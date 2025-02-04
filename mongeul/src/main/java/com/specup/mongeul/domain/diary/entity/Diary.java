@@ -38,4 +38,30 @@ public class Diary extends BaseSoftDeleteEntity {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private DiaryPrivate isPrivate;
+
+    public static Diary create(String title, String content, boolean isLocked,
+                               String picture, DiaryWeather weather, DiaryFeeling feeling,
+                               DiaryPrivate isPrivate) {
+        Diary diary = new Diary();
+        diary.title = title;
+        diary.content = content;
+        diary.isLocked = isLocked;
+        diary.picture = picture;
+        diary.weather = weather;
+        diary.feeling = feeling;
+        diary.isPrivate = isPrivate;
+        return diary;
+    }
+
+    public void update(String title, String content, boolean isLocked,
+                       String picture, DiaryWeather weather, DiaryFeeling feeling,
+                       DiaryPrivate isPrivate) {
+        this.title = title;
+        this.content = content;
+        this.isLocked = isLocked;
+        this.picture = picture;
+        this.weather = weather;
+        this.feeling = feeling;
+        this.isPrivate = isPrivate;
+    }
 }
