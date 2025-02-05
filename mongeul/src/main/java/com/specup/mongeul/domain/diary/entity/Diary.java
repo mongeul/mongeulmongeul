@@ -6,12 +6,16 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 
 @Entity
 @Getter
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "diaries")
+@SQLDelete(sql = "UPDATE diaries SET is_deleted = true, deleted_at = CURRENT_TIME WHERE id = ?")
+@SQLRestriction("is_deleted = false")
 public class Diary extends BaseSoftDeleteEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -34,6 +34,6 @@ public class DiaryController {
     @DeleteMapping("/diaries/{diaryId}")
     public ResponseEntity<ApiResponse<Void>> delete(@PathVariable Long diaryId) {
         diaryService.delete(diaryId);
-        return ResponseEntity.ok(ApiResponse.success(null, "일기 삭제 성공"));
+        return ResponseEntity.noContent().build();
     }
 }
