@@ -1,5 +1,6 @@
 spring:
   profiles:
+    # 이후 배포 시 dev & prod로 변경
     active: local
 
   jpa:
