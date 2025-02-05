@@ -46,7 +46,6 @@ public class DiaryService {
     public void delete(Long diaryId) {
         Diary diary = diaryRepository.findById(diaryId)
                 .orElseThrow(() -> new CustomException(ErrorCode.DIARY_NOT_FOUND));
-        diary.delete();
-        diaryRepository.save(diary);
+        diaryRepository.delete(diary);
     }
 }

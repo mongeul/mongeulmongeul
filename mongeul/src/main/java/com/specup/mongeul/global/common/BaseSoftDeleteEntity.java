@@ -10,17 +10,10 @@ import java.time.LocalDateTime;
 
 @Getter
 @MappedSuperclass
-@SQLDelete(sql = "UPDATE diaries SET is_deleted = true, deleted_at = now() WHERE id = ?")
-@SQLRestriction("is_deleted = false")
 public class BaseSoftDeleteEntity extends BaseTimeEntity {
 
     @Column(columnDefinition = "BOOLEAN DEFAULT false")
-    private boolean isDeleted;
+    protected boolean isDeleted;
 
-    private LocalDateTime deletedAt;
-
-    public void delete() {
-        this.isDeleted = true;
-        this.deletedAt = LocalDateTime.now();
-    }
+    protected LocalDateTime deletedAt;
 }
