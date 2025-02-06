@@ -4,6 +4,7 @@ import com.specup.mongeul.domain.diary.entity.Diary;
 import com.specup.mongeul.domain.diary.entity.DiaryFeeling;
 import com.specup.mongeul.domain.diary.entity.DiaryPrivate;
 import com.specup.mongeul.domain.diary.entity.DiaryWeather;
+import com.specup.mongeul.domain.user.entity.User;
 import lombok.Getter;
 import lombok.ToString;
 
