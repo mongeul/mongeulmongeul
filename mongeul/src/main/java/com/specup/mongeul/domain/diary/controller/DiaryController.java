@@ -29,7 +29,7 @@ public class DiaryController {
         return ResponseEntity.ok(ApiResponse.success(diaryService.getMyDiaries(user.getId()), "내가 작성한 모든 일기 조회 성공"));
     }
 
-    @Operation(summary = "해당 일기 조회", description = "일기를 조회합니다.")
+    @Operation(summary = "특정 일기 조회", description = "일기를 조회합니다.")
     @GetMapping("/diaries/{diaryId}")
     public ResponseEntity<ApiResponse<DiaryResponse>> read(@PathVariable Long diaryId) {
         return ResponseEntity.ok(ApiResponse.success(diaryService.read(diaryId), "일기 조회 성공"));
