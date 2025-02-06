@@ -1,5 +1,7 @@
 package com.specup.mongeul.domain.diary.entity;
 
+import com.specup.mongeul.domain.comment.entity.Comment;
+import com.specup.mongeul.domain.user.entity.User;
 import com.specup.mongeul.global.common.BaseSoftDeleteEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -8,6 +10,9 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -43,9 +48,16 @@ public class Diary extends BaseSoftDeleteEntity {
     @Enumerated(EnumType.STRING)
     private DiaryPrivate isPrivate;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    @OneToMany(mappedBy = "diary", cascade = CascadeType.ALL)
+    private List<Comment> comments = new ArrayList<>();
+
     public static Diary create(String title, String content, boolean isLocked,
                                String picture, DiaryWeather weather, DiaryFeeling feeling,
-                               DiaryPrivate isPrivate) {
+                               DiaryPrivate isPrivate, User user) {
         Diary diary = new Diary();
         diary.title = title;
         diary.content = content;
@@ -54,6 +66,7 @@ public class Diary extends BaseSoftDeleteEntity {
         diary.weather = weather;
         diary.feeling = feeling;
         diary.isPrivate = isPrivate;
+        diary.user = user;
         return diary;
     }
 
