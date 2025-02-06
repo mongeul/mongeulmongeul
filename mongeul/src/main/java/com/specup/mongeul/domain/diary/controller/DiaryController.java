@@ -43,14 +43,14 @@ public class DiaryController {
 
     @Operation(summary = "일기 수정", description = "일기를 수정합니다.")
     @PutMapping("/diaries/{diaryId}")
-    public ResponseEntity<ApiResponse<DiaryResponse>> update(@PathVariable Long diaryId, @Valid @RequestBody DiaryUpdateRequest request) {
-        return ResponseEntity.ok(ApiResponse.success(diaryService.update(diaryId, request), "일기 수정 성공"));
+    public ResponseEntity<ApiResponse<DiaryResponse>> update(@AuthenticationPrincipal User user, @PathVariable Long diaryId, @Valid @RequestBody DiaryUpdateRequest request) {
+        return ResponseEntity.ok(ApiResponse.success(diaryService.update(user.getId(), diaryId, request), "일기 수정 성공"));
     }
 
     @Operation(summary = "일기 삭제", description = "일기를 삭제합니다.")
     @DeleteMapping("/diaries/{diaryId}")
-    public ResponseEntity<ApiResponse<Void>> delete(@PathVariable Long diaryId) {
-        diaryService.delete(diaryId);
+    public ResponseEntity<ApiResponse<Void>> delete(@AuthenticationPrincipal User user, @PathVariable Long diaryId) {
+        diaryService.delete(user.getId(), diaryId);
         return ResponseEntity.noContent().build();
     }
 }
