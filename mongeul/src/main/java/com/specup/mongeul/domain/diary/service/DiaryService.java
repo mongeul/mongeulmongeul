@@ -5,23 +5,32 @@ import com.specup.mongeul.domain.diary.dto.request.DiaryUpdateRequest;
 import com.specup.mongeul.domain.diary.dto.response.DiaryResponse;
 import com.specup.mongeul.domain.diary.entity.Diary;
 import com.specup.mongeul.domain.diary.repository.DiaryRepository;
+import com.specup.mongeul.domain.user.entity.User;
+import com.specup.mongeul.domain.user.repository.UserRepository;
 import com.specup.mongeul.global.error.CustomException;
 import com.specup.mongeul.global.error.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class DiaryService {
+    private final UserRepository userRepository;
     private final DiaryRepository diaryRepository;
 
     @Transactional
-    public DiaryResponse create(DiaryCreateRequest request) {
+    public DiaryResponse create(Long userId, DiaryCreateRequest request) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
         Diary diary = diaryRepository.save(
                 Diary.create(request.getTitle(), request.getContent(), request.isLocked(),
                         request.getPicture(), request.getWeather(), request.getFeeling(),
-                        request.getIsPrivate())
+                        request.getIsPrivate(), user)
         );
         return DiaryResponse.from(diary);
     }
@@ -34,6 +43,14 @@ public class DiaryService {
                 request.getPicture(), request.getWeather(), request.getFeeling(),
                 request.getIsPrivate());
         return DiaryResponse.from(diary);
+    }
+
+    @Transactional(readOnly = true)
+    public List<DiaryResponse> getMyDiaries(Long userId) {
+        List<Diary> diaries = diaryRepository.findByUserId(userId);
+        return diaries.stream()
+                .map(DiaryResponse::from)
+                .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)

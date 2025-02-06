@@ -1,5 +1,7 @@
 package com.specup.mongeul.domain.user.entity;
 
+import com.specup.mongeul.domain.comment.entity.Comment;
+import com.specup.mongeul.domain.diary.entity.Diary;
 import com.specup.mongeul.global.common.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -7,7 +9,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -40,6 +43,12 @@ public class User extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private UserRole role = UserRole.USER; // 기본값은 일반 사용자
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Diary> diaries = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Comment> comments = new ArrayList<>();
 
     @Builder
     public User(String userId, String password, String name, String email, String birthday,

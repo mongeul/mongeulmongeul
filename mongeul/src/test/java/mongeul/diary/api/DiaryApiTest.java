@@ -41,7 +41,7 @@ public class DiaryApiTest {
     // Read
     @Test
     void readTest() {
-        DiaryResponse response = read(10L);
+        DiaryResponse response = read(12L);
         System.out.println("response = " + response);
     }
 
@@ -56,7 +56,7 @@ public class DiaryApiTest {
     // Update
     @Test
     void updateTest() {
-        DiaryResponse response = update(3L, new DiaryUpdateRequest(
+        DiaryResponse response = update(12L, new DiaryUpdateRequest(
                 "수정본",
                 "수정수정",
                 true,
@@ -80,7 +80,7 @@ public class DiaryApiTest {
     // delete
     @Test
     void deleteTest() {
-        delete(11L);
+        delete(12L);
         System.out.println("삭제 완료");
     }
 
