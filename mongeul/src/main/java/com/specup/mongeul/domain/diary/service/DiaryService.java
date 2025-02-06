@@ -13,6 +13,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,6 +28,14 @@ public class DiaryService {
     public DiaryResponse create(Long userId, DiaryCreateRequest request) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        LocalDateTime startOfDay = LocalDateTime.now().with(LocalTime.MIN);
+        LocalDateTime endOfDay = LocalDateTime.now().with(LocalTime.MAX);
+
+        // 일기 하루에 1개 검증 로직
+        if (diaryRepository.findByUserIdAndCreatedAtBetween(userId, startOfDay, endOfDay).isPresent()) {
+            throw new CustomException(ErrorCode.DIARY_ALREADY_EXISTS);
+        }
 
         Diary diary = diaryRepository.save(
                 Diary.create(request.getTitle(), request.getContent(), request.isLocked(),

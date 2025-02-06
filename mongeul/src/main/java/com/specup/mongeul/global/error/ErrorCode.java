@@ -17,6 +17,7 @@ public enum ErrorCode {
 
     // 일기 관련 에러
     DIARY_NOT_FOUND(HttpStatus.NOT_FOUND, "일기를 찾을 수 없습니다"),
+    DIARY_ALREADY_EXISTS(HttpStatus.BAD_REQUEST, "이미 오늘은 일기를 작성했습니다."),
 
     // 파일 관련 에러
     FILE_NOT_FOUND(HttpStatus.NOT_FOUND, "파일을 찾을 수 없습니다"),
