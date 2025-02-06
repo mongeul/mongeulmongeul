@@ -25,7 +25,7 @@ public class CommentController {
     @Operation(summary = "일기의 댓글 조회", description = "특정 일기에 달린 댓글들을 조회합니다.")
     @GetMapping("/comments/{diaryId}")
     public ResponseEntity<ApiResponse<List<CommentResponse>>> read(@PathVariable Long diaryId) {
-        return ResponseEntity.ok(ApiResponse.success(commentService.read(diaryId), "일기의 댓글 조회 성공"));
+        return ResponseEntity.ok(ApiResponse.success(commentService.read(diaryId), "댓글 조회 성공"));
     }
 
     @Operation(summary = "댓글 생성", description = "댓글을 생성합니다.")

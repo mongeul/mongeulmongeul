@@ -35,12 +35,14 @@ public class DiaryApiTest {
         return "Bearer " + response.getData().getAccessToken();
     }
 
-    // Create
+    /**
+     * 일기 생성 테스트
+     */
     @Test
     void createTest() {
         DiaryResponse response = create(token, new DiaryCreateRequest(
-                "하이로",
-                "하이루하이루",
+                "일기 생성",
+                "일기가 생성되었습니다.",
                 false,
                 null,
                 DiaryWeather.SUNNY,
@@ -61,10 +63,12 @@ public class DiaryApiTest {
             return apiResponse.getData();
     }
 
-    // Read
+    /**
+     * 일기 조회 테스트
+     */
     @Test
     void readTest() {
-        DiaryResponse response = read(1L);
+        DiaryResponse response = read(2L);
         System.out.println("response = " + response);
     }
 
@@ -76,12 +80,14 @@ public class DiaryApiTest {
         return apiResponse.getData();
     }
 
-    // Update
+    /**
+     * 일기 수정 테스트
+     */
     @Test
     void updateTest() {
-        DiaryResponse response = update(1L, new DiaryUpdateRequest(
-                "수정본",
-                "수정수정",
+        DiaryResponse response = update(token, 1L, new DiaryUpdateRequest(
+                "일기 수정",
+                "일기가 수정되었습니다.",
                 true,
                 null,
                 DiaryWeather.RAINY,
@@ -91,25 +97,30 @@ public class DiaryApiTest {
         System.out.println("response = " + response);
     }
 
-    DiaryResponse update(Long diaryId, DiaryUpdateRequest request) {
+    DiaryResponse update(String token, Long diaryId, DiaryUpdateRequest request) {
         ApiResponse<DiaryResponse> apiResponse = restClient.put()
                 .uri("/api/v1/diaries/{diaryId}", diaryId)
+                .headers(headers -> headers.set(HttpHeaders.AUTHORIZATION, token))
+                .contentType(MediaType.APPLICATION_JSON)
                 .body(request)
                 .retrieve()
                 .body(new ParameterizedTypeReference<ApiResponse<DiaryResponse>>() {});
         return apiResponse.getData();
     }
 
-    // delete
+    /**
+     * 일기 삭제 테스트
+     */
     @Test
     void deleteTest() {
-        delete(1L);
-        System.out.println("삭제 완료");
+        delete(token, 1L);
+        System.out.println("일기 삭제 완료");
     }
 
-    void delete(Long diaryId) {
+    void delete(String token, Long diaryId) {
         restClient.delete()
                 .uri("/api/v1/diaries/{diaryId}", diaryId)
+                .headers(headers -> headers.set(HttpHeaders.AUTHORIZATION, token))
                 .retrieve()
                 .toBodilessEntity();
     }
