@@ -81,4 +81,8 @@ public class Diary extends BaseSoftDeleteEntity {
         this.feeling = feeling;
         this.isPrivate = isPrivate;
     }
+
+    public void lock(Long diaryId) {
+        this.isLocked = !this.isLocked;
+    }
 }

@@ -53,4 +53,11 @@ public class DiaryController {
         diaryService.delete(user.getId(), diaryId);
         return ResponseEntity.noContent().build();
     }
+
+    @Operation(summary = "일기 잠금", description = "일기를 잠금 설정 및 해제 합니다.")
+    @PostMapping("/diaries/{diaryId}/lock")
+    public ResponseEntity<ApiResponse<Void>> lock(@AuthenticationPrincipal User user, @PathVariable Long diaryId) {
+        diaryService.lock(user.getId(), diaryId);
+        return ResponseEntity.noContent().build();
+    }
 }
