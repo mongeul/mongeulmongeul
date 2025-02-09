@@ -49,7 +49,7 @@ public class DiaryService {
     public DiaryResponse update(Long userId, Long diaryId, DiaryUpdateRequest request) {
         Diary diary = diaryRepository.findById(diaryId)
                 .orElseThrow(() -> new CustomException(ErrorCode.DIARY_NOT_FOUND));
-        if (diary.getUser().getId().equals(userId)) {
+        if (!diary.getUser().getId().equals(userId)) {
             throw new CustomException(ErrorCode.NOT_AUTHORIZED);
         }
         diary.update(request.getTitle(), request.getContent(), request.isLocked(),
@@ -76,9 +76,19 @@ public class DiaryService {
     public void delete(Long userId, Long diaryId) {
         Diary diary = diaryRepository.findById(diaryId)
                 .orElseThrow(() -> new CustomException(ErrorCode.DIARY_NOT_FOUND));
-        if (diary.getUser().getId().equals(userId)) {
+        if (!diary.getUser().getId().equals(userId)) {
             throw new CustomException(ErrorCode.NOT_AUTHORIZED);
         }
         diaryRepository.delete(diary);
+    }
+
+    @Transactional
+    public void lock(Long userId, Long diaryId) {
+        Diary diary = diaryRepository.findById(diaryId)
+                .orElseThrow(() -> new CustomException(ErrorCode.DIARY_NOT_FOUND));
+        if (!diary.getUser().getId().equals(userId)) {
+            throw new CustomException(ErrorCode.NOT_AUTHORIZED);
+        }
+        diary.lock(diaryId);
     }
 }
