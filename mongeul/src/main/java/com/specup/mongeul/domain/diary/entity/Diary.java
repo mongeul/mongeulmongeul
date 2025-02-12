@@ -1,6 +1,9 @@
 package com.specup.mongeul.domain.diary.entity;
 
 import com.specup.mongeul.domain.comment.entity.Comment;
+import com.specup.mongeul.domain.diary.entity.ENUM.DiaryFeeling;
+import com.specup.mongeul.domain.diary.entity.ENUM.DiaryPrivate;
+import com.specup.mongeul.domain.diary.entity.ENUM.DiaryWeather;
 import com.specup.mongeul.domain.user.entity.User;
 import com.specup.mongeul.global.common.BaseSoftDeleteEntity;
 import jakarta.persistence.*;
@@ -82,7 +85,7 @@ public class Diary extends BaseSoftDeleteEntity {
         this.isPrivate = isPrivate;
     }
 
-    public void lock(Long diaryId) {
+    public void lock() {
         this.isLocked = !this.isLocked;
     }
 }

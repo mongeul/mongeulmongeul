@@ -50,7 +50,7 @@ public class DiaryService {
         Diary diary = diaryRepository.findById(diaryId)
                 .orElseThrow(() -> new CustomException(ErrorCode.DIARY_NOT_FOUND));
         if (!diary.getUser().getId().equals(userId)) {
-            throw new CustomException(ErrorCode.NOT_AUTHORIZED);
+            throw new CustomException(ErrorCode.INVALID_DIARY_USER);
         }
         diary.update(request.getTitle(), request.getContent(), request.isLocked(),
                 request.getPicture(), request.getWeather(), request.getFeeling(),
@@ -77,7 +77,7 @@ public class DiaryService {
         Diary diary = diaryRepository.findById(diaryId)
                 .orElseThrow(() -> new CustomException(ErrorCode.DIARY_NOT_FOUND));
         if (!diary.getUser().getId().equals(userId)) {
-            throw new CustomException(ErrorCode.NOT_AUTHORIZED);
+            throw new CustomException(ErrorCode.INVALID_DIARY_USER);
         }
         diaryRepository.delete(diary);
     }
@@ -87,8 +87,8 @@ public class DiaryService {
         Diary diary = diaryRepository.findById(diaryId)
                 .orElseThrow(() -> new CustomException(ErrorCode.DIARY_NOT_FOUND));
         if (!diary.getUser().getId().equals(userId)) {
-            throw new CustomException(ErrorCode.NOT_AUTHORIZED);
+            throw new CustomException(ErrorCode.INVALID_DIARY_USER);
         }
-        diary.lock(diaryId);
+        diary.lock();
     }
 }

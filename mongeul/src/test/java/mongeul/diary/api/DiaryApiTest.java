@@ -1,10 +1,9 @@
 package mongeul.diary.api;
 
 import com.specup.mongeul.domain.diary.dto.response.DiaryResponse;
-import com.specup.mongeul.domain.diary.entity.DiaryFeeling;
-import com.specup.mongeul.domain.diary.entity.DiaryPrivate;
-import com.specup.mongeul.domain.diary.entity.DiaryWeather;
-import com.specup.mongeul.domain.user.dto.request.LoginRequest;
+import com.specup.mongeul.domain.diary.entity.ENUM.DiaryFeeling;
+import com.specup.mongeul.domain.diary.entity.ENUM.DiaryPrivate;
+import com.specup.mongeul.domain.diary.entity.ENUM.DiaryWeather;
 import com.specup.mongeul.domain.user.dto.response.LoginResponse;
 import com.specup.mongeul.global.common.ApiResponse;
 import lombok.AllArgsConstructor;
@@ -128,7 +127,7 @@ public class DiaryApiTest {
 
     void lock(String token, Long diaryId) {
         restClient.post()
-                .uri("/api/v1/diaries/{dirayId}/lock", diaryId)
+                .uri("/api/v1/diaries/{diaryId}/lock", diaryId)
                 .headers(headers -> headers.set(HttpHeaders.AUTHORIZATION, token))
                 .retrieve()
                 .toBodilessEntity();
