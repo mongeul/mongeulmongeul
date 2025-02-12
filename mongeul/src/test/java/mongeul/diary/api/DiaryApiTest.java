@@ -1,21 +1,22 @@
 package mongeul.diary.api;
 
 import com.specup.mongeul.domain.diary.dto.response.DiaryResponse;
-import com.specup.mongeul.domain.diary.entity.DiaryFeeling;
-import com.specup.mongeul.domain.diary.entity.DiaryPrivate;
-import com.specup.mongeul.domain.diary.entity.DiaryWeather;
-import com.specup.mongeul.domain.user.dto.request.LoginRequest;
+import com.specup.mongeul.domain.diary.entity.ENUM.DiaryFeeling;
+import com.specup.mongeul.domain.diary.entity.ENUM.DiaryPrivate;
+import com.specup.mongeul.domain.diary.entity.ENUM.DiaryWeather;
 import com.specup.mongeul.domain.user.dto.response.LoginResponse;
 import com.specup.mongeul.global.common.ApiResponse;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.web.client.RestClient;
 
+@DisplayName("일기 API 테스트")
 public class DiaryApiTest {
     RestClient restClient;
     String token;
@@ -35,10 +36,8 @@ public class DiaryApiTest {
         return "Bearer " + response.getData().getAccessToken();
     }
 
-    /**
-     * 일기 생성 테스트
-     */
     @Test
+    @DisplayName("일기 생성 테스트")
     void createTest() {
         DiaryResponse response = create(token, new DiaryCreateRequest(
                 "일기 생성",
@@ -63,10 +62,8 @@ public class DiaryApiTest {
             return apiResponse.getData();
     }
 
-    /**
-     * 일기 조회 테스트
-     */
     @Test
+    @DisplayName("일기 조회 테스트")
     void readTest() {
         DiaryResponse response = read(2L);
         System.out.println("response = " + response);
@@ -80,10 +77,8 @@ public class DiaryApiTest {
         return apiResponse.getData();
     }
 
-    /**
-     * 일기 수정 테스트
-     */
     @Test
+    @DisplayName("일기 수정 테스트")
     void updateTest() {
         DiaryResponse response = update(token, 1L, new DiaryUpdateRequest(
                 "일기 수정",
@@ -108,18 +103,31 @@ public class DiaryApiTest {
         return apiResponse.getData();
     }
 
-    /**
-     * 일기 삭제 테스트
-     */
     @Test
+    @DisplayName("일기 삭제 테스트")
     void deleteTest() {
-        delete(token, 1L);
+        delete(token, 3L);
         System.out.println("일기 삭제 완료");
     }
 
     void delete(String token, Long diaryId) {
         restClient.delete()
                 .uri("/api/v1/diaries/{diaryId}", diaryId)
+                .headers(headers -> headers.set(HttpHeaders.AUTHORIZATION, token))
+                .retrieve()
+                .toBodilessEntity();
+    }
+
+    @Test
+    @DisplayName("일기 잠금 테스트")
+    void lockTest() {
+        lock(token, 2L);
+        System.out.println("일기 잠금 설정 및 해제 완료");
+    }
+
+    void lock(String token, Long diaryId) {
+        restClient.post()
+                .uri("/api/v1/diaries/{diaryId}/lock", diaryId)
                 .headers(headers -> headers.set(HttpHeaders.AUTHORIZATION, token))
                 .retrieve()
                 .toBodilessEntity();

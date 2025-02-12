@@ -6,6 +6,7 @@ import com.specup.mongeul.global.common.ApiResponse;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;
@@ -14,6 +15,7 @@ import org.springframework.web.client.RestClient;
 
 import java.util.List;
 
+@DisplayName("댓글 API 테스트")
 public class CommentApiTest {
     RestClient restClient;
     String token;
@@ -33,10 +35,8 @@ public class CommentApiTest {
         return "Bearer " + response.getData().getAccessToken();
     }
 
-    /**
-     * 댓글 생성 테스트
-     */
     @Test
+    @DisplayName("댓글 생성 테스트")
     void createTest() {
         CommentResponse response = create(token, 2L, new CommentRequest(
                 "생성된 댓글입니다."
@@ -55,10 +55,8 @@ public class CommentApiTest {
         return apiResponse.getData();
     }
 
-    /**
-     * 댓글 조회 테스트
-     */
     @Test
+    @DisplayName("댓글 조회 테스트")
     void readTest() {
         List<CommentResponse> response = read(2L);
         System.out.println("response: " + response);
@@ -72,10 +70,8 @@ public class CommentApiTest {
         return apiResponse.getData();
     }
 
-    /**
-     * 댓글 수정 테스트
-     */
     @Test
+    @DisplayName("댓글 수정 테스트")
     void updateTest() {
         CommentResponse response = update(token, 2L, new CommentRequest(
                 "수정된 댓글입니다."
@@ -94,10 +90,8 @@ public class CommentApiTest {
         return apiResponse.getData();
     }
 
-    /**
-     * 댓글 삭제 테스트
-     */
     @Test
+    @DisplayName("댓글 삭제 테스트")
     void deleteTest() {
         delete(token, 2L);
         System.out.println("댓글 삭제 완료");

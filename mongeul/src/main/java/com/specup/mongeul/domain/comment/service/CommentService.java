@@ -51,7 +51,7 @@ public class CommentService {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new CustomException(ErrorCode.COMMENT_NOT_FOUND));
         if (!comment.getUser().getId().equals(userId)) {
-            throw new CustomException(ErrorCode.NOT_AUTHORIZED);
+            throw new CustomException(ErrorCode.INVALID_COMMENT_USER);
         }
         comment.update(request.getContent());
         return CommentResponse.from(comment);
@@ -62,7 +62,7 @@ public class CommentService {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new CustomException(ErrorCode.COMMENT_NOT_FOUND));
         if (!comment.getUser().getId().equals(userId)) {
-            throw new CustomException(ErrorCode.NOT_AUTHORIZED);
+            throw new CustomException(ErrorCode.INVALID_COMMENT_USER);
         }
         commentRepository.delete(comment);
     }

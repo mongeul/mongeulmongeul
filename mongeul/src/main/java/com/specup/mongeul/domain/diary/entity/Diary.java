@@ -1,6 +1,10 @@
 package com.specup.mongeul.domain.diary.entity;
 
 import com.specup.mongeul.domain.comment.entity.Comment;
+import com.specup.mongeul.domain.diary.entity.ENUM.DiaryFeeling;
+import com.specup.mongeul.domain.diary.entity.ENUM.DiaryPrivate;
+import com.specup.mongeul.domain.diary.entity.ENUM.DiaryWeather;
+import com.specup.mongeul.domain.diaryemoji.entity.DiaryEmoji;
 import com.specup.mongeul.domain.user.entity.User;
 import com.specup.mongeul.global.common.BaseSoftDeleteEntity;
 import jakarta.persistence.*;
@@ -40,12 +44,12 @@ public class Diary extends BaseSoftDeleteEntity {
     @Enumerated(EnumType.STRING)
     private DiaryWeather weather;
 
-    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private DiaryFeeling feeling;
 
-    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private DiaryPrivate isPrivate;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -54,6 +58,9 @@ public class Diary extends BaseSoftDeleteEntity {
 
     @OneToMany(mappedBy = "diary", cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "diary", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<DiaryEmoji> diaryEmojis = new ArrayList<>();
 
     public static Diary create(String title, String content, boolean isLocked,
                                String picture, DiaryWeather weather, DiaryFeeling feeling,
@@ -80,5 +87,9 @@ public class Diary extends BaseSoftDeleteEntity {
         this.weather = weather;
         this.feeling = feeling;
         this.isPrivate = isPrivate;
+    }
+
+    public void lock() {
+        this.isLocked = !this.isLocked;
     }
 }
