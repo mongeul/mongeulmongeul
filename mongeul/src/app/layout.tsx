@@ -1,8 +1,8 @@
+import type { Metadata } from "next";
 import "./globals.css";
-
+import Header from "@/components/Header";
 import Navbar from "@/components/NavBar";
 import { ThemeProvider } from "@/context/ThemeContext";
-import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "몽글몽글",
@@ -16,9 +16,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body className="bg-theme-50">
+      <body className="bg-theme-50 flex flex-col items-center">
         <ThemeProvider initialTheme="sky">
-          {children}
+          <Header />
+          <main className="flex w-full md:w-3/4 mx-auto min-h-screen p-4">
+            {children}
+          </main>
           <Navbar />
         </ThemeProvider>
       </body>
