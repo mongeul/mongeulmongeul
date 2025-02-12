@@ -1,4 +1,7 @@
+import "./globals.css";
+
 import Navbar from "@/components/NavBar";
+import { ThemeProvider } from "@/context/ThemeContext";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -12,10 +15,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="kr">
-      <body>
-        {children}
-        <Navbar />
+    <html lang="ko">
+      <body className="bg-theme-50">
+        <ThemeProvider initialTheme="sky">
+          {children}
+          <Navbar />
+        </ThemeProvider>
       </body>
     </html>
   );
