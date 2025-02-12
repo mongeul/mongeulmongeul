@@ -2,6 +2,7 @@ package com.specup.mongeul.domain.user.entity;
 
 import com.specup.mongeul.domain.comment.entity.Comment;
 import com.specup.mongeul.domain.diary.entity.Diary;
+import com.specup.mongeul.domain.diaryemoji.entity.DiaryEmoji;
 import com.specup.mongeul.global.common.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -49,6 +50,9 @@ public class User extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<DiaryEmoji> diaryAndEmojis = new ArrayList<>();
 
     @Builder
     public User(String userId, String password, String name, String email, String birthday,

@@ -24,6 +24,9 @@ public enum ErrorCode {
     COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "댓글을 찾을 수 없습니다."),
     INVALID_COMMENT_USER(HttpStatus.FORBIDDEN, "댓글 작성자만 가능합니다."),
 
+    // 이모지 관련 에러
+    EMOJI_NOT_FOUND(HttpStatus.NOT_FOUND, "이모지를 찾을 수 없습니다."),
+
     // 파일 관련 에러
     FILE_NOT_FOUND(HttpStatus.NOT_FOUND, "파일을 찾을 수 없습니다"),
     INVALID_FILE_TYPE(HttpStatus.BAD_REQUEST, "지원하지 않는 파일 형식입니다"),
