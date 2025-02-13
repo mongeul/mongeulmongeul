@@ -15,7 +15,10 @@ import java.util.List;
 @Getter
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "emojis")
+@Table(name = "emojis",
+        indexes = {
+            @Index(name = "idx_emoji_type", columnList = "id, type")
+})
 public class Emoji {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
