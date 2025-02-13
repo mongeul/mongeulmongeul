@@ -4,7 +4,6 @@ import com.specup.mongeul.domain.diary.dto.response.DiaryEmojiResponse;
 import com.specup.mongeul.domain.diary.dto.response.FeedDetailResponse;
 import com.specup.mongeul.domain.diary.dto.response.FeedResponse;
 import com.specup.mongeul.domain.diary.entity.Diary;
-import com.specup.mongeul.domain.diary.entity.ENUM.DiaryPrivate;
 import com.specup.mongeul.domain.diary.repository.DiaryRepository;
 import com.specup.mongeul.domain.diaryemoji.repository.DiaryEmojiRepository;
 import com.specup.mongeul.global.error.CustomException;
@@ -14,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -23,11 +21,16 @@ public class FeedService {
     private final DiaryEmojiRepository diaryEmojiRepository;
 
     @Transactional(readOnly = true)
-    public List<FeedResponse> getFeeds() {
-        List<Diary> feeds = diaryRepository.findByIsPrivate(DiaryPrivate.PUBLIC);
-        return feeds.stream()
+    public List<FeedResponse> getFeedAll(Long pageSize, Long lastDiaryId) {
+        List<Diary> diaries = lastDiaryId == null ?
+                diaryRepository.findAllInfiniteScroll(pageSize) :
+                diaryRepository.findAllInfiniteScroll(lastDiaryId, pageSize);
+        if (diaries.isEmpty()) {
+            return List.of();
+        }
+        return diaries.stream()
                 .map(FeedResponse::from)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Transactional(readOnly = true)

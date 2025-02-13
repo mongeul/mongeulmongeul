@@ -15,6 +15,7 @@ import java.util.List;
 @Getter
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name = "emojis")
 public class Emoji {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
