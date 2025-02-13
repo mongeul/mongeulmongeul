@@ -14,7 +14,8 @@ import lombok.ToString;
 @Getter
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class DiaryEmoji {
+@Table(name = "diaries_emojis")
+public class DiaryEmoji extends BaseTimeEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
