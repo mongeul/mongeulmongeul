@@ -17,7 +17,7 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body className="bg-theme-50 flex flex-col items-center">
-        <ThemeProvider initialTheme="sky">
+        <ThemeProvider initialTheme="sky" initialFont="gowun-dodum">
           <Header />
           <main className="flex w-full md:w-3/4 mx-auto min-h-screen p-4">
             {children}

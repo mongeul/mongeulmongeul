@@ -31,4 +31,26 @@
     --color-800: #075985;
     --color-900: #0c4a6e;
   }
+
+  @font-face {
+    font-family: "SUIT-Regular";
+    src: url("/fonts/SUIT-Variable.woff2") format("woff2");
+    font-weight: normal;
+    font-style: normal;
+  }
+
+  @font-face {
+    font-family: "GowunDodum-Regular";
+    src: url("/fonts/GowunDodum-Regular.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+  }
+
+  [data-font="suit"] {
+    font-family: "SUIT", sans-serif;
+  }
+
+  [data-font="gowun-dodum"] {
+    font-family: "GowunDodum-Regular", sans-serif;
+  }
 }
