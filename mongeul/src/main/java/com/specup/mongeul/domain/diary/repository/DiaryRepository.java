@@ -1,7 +1,6 @@
 package com.specup.mongeul.domain.diary.repository;
 
 import com.specup.mongeul.domain.diary.entity.Diary;
-import com.specup.mongeul.domain.diary.entity.ENUM.DiaryPrivate;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -19,22 +18,14 @@ public interface DiaryRepository extends JpaRepository<Diary, Long> {
     /**
      * 피드 무한 스크롤
      */
-    @Query(
-            value = "SELECT * FROM diaries d " +
-                    "WHERE d.is_private = 'PUBLIC' " +
-                    "ORDER BY d.id DESC " +
-                    "LIMIT :limit",
-            nativeQuery = true
-    )
+    @Query("SELECT d FROM Diary d " +
+            "WHERE d.isPrivate = com.specup.mongeul.domain.diary.entity.ENUM.DiaryPrivate.PUBLIC " +
+            "ORDER BY d.id DESC")
     List<Diary> findAllInfiniteScroll(@Param("limit") Long limit);
 
-    @Query(
-            value = "SELECT * FROM diaries d " +
-                    "WHERE d.is_private = 'PUBLIC' " +
-                    "AND d.id < :lastDiaryId " +
-                    "ORDER BY d.id DESC " +
-                    "LIMIT :limit",
-            nativeQuery = true
-    )
+    @Query("SELECT d FROM Diary d " +
+            "WHERE d.isPrivate = com.specup.mongeul.domain.diary.entity.ENUM.DiaryPrivate.PUBLIC " +
+            "AND d.id < :lastDiaryId " +
+            "ORDER BY d.id DESC")
     List<Diary> findAllInfiniteScroll(@Param("lastDiaryId") Long lastDiaryId, @Param("limit") Long limit);
 }

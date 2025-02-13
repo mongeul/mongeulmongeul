@@ -15,7 +15,8 @@ public interface DiaryEmojiRepository extends JpaRepository<DiaryEmoji, Long> {
     Optional<DiaryEmoji> findByDiaryIdAndEmojiIdAndUserId(Long diaryId, Long emojiId, Long userId);
 
     @Query("SELECT new com.specup.mongeul.domain.diary.dto.response.DiaryEmojiResponse(e.id, e.type, COUNT(de)) " +
-            "FROM DiaryEmoji de JOIN de.emoji e " +
+            "FROM DiaryEmoji de " +
+            "JOIN de.emoji e " +
             "WHERE de.diary.id = :diaryId " +
             "GROUP BY e.id, e.type")
     List<DiaryEmojiResponse> findEmojiCountByDiaryId(@Param("diaryId") Long diaryId);
