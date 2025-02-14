@@ -2,20 +2,55 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+    --zinc-50: #fafafa;
+    --zinc-100: #f4f4f5;
+    --zinc-200: #e4e4e7;
+    --zinc-300: #d4d4d8;
+    --zinc-400: #a1a1aa;
+    --zinc-500: #71717a;
+    --zinc-600: #52525b;
+    --zinc-700: #3f3f46;
+    --zinc-800: #27272a;
+    --zinc-900: #18181b;
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+    --white: #ffffff;
+    --black: #000000;
+  }
+
+  [data-theme="sky"] {
+    --color-50: #f0f9ff;
+    --color-100: #e0f2fe;
+    --color-200: #bae6fd;
+    --color-300: #7dd3fc;
+    --color-400: #38bdf8;
+    --color-500: #0ea5e9;
+    --color-600: #0284c7;
+    --color-700: #0369a1;
+    --color-800: #075985;
+    --color-900: #0c4a6e;
+  }
+
+  @font-face {
+    font-family: "SUIT-Regular";
+    src: url("/fonts/SUIT-Variable.woff2") format("woff2");
+    font-weight: normal;
+    font-style: normal;
+  }
+
+  @font-face {
+    font-family: "GowunDodum-Regular";
+    src: url("/fonts/GowunDodum-Regular.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+  }
+
+  [data-font="suit"] {
+    font-family: "SUIT", sans-serif;
+  }
+
+  [data-font="gowun-dodum"] {
+    font-family: "GowunDodum-Regular", sans-serif;
+  }
 }
