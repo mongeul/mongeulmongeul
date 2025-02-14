@@ -6,6 +6,7 @@ interface CardProps {
   borderColor?: string;
   width?: string;
   height?: string;
+  roundSize?: string;
 }
 
 export default function Card({
@@ -13,6 +14,7 @@ export default function Card({
   width = "w-auto",
   height = "h-auto",
   borderColor = "border-white",
+  roundSize = "rounded-3xl",
 }: CardProps) {
   return (
     <div
@@ -20,7 +22,8 @@ export default function Card({
         `${height}`,
         `${width}`,
         `border ${borderColor}`,
-        "rounded-full px-4 py-3 flex bg-white"
+        `${roundSize}`,
+        "px-4 py-3 flex bg-white"
       )}
     >
       {children}
