@@ -65,7 +65,7 @@ public class DiaryApiTest {
     @Test
     @DisplayName("일기 조회 테스트")
     void readTest() {
-        DiaryResponse response = read(2L);
+        DiaryResponse response = read(12345L);
         System.out.println("response = " + response);
     }
 
