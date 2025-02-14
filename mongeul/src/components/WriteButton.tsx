@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import WriteButtonDetail from "./diary-write/WriteButtonDetail";
+import WriteButtonDetail from "./write-diary/WriteButtonDetail";
 import DiaryIcon from "@/assets/icons/diary.svg";
 import WriteIcon from "@/assets/icons/write.svg";
 import SharedDiaryIcon from "@/assets/icons/shared-diary.svg";
