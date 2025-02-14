@@ -1,4 +1,5 @@
 "use client";
+
 import Button from "@/components/button";
 import DefaultLayout from "@/components/DefaultLayout";
 
@@ -8,11 +9,11 @@ export default function Page() {
   };
 
   return (
-    <div>
-      <DefaultLayout>
+    <DefaultLayout>
+      <div className="w-full">
         일기 작성
         <Button text="작성하기" onClick={submitDiary} />
-      </DefaultLayout>
-    </div>
+      </div>
+    </DefaultLayout>
   );
 }
