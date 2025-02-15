@@ -39,15 +39,13 @@ function ModalContent() {
 export default function EmotionSelect() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const openModal = (): void => {
-    setIsModalOpen(!isModalOpen);
-  };
+  const toggleModal = (): void => setIsModalOpen((prev) => !prev);
 
   return (
     <>
       <div
         onClick={() => {
-          openModal();
+          toggleModal();
         }}
         className="flex flex-col items-center justify-center gap-2"
       >
@@ -58,10 +56,10 @@ export default function EmotionSelect() {
       </div>
 
       {isModalOpen && (
-        // <MobileModal onClose={openModal}>
+        // <MobileModal onClose={toggleModal}>
         //   <ModalContent />
         // </MobileModal>
-        <WebModal onClose={openModal}>
+        <WebModal onClose={toggleModal}>
           <ModalContent />
         </WebModal>
       )}
