@@ -1,15 +1,17 @@
-import { useState } from "react";
-import Card from "../card";
+"use client";
 
-interface InputCardProps {
+import { useState } from "react";
+import Card from "../../card";
+
+interface InputProps {
   placeholder: string;
 }
 
-export default function InputCard({ placeholder }: InputCardProps) {
+export default function Input({ placeholder }: InputProps) {
   const [isTyping, setIsTyping] = useState<boolean>(false);
 
   return (
-    <div className="w-1/3">
+    <div className="w-full">
       <Card borderColor={isTyping ? "border-theme-400" : undefined}>
         <input
           type="text"

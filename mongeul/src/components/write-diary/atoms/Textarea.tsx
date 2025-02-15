@@ -1,20 +1,22 @@
+"use client";
+
 import { useState } from "react";
-import Card from "../card";
+import Card from "../../card";
 import clsx from "clsx";
 
-interface TextareaCardProps {
+interface TextareaProps {
   placeholder: string;
   height?: string;
 }
 
-export default function TextareaCard({
+export default function Textarea({
   placeholder,
   height = "h-72",
-}: TextareaCardProps) {
+}: TextareaProps) {
   const [isTyping, setIsTyping] = useState<boolean>(false);
 
   return (
-    <div className={clsx(`${height}`, "w-1/3")}>
+    <div className={clsx(`${height}`, "w-full")}>
       <Card
         borderColor={isTyping ? "border-theme-400" : undefined}
         height={height}
