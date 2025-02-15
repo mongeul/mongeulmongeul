@@ -3,21 +3,9 @@ import RoundIcon from "../atoms/RoundIcon";
 import MobileModal from "../atoms/MobileModal";
 import PublicIcon from "@/assets/icons/public.svg";
 import WebModal from "../atoms/WebModal";
+import { Weather } from "@/types/diaryTypes";
 
-interface Weather {
-  value: "sunny" | "cloudy" | "rainy";
-}
-
-const weathers: Weather[] = [
-  { value: "sunny" },
-  { value: "sunny" },
-  { value: "sunny" },
-  { value: "sunny" },
-  { value: "sunny" },
-  { value: "sunny" },
-  { value: "sunny" },
-  { value: "sunny" },
-];
+const weathers: Weather[] = ["sunny", "sunny", "sunny", "sunny"];
 
 function ModalContent() {
   return (
@@ -27,7 +15,7 @@ function ModalContent() {
         <div className="grid grid-cols-3 gap-8">
           {weathers.map((weather, index) => (
             <div key={index} className="text-3xl">
-              {weather.value}
+              {weather}
             </div>
           ))}
         </div>

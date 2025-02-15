@@ -8,18 +8,11 @@ import WebModal from "../atoms/WebModal";
 import { setDisclosure } from "@/store/diarySlice";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
+import { Disclosure } from "@/types/diaryTypes";
 
-interface Disclosure {
-  value: "public" | "unlocked" | "locked";
-}
+const disclosures: Disclosure[] = ["public", "unlocked", "locked"];
 
-const disclosures: Disclosure[] = [
-  { value: "public" },
-  { value: "unlocked" },
-  { value: "locked" },
-];
-
-const getDisclosureIcon = (disclosure: string) => {
+const getDisclosureIcon = (disclosure: Disclosure) => {
   switch (disclosure) {
     case "public":
       return {
@@ -64,8 +57,8 @@ const getDisclosureIcon = (disclosure: string) => {
 function ModalContent({ closeModal }: { closeModal: () => void }) {
   const dispatch = useDispatch();
 
-  const handleChange = (value: "public" | "unlocked" | "locked") => {
-    dispatch(setDisclosure(value));
+  const handleChange = (disclosure: Disclosure) => {
+    dispatch(setDisclosure(disclosure));
     closeModal();
   };
 
@@ -78,10 +71,10 @@ function ModalContent({ closeModal }: { closeModal: () => void }) {
             <div
               key={index}
               className="flex flex-row items-center justify-center gap-8 text-xl"
-              onClick={() => handleChange(disclosure.value)}
+              onClick={() => handleChange(disclosure)}
             >
-              <div>{getDisclosureIcon(disclosure.value).icon}</div>
-              <div>{getDisclosureIcon(disclosure.value).label}</div>
+              <div>{getDisclosureIcon(disclosure).icon}</div>
+              <div>{getDisclosureIcon(disclosure).label}</div>
             </div>
           ))}
           <p className="text-zinc-400 text-xs">
@@ -95,9 +88,8 @@ function ModalContent({ closeModal }: { closeModal: () => void }) {
 
 export default function DisclosureSelect() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const selectedDisclosure = useSelector(
-    (state: RootState) => state.diary.disclosure
-  );
+  const selectedDisclosure: Disclosure =
+    useSelector((state: RootState) => state.diary.disclosure) ?? "public";
 
   const toggleModal = (): void => setIsModalOpen((prev) => !prev);
 
