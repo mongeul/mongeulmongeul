@@ -4,31 +4,25 @@ import MobileModal from "../atoms/MobileModal";
 import PublicIcon from "@/assets/icons/public.svg";
 import WebModal from "../atoms/WebModal";
 
-interface Emotion {
-  value: "happy" | "sad";
+interface Disclosure {
+  value: "public" | "unlocked" | "locked";
 }
 
-const emotions: Emotion[] = [
-  { value: "happy" },
-  { value: "happy" },
-  { value: "happy" },
-  { value: "happy" },
-  { value: "happy" },
-  { value: "happy" },
-  { value: "happy" },
-  { value: "happy" },
-  { value: "happy" },
+const disclousures: Disclosure[] = [
+  { value: "public" },
+  { value: "unlocked" },
+  { value: "locked" },
 ];
 
 function ModalContent() {
   return (
     <div className="flex flex-col items-center justify-center">
-      <p className="text-gray-600">오늘 하루 기분이 어떠셨나요?</p>
+      <p className="text-gray-600">공개 범위를 설정할 수 있어요</p>
       <div className="flex justify-center p-6">
-        <div className="grid grid-cols-3 gap-8">
-          {emotions.map((emotion, index) => (
+        <div className="flex flex-col gap-8">
+          {disclousures.map((disclousures, index) => (
             <div key={index} className="text-3xl">
-              {emotion.value}
+              {disclousures.value}
             </div>
           ))}
         </div>
@@ -55,7 +49,7 @@ export default function EmotionSelect() {
         <RoundIcon backgroundColor="bg-zinc-300">
           <PublicIcon className="text-white h-9 w-9" />
         </RoundIcon>
-        <p className="text-xs text-zinc-400">오늘의 기분</p>
+        <p className="text-xs text-zinc-400">공개 범위</p>
       </div>
 
       {isModalOpen && (
