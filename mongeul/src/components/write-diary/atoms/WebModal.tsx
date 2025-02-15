@@ -20,7 +20,7 @@ export default function WebModal({ children, onClose }: WebModalProps) {
         <div className="flex justify-end p-2" onClick={onClose}>
           <CloseIcon className="text-zinc-400 h-6 w-6" />
         </div>
-        {children}
+        <div className="px-8 py-4">{children}</div>
       </div>
     </div>
   );

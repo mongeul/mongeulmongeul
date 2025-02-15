@@ -4,6 +4,39 @@ import MobileModal from "../atoms/MobileModal";
 import PublicIcon from "@/assets/icons/public.svg";
 import WebModal from "../atoms/WebModal";
 
+interface Emotion {
+  value: string;
+}
+
+const emotions: Emotion[] = [
+  { value: "happy" },
+  { value: "happy" },
+  { value: "happy" },
+  { value: "happy" },
+  { value: "happy" },
+  { value: "happy" },
+  { value: "happy" },
+  { value: "happy" },
+  { value: "happy" },
+];
+
+function ModalContent() {
+  return (
+    <div className="flex flex-col items-center justify-center">
+      <p className="text-gray-600">오늘 하루 기분이 어떠셨나요?</p>
+      <div className="flex justify-center p-6">
+        <div className="grid grid-cols-3 gap-8">
+          {emotions.map((emotion, index) => (
+            <div key={index} className="text-3xl">
+              {emotion.value}
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function EmotionSelect() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -27,16 +60,10 @@ export default function EmotionSelect() {
 
       {isModalOpen && (
         // <MobileModal onClose={openModal}>
-        //   <div className="p-4">
-        //     <h2 className="text-lg font-semibold">오늘의 기분 선택</h2>
-        //     <p className="text-gray-600 mt-2">기분을 선택하세요.</p>
-        //   </div>
+        //   <ModalContent />
         // </MobileModal>
         <WebModal onClose={openModal}>
-          <div className="p-4">
-            <h2 className="text-lg font-semibold">오늘의 기분 선택</h2>
-            <p className="text-gray-600 mt-2">기분을 선택하세요.</p>
-          </div>
+          <ModalContent />
         </WebModal>
       )}
     </>
