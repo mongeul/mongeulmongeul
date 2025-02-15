@@ -2,6 +2,7 @@ import { useState } from "react";
 import RoundIcon from "../atoms/RoundIcon";
 import MobileModal from "../atoms/MobileModal";
 import PublicIcon from "@/assets/icons/public.svg";
+import WebModal from "../atoms/WebModal";
 
 export default function EmotionSelect() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -25,12 +26,18 @@ export default function EmotionSelect() {
       </div>
 
       {isModalOpen && (
-        <MobileModal onClose={openModal}>
+        // <MobileModal onClose={openModal}>
+        //   <div className="p-4">
+        //     <h2 className="text-lg font-semibold">오늘의 기분 선택</h2>
+        //     <p className="text-gray-600 mt-2">기분을 선택하세요.</p>
+        //   </div>
+        // </MobileModal>
+        <WebModal onClose={openModal}>
           <div className="p-4">
             <h2 className="text-lg font-semibold">오늘의 기분 선택</h2>
             <p className="text-gray-600 mt-2">기분을 선택하세요.</p>
           </div>
-        </MobileModal>
+        </WebModal>
       )}
     </>
   );
