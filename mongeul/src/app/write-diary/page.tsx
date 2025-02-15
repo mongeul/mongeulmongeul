@@ -1,6 +1,6 @@
 "use client";
 
-import Button from "@/components/button";
+import Button from "@/components/Button";
 import DefaultLayout from "@/components/DefaultLayout";
 import IconCard from "@/components/write-diary/organisms/IconCard";
 import DateInputCard from "@/components/write-diary/organisms/DateInputCard";

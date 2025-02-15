@@ -1,17 +1,19 @@
-"use client";
-
 import { useState } from "react";
-import Card from "../../card";
+import Card from "../../Card";
 import clsx from "clsx";
 
 interface TextareaProps {
   placeholder: string;
   height?: string;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
 }
 
 export default function Textarea({
   placeholder,
   height = "h-72",
+  value,
+  onChange,
 }: TextareaProps) {
   const [isTyping, setIsTyping] = useState<boolean>(false);
 
@@ -23,9 +25,11 @@ export default function Textarea({
       >
         <textarea
           placeholder={placeholder}
+          value={value}
           className="flex items-center justify-center w-full h-full text-center focus:outline-none resize-none"
           onFocus={() => setIsTyping(true)}
           onBlur={() => setIsTyping(false)}
+          onChange={onChange}
         />
       </Card>
     </div>

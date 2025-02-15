@@ -1,7 +1,5 @@
-"use-client";
-
-import { useState, useEffect } from "react";
-import Card from "../../card";
+import { useState } from "react";
+import Card from "@/components/Card";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import WebModal from "../atoms/WebModal";
@@ -16,18 +14,13 @@ function ModalContent() {
 
 export default function DateInputCard() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedDate, setSelectedDate] = useState("");
-
-  useEffect(() => {
-    const now = new Date();
-    setSelectedDate(
-      now.toLocaleDateString("ko-KR", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-      })
-    );
-  }, []);
+  const [selectedDate, setSelectedDate] = useState(
+    new Date().toLocaleDateString("ko-KR", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    })
+  );
 
   const toggleModal = (): void => setIsModalOpen((prev) => !prev);
 
