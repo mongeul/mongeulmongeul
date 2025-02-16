@@ -18,7 +18,7 @@ public class ShareDiaryResponse {
     private String picture;
     private DiaryWeather weather;
     private DiaryFeeling feeling;
-    private DiaryPrivate isPrivate;
+    private DiaryPrivate privateStatus;
     private Integer turn;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
@@ -31,7 +31,7 @@ public class ShareDiaryResponse {
         response.picture = shareDiary.getPicture();
         response.weather = shareDiary.getWeather();
         response.feeling = shareDiary.getFeeling();
-        response.isPrivate = shareDiary.getIsPrivate();
+        response.privateStatus = shareDiary.getPrivateStatus();
         response.turn = shareDiary.getTurn();
         response.createdAt = shareDiary.getCreatedAt();
         response.modifiedAt = shareDiary.getModifiedAt();
