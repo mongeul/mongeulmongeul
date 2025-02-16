@@ -16,8 +16,8 @@ import org.hibernate.annotations.SQLRestriction;
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "comments")
-@SQLDelete(sql = "UPDATE comments SET is_deleted = true, deleted_at = CURRENT_TIME WHERE id = ?")
-@SQLRestriction("is_deleted = false")
+@SQLDelete(sql = "UPDATE comments SET deleted = true, deleted_at = CURRENT_TIME WHERE id = ?")
+@SQLRestriction("deleted = false")
 public class Comment extends BaseSoftDeleteEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

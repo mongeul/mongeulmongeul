@@ -2,7 +2,6 @@ package com.specup.mongeul.domain.diaryemoji.service;
 
 import com.specup.mongeul.domain.diary.entity.Diary;
 import com.specup.mongeul.domain.diary.repository.DiaryRepository;
-import com.specup.mongeul.domain.diaryemoji.dto.request.DiaryEmojiRequest;
 import com.specup.mongeul.domain.diaryemoji.entity.DiaryEmoji;
 import com.specup.mongeul.domain.diaryemoji.repository.DiaryEmojiRepository;
 import com.specup.mongeul.domain.emoji.entity.Emoji;
@@ -12,10 +11,9 @@ import com.specup.mongeul.domain.user.repository.UserRepository;
 import com.specup.mongeul.global.error.CustomException;
 import com.specup.mongeul.global.error.ErrorCode;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -26,22 +24,48 @@ public class DiaryEmojiService {
     private final DiaryEmojiRepository diaryEmojiRepository;
 
     @Transactional
-    public boolean emojiToggle(Long userId, Long diaryId, DiaryEmojiRequest request) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+    public void addEmoji(Long diaryId, Long emojiId, Long userId) {
         Diary diary = diaryRepository.findById(diaryId)
                 .orElseThrow(() -> new CustomException(ErrorCode.DIARY_NOT_FOUND));
-        Emoji emoji = emojiRepository.findById(request.getEmojiId())
+        Emoji emoji = emojiRepository.findById(emojiId)
                 .orElseThrow(() -> new CustomException(ErrorCode.EMOJI_NOT_FOUND));
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
-        Optional<DiaryEmoji> existEmoji = diaryEmojiRepository.findByDiaryIdAndEmojiIdAndUserId(diaryId, request.getEmojiId(), userId);
-
-        if (existEmoji.isPresent()) {
-            diaryEmojiRepository.delete(existEmoji.get());
-            return false;
-        } else {
+        try {
             diaryEmojiRepository.save(DiaryEmoji.create(diary, emoji, user));
-            return true;
+        } catch (DataIntegrityViolationException e) {
+            throw new CustomException(ErrorCode.EMOJI_ALREADY_ADDED);
         }
     }
+
+    @Transactional
+    public void deleteEmoji(Long diaryId, Long emojiId, Long userId) {
+        DiaryEmoji diaryEmoji = diaryEmojiRepository.findByDiaryIdAndEmojiIdAndUserId(diaryId, emojiId, userId)
+                        .orElseThrow(() -> new CustomException(ErrorCode.EMOJI_NOT_FOUND));
+        diaryEmojiRepository.delete(diaryEmoji);
+    }
+
+    /**
+     * 토글 형식의 이모지 등록/삭제 ver -> 이후 성능 테스트 비교
+     */
+//    @Transactional
+//    public boolean emojiToggle(Long userId, Long diaryId, DiaryEmojiRequest request) {
+//        User user = userRepository.findById(userId)
+//                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+//        Diary diary = diaryRepository.findById(diaryId)
+//                .orElseThrow(() -> new CustomException(ErrorCode.DIARY_NOT_FOUND));
+//        Emoji emoji = emojiRepository.findById(request.getEmojiId())
+//                .orElseThrow(() -> new CustomException(ErrorCode.EMOJI_NOT_FOUND));
+//
+//        Optional<DiaryEmoji> existEmoji = diaryEmojiRepository.findByDiaryIdAndEmojiIdAndUserId(diaryId, request.getEmojiId(), userId);
+//
+//        if (existEmoji.isPresent()) {
+//            diaryEmojiRepository.delete(existEmoji.get());
+//            return false;
+//        } else {
+//            diaryEmojiRepository.save(DiaryEmoji.create(diary, emoji, user));
+//            return true;
+//        }
+//    }
 }
