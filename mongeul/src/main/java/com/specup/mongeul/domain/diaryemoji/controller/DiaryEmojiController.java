@@ -18,7 +18,7 @@ public class DiaryEmojiController {
     private final DiaryEmojiService diaryEmojiService;
 
     @Operation(summary = "이모지 추가", description = "이모지를 추가합니다.")
-    @PostMapping("/feeds/{feedId}/emojis/emojiId")
+    @PostMapping("/feeds/{feedId}/emojis/{emojiId}")
     public ResponseEntity<ApiResponse<Void>> addEmoji(
             @AuthenticationPrincipal User user,
             @PathVariable Long feedId,
@@ -28,7 +28,7 @@ public class DiaryEmojiController {
     }
 
     @Operation(summary = "이모지 삭제", description = "이모지를 삭제합니다.")
-    @DeleteMapping("/feeds/{feedId}/emojis")
+    @DeleteMapping("/feeds/{feedId}/emojis/{emojiId}")
     public ResponseEntity<ApiResponse<Void>> deleteEmoji(
             @AuthenticationPrincipal User user,
             @PathVariable Long feedId,
