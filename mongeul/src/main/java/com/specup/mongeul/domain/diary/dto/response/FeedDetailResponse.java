@@ -16,11 +16,10 @@ public class FeedDetailResponse {
     private Long feedId;
     private String title;
     private String content;
-    private boolean isLocked;
     private String picture;
     private DiaryWeather weather;
     private DiaryFeeling feeling;
-    private DiaryPrivate isPrivate;
+    private DiaryPrivate privateStatus;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
     private List<DiaryEmojiResponse> emojis;
@@ -30,11 +29,10 @@ public class FeedDetailResponse {
         response.feedId = diary.getId();
         response.title = diary.getTitle();
         response.content = diary.getContent();
-        response.isLocked = diary.isLocked();
         response.picture = diary.getPicture();
         response.weather = diary.getWeather();
         response.feeling = diary.getFeeling();
-        response.isPrivate = diary.getIsPrivate();
+        response.privateStatus = diary.getPrivateStatus();
         response.createdAt = diary.getCreatedAt();
         response.modifiedAt = diary.getModifiedAt();
         response.emojis = emojis;

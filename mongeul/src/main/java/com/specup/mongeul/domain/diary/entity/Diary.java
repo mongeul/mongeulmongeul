@@ -40,9 +40,6 @@ public class Diary extends BaseSoftDeleteEntity {
     @Column(nullable = false, columnDefinition = "TEXT")
     private String content;
 
-    @Column(nullable = false)
-    private boolean isLocked;
-
     private String picture;
 
     @Enumerated(EnumType.STRING)
@@ -54,7 +51,7 @@ public class Diary extends BaseSoftDeleteEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private DiaryPrivate isPrivate;
+    private DiaryPrivate privateStatus;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
@@ -66,34 +63,28 @@ public class Diary extends BaseSoftDeleteEntity {
     @OneToMany(mappedBy = "diary", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DiaryEmoji> diaryEmojis = new ArrayList<>();
 
-    public static Diary create(String title, String content, boolean isLocked,
-                               String picture, DiaryWeather weather, DiaryFeeling feeling,
-                               DiaryPrivate isPrivate, User user) {
+    public static Diary create(String title, String content, String picture,
+                               DiaryWeather weather, DiaryFeeling feeling,
+                               DiaryPrivate privateStatus, User user) {
         Diary diary = new Diary();
         diary.title = title;
         diary.content = content;
-        diary.isLocked = isLocked;
         diary.picture = picture;
         diary.weather = weather;
         diary.feeling = feeling;
-        diary.isPrivate = isPrivate;
+        diary.privateStatus = privateStatus;
         diary.user = user;
         return diary;
     }
 
-    public void update(String title, String content, boolean isLocked,
-                       String picture, DiaryWeather weather, DiaryFeeling feeling,
-                       DiaryPrivate isPrivate) {
+    public void update(String title, String content, String picture,
+                       DiaryWeather weather, DiaryFeeling feeling,
+                       DiaryPrivate privateStatus) {
         this.title = title;
         this.content = content;
-        this.isLocked = isLocked;
         this.picture = picture;
         this.weather = weather;
         this.feeling = feeling;
-        this.isPrivate = isPrivate;
-    }
-
-    public void lock() {
-        this.isLocked = !this.isLocked;
+        this.privateStatus = privateStatus;
     }
 }

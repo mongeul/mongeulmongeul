@@ -37,9 +37,8 @@ public class DiaryService {
         }
 
         Diary diary = diaryRepository.save(
-                Diary.create(request.getTitle(), request.getContent(), request.isLocked(),
-                        request.getPicture(), request.getWeather(), request.getFeeling(),
-                        request.getIsPrivate(), user)
+                Diary.create(request.getTitle(), request.getContent(), request.getPicture(),
+                        request.getWeather(), request.getFeeling(), request.getPrivateStatus(), user)
         );
         return DiaryResponse.from(diary);
     }
@@ -51,9 +50,8 @@ public class DiaryService {
         if (!diary.getUser().getId().equals(userId)) {
             throw new CustomException(ErrorCode.INVALID_DIARY_USER);
         }
-        diary.update(request.getTitle(), request.getContent(), request.isLocked(),
-                request.getPicture(), request.getWeather(), request.getFeeling(),
-                request.getIsPrivate());
+        diary.update(request.getTitle(), request.getContent(), request.getPicture(),
+                request.getWeather(), request.getFeeling(), request.getPrivateStatus());
         return DiaryResponse.from(diary);
     }
 
@@ -79,15 +77,5 @@ public class DiaryService {
             throw new CustomException(ErrorCode.INVALID_DIARY_USER);
         }
         diaryRepository.delete(diary);
-    }
-
-    @Transactional
-    public void lock(Long userId, Long diaryId) {
-        Diary diary = diaryRepository.findById(diaryId)
-                .orElseThrow(() -> new CustomException(ErrorCode.DIARY_NOT_FOUND));
-        if (!diary.getUser().getId().equals(userId)) {
-            throw new CustomException(ErrorCode.INVALID_DIARY_USER);
-        }
-        diary.lock();
     }
 }

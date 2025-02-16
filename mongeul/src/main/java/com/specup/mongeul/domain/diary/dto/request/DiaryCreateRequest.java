@@ -11,9 +11,8 @@ import lombok.ToString;
 public class DiaryCreateRequest {
     private String title;
     private String content;
-    private boolean isLocked;
     private String picture;
     private DiaryWeather weather;
     private DiaryFeeling feeling;
-    private DiaryPrivate isPrivate;
+    private DiaryPrivate privateStatus;
 }
