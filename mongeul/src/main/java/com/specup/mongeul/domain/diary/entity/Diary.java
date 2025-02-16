@@ -24,7 +24,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "diaries",
         indexes = {
-            @Index(name = "idx_diary_private_id", columnList = "is_private, id DESC")
+            @Index(name = "idx_diary_private_id", columnList = "private_status, id DESC")
         }
 )
 @SQLDelete(sql = "UPDATE diaries SET deleted = true, deleted_at = CURRENT_TIME WHERE id = ?")
