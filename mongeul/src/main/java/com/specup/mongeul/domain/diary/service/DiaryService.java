@@ -32,7 +32,11 @@ public class DiaryService {
         LocalDateTime endOfDay = LocalDateTime.now().with(LocalTime.MAX);
 
         // 일기 하루에 1개 검증 로직
-        if (diaryRepository.findByUserIdAndCreatedAtBetween(userId, startOfDay, endOfDay).isPresent()) {
+//        if (diaryRepository.findByUserIdAndCreatedAtBetween(userId, startOfDay, endOfDay).isPresent()) {
+//            throw new CustomException(ErrorCode.DIARY_ALREADY_EXISTS);
+//        }
+
+        if (diaryRepository.existsByUserIdAndCreatedAtBetween(userId, startOfDay, endOfDay)) {
             throw new CustomException(ErrorCode.DIARY_ALREADY_EXISTS);
         }
 
