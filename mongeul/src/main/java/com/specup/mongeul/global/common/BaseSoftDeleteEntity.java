@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 public class BaseSoftDeleteEntity extends BaseTimeEntity {
 
     @Column(columnDefinition = "BOOLEAN DEFAULT false")
-    protected boolean isDeleted;
+    protected boolean deleted;
 
     protected LocalDateTime deletedAt;
 }
