@@ -3,24 +3,53 @@ import Card from "@/components/Card";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import WebModal from "../atoms/WebModal";
+import { RootState } from "@/store/store";
+import { useDispatch, useSelector } from "react-redux";
+import { setDate } from "@/store/diarySlice";
 
-function ModalContent() {
+const formatDate = (date: string) => {
+  return new Date(date).toLocaleDateString("ko-KR", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+};
+
+function ModalContent({ closeModal }: { closeModal: () => void }) {
+  const dispatch = useDispatch();
+
+  const selectedDate: string = useSelector(
+    (state: RootState) => state.diary.date
+  );
+  const parsedDate =
+    selectedDate && !isNaN(Date.parse(selectedDate))
+      ? new Date(selectedDate)
+      : new Date();
+
+  const handleChange = (date: Date | null) => {
+    if (!date) return;
+    const formattedDate = date.toISOString().split("T")[0];
+    dispatch(setDate(formattedDate));
+
+    closeModal();
+  };
+
   return (
     <div className="flex items-center">
-      <DatePicker inline />
+      <DatePicker inline selected={parsedDate} onChange={handleChange} />
     </div>
   );
 }
 
 export default function DateInputCard() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedDate, setSelectedDate] = useState(
+  const selectedDate: string =
+    useSelector((state: RootState) => state.diary.date) ??
     new Date().toLocaleDateString("ko-KR", {
       year: "numeric",
       month: "long",
       day: "numeric",
-    })
-  );
+    });
 
   const toggleModal = (): void => setIsModalOpen((prev) => !prev);
 
@@ -29,7 +58,7 @@ export default function DateInputCard() {
       <div className="w-full md:w-1/3" onClick={() => toggleModal()}>
         <Card width="w-full">
           <div className="flex justify-center items-center w-full">
-            {selectedDate}
+            {formatDate(selectedDate)}
           </div>
         </Card>
       </div>
@@ -39,7 +68,7 @@ export default function DateInputCard() {
         //   <ModalContent />
         // </MobileModal>
         <WebModal onClose={toggleModal}>
-          <ModalContent />
+          <ModalContent closeModal={toggleModal} />
         </WebModal>
       )}
     </>

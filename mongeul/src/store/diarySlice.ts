@@ -6,14 +6,18 @@ interface DiaryState {
   content: string;
   date: string;
   emotion: Emotion;
-  weather: Weather;
+  weather: string;
   disclosure: Disclosure;
 }
 
 const initialState: DiaryState = {
   title: "",
   content: "",
-  date: "",
+  date: new Date().toLocaleDateString("ko-KR", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  }) as string,
   emotion: "" as Emotion,
   weather: "" as Weather,
   disclosure: "unlocked" as Disclosure,
@@ -35,7 +39,7 @@ const diarySlice = createSlice({
     setEmotion: (state, action: PayloadAction<Emotion>) => {
       state.emotion = action.payload;
     },
-    setWeather: (state, action: PayloadAction<Weather>) => {
+    setWeather: (state, action: PayloadAction<string>) => {
       state.weather = action.payload;
     },
     setDisclosure: (state, action: PayloadAction<Disclosure>) => {
