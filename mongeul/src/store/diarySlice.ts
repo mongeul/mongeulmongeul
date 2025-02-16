@@ -1,4 +1,4 @@
-import { Disclosure, Emotion } from "@/types/diaryTypes";
+import { Disclosure, Emotion, Weather } from "@/types/diaryTypes";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface DiaryState {
@@ -6,7 +6,7 @@ interface DiaryState {
   content: string;
   date: string;
   emotion: Emotion;
-  weather: string;
+  weather: Weather;
   disclosure: Disclosure;
 }
 
@@ -15,7 +15,7 @@ const initialState: DiaryState = {
   content: "",
   date: "",
   emotion: "" as Emotion,
-  weather: "",
+  weather: "" as Weather,
   disclosure: "unlocked" as Disclosure,
 };
 
@@ -35,7 +35,7 @@ const diarySlice = createSlice({
     setEmotion: (state, action: PayloadAction<Emotion>) => {
       state.emotion = action.payload;
     },
-    setWeather: (state, action: PayloadAction<string>) => {
+    setWeather: (state, action: PayloadAction<Weather>) => {
       state.weather = action.payload;
     },
     setDisclosure: (state, action: PayloadAction<Disclosure>) => {

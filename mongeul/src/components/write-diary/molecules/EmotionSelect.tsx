@@ -17,7 +17,7 @@ const getEmotionIcon = (emotion: Emotion) => {
   switch (emotion) {
     case "happy":
       return (
-        <RoundIcon backgroundColor="bg-yellow-300">
+        <RoundIcon backgroundColor="bg-pink-200">
           <HappyIcon className="text-white h-9 w-9" />
         </RoundIcon>
       );
