@@ -3,19 +3,31 @@
 import { useState } from "react";
 import RoundIcon from "../atoms/RoundIcon";
 import MobileModal from "../atoms/MobileModal";
-import EmotionIcon from "@/assets/icons/emotion.svg";
+import FeelingsIcon from "@/assets/icons/feelings.svg";
 import HappyIcon from "@/assets/icons/happy.svg";
 import WebModal from "../atoms/WebModal";
 import { RootState } from "@/store/store";
 import { useDispatch, useSelector } from "react-redux";
-import { setEmotion } from "@/store/diarySlice";
-import { Emotion } from "@/types/diaryTypes";
+import { setFeelings } from "@/store/diarySlice";
+import { Feelings } from "@/types/diaryTypes";
 
-const emotions: Emotion[] = ["happy", "happy"];
+const feelingsOptions: Feelings[] = ["happy", "soso", "sad"];
 
-const getEmotionIcon = (emotion: Emotion) => {
-  switch (emotion) {
+const getFeelingsIcon = (feelings: Feelings) => {
+  switch (feelings) {
     case "happy":
+      return (
+        <RoundIcon backgroundColor="bg-pink-400">
+          <HappyIcon className="text-white h-9 w-9" />
+        </RoundIcon>
+      );
+    case "soso":
+      return (
+        <RoundIcon backgroundColor="bg-pink-300">
+          <HappyIcon className="text-white h-9 w-9" />
+        </RoundIcon>
+      );
+    case "sad":
       return (
         <RoundIcon backgroundColor="bg-pink-200">
           <HappyIcon className="text-white h-9 w-9" />
@@ -25,7 +37,7 @@ const getEmotionIcon = (emotion: Emotion) => {
     default:
       return (
         <RoundIcon backgroundColor="bg-zinc-300">
-          <EmotionIcon className="text-white h-9 w-9" />
+          <FeelingsIcon className="text-white h-9 w-9" />
         </RoundIcon>
       );
   }
@@ -34,8 +46,8 @@ const getEmotionIcon = (emotion: Emotion) => {
 function ModalContent({ closeModal }: { closeModal: () => void }) {
   const dispatch = useDispatch();
 
-  const handleChange = (emotion: Emotion) => {
-    dispatch(setEmotion(emotion));
+  const handleChange = (feelings: Feelings) => {
+    dispatch(setFeelings(feelings));
     closeModal();
   };
 
@@ -44,13 +56,13 @@ function ModalContent({ closeModal }: { closeModal: () => void }) {
       <p className="text-gray-600">오늘 하루 기분이 어떠셨나요?</p>
       <div className="flex justify-center p-6">
         <div className="grid grid-cols-3 gap-8">
-          {emotions.map((emotion, index) => (
+          {feelingsOptions.map((feelings, index) => (
             <div
               key={index}
               className="text-3xl"
-              onClick={() => handleChange(emotion)}
+              onClick={() => handleChange(feelings)}
             >
-              {getEmotionIcon(emotion)}
+              {getFeelingsIcon(feelings)}
             </div>
           ))}
         </div>
@@ -59,10 +71,10 @@ function ModalContent({ closeModal }: { closeModal: () => void }) {
   );
 }
 
-export default function EmotionSelect() {
+export default function FeelingsSelect() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const selectedEmotion: Emotion =
-    useSelector((state: RootState) => state.diary.emotion) ?? "";
+  const selectedFeelings: Feelings =
+    useSelector((state: RootState) => state.diary.feelings) ?? "";
 
   const toggleModal = (): void => setIsModalOpen((prev) => !prev);
 
@@ -74,7 +86,7 @@ export default function EmotionSelect() {
         }}
         className="flex flex-col items-center justify-center gap-2"
       >
-        {getEmotionIcon(selectedEmotion)}
+        {getFeelingsIcon(selectedFeelings)}
         <p className="text-xs text-zinc-400">오늘의 기분</p>
       </div>
 

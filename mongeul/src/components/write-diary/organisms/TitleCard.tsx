@@ -8,15 +8,17 @@ export default function TitleCard() {
   const title = useSelector((state: RootState) => state.diary.title);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch(setTitle(e.target.value));
+    const newValue = e.target.value.slice(0, 20);
+    dispatch(setTitle(newValue));
   };
 
   return (
-    <div className="w-full md:w-1/3">
+    <div className="w-full">
       <Input
         placeholder="제목을 입력하세요"
         value={title}
         onChange={handleChange}
+        maxLength={20}
       />
     </div>
   );

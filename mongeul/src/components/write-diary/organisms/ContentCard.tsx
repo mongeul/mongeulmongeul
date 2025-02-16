@@ -8,14 +8,16 @@ export default function ContentCard() {
   const content = useSelector((state: RootState) => state.diary.content);
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    dispatch(setContent(e.target.value));
+    const newValue = e.target.value.slice(0, 500);
+    dispatch(setContent(newValue));
   };
   return (
-    <div className="w-full md:w-1/3">
+    <div className="w-full">
       <Textarea
         placeholder="오늘 하루를 글로 기록해보세요"
         value={content}
         onChange={handleChange}
+        maxLength={500}
       />
     </div>
   );

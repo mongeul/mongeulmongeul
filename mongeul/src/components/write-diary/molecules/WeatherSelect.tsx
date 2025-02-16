@@ -10,24 +10,24 @@ import { RootState } from "@/store/store";
 
 const weathers: Weather[] = ["sunny", "cloudy", "rainy"];
 
-const getWeatherIcon = (disclosure: Weather) => {
-  switch (disclosure) {
+const getWeatherIcon = (weather: Weather) => {
+  switch (weather) {
     case "sunny":
       return (
-        <RoundIcon backgroundColor="bg-theme-200">
+        <RoundIcon backgroundColor="bg-lime-200">
           <WeatherIcon className="text-white h-9 w-9" />
         </RoundIcon>
       );
 
     case "cloudy":
       return (
-        <RoundIcon backgroundColor="bg-theme-300">
+        <RoundIcon backgroundColor="bg-lime-300">
           <WeatherIcon className="text-white h-9 w-9" />
         </RoundIcon>
       );
     case "rainy":
       return (
-        <RoundIcon backgroundColor="bg-theme-400">
+        <RoundIcon backgroundColor="bg-lime-400">
           <WeatherIcon className="text-white h-9 w-9" />
         </RoundIcon>
       );
@@ -50,7 +50,7 @@ function ModalContent({ closeModal }: { closeModal: () => void }) {
 
   return (
     <div className="flex flex-col items-center justify-center">
-      <p className="text-gray-600">오늘의 날씨는 어떘나요?</p>
+      <p className="text-gray-600">오늘의 날씨는 어떤가요?</p>
       <div className="flex justify-center p-6">
         <div className="grid grid-cols-3 gap-8">
           {weathers.map((weather, index) => (

@@ -10,11 +10,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { Disclosure } from "@/types/diaryTypes";
 
-const disclosures: Disclosure[] = ["public", "unlocked", "locked"];
+const disclosures: Disclosure[] = ["PUBLIC", "PRIVATE", "LOCK"];
 
 const getDisclosureIcon = (disclosure: Disclosure) => {
   switch (disclosure) {
-    case "public":
+    case "PUBLIC":
       return {
         icon: (
           <RoundIcon backgroundColor="bg-theme-600">
@@ -24,7 +24,7 @@ const getDisclosureIcon = (disclosure: Disclosure) => {
         label: "전체 공개",
       };
 
-    case "unlocked":
+    case "PRIVATE":
       return {
         icon: (
           <RoundIcon backgroundColor="bg-theme-500">
@@ -33,7 +33,7 @@ const getDisclosureIcon = (disclosure: Disclosure) => {
         ),
         label: "나만 보기",
       };
-    case "locked":
+    case "LOCK":
       return {
         icon: (
           <RoundIcon backgroundColor="bg-zinc-300">
@@ -64,21 +64,23 @@ function ModalContent({ closeModal }: { closeModal: () => void }) {
 
   return (
     <div className="flex flex-col items-center justify-center">
-      <p className="text-gray-600">공개 범위를 설정할 수 있어요</p>
+      <p>공개 범위를 선택하세요</p>
       <div className="flex justify-center p-6">
-        <div className="flex flex-col gap-8">
-          {disclosures.map((disclosure, index) => (
-            <div
-              key={index}
-              className="flex flex-row items-center justify-center gap-8 text-xl"
-              onClick={() => handleChange(disclosure)}
-            >
-              <div>{getDisclosureIcon(disclosure).icon}</div>
-              <div>{getDisclosureIcon(disclosure).label}</div>
-            </div>
-          ))}
-          <p className="text-zinc-400 text-xs">
-            잠긴 일기는 비밀번호를 입력해야만 볼 수 있어요
+        <div className="flex flex-col justify-center gap-6">
+          <div className="flex flex-row gap-8">
+            {disclosures.map((disclosure, index) => (
+              <div
+                key={index}
+                className="flex flex-col items-center justify-center gap-4"
+                onClick={() => handleChange(disclosure)}
+              >
+                <div>{getDisclosureIcon(disclosure).icon}</div>
+                <div>{getDisclosureIcon(disclosure).label}</div>
+              </div>
+            ))}
+          </div>
+          <p className="text-zinc-400 text-xs text-center">
+            * 잠긴 일기는 비밀번호를 입력해야만 볼 수 있어요
           </p>
         </div>
       </div>

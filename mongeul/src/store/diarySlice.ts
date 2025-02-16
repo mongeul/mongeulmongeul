@@ -1,26 +1,22 @@
-import { Disclosure, Emotion, Weather } from "@/types/diaryTypes";
+import { Disclosure, Feelings, Weather } from "@/types/diaryTypes";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface DiaryState {
   title: string;
   content: string;
   date: string;
-  emotion: Emotion;
-  weather: string;
+  feelings: Feelings;
+  weather: Weather;
   disclosure: Disclosure;
 }
 
 const initialState: DiaryState = {
   title: "",
   content: "",
-  date: new Date().toLocaleDateString("ko-KR", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  }) as string,
-  emotion: "" as Emotion,
+  date: new Date().toISOString().split("T")[0],
+  feelings: "" as Feelings,
   weather: "" as Weather,
-  disclosure: "unlocked" as Disclosure,
+  disclosure: "PRIVATE" as Disclosure,
 };
 
 const diarySlice = createSlice({
@@ -36,10 +32,10 @@ const diarySlice = createSlice({
     setDate: (state, action: PayloadAction<string>) => {
       state.date = action.payload;
     },
-    setEmotion: (state, action: PayloadAction<Emotion>) => {
-      state.emotion = action.payload;
+    setFeelings: (state, action: PayloadAction<Feelings>) => {
+      state.feelings = action.payload;
     },
-    setWeather: (state, action: PayloadAction<string>) => {
+    setWeather: (state, action: PayloadAction<Weather>) => {
       state.weather = action.payload;
     },
     setDisclosure: (state, action: PayloadAction<Disclosure>) => {
@@ -53,7 +49,7 @@ export const {
   setTitle,
   setContent,
   setDate,
-  setEmotion,
+  setFeelings,
   setWeather,
   setDisclosure,
   resetDiary,

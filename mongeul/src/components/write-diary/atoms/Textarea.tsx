@@ -4,33 +4,41 @@ import clsx from "clsx";
 
 interface TextareaProps {
   placeholder: string;
-  height?: string;
+  className?: string;
   value: string;
+  maxLength: number;
   onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
 }
 
 export default function Textarea({
   placeholder,
-  height = "h-72",
+  className = "h-72",
   value,
+  maxLength,
   onChange,
 }: TextareaProps) {
   const [isTyping, setIsTyping] = useState<boolean>(false);
 
   return (
-    <div className={clsx(`${height}`, "w-full")}>
+    <div className="w-full">
       <Card
         borderColor={isTyping ? "border-theme-400" : undefined}
-        height={height}
+        height={className}
       >
-        <textarea
-          placeholder={placeholder}
-          value={value}
-          className="flex items-center justify-center w-full h-full text-center focus:outline-none resize-none"
-          onFocus={() => setIsTyping(true)}
-          onBlur={() => setIsTyping(false)}
-          onChange={onChange}
-        />
+        <div className="flex flex-col items-center justify-center w-full h-full">
+          <textarea
+            placeholder={placeholder}
+            value={value}
+            className="w-full h-full text-center focus:outline-none resize-none"
+            onFocus={() => setIsTyping(true)}
+            onBlur={() => setIsTyping(false)}
+            onChange={onChange}
+            maxLength={maxLength}
+          />
+          <div className="flex w-full justify-end text-xs text-zinc-300">
+            {value.length}/{maxLength}
+          </div>
+        </div>
       </Card>
     </div>
   );

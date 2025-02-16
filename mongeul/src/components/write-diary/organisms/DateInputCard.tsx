@@ -6,14 +6,7 @@ import WebModal from "../atoms/WebModal";
 import { RootState } from "@/store/store";
 import { useDispatch, useSelector } from "react-redux";
 import { setDate } from "@/store/diarySlice";
-
-const formatDate = (date: string) => {
-  return new Date(date).toLocaleDateString("ko-KR", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
-};
+import { formatDate } from "@/utils/formatDate";
 
 function ModalContent({ closeModal }: { closeModal: () => void }) {
   const dispatch = useDispatch();
@@ -36,7 +29,12 @@ function ModalContent({ closeModal }: { closeModal: () => void }) {
 
   return (
     <div className="flex items-center">
-      <DatePicker inline selected={parsedDate} onChange={handleChange} />
+      <DatePicker
+        inline
+        selected={parsedDate}
+        onChange={handleChange}
+        maxDate={new Date()}
+      />
     </div>
   );
 }
@@ -55,7 +53,7 @@ export default function DateInputCard() {
 
   return (
     <>
-      <div className="w-full md:w-1/3" onClick={() => toggleModal()}>
+      <div className="w-full" onClick={() => toggleModal()}>
         <Card width="w-full">
           <div className="flex justify-center items-center w-full">
             {formatDate(selectedDate)}

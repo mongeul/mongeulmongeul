@@ -8,6 +8,7 @@ interface ButtonProps {
   backgroundColor?: string;
   borderColor?: string;
   textColor?: string;
+  fontWeight?: string;
   roundSize?: string;
   onClick: () => void;
 }
@@ -18,7 +19,8 @@ export default function Button({
   height = "h-auto",
   backgroundColor = "bg-theme-400",
   borderColor = "border-0",
-  textColor = "black",
+  textColor = "text-black",
+  fontWeight = "font-normal",
   roundSize = "rounded-3xl",
   onClick,
 }: ButtonProps) {
@@ -31,6 +33,7 @@ export default function Button({
         `${borderColor}`,
         `${textColor}`,
         `${roundSize}`,
+        `${fontWeight}`,
         "px-4 py-3 flex items-center justify-center"
       )}
       onClick={() => onClick()}
