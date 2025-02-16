@@ -26,6 +26,7 @@ public enum ErrorCode {
 
     // 이모지 관련 에러
     EMOJI_NOT_FOUND(HttpStatus.NOT_FOUND, "이모지를 찾을 수 없습니다."),
+    EMOJI_ALREADY_ADDED(HttpStatus.BAD_REQUEST, "이미 해당 이모지가 등록되어 있습니다."),
 
     // 파일 관련 에러
     FILE_NOT_FOUND(HttpStatus.NOT_FOUND, "파일을 찾을 수 없습니다"),

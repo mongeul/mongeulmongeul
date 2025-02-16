@@ -14,7 +14,14 @@ import lombok.ToString;
 @Getter
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "diaries_emojis")
+@Table(name = "diaries_emojis",
+        indexes = {
+                @Index(name = "idx_diary_emoji_group", columnList = "diary_id, emoji_id")
+        },
+        uniqueConstraints = {
+            @UniqueConstraint(name = "idx_diary_emoji_user", columnNames = {"diary_id", "emoji_id", "user_id"})
+        }
+)
 public class DiaryEmoji extends BaseTimeEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

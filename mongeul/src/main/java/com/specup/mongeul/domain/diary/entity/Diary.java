@@ -22,9 +22,13 @@ import java.util.List;
 @Getter
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "diaries")
-@SQLDelete(sql = "UPDATE diaries SET is_deleted = true, deleted_at = CURRENT_TIME WHERE id = ?")
-@SQLRestriction("is_deleted = false")
+@Table(name = "diaries",
+        indexes = {
+            @Index(name = "idx_diary_private_id", columnList = "is_private, id DESC")
+        }
+)
+@SQLDelete(sql = "UPDATE diaries SET deleted = true, deleted_at = CURRENT_TIME WHERE id = ?")
+@SQLRestriction("deleted = false")
 public class Diary extends BaseSoftDeleteEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
