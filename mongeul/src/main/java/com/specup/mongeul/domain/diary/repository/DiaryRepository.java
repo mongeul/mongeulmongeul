@@ -14,6 +14,10 @@ import java.util.Optional;
 public interface DiaryRepository extends JpaRepository<Diary, Long> {
     List<Diary> findByUserId(Long userId);
     @Query("SELECT COUNT(d) > 0 FROM Diary d WHERE d.user.id = :userId AND d.createdAt BETWEEN :start AND :end")
+
+    /**
+     * 하루 1개 일기 제한 검증
+     */
     boolean existsByUserIdAndCreatedAtBetween(@Param("userId") Long userId, @Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
 
 //    Optional<Diary> findByUserIdAndCreatedAtBetween(Long userId, LocalDateTime start, LocalDateTime end);
