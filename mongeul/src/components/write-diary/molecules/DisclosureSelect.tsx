@@ -1,10 +1,10 @@
 import { useState } from "react";
-import RoundIcon from "../atoms/RoundIcon";
-import MobileModal from "../atoms/MobileModal";
+import RoundIcon from "../../common/atoms/RoundIcon";
+import MobileModal from "../../common/atoms/MobileModal";
 import PublicIcon from "@/assets/icons/public.svg";
 import UnlockedIcon from "@/assets/icons/unlocked.svg";
 import LockedIcon from "@/assets/icons/locked.svg";
-import WebModal from "../atoms/WebModal";
+import WebModal from "../../common/atoms/WebModal";
 import { setDisclosure } from "@/store/diarySlice";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";

@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import Textarea from "../atoms/Textarea";
+import Textarea from "../../common/atoms/Textarea";
 import { setContent } from "@/store/diarySlice";
 import { RootState } from "@/store/store";
 

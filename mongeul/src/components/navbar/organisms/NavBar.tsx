@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import WriteButton from "./WriteButton";
+import WriteButton from "../atoms/WriteButton";
 import DiaryIcon from "@/assets/icons/diary.svg";
 import FeedIcon from "@/assets/icons/feed.svg";
 import SharedDiaryIcon from "@/assets/icons/shared-diary.svg";

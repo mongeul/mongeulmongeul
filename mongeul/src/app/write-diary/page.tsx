@@ -1,7 +1,6 @@
 "use client";
 
-import Button from "@/components/Button";
-import DefaultLayout from "@/components/DefaultLayout";
+import DefaultLayout from "@/components/layout/DefaultLayout";
 import IconCard from "@/components/write-diary/organisms/IconCard";
 import DateInputCard from "@/components/write-diary/organisms/DateInputCard";
 import ContentCard from "@/components/write-diary/organisms/ContentCard";
@@ -10,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { resetDiary } from "@/store/diarySlice";
 import { createDiary } from "@/lib/api/diary";
+import Button from "@/components/common/atoms/Button";
 
 export default function Page() {
   const dispatch = useDispatch();

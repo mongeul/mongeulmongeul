@@ -1,4 +1,4 @@
-import ParellelLayoutProps from "@/components/ParellelLayout";
+import ParellelLayoutProps from "@/components/layout/ParellelLayout";
 import { ReactNode } from "react";
 
 export default function Layout({

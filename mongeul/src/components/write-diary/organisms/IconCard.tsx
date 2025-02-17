@@ -1,4 +1,4 @@
-import Card from "@/components/Card";
+import Card from "@/components/common/atoms/Card";
 import DisclosureSelect from "../molecules/DisclosureSelect";
 import WeatherSelect from "../molecules/WeatherSelect";
 import FeelingsSelect from "../molecules/FeelingsSelect";
