@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import Input from "../atoms/Input";
+import Input from "../../common/atoms/Input";
 import { RootState } from "@/store/store";
 import { setTitle } from "@/store/diarySlice";
 

@@ -1,8 +1,8 @@
 import { useState } from "react";
-import Card from "@/components/Card";
+import Card from "@/components/common/atoms/Card";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import WebModal from "../atoms/WebModal";
+import WebModal from "../../common/atoms/WebModal";
 import { RootState } from "@/store/store";
 import { useDispatch, useSelector } from "react-redux";
 import { setDate } from "@/store/diarySlice";

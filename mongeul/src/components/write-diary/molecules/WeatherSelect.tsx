@@ -1,8 +1,8 @@
 import { useState } from "react";
-import RoundIcon from "../atoms/RoundIcon";
-import MobileModal from "../atoms/MobileModal";
+import RoundIcon from "../../common/atoms/RoundIcon";
+import MobileModal from "../../common/atoms/MobileModal";
 import WeatherIcon from "@/assets/icons/weather.svg";
-import WebModal from "../atoms/WebModal";
+import WebModal from "../../common/atoms/WebModal";
 import { Weather } from "@/types/diaryTypes";
 import { setWeather } from "@/store/diarySlice";
 import { useDispatch, useSelector } from "react-redux";
