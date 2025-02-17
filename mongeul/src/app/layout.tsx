@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import Header from "@/components/header/orgamisms/Header";
-import Navbar from "@/components/navbar/organisms/NavBar";
+
 import { ThemeProvider } from "@/context/ThemeContext";
 import { Provider } from "react-redux";
 import { store } from "@/store/store";
+import Header from "@/components/header/orgamisms/Header";
 import ClientLayout from "@/components/layout/ClientLayout";
+import Navbar from "@/components/navbar/organisms/NavBar";
 
 export const metadata: Metadata = {
   title: "몽글몽글",
