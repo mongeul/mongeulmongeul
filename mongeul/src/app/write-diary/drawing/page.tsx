@@ -1,3 +1,10 @@
+import DrawingForm from "@/components/write-diary/templates/DrawingForm";
+
 export default function Page() {
-  return <div>그림일기</div>;
+  return (
+    <div className="w-full">
+      그림일기
+      <DrawingForm />
+    </div>
+  );
 }
