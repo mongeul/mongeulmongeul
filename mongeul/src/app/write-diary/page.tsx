@@ -42,7 +42,7 @@ export default function Page() {
   };
 
   return (
-    <div className="w-full md:w-1/2 flex flex-col items-center gap-4">
+    <div className="w-full flex flex-col items-center gap-4">
       <WriteForm />
       <Button
         text="작성하기"

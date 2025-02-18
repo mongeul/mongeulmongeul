@@ -27,7 +27,7 @@ export default function ColorPalette({
   onSelectColor,
 }: ColorPaletteProps) {
   return (
-    <div className="flex flex-row w-full justify-center gap-3">
+    <div className="flex flex-wrap w-full justify-center gap-3">
       {colors.map((color) => (
         <ColorButton
           key={color}

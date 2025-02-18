@@ -24,7 +24,7 @@ export default function RootLayout({
         <ClientLayout>
           <ThemeProvider initialTheme="sky" initialFont="suit">
             <Header />
-            <main className="flex w-full md:w-3/4 mx-auto min-h-screen p-4">
+            <main className="flex w-full md:w-3/4 lg:w-1/2 mx-auto min-h-screen p-4">
               {children}
             </main>
             <Navbar />
