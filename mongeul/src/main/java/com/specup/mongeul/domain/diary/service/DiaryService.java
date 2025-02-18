@@ -60,8 +60,14 @@ public class DiaryService {
     }
 
     @Transactional(readOnly = true)
-    public List<DiaryResponse> getMyDiaries(Long userId) {
-        List<Diary> diaries = diaryRepository.findByUserId(userId);
+    public List<DiaryResponse> getCalendarDiaries(Long userId, int year, int month) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        LocalDateTime startOfMonth = LocalDateTime.of(year, month, 1, 0, 0, 0);
+        LocalDateTime startOfNextMonth = startOfMonth.plusMonths(1);
+
+        List<Diary> diaries = diaryRepository.findByUserAndCreatedAtBetween(user, startOfMonth, startOfNextMonth);
         return diaries.stream()
                 .map(DiaryResponse::from)
                 .toList();
