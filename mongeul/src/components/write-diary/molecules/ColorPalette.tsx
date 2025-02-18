@@ -1,4 +1,3 @@
-import { useState } from "react";
 import ColorButton from "../atoms/ColorButton";
 
 const colors = [

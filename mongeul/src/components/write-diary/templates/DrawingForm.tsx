@@ -1,4 +1,4 @@
-import DrawingToolCard from "../organisms/DrawingToolCard";
+import DrawingToolCard from "../organisms/DrawingBoard";
 
 export default function DrawingForm() {
   return (

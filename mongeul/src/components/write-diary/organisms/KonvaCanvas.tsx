@@ -5,13 +5,17 @@ import { Stage, Layer, Line } from "react-konva";
 
 interface KonvaCanvasProps {
   selectedColor: string;
+  selectedBrushSize: number;
 }
 
-export default function KonvaCanvas({ selectedColor }: KonvaCanvasProps) {
+export default function KonvaCanvas({
+  selectedColor,
+  selectedBrushSize,
+}: KonvaCanvasProps) {
   const stageRef = useRef<any>(null);
-  const [lines, setLines] = useState<{ points: number[]; stroke: string }[]>(
-    []
-  );
+  const [lines, setLines] = useState<
+    { points: number[]; stroke: string; strokeWidth: number }[]
+  >([]);
   const [history, setHistory] = useState<
     { points: number[]; stroke: string }[][]
   >([]);
@@ -25,7 +29,14 @@ export default function KonvaCanvas({ selectedColor }: KonvaCanvasProps) {
     setIsDrawing(true);
     const pos = e.target.getStage().getPointerPosition();
     setHistory((prev) => [...prev, JSON.parse(JSON.stringify(lines))]); // 현재 상태 저장
-    setLines([...lines, { points: [pos.x, pos.y], stroke: selectedColor }]);
+    setLines([
+      ...lines,
+      {
+        points: [pos.x, pos.y],
+        stroke: selectedColor,
+        strokeWidth: selectedBrushSize,
+      },
+    ]);
   };
 
   // 그리는중
@@ -60,7 +71,7 @@ export default function KonvaCanvas({ selectedColor }: KonvaCanvasProps) {
             key={i}
             points={line.points}
             stroke={line.stroke}
-            strokeWidth={5}
+            strokeWidth={line.strokeWidth}
             tension={0.5}
             lineCap="round"
             lineJoin="round"
