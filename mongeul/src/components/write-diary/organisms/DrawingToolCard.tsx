@@ -1,20 +1,22 @@
 "use client";
 
-import Card from "@/components/common/atoms/Card";
-import ColorPalette from "../molecules/ColorPalette";
+import dynamic from "next/dynamic";
 import { useState } from "react";
-import Canvas from "./Canvas";
+import ColorPalette from "../molecules/ColorPalette";
+import Card from "@/components/common/atoms/Card";
 
-export default function DrawingToolCard() {
-  const [brushColor, setBrushColor] = useState("#000000");
+const KonvaCanvas = dynamic(() => import("./KonvaCanvas"), { ssr: false });
+
+export default function CanvasWrapper() {
+  const [selectedColor, setSelectedColor] = useState("#000000");
 
   return (
     <Card width="w-full">
-      <div className="flex flex-col gap-4 w-full">
-        <Canvas brushColor={brushColor} />
+      <div className="w-full h-full flex flex-col items-center gap-4">
+        <KonvaCanvas selectedColor={selectedColor} />
         <ColorPalette
-          selectedColor={brushColor}
-          onSelectColor={setBrushColor}
+          selectedColor={selectedColor}
+          onSelectColor={setSelectedColor}
         />
       </div>
     </Card>
