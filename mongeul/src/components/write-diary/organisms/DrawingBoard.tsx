@@ -15,19 +15,10 @@ export default function DrawingBoard() {
   return (
     <Card width="w-full">
       <div className="w-full h-full flex flex-col items-center gap-4">
-        <KonvaCanvas
-          selectedColor={selectedColor}
-          selectedBrushSize={selectedBrushSize}
-        />
+        <KonvaCanvas />
         <div className="flex flex-row gap-6">
-          <ColorPalette
-            selectedColor={selectedColor}
-            onSelectColor={setSelectedColor}
-          />
-          <BrushSizePalette
-            brushSize={selectedBrushSize}
-            onSelectSize={setSelectedBrushSize}
-          />
+          <ColorPalette />
+          <BrushSizePalette />
         </div>
       </div>
     </Card>

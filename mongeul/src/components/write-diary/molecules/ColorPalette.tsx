@@ -1,38 +1,38 @@
 import ColorButton from "../atoms/ColorButton";
+import { setColor } from "@/store/drawingSlice";
+import { RootState } from "@/store/store";
+import { useDispatch, useSelector } from "react-redux";
 
 const colors = [
-  "#FF3B30", // 빨강
-  "#FF9500", // 주황
+  "#FF0000", // 빨강
+  "#FF7700", // 주황
   "#FFF705", // 노랑
   "#A8E063", // 연두
   "#34C759", // 초록
-  "#87CEEB", // 하늘
+  "#6FE2FF", // 하늘
   "#007AFF", // 파랑
-  "#003366", // 남색
-  "#AF52DE", // 보라
+  "#9F50FF", // 보라
   "#FF86CD", // 핑크
   "#8B4513", // 갈색
+  "#898A8D", // 갈색
   "#FFFFFF", // 하양
   "#000000", // 검정
 ];
 
-interface ColorPaletteProps {
-  selectedColor: string;
-  onSelectColor: (color: string) => void;
-}
+export default function ColorPalette() {
+  const dispatch = useDispatch();
+  const selectedColor = useSelector(
+    (state: RootState) => state.drawing.selectedColor
+  );
 
-export default function ColorPalette({
-  selectedColor,
-  onSelectColor,
-}: ColorPaletteProps) {
   return (
-    <div className="flex flex-wrap w-full justify-center gap-3">
+    <div className="flex flex-wrap w-auto justify-center gap-3">
       {colors.map((color) => (
         <ColorButton
           key={color}
           color={color}
           selected={selectedColor === color}
-          onClick={() => onSelectColor(color)}
+          onClick={() => dispatch(setColor(color))}
         />
       ))}
     </div>
