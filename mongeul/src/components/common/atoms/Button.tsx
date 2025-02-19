@@ -6,7 +6,6 @@ interface ButtonProps {
   width?: string;
   height?: string;
   backgroundColor?: string;
-  hoverColor?: string;
   borderColor?: string;
   textColor?: string;
   fontWeight?: string;
@@ -19,7 +18,6 @@ export default function Button({
   width = "w-auto",
   height = "h-auto",
   backgroundColor = "bg-theme-400",
-  hoverColor = "bg-theme-500",
   borderColor = "border-0",
   textColor = "text-black",
   fontWeight = "font-normal",
@@ -32,7 +30,6 @@ export default function Button({
         `${height}`,
         `${width}`,
         `${backgroundColor}`,
-        `hover:${hoverColor}`,
         `${borderColor}`,
         `${textColor}`,
         `${roundSize}`,

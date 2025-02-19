@@ -1,4 +1,4 @@
-export type Brush = "pen" | "eraser";
+export type Brush = "pen" | "pencil" | "eraser";
 
 export interface DrawingLine {
   points: number[];

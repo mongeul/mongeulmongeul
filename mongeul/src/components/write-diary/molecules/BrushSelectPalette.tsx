@@ -5,10 +5,12 @@ import { RootState } from "@/store/store";
 import { setBrushType } from "@/store/drawingSlice";
 import BrushSelectButton from "../atoms/BrushSelectButton";
 import { Brush } from "@/types/drawingTypes";
-import BasicPenIcon from "@/assets/icons/basic-pen.svg";
+import PencilIcon from "@/assets/icons/pencil.svg";
+import PenIcon from "@/assets/icons/pen.svg";
 import EraserIcon from "@/assets/icons/eraser.svg";
 
-const brushes: Brush[] = ["pen", "eraser"];
+const brushes: Brush[] = ["pen", "pencil", "eraser"];
+// const brushes: Brush[] = ["pen", "eraser"];
 
 export default function BrushSelectPalette() {
   const dispatch = useDispatch();
@@ -19,7 +21,9 @@ export default function BrushSelectPalette() {
   const getBrushIcon = (brush: Brush) => {
     switch (brush) {
       case "pen":
-        return <BasicPenIcon className="w-7 h-7" />;
+        return <PenIcon className="w-7 h-7" />;
+      case "pencil":
+        return <PencilIcon className="w-7 h-7" />;
       case "eraser":
         return <EraserIcon className="w-6 h-6" />;
     }
