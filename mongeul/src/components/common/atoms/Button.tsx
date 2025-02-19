@@ -1,8 +1,10 @@
 "use client";
 import clsx from "clsx";
+import { ReactNode } from "react";
 
 interface ButtonProps {
   text: string;
+  icon?: ReactNode;
   width?: string;
   height?: string;
   backgroundColor?: string;
@@ -15,6 +17,7 @@ interface ButtonProps {
 
 export default function Button({
   text,
+  icon,
   width = "w-auto",
   height = "h-auto",
   backgroundColor = "bg-theme-400",
@@ -34,10 +37,11 @@ export default function Button({
         `${textColor}`,
         `${roundSize}`,
         `${fontWeight}`,
-        "px-4 py-3 flex items-center justify-center"
+        "px-4 py-3 flex items-center justify-center gap-2"
       )}
       onClick={() => onClick()}
     >
+      {icon && <span>{icon}</span>}
       {text}
     </button>
   );
