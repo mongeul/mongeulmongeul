@@ -52,13 +52,12 @@ public class DataInitializer {
 
     void insert() {
         transactionTemplate.executeWithoutResult(status -> {
-            User user = userRepository.findById(2L)
+            User user = userRepository.findById(1L)
                     .orElseThrow(() -> new RuntimeException("User not found"));
             for (int i = 0; i < BULK_INSERT_SIZE; i++) {
                 Diary diary = Diary.create(
                         "title" + i,
                         "content" + i,
-                        false,
                         null,
                         DiaryWeather.SUNNY,
                         DiaryFeeling.HAPPY,

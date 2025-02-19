@@ -23,10 +23,10 @@ import java.util.List;
 public class DiaryController {
     private final DiaryService diaryService;
 
-    @Operation(summary = "내가 작성한 모든 일기 조회", description = "내가 작성한 모든 일기를 조회합니다.")
-    @GetMapping("/diaries/me")
-    public ResponseEntity<ApiResponse<List<DiaryResponse>>> getMyDiaries(@AuthenticationPrincipal User user) {
-        return ResponseEntity.ok(ApiResponse.success(diaryService.getMyDiaries(user.getId()), "내가 작성한 모든 일기 조회 성공"));
+    @Operation(summary = "캘린더에서 일기 조회", description = "내가 작성한 일기를 월 별로 조회합니다.")
+    @GetMapping("/diaries/{year}/{month}")
+    public ResponseEntity<ApiResponse<List<DiaryResponse>>> getCalendarDiaries(@AuthenticationPrincipal User user, @PathVariable int year, @PathVariable int month) {
+        return ResponseEntity.ok(ApiResponse.success(diaryService.getCalendarDiaries(user.getId(), year, month), "내가 작성한 일기 목록 조회 성공"));
     }
 
     @Operation(summary = "특정 일기 조회", description = "일기를 조회합니다.")
@@ -51,13 +51,6 @@ public class DiaryController {
     @DeleteMapping("/diaries/{diaryId}")
     public ResponseEntity<ApiResponse<Void>> delete(@AuthenticationPrincipal User user, @PathVariable Long diaryId) {
         diaryService.delete(user.getId(), diaryId);
-        return ResponseEntity.noContent().build();
-    }
-
-    @Operation(summary = "일기 잠금", description = "일기를 잠금 설정 및 해제 합니다.")
-    @PostMapping("/diaries/{diaryId}/lock")
-    public ResponseEntity<ApiResponse<Void>> lock(@AuthenticationPrincipal User user, @PathVariable Long diaryId) {
-        diaryService.lock(user.getId(), diaryId);
         return ResponseEntity.noContent().build();
     }
 }

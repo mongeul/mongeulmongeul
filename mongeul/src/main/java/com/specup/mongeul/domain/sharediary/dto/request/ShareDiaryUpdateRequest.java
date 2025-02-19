@@ -14,6 +14,6 @@ public class ShareDiaryUpdateRequest {
     private String picture;
     private DiaryWeather weather;
     private DiaryFeeling feeling;
-    private DiaryPrivate isPrivate;
+    private DiaryPrivate privateStatus;
     private Integer turn;
 }
