@@ -24,6 +24,7 @@ public enum ErrorCode {
     COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "댓글을 찾을 수 없습니다."),
     INVALID_COMMENT_USER(HttpStatus.FORBIDDEN, "댓글 작성자만 가능합니다."),
     INVALID_COMMENT_PARENT(HttpStatus.BAD_REQUEST, "유효하지 않은 부모 댓글입니다."),
+    ALREADY_REPORTED(HttpStatus.BAD_REQUEST, "이미 신고한 댓글입니다."),
 
     // 이모지 관련 에러
     EMOJI_NOT_FOUND(HttpStatus.NOT_FOUND, "이모지를 찾을 수 없습니다."),
