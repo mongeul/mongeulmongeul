@@ -49,7 +49,6 @@ const drawingSlice = createSlice({
       state.history.push([...state.lines]); // 현재 상태를 히스토리에 저장
       state.lines = state.lines.filter((_, index) => index !== action.payload);
     },
-
     updateLines: (state, action: PayloadAction<DrawingLine[]>) => {
       state.lines = action.payload;
     },

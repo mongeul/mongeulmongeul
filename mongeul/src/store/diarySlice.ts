@@ -3,8 +3,9 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface DiaryState {
   title: string;
-  content: string;
   date: string;
+  content: string;
+  drawing: string | null;
   feelings: Feelings;
   weather: Weather;
   disclosure: Disclosure;
@@ -12,8 +13,9 @@ interface DiaryState {
 
 const initialState: DiaryState = {
   title: "",
-  content: "",
   date: new Date().toISOString().split("T")[0],
+  content: "",
+  drawing: null,
   feelings: "" as Feelings,
   weather: "" as Weather,
   disclosure: "PRIVATE" as Disclosure,
@@ -26,11 +28,14 @@ const diarySlice = createSlice({
     setTitle: (state, action: PayloadAction<string>) => {
       state.title = action.payload;
     },
+    setDate: (state, action: PayloadAction<string>) => {
+      state.date = action.payload;
+    },
     setContent: (state, action: PayloadAction<string>) => {
       state.content = action.payload;
     },
-    setDate: (state, action: PayloadAction<string>) => {
-      state.date = action.payload;
+    setDrawing: (state, action: PayloadAction<string | null>) => {
+      state.drawing = action.payload;
     },
     setFeelings: (state, action: PayloadAction<Feelings>) => {
       state.feelings = action.payload;
@@ -47,8 +52,9 @@ const diarySlice = createSlice({
 
 export const {
   setTitle,
-  setContent,
   setDate,
+  setContent,
+  setDrawing,
   setFeelings,
   setWeather,
   setDisclosure,
