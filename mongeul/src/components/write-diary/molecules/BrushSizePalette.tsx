@@ -1,6 +1,6 @@
 import BrushSizeButton from "../atoms/BrushSizeButton";
 
-const sizes = [1, 5, 15, 30, 50];
+const sizes = [10, 20, 35];
 
 interface BrushSizePaletteProps {
   brushSize: number;
@@ -12,7 +12,7 @@ export default function BrushSizePalette({
   onSelectSize,
 }: BrushSizePaletteProps) {
   return (
-    <div className="flex flex-wrap w-full justify-center gap-3">
+    <div className="flex flex-wrap items-center w-auto justify-center gap-5">
       {sizes.map((size) => (
         <BrushSizeButton
           key={size}

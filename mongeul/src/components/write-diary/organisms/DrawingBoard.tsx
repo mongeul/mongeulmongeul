@@ -10,7 +10,7 @@ const KonvaCanvas = dynamic(() => import("./KonvaCanvas"), { ssr: false });
 
 export default function DrawingBoard() {
   const [selectedColor, setSelectedColor] = useState("#000000");
-  const [selectedBrushSize, setSelectedBrushSize] = useState(3);
+  const [selectedBrushSize, setSelectedBrushSize] = useState(10);
 
   return (
     <Card width="w-full">
@@ -19,14 +19,16 @@ export default function DrawingBoard() {
           selectedColor={selectedColor}
           selectedBrushSize={selectedBrushSize}
         />
-        <ColorPalette
-          selectedColor={selectedColor}
-          onSelectColor={setSelectedColor}
-        />
-        <BrushSizePalette
-          brushSize={selectedBrushSize}
-          onSelectSize={setSelectedBrushSize}
-        />
+        <div className="flex flex-row gap-6">
+          <ColorPalette
+            selectedColor={selectedColor}
+            onSelectColor={setSelectedColor}
+          />
+          <BrushSizePalette
+            brushSize={selectedBrushSize}
+            onSelectSize={setSelectedBrushSize}
+          />
+        </div>
       </div>
     </Card>
   );

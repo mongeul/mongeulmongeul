@@ -12,10 +12,15 @@ export default function ColorButton({
   return (
     <button
       onClick={onClick}
-      className={`w-8 h-8 rounded-full border-2 transition ${
-        selected ? "border-black scale-110" : "border-gray-300"
-      }`}
-      style={{ backgroundColor: color }}
-    />
+      className="w-8 h-8 relative flex items-center justify-center transition"
+    >
+      {selected && (
+        <span className="w-10 h-10 absolute border-4 border-theme-600 rounded-full" />
+      )}
+      <div
+        className="w-full h-full border-zinc-100 border-2 rounded-full bg-theme-200"
+        style={{ backgroundColor: color }}
+      />
+    </button>
   );
 }
