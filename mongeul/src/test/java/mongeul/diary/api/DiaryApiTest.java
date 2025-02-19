@@ -42,7 +42,6 @@ public class DiaryApiTest {
         DiaryResponse response = create(token, new DiaryCreateRequest(
                 "일기 생성",
                 "일기가 생성되었습니다.",
-                false,
                 null,
                 DiaryWeather.SUNNY,
                 DiaryFeeling.HAPPY,
@@ -65,7 +64,7 @@ public class DiaryApiTest {
     @Test
     @DisplayName("일기 조회 테스트")
     void readTest() {
-        DiaryResponse response = read(12345L);
+        DiaryResponse response = read(12344L);
         System.out.println("response = " + response);
     }
 
@@ -83,7 +82,6 @@ public class DiaryApiTest {
         DiaryResponse response = update(token, 1L, new DiaryUpdateRequest(
                 "일기 수정",
                 "일기가 수정되었습니다.",
-                true,
                 null,
                 DiaryWeather.RAINY,
                 DiaryFeeling.ANGRY,
@@ -118,31 +116,15 @@ public class DiaryApiTest {
                 .toBodilessEntity();
     }
 
-    @Test
-    @DisplayName("일기 잠금 테스트")
-    void lockTest() {
-        lock(token, 2L);
-        System.out.println("일기 잠금 설정 및 해제 완료");
-    }
-
-    void lock(String token, Long diaryId) {
-        restClient.post()
-                .uri("/api/v1/diaries/{diaryId}/lock", diaryId)
-                .headers(headers -> headers.set(HttpHeaders.AUTHORIZATION, token))
-                .retrieve()
-                .toBodilessEntity();
-    }
-
     @Getter
     @AllArgsConstructor
     static class DiaryCreateRequest {
         private String title;
         private String content;
-        private boolean isLocked;
         private String picture;
         private DiaryWeather weather;
         private DiaryFeeling feeling;
-        private DiaryPrivate isPrivate;
+        private DiaryPrivate privateStatus;
     }
 
     @Getter
@@ -150,11 +132,10 @@ public class DiaryApiTest {
     static class DiaryUpdateRequest {
         private String title;
         private String content;
-        private boolean isLocked;
         private String picture;
         private DiaryWeather weather;
         private DiaryFeeling feeling;
-        private DiaryPrivate isPrivate;
+        private DiaryPrivate privateStatus;
     }
 
     @Getter

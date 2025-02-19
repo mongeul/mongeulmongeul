@@ -4,4 +4,6 @@ public enum EmojiType {
     HAPPY,
     SAD,
     ANGRY,
+    WOW,
+    SOSO,
 }

@@ -5,8 +5,6 @@ import com.specup.mongeul.domain.diary.entity.ENUM.DiaryFeeling;
 import lombok.Getter;
 import lombok.ToString;
 
-import java.time.LocalDateTime;
-
 @Getter
 @ToString
 public class FeedResponse {

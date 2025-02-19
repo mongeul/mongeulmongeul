@@ -22,16 +22,16 @@ import java.util.List;
 public class CommentController {
     private final CommentService commentService;
 
-    @Operation(summary = "일기의 댓글 조회", description = "특정 일기에 달린 댓글들을 조회합니다.")
-    @GetMapping("/comments/{diaryId}")
-    public ResponseEntity<ApiResponse<List<CommentResponse>>> read(@PathVariable Long diaryId) {
-        return ResponseEntity.ok(ApiResponse.success(commentService.read(diaryId), "댓글 조회 성공"));
+    @Operation(summary = "피드 댓글 조회", description = "특정 피드에 달린 댓글들을 조회합니다.")
+    @GetMapping("/feeds/{feedId}/comments")
+    public ResponseEntity<ApiResponse<List<CommentResponse>>> read(@PathVariable Long feedId) {
+        return ResponseEntity.ok(ApiResponse.success(commentService.read(feedId), "댓글 조회 성공"));
     }
 
     @Operation(summary = "댓글 생성", description = "댓글을 생성합니다.")
-    @PostMapping("/diaries/{diaryId}/comments")
-    public ResponseEntity<ApiResponse<CommentResponse>> create(@AuthenticationPrincipal User user, @PathVariable Long diaryId, @Valid @RequestBody CommentRequest request) {
-        return ResponseEntity.ok(ApiResponse.success(commentService.create(user.getId(), diaryId, request), "댓글 생성 성공"));
+    @PostMapping("/feeds/{feedId}/comments")
+    public ResponseEntity<ApiResponse<CommentResponse>> create(@AuthenticationPrincipal User user, @PathVariable Long feedId, @Valid @RequestBody CommentRequest request) {
+        return ResponseEntity.ok(ApiResponse.success(commentService.create(user.getId(), feedId, request), "댓글 생성 성공"));
     }
 
     @Operation(summary = "댓글 수정", description = "댓글을 수정합니다.")

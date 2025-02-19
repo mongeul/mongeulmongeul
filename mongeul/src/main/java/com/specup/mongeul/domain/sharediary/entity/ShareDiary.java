@@ -42,22 +42,22 @@ public class ShareDiary extends BaseSoftDeleteEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private DiaryPrivate isPrivate;
+    private DiaryPrivate privateStatus;
 
     @Column(columnDefinition = "TINYINT DEFAULT 0", nullable = false)
     @ColumnDefault("0")
     private Integer turn;
 
     public static ShareDiary create(String title, String content, String picture,
-                                    DiaryWeather weather, DiaryFeeling feeling, DiaryPrivate isPrivate,
-                                    Integer turn) {
+                                    DiaryWeather weather, DiaryFeeling feeling,
+                                    DiaryPrivate privateStatus, Integer turn) {
         ShareDiary shareDiary = new ShareDiary();
         shareDiary.title = title;
         shareDiary.content = content;
         shareDiary.picture = picture;
         shareDiary.weather = weather;
         shareDiary.feeling = feeling;
-        shareDiary.isPrivate = isPrivate;
+        shareDiary.privateStatus = privateStatus;
         shareDiary.turn = turn;
         return shareDiary;
     }
@@ -68,7 +68,7 @@ public class ShareDiary extends BaseSoftDeleteEntity {
         this.picture = shareDiary.picture;
         this.weather = shareDiary.weather;
         this.feeling = shareDiary.feeling;
-        this.isPrivate = shareDiary.isPrivate;
+        this.privateStatus = shareDiary.privateStatus;
         this.turn = shareDiary.turn;
     }
 }

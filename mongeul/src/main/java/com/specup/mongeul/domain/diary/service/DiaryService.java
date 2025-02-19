@@ -32,14 +32,17 @@ public class DiaryService {
         LocalDateTime endOfDay = LocalDateTime.now().with(LocalTime.MAX);
 
         // 일기 하루에 1개 검증 로직
-        if (diaryRepository.findByUserIdAndCreatedAtBetween(userId, startOfDay, endOfDay).isPresent()) {
+//        if (diaryRepository.findByUserIdAndCreatedAtBetween(userId, startOfDay, endOfDay).isPresent()) {
+//            throw new CustomException(ErrorCode.DIARY_ALREADY_EXISTS);
+//        }
+
+        if (diaryRepository.existsByUserIdAndCreatedAtBetween(userId, startOfDay, endOfDay)) {
             throw new CustomException(ErrorCode.DIARY_ALREADY_EXISTS);
         }
 
         Diary diary = diaryRepository.save(
-                Diary.create(request.getTitle(), request.getContent(), request.isLocked(),
-                        request.getPicture(), request.getWeather(), request.getFeeling(),
-                        request.getIsPrivate(), user)
+                Diary.create(request.getTitle(), request.getContent(), request.getPicture(),
+                        request.getWeather(), request.getFeeling(), request.getPrivateStatus(), user)
         );
         return DiaryResponse.from(diary);
     }
@@ -51,15 +54,20 @@ public class DiaryService {
         if (!diary.getUser().getId().equals(userId)) {
             throw new CustomException(ErrorCode.INVALID_DIARY_USER);
         }
-        diary.update(request.getTitle(), request.getContent(), request.isLocked(),
-                request.getPicture(), request.getWeather(), request.getFeeling(),
-                request.getIsPrivate());
+        diary.update(request.getTitle(), request.getContent(), request.getPicture(),
+                request.getWeather(), request.getFeeling(), request.getPrivateStatus());
         return DiaryResponse.from(diary);
     }
 
     @Transactional(readOnly = true)
-    public List<DiaryResponse> getMyDiaries(Long userId) {
-        List<Diary> diaries = diaryRepository.findByUserId(userId);
+    public List<DiaryResponse> getCalendarDiaries(Long userId, int year, int month) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        LocalDateTime startOfMonth = LocalDateTime.of(year, month, 1, 0, 0, 0);
+        LocalDateTime startOfNextMonth = startOfMonth.plusMonths(1);
+
+        List<Diary> diaries = diaryRepository.findByUserAndCreatedAtBetween(user, startOfMonth, startOfNextMonth);
         return diaries.stream()
                 .map(DiaryResponse::from)
                 .toList();
@@ -79,15 +87,5 @@ public class DiaryService {
             throw new CustomException(ErrorCode.INVALID_DIARY_USER);
         }
         diaryRepository.delete(diary);
-    }
-
-    @Transactional
-    public void lock(Long userId, Long diaryId) {
-        Diary diary = diaryRepository.findById(diaryId)
-                .orElseThrow(() -> new CustomException(ErrorCode.DIARY_NOT_FOUND));
-        if (!diary.getUser().getId().equals(userId)) {
-            throw new CustomException(ErrorCode.INVALID_DIARY_USER);
-        }
-        diary.lock();
     }
 }
