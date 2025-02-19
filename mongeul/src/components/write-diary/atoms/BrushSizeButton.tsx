@@ -20,7 +20,7 @@ export default function BrushSizeButton({
     >
       {selected && (
         <span
-          className="absolute border-4 border-theme-600 rounded-full"
+          className="absolute border-4 border-theme-500 rounded-full"
           style={{
             width: `${size + 14}px`,
             height: `${size + 14}px`,

@@ -54,3 +54,7 @@
     font-family: "GowunDodum-Regular", sans-serif;
   }
 }
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}

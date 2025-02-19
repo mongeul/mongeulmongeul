@@ -1,19 +1,16 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { Stage, Layer, Line } from "react-konva";
-import { DrawingLine } from "@/types/drawingTypes";
-import UndoRedoButtons from "../molecules/UndoRedoButtons";
 import { RootState } from "@/store/store";
 import { useDispatch, useSelector } from "react-redux";
 import { addLine, updateLines } from "@/store/drawingSlice";
+import Card from "@/components/common/atoms/Card";
 
 export default function KonvaCanvas() {
   const stageRef = useRef<any>(null);
   const dispatch = useDispatch();
-  const { selectedColor, selectedBrushSize, lines } = useSelector(
-    (state: RootState) => state.drawing
-  );
+  const { lines } = useSelector((state: RootState) => state.drawing);
   const [isDrawing, setIsDrawing] = useState<boolean>(false);
 
   // 그림그리기 시작
@@ -44,12 +41,11 @@ export default function KonvaCanvas() {
   };
 
   return (
-    <div>
+    <Card margin="">
       <Stage
         width={500}
         height={500}
         ref={stageRef}
-        className="border"
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
@@ -68,7 +64,6 @@ export default function KonvaCanvas() {
           ))}
         </Layer>
       </Stage>
-      <UndoRedoButtons />
-    </div>
+    </Card>
   );
 }

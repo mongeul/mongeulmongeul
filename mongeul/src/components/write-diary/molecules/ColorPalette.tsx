@@ -1,3 +1,5 @@
+"use client";
+
 import ColorButton from "../atoms/ColorButton";
 import { setColor } from "@/store/drawingSlice";
 import { RootState } from "@/store/store";
@@ -26,15 +28,17 @@ export default function ColorPalette() {
   );
 
   return (
-    <div className="flex flex-wrap w-auto justify-center gap-3">
-      {colors.map((color) => (
-        <ColorButton
-          key={color}
-          color={color}
-          selected={selectedColor === color}
-          onClick={() => dispatch(setColor(color))}
-        />
-      ))}
+    <div className="w-full h-10 overflow-x-auto scrollbar-hide">
+      <div className="flex min-w-max h-10 items-center gap-3 px-6 py-4">
+        {colors.map((color) => (
+          <ColorButton
+            key={color}
+            color={color}
+            selected={selectedColor === color}
+            onClick={() => dispatch(setColor(color))}
+          />
+        ))}
+      </div>
     </div>
   );
 }

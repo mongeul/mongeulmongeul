@@ -12,11 +12,7 @@ export default function UndoRedoButton({
   children,
 }: UndoRedoButtonProps) {
   return (
-    <button
-      onClick={onClick}
-      disabled={disabled}
-      className={`p-2 w-10 h-10 rounded`}
-    >
+    <button onClick={onClick} disabled={disabled} className={`p-2 rounded`}>
       <div
         className={`w-full h-full flex items-center justify-center ${
           disabled ? "text-gray-300" : "text-theme-300 hover:text-theme-400"
