@@ -41,6 +41,8 @@ public class User extends BaseTimeEntity {
 
     private String profileImage;
 
+    private int reportCount = 0;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private UserRole role = UserRole.USER; // 기본값은 일반 사용자
@@ -82,5 +84,9 @@ public class User extends BaseTimeEntity {
 
     public void updateRole(UserRole role) {
         this.role = role;
+    }
+
+    public void increaseReportCount() {
+        this.reportCount++;
     }
 }
