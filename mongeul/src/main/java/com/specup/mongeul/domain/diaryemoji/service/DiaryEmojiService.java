@@ -32,6 +32,10 @@ public class DiaryEmojiService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
+        if (diaryEmojiRepository.existsByDiaryIdAndEmojiIdAndUserId(diaryId, emojiId, userId)) {
+            throw new CustomException(ErrorCode.EMOJI_ALREADY_ADDED);
+        }
+
         try {
             diaryEmojiRepository.save(DiaryEmoji.create(diary, emoji, user));
         } catch (DataIntegrityViolationException e) {

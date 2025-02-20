@@ -12,14 +12,10 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DiaryEmojiResponse {
-    private Long emojiId;
     private EmojiType emojiType;
     private Long count;
 
-    public static DiaryEmojiResponse from(DiaryEmoji diaryEmoji) {
-        DiaryEmojiResponse response = new DiaryEmojiResponse();
-        response.emojiId = diaryEmoji.getEmoji().getId();
-        response.emojiType = diaryEmoji.getEmoji().getType();
-        return response;
+    public static DiaryEmojiResponse from(EmojiType emojiType, Long count) {
+        return new DiaryEmojiResponse(emojiType, count);
     }
 }
