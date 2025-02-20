@@ -31,11 +31,12 @@ public class DiaryService {
         LocalDateTime startOfDay = LocalDateTime.now().with(LocalTime.MIN);
         LocalDateTime endOfDay = LocalDateTime.now().with(LocalTime.MAX);
 
-        // 일기 하루에 1개 검증 로직
+        // 일기 하루에 1개 검증 로직 (데이터 조회 ver)
 //        if (diaryRepository.findByUserIdAndCreatedAtBetween(userId, startOfDay, endOfDay).isPresent()) {
 //            throw new CustomException(ErrorCode.DIARY_ALREADY_EXISTS);
 //        }
 
+        // 일기 하루에 1개 검증 로직 (존재여부 체크 ver)
         if (diaryRepository.existsByUserIdAndCreatedAtBetween(userId, startOfDay, endOfDay)) {
             throw new CustomException(ErrorCode.DIARY_ALREADY_EXISTS);
         }
