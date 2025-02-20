@@ -6,6 +6,7 @@ interface DiaryState {
   date: string;
   content: string;
   drawing: string | null;
+  drawingImage: string | null;
   feelings: Feelings;
   weather: Weather;
   disclosure: Disclosure;
@@ -16,6 +17,7 @@ const initialState: DiaryState = {
   date: new Date().toISOString().split("T")[0],
   content: "",
   drawing: null,
+  drawingImage: null,
   feelings: "" as Feelings,
   weather: "" as Weather,
   disclosure: "PRIVATE" as Disclosure,
@@ -37,6 +39,9 @@ const diarySlice = createSlice({
     setDrawing: (state, action: PayloadAction<string | null>) => {
       state.drawing = action.payload;
     },
+    setDrawingImage: (state, action: PayloadAction<string | null>) => {
+      state.drawingImage = action.payload;
+    },
     setFeelings: (state, action: PayloadAction<Feelings>) => {
       state.feelings = action.payload;
     },
@@ -55,6 +60,7 @@ export const {
   setDate,
   setContent,
   setDrawing,
+  setDrawingImage,
   setFeelings,
   setWeather,
   setDisclosure,

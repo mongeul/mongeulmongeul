@@ -6,7 +6,7 @@ import BrushSelectPalette from "../molecules/BrushSelectPalette";
 
 export default function DrawingToolCard() {
   return (
-    <Card width="w-full" margin="">
+    <Card width="w-full" padding="">
       <div className="w-full flex justify-center items-center flex-col">
         <div className="w-full flex justify-center items-center flex-row">
           <UndoRedoButtons />

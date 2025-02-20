@@ -6,7 +6,7 @@ interface CardProps {
   borderColor?: string;
   width?: string;
   height?: string;
-  margin?: string;
+  padding?: string;
   roundSize?: string;
 }
 
@@ -14,7 +14,7 @@ export default function Card({
   children,
   width = "w-auto",
   height = "h-auto",
-  margin = "px-4 py-3",
+  padding = "px-4 py-3",
   borderColor = "border-white",
   roundSize = "rounded-3xl",
 }: CardProps) {
@@ -23,7 +23,7 @@ export default function Card({
       className={clsx(
         `${height}`,
         `${width}`,
-        `${margin}`,
+        `${padding}`,
         `border ${borderColor}`,
         `${roundSize}`,
         " flex bg-white"

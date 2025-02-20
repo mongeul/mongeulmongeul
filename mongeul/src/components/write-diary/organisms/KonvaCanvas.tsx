@@ -70,7 +70,7 @@ export default function KonvaCanvas() {
   };
 
   return (
-    <Card margin="">
+    <Card padding="">
       <div>
         <Stage
           width={500}
@@ -79,6 +79,7 @@ export default function KonvaCanvas() {
           onMouseDown={handleMouseDown}
           onMouseMove={handleMouseMove}
           onMouseUp={handleMouseUp}
+          onMouseLeave={handleMouseUp}
         >
           <Layer>
             {lines.map((line, i) => (

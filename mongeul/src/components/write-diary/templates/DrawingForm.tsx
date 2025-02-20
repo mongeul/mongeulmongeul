@@ -17,8 +17,8 @@ export default function DrawingForm() {
       return;
     }
 
-    const drawingJSON = JSON.stringify(lines); // JSON 문자열로 변환
-    dispatch(setDrawing(drawingJSON)); // Redux Store에 저장
+    const drawingJSON = JSON.stringify(lines);
+    dispatch(setDrawing(drawingJSON));
     console.log("그림 저장 완료", drawingJSON);
   };
 
