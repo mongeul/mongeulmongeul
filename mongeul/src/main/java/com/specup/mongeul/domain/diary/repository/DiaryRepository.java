@@ -15,8 +15,6 @@ import java.util.Optional;
 @Repository
 public interface DiaryRepository extends JpaRepository<Diary, Long> {
 
-    List<Diary> findByUserId(Long userId);
-
     /**
      * 일기 월별 조회 (캘린더에서 사용)
      */
@@ -35,10 +33,13 @@ public interface DiaryRepository extends JpaRepository<Diary, Long> {
             @Param("startOfNextMonth") LocalDateTime startOfNextMonth);
 
     /**
-     * 하루 1개 일기 제한 검증
+     * 하루 1개 일기 제한 검증 (데이터 조회안하고 존재여부만 체크)
      */
     boolean existsByUserIdAndCreatedAtBetween(@Param("userId") Long userId, @Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
 
+    /**
+     * 하루 1개 일기 제한 검증 (데이터를 조회해서 반환으로 체크)
+     */
 //    @Query("SELECT COUNT(d) > 0 FROM Diary d WHERE d.user.id = :userId AND d.createdAt BETWEEN :start AND :end")
 //    Optional<Diary> findByUserIdAndCreatedAtBetween(Long userId, LocalDateTime start, LocalDateTime end);
 
