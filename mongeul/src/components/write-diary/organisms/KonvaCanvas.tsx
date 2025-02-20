@@ -1,14 +1,11 @@
-"use client";
-
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { Stage, Layer, Line } from "react-konva";
 import { RootState } from "@/store/store";
 import { useDispatch, useSelector } from "react-redux";
 import { addLine, removeLine, updateLines } from "@/store/drawingSlice";
 import Card from "@/components/common/atoms/Card";
 
-export default function KonvaCanvas() {
-  const stageRef = useRef<any>(null);
+export default function KonvaCanvas({ stageRef }: { stageRef: any }) {
   const dispatch = useDispatch();
   const { lines, selectedBrush } = useSelector(
     (state: RootState) => state.drawing
@@ -18,7 +15,7 @@ export default function KonvaCanvas() {
   // 그림 그리기 시작
   const handleMouseDown = (e: any) => {
     if (selectedBrush === "eraser") {
-      handleErase(e); // 지우개 모드일 때는 선 삭제 실행
+      handleErase(e);
       return;
     }
 
@@ -42,25 +39,24 @@ export default function KonvaCanvas() {
     dispatch(updateLines(newLines));
   };
 
-  // 지우기 (특정 선 삭제)
+  // TODO 드래그도중에 지우기 유지
   const handleErase = (e: any) => {
     if (selectedBrush !== "eraser") return;
 
     const stage = stageRef.current;
     const clickedPosition = stage.getPointerPosition();
 
-    // 클릭한 좌표에서 가장 가까운 선 찾기
     const clickedLineIndex = lines.findIndex((line) =>
       line.points.some(
         (_, i) =>
           i % 2 === 0 &&
-          Math.abs(line.points[i] - clickedPosition.x) < 10 && // X 좌표 근접 체크
-          Math.abs(line.points[i + 1] - clickedPosition.y) < 10 // Y 좌표 근접 체크
+          Math.abs(line.points[i] - clickedPosition.x) < 10 &&
+          Math.abs(line.points[i + 1] - clickedPosition.y) < 10
       )
     );
 
     if (clickedLineIndex !== -1) {
-      dispatch(removeLine(clickedLineIndex)); // Redux에서 해당 선 삭제
+      dispatch(removeLine(clickedLineIndex));
     }
   };
 

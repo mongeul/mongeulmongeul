@@ -1,4 +1,5 @@
 import { Disclosure, Feelings, Weather } from "@/types/diaryTypes";
+import { DrawingLine } from "@/types/drawingTypes";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface DiaryState {

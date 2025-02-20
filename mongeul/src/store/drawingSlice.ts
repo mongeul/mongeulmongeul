@@ -70,6 +70,7 @@ const drawingSlice = createSlice({
         }
       }
     },
+    resetDrawing: () => initialState,
   },
 });
 
@@ -82,5 +83,6 @@ export const {
   updateLines,
   undo,
   redo,
+  resetDrawing,
 } = drawingSlice.actions;
 export default drawingSlice.reducer;
