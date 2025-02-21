@@ -56,7 +56,7 @@ public class JwtTokenProvider {
                     .parseClaimsJws(token)
                     .getBody();
 
-            return true;
+            return claims.getExpiration().after(new Date());
         } catch (JwtException | IllegalArgumentException e) {
             return false;
         }
@@ -76,34 +76,29 @@ public class JwtTokenProvider {
                     .parseClaimsJws(token)
                     .getBody();
 
-            return true;
+            return claims.getExpiration().after(new Date());
         } catch (JwtException | IllegalArgumentException e) {
             return false;
         }
     }
 
-    public String createAccessToken(String userId) {
-        Claims claims = Jwts.claims().setSubject(userId);
-        Date now = new Date();
-        Date validity = new Date(now.getTime() + accessTokenValidity);
-
-        return Jwts.builder()
-                .setClaims(claims)
-                .setIssuedAt(now)
-                .setExpiration(validity)
-                .signWith(key, SignatureAlgorithm.HS256)
-                .compact();
+    public String createAccessToken(Long userId) {
+        return createToken(userId, accessTokenValidity);
     }
 
-    public String createRefreshToken(String userId) {
-        Claims claims = Jwts.claims().setSubject(userId);
+    public String createRefreshToken(Long userId) {
+        return createToken(userId, refreshTokenValidity);
+    }
+
+    public String createToken(Long userId, long validity) {
+        Claims claims = Jwts.claims().setSubject(String.valueOf(userId));
         Date now = new Date();
-        Date validity = new Date(now.getTime() + refreshTokenValidity);
+        Date expirationDate = new Date(now.getTime() + validity);
 
         return Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(now)
-                .setExpiration(validity)
+                .setExpiration(expirationDate)
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
@@ -125,13 +120,13 @@ public class JwtTokenProvider {
         }
     }
 
-    public String getUserIdFromToken(String token) {
+    public Long getUserIdFromToken(String token) {
         Claims claims = Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
 
-        return claims.getSubject();
+        return Long.parseLong(claims.getSubject());
     }
 }
