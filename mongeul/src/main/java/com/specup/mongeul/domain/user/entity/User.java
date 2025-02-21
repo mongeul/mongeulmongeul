@@ -1,14 +1,16 @@
 package com.specup.mongeul.domain.user.entity;
 
-import com.specup.mongeul.domain.comment.entity.Comment;
 import com.specup.mongeul.domain.diary.entity.Diary;
 import com.specup.mongeul.domain.diaryemoji.entity.DiaryEmoji;
-import com.specup.mongeul.global.common.BaseTimeEntity;
+import com.specup.mongeul.domain.notification.entity.Notification;
+import com.specup.mongeul.global.common.BaseSoftDeleteEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,22 +19,17 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "users")
-public class User extends BaseTimeEntity {
-
+@SQLDelete(sql = "UPDATE users SET is_deleted = true, deleted_at = NOW() WHERE id = ?")
+@SQLRestriction("is_deleted = false")
+public class User extends BaseSoftDeleteEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
-    private String userId;
+    @Column(nullable = true)
+    private String nickname;
 
-    @Column(nullable = false)
-    private String password;
-
-    @Column(nullable = false)
-    private String name;
-
-    @Column(nullable = false, unique = true)
+    @Column(unique = true, nullable = false)
     private String email;
 
     private String birthday;
@@ -44,46 +41,36 @@ public class User extends BaseTimeEntity {
     private int reportCount = 0;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private UserRole role = UserRole.USER; // 기본값은 일반 사용자
+    @Column(name = "oauth_provider")
+    private OAuthProvider oauthProvider;
+
+    @Column(name = "oauth_id")
+    private String oauthId;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Diary> diaries = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Comment> comments = new ArrayList<>();
+    private List<Notification> notifications = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<DiaryEmoji> diaryAndEmojis = new ArrayList<>();
 
     @Builder
-    public User(String userId, String password, String name, String email, String birthday,
-                String phoneNumber, String profileImage, UserRole role) {
-        this.userId = userId;
-        this.password = password;
-        this.name = name;
+    public User(String nickname, String email,
+                OAuthProvider oauthProvider, String oauthId) {
+        this.nickname = nickname;
         this.email = email;
-        this.birthday = birthday;
-        this.phoneNumber = phoneNumber;
-        this.profileImage = profileImage;
-        this.role = role != null ? role : UserRole.USER;
+        this.oauthProvider = oauthProvider;
+        this.oauthId = oauthId;
     }
 
-    // 비밀번호 업데이트 메서드
-    public void updatePassword(String newPassword) {
-        this.password = newPassword;
+    public void updateNickname(String nickname) {
+        this.nickname = nickname;
     }
 
-    public void update(String name, String email, String birthday, String phoneNumber, String profileImage) {
-        this.name = name;
+    public void updateEmail(String email) {
         this.email = email;
-        this.birthday = birthday;
-        this.phoneNumber = phoneNumber;
-        this.profileImage = profileImage;
-    }
-
-    public void updateRole(UserRole role) {
-        this.role = role;
     }
 
     public void increaseReportCount() {
