@@ -11,7 +11,6 @@ interface InputProps {
   roundSize?: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
-  ref?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
 }
 
 export default function Input({
