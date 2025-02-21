@@ -10,7 +10,7 @@ const DisplaySetting = [
 ];
 const AuthSetting = [
   { label: "로그아웃", link: "/setting/nickname" },
-  { label: "회원 탈퇴", link: "/setting/lock" },
+  { label: "회원 탈퇴", link: "/setting/diary-lock" },
 ];
 
 export default function SettingTemplates() {
