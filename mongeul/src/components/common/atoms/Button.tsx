@@ -13,6 +13,7 @@ interface ButtonProps {
   fontWeight?: string;
   roundSize?: string;
   onClick: () => void;
+  disabled?: boolean;
 }
 
 export default function Button({
@@ -26,6 +27,7 @@ export default function Button({
   fontWeight = "font-normal",
   roundSize = "rounded-3xl",
   onClick,
+  disabled = false,
 }: ButtonProps) {
   return (
     <button
@@ -39,7 +41,8 @@ export default function Button({
         `${fontWeight}`,
         "px-4 py-3 flex items-center justify-center gap-2"
       )}
-      onClick={() => onClick()}
+      onClick={disabled ? undefined : onClick}
+      disabled={disabled}
     >
       {icon && <span>{icon}</span>}
       {text}

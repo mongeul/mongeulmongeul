@@ -1,36 +1,37 @@
+"use client";
+
 import Card from "@/components/common/atoms/Card";
+import NicknameBadge from "../atoms/NicknameBadge";
+import DiaryStats from "../atoms/DiaryStats";
+import RecentAuthor from "../atoms/RecentAuthor";
+import MenuIcon from "@/assets/icons/menudot.svg";
 
 interface SharedDiaryCardProps {
-  name: string;
+  nickname: string;
+  day: number;
+  count: number;
   writer: string;
   date: string;
-  duration: number;
 }
 
 export default function SharedDiaryCard({
-  name,
+  nickname,
+  day,
+  count,
   writer,
   date,
-  duration,
 }: SharedDiaryCardProps) {
   return (
-    <Card
-      borderColor="border-gray-200"
-      width="w-full max-w-2xl mx-auto"
-      roundSize="rounded-3xl"
-    >
-      <div className="flex flex-col w-full p-4 bg-white">
-        <div className="text-lg font-bold text-blue-500">{name}</div>
-        <p className="text-sm text-gray-600 mt-1">
-          {duration}일 동안 3편의 일기를 주고받았어요!
-        </p>
-        <div className="flex justify-between items-center mt-2">
-          <div className="text-sm text-gray-700">
-            <span className="font-semibold">최근 작성자:</span> {writer}
-          </div>
-          <div className="text-sm text-gray-700">
-            <span className="font-semibold">최근 작성일:</span> {date}
-          </div>
+    <Card width="w-full max-w-lg mx-auto" roundSize="rounded-3xl">
+      <div className="flex justify-between items-center w-full p-3 bg-white relative gap-6">
+        <MenuIcon className="w-5 h-5 text-zinc-400 absolute top-2 right-3 cursor-pointer" />
+        <div className="flex flex-col gap-1 pl-6 flex-1">
+          <NicknameBadge nickname={nickname} />
+          <DiaryStats days={day} count={count} />
+        </div>
+
+        <div className="pr-6">
+          <RecentAuthor author={writer} date={date} />
         </div>
       </div>
     </Card>
