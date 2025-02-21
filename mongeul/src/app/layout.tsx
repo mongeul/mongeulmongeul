@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import Header from "@/components/header/orgamisms/Header";
-import Navbar from "@/components/navbar/organisms/NavBar";
+
 import { ThemeProvider } from "@/context/ThemeContext";
 import { Provider } from "react-redux";
 import { store } from "@/store/store";
+import Header from "@/components/header/orgamisms/Header";
 import ClientLayout from "@/components/layout/ClientLayout";
+import Navbar from "@/components/navbar/organisms/NavBar";
 
 export const metadata: Metadata = {
   title: "몽글몽글",
@@ -23,7 +24,7 @@ export default function RootLayout({
         <ClientLayout>
           <ThemeProvider initialTheme="sky" initialFont="suit">
             <Header />
-            <main className="flex w-full md:w-3/4 mx-auto min-h-screen p-4">
+            <main className="flex w-full md:w-3/4 lg:w-1/2 mx-auto min-h-screen p-4">
               {children}
             </main>
             <Navbar />

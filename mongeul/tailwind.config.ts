@@ -40,4 +40,14 @@ export default {
     },
   },
   plugins: [],
+  safelist: [
+    "react-datepicker",
+    "react-datepicker__header",
+    "react-datepicker__day",
+    "react-datepicker__day-name",
+    "react-datepicker__day--disabled",
+    "react-datepicker__day--selected",
+    "react-datepicker__day--today",
+    "react-datepicker__day--keyboard-selected",
+  ],
 } satisfies Config;

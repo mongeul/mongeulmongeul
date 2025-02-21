@@ -65,7 +65,7 @@ export default function DateInputCard() {
         // <MobileModal onClose={toggleModal}>
         //   <ModalContent />
         // </MobileModal>
-        <WebModal onClose={toggleModal}>
+        <WebModal onClose={toggleModal} padding="p-2">
           <ModalContent closeModal={toggleModal} />
         </WebModal>
       )}
