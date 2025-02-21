@@ -32,7 +32,7 @@ export default function DrawingForm() {
     if (stageRef.current) {
       const drawingImage = stageRef.current.toDataURL();
       dispatch(setDrawingImage(drawingImage));
-      console.log("그림과 이미지 저장 완료", drawingImage);
+      console.log("이미지 저장 완료", drawingImage);
     }
 
     router.back();

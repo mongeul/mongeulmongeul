@@ -58,3 +58,44 @@
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
 }
+
+@layer base {
+  /* 달력 전체 컨테이너 */
+  .react-datepicker {
+    @apply min-w-[320px] max-w-[400px] bg-white p-0 border-0 rounded-lg !important;
+  }
+
+  /* 헤더 스타일 */
+  .react-datepicker__header {
+    @apply flex flex-col bg-white border-0 p-0 gap-4 text-gray-700 !important;
+  }
+
+  /* 요일 개별 스타일 */
+  .react-datepicker__day-name {
+    @apply text-theme-500 text-center cursor-pointer p-2 rounded-md w-[40px] !important;
+  }
+
+  /* 날짜 스타일 */
+  .react-datepicker__day {
+    @apply text-gray-700 text-center cursor-pointer p-2 rounded-md w-[40px] !important;
+  }
+
+  /* 선택 불가능 날짜 */
+  .react-datepicker__day--disabled {
+    @apply text-gray-300 text-center cursor-pointer p-2 rounded-md w-[40px] !important;
+  }
+
+  /* 선택된 날짜 */
+  .react-datepicker__day--selected {
+    @apply rounded-3xl bg-theme-400 text-white font-bold !important;
+  }
+
+  /* 오늘 날짜 스타일 */
+  .react-datepicker__day--today {
+    @apply rounded-3xl bg-theme-100 text-theme-500 !important;
+  }
+
+  .react-datepicker__day--keyboard-selected {
+    @apply text-gray-700 bg-white text-center cursor-pointer p-2 rounded-md w-[40px] !important;
+  }
+}
