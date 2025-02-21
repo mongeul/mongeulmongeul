@@ -42,18 +42,8 @@ public class SecurityConfig {
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .requestMatchers(
                                 "/**",
-                                "/api/v1/users",
-                                "/api/v1/login",
-                                "/api/v1/users/check-id/**",
-                                "/api/v1/users/check-email/**",
-                                "/api/v1/users/find-id",
-                                "/api/v1/users/verify-for-password",
-                                "/api/v1/users/reset-password",
-                                "/api/v1/users/test",
-                                "/api/v1/auth/identity/request",
-                                "/api/v1/auth/identity/status/**",
-                                "/api/v1/auth/identity/result/**",
-                                "/api/v1/users/test"
+                                "/api/auth/kakao",     // 카카오 로그인 URL 조회
+                                "/api/auth/kakao/**"   // 카카오 로그인 콜백
                         ).permitAll()
                         .anyRequest().authenticated())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)

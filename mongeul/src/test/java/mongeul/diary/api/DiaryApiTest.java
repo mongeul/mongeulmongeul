@@ -51,14 +51,14 @@ public class DiaryApiTest {
     }
 
     DiaryResponse create(String token, DiaryCreateRequest request) {
-            ApiResponse<DiaryResponse> apiResponse = restClient.post()
+        ApiResponse<DiaryResponse> apiResponse = restClient.post()
                 .uri("/api/v1/diaries")
-                    .headers(headers -> headers.set(HttpHeaders.AUTHORIZATION, token))
-                    .contentType(MediaType.APPLICATION_JSON)
+                .headers(headers -> headers.set(HttpHeaders.AUTHORIZATION, token))
+                .contentType(MediaType.APPLICATION_JSON)
                 .body(request)
                 .retrieve()
                 .body(new ParameterizedTypeReference<ApiResponse<DiaryResponse>>() {});
-            return apiResponse.getData();
+        return apiResponse.getData();
     }
 
     @Test

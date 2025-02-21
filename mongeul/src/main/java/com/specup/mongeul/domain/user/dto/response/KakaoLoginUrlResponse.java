@@ -5,6 +5,6 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class FindIdResponse {
-    private String userId;
+public class KakaoLoginUrlResponse {
+    private String loginUrl;
 }
