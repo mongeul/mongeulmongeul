@@ -25,7 +25,6 @@ export default function NicknameTemplates() {
           <Input
             placeholder={"닉네임을 입력해주세요"}
             value={nickname}
-            height="h-6"
             maxLength={8}
             onChange={onChange}
             borderColor="border-gray-200"
