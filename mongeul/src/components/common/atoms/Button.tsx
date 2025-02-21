@@ -1,8 +1,10 @@
 "use client";
 import clsx from "clsx";
+import { ReactNode } from "react";
 
 interface ButtonProps {
   text: string;
+  icon?: ReactNode;
   width?: string;
   height?: string;
   backgroundColor?: string;
@@ -11,10 +13,12 @@ interface ButtonProps {
   fontWeight?: string;
   roundSize?: string;
   onClick: () => void;
+  disabled?: boolean;
 }
 
 export default function Button({
   text,
+  icon,
   width = "w-auto",
   height = "h-auto",
   backgroundColor = "bg-theme-400",
@@ -23,6 +27,7 @@ export default function Button({
   fontWeight = "font-normal",
   roundSize = "rounded-3xl",
   onClick,
+  disabled = false,
 }: ButtonProps) {
   return (
     <button
@@ -34,10 +39,12 @@ export default function Button({
         `${textColor}`,
         `${roundSize}`,
         `${fontWeight}`,
-        "px-4 py-3 flex items-center justify-center"
+        "px-4 py-3 flex items-center justify-center gap-2"
       )}
-      onClick={() => onClick()}
+      onClick={disabled ? undefined : onClick}
+      disabled={disabled}
     >
+      {icon && <span>{icon}</span>}
       {text}
     </button>
   );
