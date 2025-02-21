@@ -1,15 +1,6 @@
-import Link from "next/link";
+import DefaultLayoutProps from "@/components/layout/DefaultLayout";
+import SettingTemplates from "@/components/setting/templates/SettingTemplates";
 
 export default function Page() {
-  return (
-    <div>
-      설정 페이지 목록
-      <div>
-        <Link href={"/setting/font"}>글꼴 변경</Link>
-      </div>
-      <div>
-        <Link href={"/setting/theme"}>테마 변경</Link>
-      </div>
-    </div>
-  );
+  return <SettingTemplates />;
 }
