@@ -22,7 +22,7 @@ export default function RadioButton({
       />
       <div
         className={`w-5 h-5 rounded-full border-2 ${
-          selected ? "bg-blue-500 border-blue-500" : "border-gray-400"
+          selected ? "bg-theme-500 border-theme-500" : "border-gray-400"
         } flex items-center justify-center`}
       >
         {selected && <div className="w-2.5 h-2.5 bg-white rounded-full" />}

@@ -7,13 +7,14 @@ import FontSizeController from "../molecules/FontSizeController";
 
 export default function FontSelectCard() {
   const [fontSize, setFontSize] = useState(16);
-  const [selectedFont, setSelectedFont] = useState("suit");
 
   return (
-    <Card width="w-full flex flex-col gap-6">
+    <Card
+      width="w-full flex flex-col justify-center items-center gap-12"
+      padding="px-4 py-6"
+    >
       <FontSizeController value={fontSize} onChange={setFontSize} />
-
-      <FontSelect selectedFont={selectedFont} onFontChange={setSelectedFont} />
+      <FontSelect />
     </Card>
   );
 }

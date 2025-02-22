@@ -22,7 +22,12 @@ export default function Slider({
       value={value}
       onChange={(e) => onChange(Number(e.target.value))}
       className="w-full appearance-none bg-transparent cursor-pointer relative z-10"
-      style={{ WebkitAppearance: "none" }}
+      style={{
+        WebkitAppearance: "none",
+        position: "absolute",
+        top: "50%",
+        transform: "translateY(-50%)",
+      }}
     />
   );
 }

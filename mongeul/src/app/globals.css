@@ -59,6 +59,8 @@
   display: none;
 }
 
+/* datepicker 커스텀 스타일 */
+
 @layer base {
   /* 달력 전체 컨테이너 */
   .react-datepicker {
@@ -98,4 +100,32 @@
   .react-datepicker__day--keyboard-selected {
     @apply text-gray-700 bg-white text-center cursor-pointer p-2 rounded-md w-[40px] !important;
   }
+}
+
+/* 폰트 크기 슬라이드바 커스텀 스타일 */
+
+/* 슬라이더 바 */
+input[type="range"]::-webkit-slider-runnable-track {
+  height: 4px;
+  background: var(--zinc-300);
+  border-radius: 2px;
+}
+
+/* 슬라이더 핸들 */
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  background: var(--color-500);
+  border-radius: 50%;
+  margin-top: -8px; /* 중앙 정렬 */
+}
+
+/* Firefox용 스타일 */
+input[type="range"]::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  background: var(--color-500);
+  border-radius: 50%;
+  border: 2px solid white;
 }
