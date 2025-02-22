@@ -1,3 +1,5 @@
+import FontTemplates from "@/components/setting/templates/FontTemplates";
+
 export default function Page() {
-  return <div>폰트설정 페이지</div>;
+  return <FontTemplates />;
 }
