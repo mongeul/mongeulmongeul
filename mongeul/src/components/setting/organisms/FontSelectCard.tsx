@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Card from "@/components/common/atoms/Card";
-import FontSelect from "../molecules/FontSelectList";
+import FontSelectList from "../molecules/FontSelectList";
 import FontSizeController from "../molecules/FontSizeController";
 
 export default function FontSelectCard() {
@@ -14,7 +14,7 @@ export default function FontSelectCard() {
       padding="px-4 py-6"
     >
       <FontSizeController value={fontSize} onChange={setFontSize} />
-      <FontSelect />
+      <FontSelectList />
     </Card>
   );
 }

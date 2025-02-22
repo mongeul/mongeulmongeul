@@ -1,8 +1,9 @@
+import { Font } from "@/types/settingTypes";
 import RadioButton from "../atoms/RadioButton";
 
 interface FontSelectProps {
   label: string;
-  value: string;
+  value: Font;
   selected: boolean;
   onChange: () => void;
 }

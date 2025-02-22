@@ -19,6 +19,7 @@
     --black: #000000;
   }
 
+  /* 테마별 색상 */
   [data-theme="sky"] {
     --color-50: #f0f9ff;
     --color-100: #e0f2fe;
@@ -32,6 +33,59 @@
     --color-900: #0c4a6e;
   }
 
+  [data-theme="pink"] {
+    --color-50: #fdf2f8;
+    --color-100: #fce7f3;
+    --color-200: #fbcfe8;
+    --color-300: #f9a8d4;
+    --color-400: #f472b6;
+    --color-500: #ec4899;
+    --color-600: #db2777;
+    --color-700: #be185d;
+    --color-800: #9d174d;
+    --color-900: #831843;
+  }
+
+  [data-theme="lime"] {
+    --color-50: #f7fee7;
+    --color-100: #ecfccb;
+    --color-200: #d9f99d;
+    --color-300: #bef264;
+    --color-400: #a3e635;
+    --color-500: #84cc16;
+    --color-600: #65a30d;
+    --color-700: #4d7c0f;
+    --color-800: #3f6212;
+    --color-900: #365314;
+  }
+
+  [data-theme="amber"] {
+    --color-50: #fffbeb;
+    --color-100: #fef3c7;
+    --color-200: #fde68a;
+    --color-300: #fcd34d;
+    --color-400: #fbbf24;
+    --color-500: #f59e0b;
+    --color-600: #d97706;
+    --color-700: #b45309;
+    --color-800: #92400e;
+    --color-900: #78350f;
+  }
+
+  [data-theme="stone"] {
+    --color-50: #fafaf9;
+    --color-100: #f5f5f4;
+    --color-200: #e7e5e4;
+    --color-300: #d6d3d1;
+    --color-400: #a8a29e;
+    --color-500: #78716c;
+    --color-600: #57534e;
+    --color-700: #44403c;
+    --color-800: #292524;
+    --color-900: #1c1917;
+  }
+
+  /* 폰트 설정 */
   @font-face {
     font-family: "SUIT-Regular";
     src: url("/fonts/SUIT-Variable.woff2") format("woff2");
@@ -55,73 +109,53 @@
   }
 }
 
+/* 스크롤바 숨기기 */
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
 }
 
-/* datepicker 커스텀 스타일 */
-
-@layer base {
-  /* 달력 전체 컨테이너 */
-  .react-datepicker {
-    @apply min-w-[320px] max-w-[400px] bg-white p-0 border-0 rounded-lg !important;
-  }
-
-  /* 헤더 스타일 */
-  .react-datepicker__header {
-    @apply flex flex-col bg-white border-0 p-0 gap-4 text-gray-700 !important;
-  }
-
-  /* 요일 개별 스타일 */
-  .react-datepicker__day-name {
-    @apply text-theme-500 text-center cursor-pointer p-2 rounded-md w-[40px] !important;
-  }
-
-  /* 날짜 스타일 */
-  .react-datepicker__day {
-    @apply text-gray-700 text-center cursor-pointer p-2 rounded-md w-[40px] !important;
-  }
-
-  /* 선택 불가능 날짜 */
-  .react-datepicker__day--disabled {
-    @apply text-gray-300 text-center cursor-pointer p-2 rounded-md w-[40px] !important;
-  }
-
-  /* 선택된 날짜 */
-  .react-datepicker__day--selected {
-    @apply rounded-3xl bg-theme-400 text-white font-bold !important;
-  }
-
-  /* 오늘 날짜 스타일 */
-  .react-datepicker__day--today {
-    @apply rounded-3xl bg-theme-100 text-theme-500 !important;
-  }
-
-  .react-datepicker__day--keyboard-selected {
-    @apply text-gray-700 bg-white text-center cursor-pointer p-2 rounded-md w-[40px] !important;
-  }
+/* DatePicker 커스텀 스타일 */
+.react-datepicker {
+  @apply min-w-[320px] max-w-[400px] bg-white p-0 border-0 rounded-lg !important;
 }
 
-/* 폰트 크기 슬라이드바 커스텀 스타일 */
+.react-datepicker__header {
+  @apply flex flex-col bg-white border-0 p-0 gap-4 text-gray-700 !important;
+}
 
-/* 슬라이더 바 */
+.react-datepicker__day-name,
+.react-datepicker__day,
+.react-datepicker__day--disabled,
+.react-datepicker__day--selected,
+.react-datepicker__day--today,
+.react-datepicker__day--keyboard-selected {
+  @apply text-center cursor-pointer p-2 rounded-md w-[40px] !important;
+}
+
+.react-datepicker__day--selected {
+  @apply rounded-3xl bg-theme-400 text-white font-bold !important;
+}
+
+.react-datepicker__day--today {
+  @apply rounded-3xl bg-theme-100 text-theme-500 !important;
+}
+
+/* 폰트 크기 슬라이드바 스타일 */
 input[type="range"]::-webkit-slider-runnable-track {
   height: 4px;
   background: var(--zinc-300);
   border-radius: 2px;
 }
 
-/* 슬라이더 핸들 */
 input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
   width: 20px;
   height: 20px;
   background: var(--color-500);
   border-radius: 50%;
-  margin-top: -8px; /* 중앙 정렬 */
+  margin-top: -8px;
 }
 
-/* Firefox용 스타일 */
 input[type="range"]::-moz-range-thumb {
   width: 20px;
   height: 20px;
