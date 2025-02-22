@@ -17,19 +17,19 @@ const getFeelingsIcon = (feelings: Feelings) => {
   switch (feelings) {
     case "happy":
       return (
-        <RoundIcon backgroundColor="bg-pink-400">
+        <RoundIcon backgroundColor="bg-theme-400">
           <HappyIcon className="text-white h-9 w-9" />
         </RoundIcon>
       );
     case "soso":
       return (
-        <RoundIcon backgroundColor="bg-pink-300">
+        <RoundIcon backgroundColor="bg-theme-300">
           <HappyIcon className="text-white h-9 w-9" />
         </RoundIcon>
       );
     case "sad":
       return (
-        <RoundIcon backgroundColor="bg-pink-200">
+        <RoundIcon backgroundColor="bg-theme-200">
           <HappyIcon className="text-white h-9 w-9" />
         </RoundIcon>
       );

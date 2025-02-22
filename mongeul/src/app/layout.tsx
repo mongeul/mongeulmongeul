@@ -22,7 +22,11 @@ export default function RootLayout({
     <html lang="ko">
       <body className="bg-theme-50 flex flex-col items-center">
         <ClientLayout>
-          <ThemeProvider initialTheme="sky" initialFont="suit">
+          <ThemeProvider
+            initialTheme="sky"
+            initialFont="suit"
+            initialFontSize={16}
+          >
             <Header />
             <main className="flex w-full md:w-3/4 lg:w-1/2 mx-auto min-h-screen p-4">
               {children}

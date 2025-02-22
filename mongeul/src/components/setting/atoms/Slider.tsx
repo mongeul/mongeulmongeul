@@ -1,9 +1,11 @@
+import { ReactEventHandler } from "react";
+
 interface SliderProps {
   min: number;
   max: number;
   step: number;
   value: number;
-  onChange: (value: number) => void;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 export default function Slider({
@@ -20,7 +22,7 @@ export default function Slider({
       max={max}
       step={step}
       value={value}
-      onChange={(e) => onChange(Number(e.target.value))}
+      onChange={onChange}
       className="w-full appearance-none bg-transparent cursor-pointer relative z-10"
       style={{
         WebkitAppearance: "none",
