@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Card from "@/components/common/atoms/Card";
-import FontSelect from "../molecules/FontSelect";
+import FontSelect from "../molecules/FontSelectList";
 import FontSizeController from "../molecules/FontSizeController";
 
 export default function FontSelectCard() {

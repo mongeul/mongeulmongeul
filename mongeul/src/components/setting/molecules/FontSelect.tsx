@@ -1,28 +1,25 @@
-"use client";
-
-import { useTheme } from "@/context/ThemeContext";
 import RadioButton from "../atoms/RadioButton";
-import { FontOption } from "@/types/settingTypes";
 
-export default function FontSelect() {
-  const { font, setFont } = useTheme();
+interface FontSelectProps {
+  label: string;
+  value: string;
+  selected: boolean;
+  onChange: () => void;
+}
 
-  const fonts: FontOption[] = [
-    { label: "SUIT", value: "suit" },
-    { label: "고운 돋움", value: "gowun-dodum" },
-  ];
-
+export default function FontSelect({
+  label,
+  value,
+  selected,
+  onChange,
+}: FontSelectProps) {
   return (
-    <div className="w-full px-4 flex flex-col justify-center items-center gap-6">
-      {fonts.map((f) => (
-        <RadioButton
-          key={f.value}
-          label={f.label}
-          value={f.value}
-          selected={font === f.value}
-          onClick={() => setFont(f.value)}
-        />
-      ))}
-    </div>
+    <label
+      className="w-full flex items-center gap-2 cursor-pointer"
+      data-font={value}
+    >
+      <RadioButton value={value} selected={selected} onChange={onChange} />
+      <span>{label}</span>
+    </label>
   );
 }
