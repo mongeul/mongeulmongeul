@@ -33,45 +33,51 @@ export function ThemeProvider({
   initialFont,
   initialFontSize,
 }: ThemeProviderProps) {
-  const [theme, setTheme] = useState<Theme>(initialTheme);
-  const [font, setFont] = useState<Font>(initialFont);
-  const [fontSize, setFontSize] = useState<number>(initialFontSize);
+  const [theme, setTheme] = useState<Theme | null>(null);
+  const [font, setFont] = useState<Font | null>(null);
+  const [fontSize, setFontSize] = useState<number | null>(null);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      const savedTheme = localStorage.getItem("theme") as Theme;
-      const savedFont = localStorage.getItem("font") as Font;
-      const savedFontSize = Number(localStorage.getItem("fontSize"));
+      const savedTheme =
+        (localStorage.getItem("theme") as Theme) || initialTheme;
+      const savedFont = (localStorage.getItem("font") as Font) || initialFont;
+      const savedFontSize =
+        Number(localStorage.getItem("fontSize")) || initialFontSize;
 
-      if (savedTheme) setTheme(savedTheme);
-      if (savedFont) setFont(savedFont);
-      if (!isNaN(savedFontSize)) setFontSize(savedFontSize);
+      setTheme(savedTheme);
+      setFont(savedFont);
+      setFontSize(savedFontSize);
     }
   }, []);
 
-  // 테마 변경
   useEffect(() => {
-    document.documentElement.setAttribute("data-theme", theme);
-    if (typeof window !== "undefined") {
+    if (theme) {
+      document.documentElement.setAttribute("data-theme", theme);
       localStorage.setItem("theme", theme);
     }
   }, [theme]);
 
-  // 폰트 변경
   useEffect(() => {
-    document.documentElement.setAttribute("data-font", font);
-    if (typeof window !== "undefined") {
+    if (font) {
+      document.documentElement.setAttribute("data-font", font);
       localStorage.setItem("font", font);
     }
   }, [font]);
 
-  // 폰트 크기 변경
   useEffect(() => {
-    document.documentElement.style.setProperty("--font-size", `${fontSize}px`);
-    if (typeof window !== "undefined") {
+    if (fontSize !== null) {
+      document.documentElement.style.setProperty(
+        "--font-size",
+        `${fontSize}px`
+      );
       localStorage.setItem("fontSize", fontSize.toString());
     }
   }, [fontSize]);
+
+  if (theme === null || font === null || fontSize === null) {
+    return <div style={{ visibility: "hidden" }}>{children}</div>;
+  }
 
   return (
     <ThemeContext.Provider
