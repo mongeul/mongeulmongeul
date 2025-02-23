@@ -1,6 +1,7 @@
 package com.specup.mongeul.domain.comment.service;
 
-import com.specup.mongeul.domain.comment.dto.request.CommentRequest;
+import com.specup.mongeul.domain.comment.dto.request.CommentCreateRequest;
+import com.specup.mongeul.domain.comment.dto.request.CommentUpdateRequest;
 import com.specup.mongeul.domain.comment.dto.response.CommentResponse;
 import com.specup.mongeul.domain.comment.entity.Comment;
 import com.specup.mongeul.domain.comment.repository.CommentRepository;
@@ -26,7 +27,7 @@ public class CommentService {
     private final CommentRepository commentRepository;
 
     @Transactional
-    public CommentResponse create(Long userId, Long diaryId, CommentRequest request) {
+    public CommentResponse create(Long userId, Long diaryId, CommentCreateRequest request) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         Diary diary = diaryRepository.findById(diaryId)
@@ -43,7 +44,7 @@ public class CommentService {
         return CommentResponse.from(comment);
     }
 
-    private Comment findParentComment(CommentRequest request) {
+    private Comment findParentComment(CommentCreateRequest request) {
         Long parentCommentId = request.getParentCommentId();
         if (parentCommentId == null) {
             return null;
@@ -65,7 +66,7 @@ public class CommentService {
     }
 
     @Transactional
-    public CommentResponse update(Long userId, Long commentId, CommentRequest request) {
+    public CommentResponse update(Long userId, Long commentId, CommentUpdateRequest request) {
         Comment comment = commentRepository.findById(commentId)
                 .filter(not(Comment::getDeleted))
                 .orElseThrow(() -> new CustomException(ErrorCode.COMMENT_NOT_FOUND));
