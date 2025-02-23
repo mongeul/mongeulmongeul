@@ -1,8 +1,8 @@
 import clsx from "clsx";
-import { ReactElement } from "react";
+import { ReactNode } from "react";
 
 interface CardProps {
-  children: ReactElement;
+  children: ReactNode;
   borderColor?: string;
   width?: string;
   height?: string;
@@ -26,7 +26,7 @@ export default function Card({
         `${padding}`,
         `border ${borderColor}`,
         `${roundSize}`,
-        " flex bg-white"
+        "flex bg-white"
       )}
     >
       {children}

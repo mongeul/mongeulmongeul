@@ -9,6 +9,13 @@ export default {
   ],
   theme: {
     extend: {
+      fontSize: {
+        base: "var(--font-size)",
+        sm: "calc(var(--font-size) * 0.875)",
+        lg: "calc(var(--font-size) * 1.125)",
+        xl: "calc(var(--font-size) * 1.25)",
+        "2xl": "calc(var(--font-size) * 1.5)",
+      },
       colors: {
         theme: {
           50: "var(--color-50)",
@@ -22,20 +29,6 @@ export default {
           800: "var(--color-800)",
           900: "var(--color-900)",
         },
-        zinc: {
-          50: "var(--zinc-50)",
-          100: "var(--zinc-100)",
-          200: "var(--zinc-200)",
-          300: "var(--zinc-300)",
-          400: "var(--zinc-400)",
-          500: "var(--zinc-500)",
-          600: "var(--zinc-600)",
-          700: "var(--zinc-700)",
-          800: "var(--zinc-800)",
-          900: "var(--zinc-900)",
-        },
-        white: "var(--white)",
-        black: "var(--black)",
       },
     },
   },
@@ -49,5 +42,10 @@ export default {
     "react-datepicker__day--selected",
     "react-datepicker__day--today",
     "react-datepicker__day--keyboard-selected",
+    "bg-sky-200",
+    "bg-amber-200",
+    "bg-lime-200",
+    "bg-pink-200",
+    "bg-stone-200",
   ],
 } satisfies Config;
