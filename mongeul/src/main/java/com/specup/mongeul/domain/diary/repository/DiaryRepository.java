@@ -7,10 +7,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import javax.swing.text.html.Option;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface DiaryRepository extends JpaRepository<Diary, Long> {
@@ -22,20 +20,21 @@ public interface DiaryRepository extends JpaRepository<Diary, Long> {
         SELECT d
         FROM Diary d
         WHERE d.user = :user
-          AND d.createdAt >= :startOfMonth
-          AND d.createdAt < :startOfNextMonth
-        ORDER BY d.createdAt DESC
-        LIMIT 31
+          AND d.date >= :startOfMonth
+          AND d.date < :startOfNextMonth
+        ORDER BY d.date DESC
     """)
-    List<Diary> findByUserAndCreatedAtBetween(
+    List<Diary> findByUserAndDateBetween(
             @Param("user") User user,
-            @Param("startOfMonth") LocalDateTime startOfMonth,
-            @Param("startOfNextMonth") LocalDateTime startOfNextMonth);
+            @Param("startOfMonth") LocalDate startOfMonth,
+            @Param("startOfNextMonth") LocalDate startOfNextMonth);
 
     /**
      * 하루 1개 일기 제한 검증 (데이터 조회안하고 존재여부만 체크)
      */
-    boolean existsByUserIdAndCreatedAtBetween(@Param("userId") Long userId, @Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
+//    boolean existsByUserIdAndCreatedAtBetween(@Param("userId") Long userId, @Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
+
+    boolean existsByUserIdAndDate(@Param("userId") Long userId, @Param("date") LocalDate date);
 
     /**
      * 하루 1개 일기 제한 검증 (데이터를 조회해서 반환으로 체크)

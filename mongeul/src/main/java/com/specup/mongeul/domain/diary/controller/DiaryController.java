@@ -3,6 +3,7 @@ package com.specup.mongeul.domain.diary.controller;
 import com.specup.mongeul.domain.diary.dto.request.DiaryCreateRequest;
 import com.specup.mongeul.domain.diary.dto.request.DiaryUpdateRequest;
 import com.specup.mongeul.domain.diary.dto.response.DiaryResponse;
+import com.specup.mongeul.domain.diary.dto.response.PictureLineResponse;
 import com.specup.mongeul.domain.diary.service.DiaryService;
 import com.specup.mongeul.domain.user.entity.User;
 import com.specup.mongeul.global.common.ApiResponse;
@@ -52,5 +53,11 @@ public class DiaryController {
     public ResponseEntity<ApiResponse<Void>> delete(@AuthenticationPrincipal User user, @PathVariable Long diaryId) {
         diaryService.delete(user.getId(), diaryId);
         return ResponseEntity.noContent().build();
+    }
+
+    @Operation(summary = "그림 조회", description = "그림을 조회합니다.")
+    @GetMapping("/diaries/{diaryId}/pictureLines")
+    public ResponseEntity<ApiResponse<PictureLineResponse>> getPictureLines(@AuthenticationPrincipal User user, @PathVariable Long diaryId) {
+        return ResponseEntity.ok(ApiResponse.success(diaryService.readPicture(user.getId(), diaryId), "그림 조회 성공"));
     }
 }
