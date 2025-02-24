@@ -2,8 +2,6 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 import { ThemeProvider } from "@/context/ThemeContext";
-import { Provider } from "react-redux";
-import { store } from "@/store/store";
 import Header from "@/components/header/orgamisms/Header";
 import ClientLayout from "@/components/layout/ClientLayout";
 import Navbar from "@/components/navbar/organisms/NavBar";

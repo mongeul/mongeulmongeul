@@ -1,7 +1,7 @@
 "use client";
 
 import Button from "@/components/common/atoms/Button";
-import { setDrawing, setDrawingImage } from "@/store/diarySlice";
+import { setDrawing, setDrawingLines } from "@/store/diarySlice";
 import { resetDrawing } from "@/store/drawingSlice";
 import { RootState } from "@/store/store";
 import { stageRef } from "@/utils/stateRef";
@@ -21,13 +21,13 @@ export default function DrawingNavBar() {
 
     // JSON 저장
     const drawingJSON = JSON.stringify(lines);
-    dispatch(setDrawing(drawingJSON));
+    dispatch(setDrawingLines(drawingJSON));
     console.log("JSON 저장 완료:", drawingJSON);
 
     // 전역 변수에서 가져온 stageRef를 활용하여 이미지 저장
     if (stageRef) {
       const drawingImage = stageRef.toDataURL();
-      dispatch(setDrawingImage(drawingImage));
+      dispatch(setDrawing(drawingImage));
       console.log("이미지 저장 완료:", drawingImage);
     } else {
       console.error("stageRef가 null입니다. 확인해주세요.");

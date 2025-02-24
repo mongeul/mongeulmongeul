@@ -6,7 +6,7 @@ const DiaryDate: React.FC = () => {
 
   if (!selectedDiary) return null;
 
-  return <p>{selectedDiary.createdAt}</p>;
+  return <p>{selectedDiary.date}</p>;
 };
 
 export default DiaryDate;

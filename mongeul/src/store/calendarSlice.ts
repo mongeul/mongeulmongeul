@@ -1,9 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { DiaryRead } from "@/types/diaryTypes";
+import { Diary } from "@/types/diaryTypes";
 
 interface CalendarState {
   selectedDate: string;
-  selectedDiary: DiaryRead | null;
+  selectedDiary: Diary | null;
   currentMonth: { year: number; month: number };
   diaryDates: string[];
 }
@@ -22,7 +22,7 @@ const calendarSlice = createSlice({
     setSelectedDate: (state, action: PayloadAction<string>) => {
       state.selectedDate = action.payload;
     },
-    setSelectedDiary: (state, action: PayloadAction<DiaryRead | null>) => {
+    setSelectedDiary: (state, action: PayloadAction<Diary | null>) => {
       state.selectedDiary = action.payload;
     },
     setCurrentMonth: (

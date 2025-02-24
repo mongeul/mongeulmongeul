@@ -6,22 +6,22 @@ export type PrivateStatus = "PUBLIC" | "PRIVATE" | "LOCK";
 
 export type Weather = "SUNNY" | "CLOUDY" | "RAINY" | "";
 
-export interface DiaryRequest {
+export interface BaseDiary {
   title: string;
   content: string;
+  picture?: string;
   date: string;
   weather: Weather;
   feelings: Feelings;
-  picture?: string;
-  pictureLines?: DrawingLine;
   privateStatus: PrivateStatus;
 }
 
-export interface Diary extends DiaryRequest {
+export interface DiaryRequest extends BaseDiary {
+  pictureLines?: DrawingLine[];
+}
+
+export interface Diary extends BaseDiary {
   diaryId: number;
-  author: string;
-  createdAt: string;
-  updatedAt: string;
 }
 
 export interface DiaryResponse {
