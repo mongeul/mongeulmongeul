@@ -1,8 +1,12 @@
 package com.specup.mongeul.domain.diary.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.specup.mongeul.domain.diary.dto.common.PictureLineDto;
 import com.specup.mongeul.domain.diary.dto.request.DiaryCreateRequest;
 import com.specup.mongeul.domain.diary.dto.request.DiaryUpdateRequest;
 import com.specup.mongeul.domain.diary.dto.response.DiaryResponse;
+import com.specup.mongeul.domain.diary.dto.response.PictureLineResponse;
 import com.specup.mongeul.domain.diary.entity.Diary;
 import com.specup.mongeul.domain.diary.repository.DiaryRepository;
 import com.specup.mongeul.domain.user.entity.User;
@@ -13,8 +17,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -22,28 +25,45 @@ import java.util.List;
 public class DiaryService {
     private final UserRepository userRepository;
     private final DiaryRepository diaryRepository;
+    private final ObjectMapper objectMapper;
 
     @Transactional
     public DiaryResponse create(Long userId, DiaryCreateRequest request) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
-        LocalDateTime startOfDay = LocalDateTime.now().with(LocalTime.MIN);
-        LocalDateTime endOfDay = LocalDateTime.now().with(LocalTime.MAX);
+        LocalDate date = request.getDate();
+        if (diaryRepository.existsByUserIdAndDate(userId, date)) {
+            throw new CustomException(ErrorCode.DIARY_ALREADY_EXISTS);
+        }
+
+//        LocalDateTime startOfDay = LocalDateTime.now().with(LocalTime.MIN);
+//        LocalDateTime endOfDay = LocalDateTime.now().with(LocalTime.MAX);
 
         // 일기 하루에 1개 검증 로직 (데이터 조회 ver)
 //        if (diaryRepository.findByUserIdAndCreatedAtBetween(userId, startOfDay, endOfDay).isPresent()) {
 //            throw new CustomException(ErrorCode.DIARY_ALREADY_EXISTS);
 //        }
 
-        // 일기 하루에 1개 검증 로직 (존재여부 체크 ver)
-        if (diaryRepository.existsByUserIdAndCreatedAtBetween(userId, startOfDay, endOfDay)) {
-            throw new CustomException(ErrorCode.DIARY_ALREADY_EXISTS);
+        // 일기 하루에 1개 검증 로직 (존재여부 체크 ver) 이전
+//        if (diaryRepository.existsByUserIdAndCreatedAtBetween(userId, startOfDay, endOfDay)) {
+//            throw new CustomException(ErrorCode.DIARY_ALREADY_EXISTS);
+//        }
+
+        String pictureLinesJson = null;
+        if (request.getPictureLines() != null && !request.getPictureLines().isEmpty()) {
+            try {
+                pictureLinesJson = objectMapper.writeValueAsString(request.getPictureLines());
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException("PictureLines Json 직렬화 실패", e);
+            }
         }
 
         Diary diary = diaryRepository.save(
                 Diary.create(request.getTitle(), request.getContent(), request.getPicture(),
-                        request.getWeather(), request.getFeeling(), request.getPrivateStatus(), user)
+                        date, pictureLinesJson, request.getWeather(), request.getFeeling(),
+                        request.getPrivateStatus(), user
+                )
         );
         return DiaryResponse.from(diary);
     }
@@ -52,23 +72,42 @@ public class DiaryService {
     public DiaryResponse update(Long userId, Long diaryId, DiaryUpdateRequest request) {
         Diary diary = diaryRepository.findById(diaryId)
                 .orElseThrow(() -> new CustomException(ErrorCode.DIARY_NOT_FOUND));
+
         if (!diary.getUser().getId().equals(userId)) {
             throw new CustomException(ErrorCode.INVALID_DIARY_USER);
         }
+
+        if (!diary.getDate().equals(request.getDate())) {
+            if (diaryRepository.existsByUserIdAndDate(userId, request.getDate())) {
+                throw new CustomException(ErrorCode.DIARY_ALREADY_EXISTS);
+            }
+        }
+
+        String pictureLinesJson = null;
+        if (request.getPictureLines() != null && !request.getPictureLines().isEmpty()) {
+            try {
+                pictureLinesJson = objectMapper.writeValueAsString(request.getPictureLines());
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException("PictureLines Json 직렬화 실패", e);
+            }
+        }
+
         diary.update(request.getTitle(), request.getContent(), request.getPicture(),
-                request.getWeather(), request.getFeeling(), request.getPrivateStatus());
+                request.getDate(), pictureLinesJson, request.getWeather(),
+                request.getFeeling(), request.getPrivateStatus());
+
         return DiaryResponse.from(diary);
     }
 
-    @Transactional(readOnly = true)
+//    @Transactional(readOnly = true)
     public List<DiaryResponse> getCalendarDiaries(Long userId, int year, int month) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
-        LocalDateTime startOfMonth = LocalDateTime.of(year, month, 1, 0, 0, 0);
-        LocalDateTime startOfNextMonth = startOfMonth.plusMonths(1);
+        LocalDate startOfMonth = LocalDate.of(year, month, 1);
+        LocalDate startOfNextMonth = startOfMonth.plusMonths(1);
 
-        List<Diary> diaries = diaryRepository.findByUserAndCreatedAtBetween(user, startOfMonth, startOfNextMonth);
+        List<Diary> diaries = diaryRepository.findByUserAndDateBetween(user, startOfMonth, startOfNextMonth);
         return diaries.stream()
                 .map(DiaryResponse::from)
                 .toList();
@@ -88,5 +127,23 @@ public class DiaryService {
             throw new CustomException(ErrorCode.INVALID_DIARY_USER);
         }
         diaryRepository.delete(diary);
+    }
+
+    @Transactional(readOnly = true)
+    public PictureLineResponse readPicture(Long userId, Long diaryId) {
+        userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        Diary diary = diaryRepository.findById(diaryId)
+                .orElseThrow(() -> new CustomException(ErrorCode.DIARY_NOT_FOUND));
+        List<PictureLineDto> pictureLines = null;
+        if (diary.getPictureLines() != null && !diary.getPictureLines().isEmpty()) {
+            try {
+                pictureLines = objectMapper.readValue(diary.getPictureLines(),
+                        objectMapper.getTypeFactory().constructCollectionType(List.class, PictureLineDto.class));
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException("PictureLines JSON 역직렬화 실패", e);
+            }
+        }
+        return PictureLineResponse.from(diary.getId(), pictureLines);
     }
 }
