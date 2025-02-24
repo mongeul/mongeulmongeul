@@ -15,9 +15,9 @@ export default function FontSizeController() {
       <div className="relative w-full mx-4">
         <div className="absolute top-1/2 w-full h-1 bg-gray-300 rounded-full transform -translate-y-1/2"></div>
         <Slider
-          min={12}
-          max={20}
-          step={2}
+          min={14}
+          max={18}
+          step={1}
           value={fontSize}
           onChange={onChange}
         />

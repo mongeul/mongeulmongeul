@@ -1,5 +1,4 @@
-import { Disclosure, Feelings, Weather } from "@/types/diaryTypes";
-import { DrawingLine } from "@/types/drawingTypes";
+import { PrivateStatus, Feelings, Weather } from "@/types/diaryTypes";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface DiaryState {
@@ -7,10 +6,10 @@ interface DiaryState {
   date: string;
   content: string;
   drawing: string | null;
-  drawingImage: string | null;
+  drawingLines: string | null;
   feelings: Feelings;
   weather: Weather;
-  disclosure: Disclosure;
+  privateStatus: PrivateStatus;
 }
 
 const initialState: DiaryState = {
@@ -18,10 +17,10 @@ const initialState: DiaryState = {
   date: new Date().toISOString().split("T")[0],
   content: "",
   drawing: null,
-  drawingImage: null,
+  drawingLines: null,
   feelings: "" as Feelings,
   weather: "" as Weather,
-  disclosure: "PRIVATE" as Disclosure,
+  privateStatus: "PRIVATE" as PrivateStatus,
 };
 
 const diarySlice = createSlice({
@@ -40,8 +39,8 @@ const diarySlice = createSlice({
     setDrawing: (state, action: PayloadAction<string | null>) => {
       state.drawing = action.payload;
     },
-    setDrawingImage: (state, action: PayloadAction<string | null>) => {
-      state.drawingImage = action.payload;
+    setDrawingLines: (state, action: PayloadAction<string | null>) => {
+      state.drawingLines = action.payload;
     },
     setFeelings: (state, action: PayloadAction<Feelings>) => {
       state.feelings = action.payload;
@@ -49,8 +48,8 @@ const diarySlice = createSlice({
     setWeather: (state, action: PayloadAction<Weather>) => {
       state.weather = action.payload;
     },
-    setDisclosure: (state, action: PayloadAction<Disclosure>) => {
-      state.disclosure = action.payload;
+    setPrivateStatus: (state, action: PayloadAction<PrivateStatus>) => {
+      state.privateStatus = action.payload;
     },
     resetDiary: () => initialState,
   },
@@ -61,10 +60,10 @@ export const {
   setDate,
   setContent,
   setDrawing,
-  setDrawingImage,
+  setDrawingLines,
   setFeelings,
   setWeather,
-  setDisclosure,
+  setPrivateStatus,
   resetDiary,
 } = diarySlice.actions;
 export default diarySlice.reducer;

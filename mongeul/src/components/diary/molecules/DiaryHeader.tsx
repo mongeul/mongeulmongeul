@@ -2,7 +2,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import DiaryDate from "../atoms/DiaryDate";
 import DiaryWeather from "../atoms/DiaryWeather";
-import DiaryDisclosureIcon from "../atoms/DiaryDisclosure";
+import DiaryPrivateStatusIcon from "../atoms/DiaryPrivateStatus";
 
 const DiaryHeader: React.FC = () => {
   const { selectedDiary } = useSelector((state: RootState) => state.calendar);
@@ -14,7 +14,7 @@ const DiaryHeader: React.FC = () => {
       <DiaryDate />
       <div className="flex space-x-3">
         <DiaryWeather />
-        <DiaryDisclosureIcon />
+        <DiaryPrivateStatusIcon />
       </div>
     </div>
   );

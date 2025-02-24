@@ -1,4 +1,4 @@
-import ParellelLayoutProps from "@/components/layout/ParellelLayout";
+import ParellelLayout from "@/components/layout/ParellelLayout";
 import { ReactNode } from "react";
 
 export default function Layout({
@@ -9,7 +9,7 @@ export default function Layout({
   detail: ReactNode;
 }) {
   return (
-    <ParellelLayoutProps children={children} detail={detail} />
+    <ParellelLayout children={children} detail={detail} />
     // <div className="flex gap-4 h-screen">
     //   <div className="w-full md:w-1/2">{children}</div>
     //   <div className="w-full md:w-1/2">{detail}</div>

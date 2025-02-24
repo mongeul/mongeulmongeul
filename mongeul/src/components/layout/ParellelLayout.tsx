@@ -6,7 +6,7 @@ interface ParellelLayoutProps {
   detail: ReactNode;
 }
 
-export default function ParellelLayoutProps({
+export default function ParellelLayout({
   children,
   detail,
 }: ParellelLayoutProps) {

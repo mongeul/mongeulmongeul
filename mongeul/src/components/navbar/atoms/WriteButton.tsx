@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import WriteButtonDetail from "../molecules/WriteButtonDetail";
+import WriteButtonDetail from "./WriteButtonDetail";
 import DiaryIcon from "@/assets/icons/diary.svg";
 import WriteIcon from "@/assets/icons/write.svg";
 import SharedDiaryIcon from "@/assets/icons/shared-diary.svg";
@@ -11,14 +11,11 @@ import Link from "next/link";
 export default function WriteButton() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
-  const openButton = (): void => {
-    [console.log("다이어리 작성 버튼 클릭")];
-    setIsOpen((prev: boolean) => !prev);
-  };
+  const toggleButton = () => setIsOpen((prev) => !prev);
 
   const writePersonalDiary = (): void => {
     console.log("개인 다이어리 작성");
-    openButton();
+    toggleButton();
   };
   const writeSharedDiary = (): void => {
     console.log("공유 다이어리 작성");
@@ -44,8 +41,8 @@ export default function WriteButton() {
           </div>
         )}
       </AnimatePresence>
-      <button onClick={openButton}>
-        <WriteIcon className="absolute left-1/2 -translate-x-1/2 -top-4 w-14 h-14 text-theme-400" />
+      <button onClick={toggleButton}>
+        <WriteIcon className="absolute left-1/2 -translate-x-1/2 -top-4 w-14 h-14 text-theme-400 bg-white rounded-full" />
       </button>
     </div>
   );

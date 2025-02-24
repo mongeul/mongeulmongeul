@@ -5,27 +5,25 @@ import Card from "@/components/common/atoms/Card";
 import Link from "next/link";
 import { useSelector, useDispatch } from "react-redux";
 import { resetDrawing } from "@/store/drawingSlice";
-import { setDrawing, setDrawingImage } from "@/store/diarySlice";
+import { setDrawing, setDrawingLines } from "@/store/diarySlice";
 import CloseIcon from "@/assets/icons/close.svg";
 import PaletteIcon from "@/assets/icons/palette.svg";
 
 export default function DrawingCard() {
   const dispatch = useDispatch();
 
-  const drawingImage = useSelector(
-    (state: RootState) => state.diary.drawingImage
-  );
+  const drawing = useSelector((state: RootState) => state.diary.drawing);
 
   const deleteDrawing = () => {
     dispatch(resetDrawing());
     dispatch(setDrawing(null));
-    dispatch(setDrawingImage(null));
+    dispatch(setDrawingLines(null));
   };
 
   return (
     <div className="w-full h-full">
       <Card>
-        {drawingImage ? (
+        {drawing ? (
           <div className="w-full flex flex-col justify-center items-center">
             <button
               className="w-full flex flex-row justify-end items-center"
@@ -35,7 +33,7 @@ export default function DrawingCard() {
             </button>
             <Link href="/write-diary/drawing">
               <div className="w-full flex justify-center items-center">
-                <img src={drawingImage} alt="저장된 그림" />
+                <img src={drawing} alt="저장된 그림" />
               </div>
             </Link>
           </div>

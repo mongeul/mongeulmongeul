@@ -2,8 +2,6 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 import { ThemeProvider } from "@/context/ThemeContext";
-import { Provider } from "react-redux";
-import { store } from "@/store/store";
 import Header from "@/components/header/orgamisms/Header";
 import ClientLayout from "@/components/layout/ClientLayout";
 import Navbar from "@/components/navbar/organisms/NavBar";
@@ -28,7 +26,7 @@ export default function RootLayout({
         >
           <ClientLayout>
             <Header />
-            <main className="flex w-full md:w-3/4 lg:w-1/2 mx-auto min-h-screen p-4">
+            <main className="flex w-full md:w-3/4 lg:w-1/2 mx-auto min-h-screen p-4 pb-24">
               {children}
             </main>
             <Navbar />
