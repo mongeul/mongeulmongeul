@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.specup.mongeul.domain.diary.dto.common.PictureLineDto;
 import com.specup.mongeul.domain.diary.dto.request.DiaryCreateRequest;
 import com.specup.mongeul.domain.diary.dto.request.DiaryUpdateRequest;
+import com.specup.mongeul.domain.diary.dto.response.DiaryDateResponse;
 import com.specup.mongeul.domain.diary.dto.response.DiaryResponse;
 import com.specup.mongeul.domain.diary.dto.response.PictureLineResponse;
 import com.specup.mongeul.domain.diary.entity.Diary;
@@ -27,6 +28,7 @@ public class DiaryService {
     private final DiaryRepository diaryRepository;
     private final ObjectMapper objectMapper;
 
+    // 일기 생성
     @Transactional
     public DiaryResponse create(Long userId, DiaryCreateRequest request) {
         User user = userRepository.findById(userId)
@@ -68,6 +70,7 @@ public class DiaryService {
         return DiaryResponse.from(diary);
     }
 
+    // 일기 수정
     @Transactional
     public DiaryResponse update(Long userId, Long diaryId, DiaryUpdateRequest request) {
         Diary diary = diaryRepository.findById(diaryId)
@@ -99,7 +102,8 @@ public class DiaryService {
         return DiaryResponse.from(diary);
     }
 
-//    @Transactional(readOnly = true)
+    // 캘린더 일기 조회
+    @Transactional(readOnly = true)
     public List<DiaryResponse> getCalendarDiaries(Long userId, int year, int month) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
@@ -113,12 +117,14 @@ public class DiaryService {
                 .toList();
     }
 
+    // 특정 일기 조회
     @Transactional(readOnly = true)
     public DiaryResponse read(Long diaryId) {
         return DiaryResponse.from(diaryRepository.findById(diaryId)
                 .orElseThrow(() -> new CustomException(ErrorCode.DIARY_NOT_FOUND)));
     }
 
+    // 일기 삭제
     @Transactional
     public void delete(Long userId, Long diaryId) {
         Diary diary = diaryRepository.findById(diaryId)
@@ -129,6 +135,7 @@ public class DiaryService {
         diaryRepository.delete(diary);
     }
 
+    // 그림 조회
     @Transactional(readOnly = true)
     public PictureLineResponse readPicture(Long userId, Long diaryId) {
         userRepository.findById(userId)
@@ -145,5 +152,20 @@ public class DiaryService {
             }
         }
         return PictureLineResponse.from(diary.getId(), pictureLines);
+    }
+
+    // 일기 작성 날짜 조회
+    @Transactional(readOnly = true)
+    public List<DiaryDateResponse> getDates(Long userId, int year, int month) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        LocalDate startOfMonth = LocalDate.of(year, month, 1);
+        LocalDate startOfNextMonth = startOfMonth.plusMonths(1);
+
+        List<Diary> diaries = diaryRepository.findByUserAndDateBetween(user, startOfMonth, startOfNextMonth);
+        return diaries.stream()
+                .map(DiaryDateResponse::from)
+                .toList();
     }
 }
