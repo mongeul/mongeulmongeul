@@ -10,6 +10,8 @@ import { RootState } from "@/store/store";
 import { resetDiary } from "@/store/diarySlice";
 import { createDiary } from "@/lib/api/diary";
 import Button from "@/components/common/atoms/Button";
+import DrawingCard from "@/components/write-diary/organisms/DrawingCard";
+import WriteForm from "@/components/write-diary/templates/WriteForm";
 
 export default function Page() {
   const dispatch = useDispatch();
@@ -40,20 +42,15 @@ export default function Page() {
   };
 
   return (
-    <DefaultLayout>
-      <div className="w-full md:w-1/2 flex flex-col items-center gap-4">
-        <DateInputCard />
-        <IconCard />
-        <TitleCard />
-        <ContentCard />
-        <Button
-          text="작성하기"
-          width="w-full"
-          textColor="text-white"
-          fontWeight="font-bold"
-          onClick={submitDiary}
-        />
-      </div>
-    </DefaultLayout>
+    <div className="w-full flex flex-col items-center gap-4">
+      <WriteForm />
+      <Button
+        text="작성하기"
+        width="w-full"
+        textColor="text-white"
+        fontWeight="font-bold"
+        onClick={submitDiary}
+      />
+    </div>
   );
 }

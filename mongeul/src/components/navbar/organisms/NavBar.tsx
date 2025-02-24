@@ -12,7 +12,7 @@ export default function Navbar() {
 
   return (
     <div className="fixed bottom-0 w-full bg-white flex justify-center">
-      <div className="w-full md:w-1/3 flex p-4 justify-around">
+      <div className="w-full md:w-2/3 lg:w-1/2 flex p-4 justify-around">
         <Link href="/feed">
           <FeedIcon
             className={`w-7 h-7 ${

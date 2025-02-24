@@ -10,7 +10,7 @@ export interface DiaryCreate {
   date: string;
   weather: Weather;
   feelings: Feelings;
-  painting?: string;
+  drawing?: string;
   disclosure: Disclosure;
 }
 
