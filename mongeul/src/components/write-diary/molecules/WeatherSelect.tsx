@@ -8,7 +8,7 @@ import { Weather } from "@/types/diaryTypes";
 import { getWeatherIcon } from "@/utils/uiUtils";
 import WebModal from "../../common/atoms/WebModal";
 
-const weathers: Weather[] = ["sunny", "cloudy", "rainy"];
+const weathers: Weather[] = ["SUNNY", "CLOUDY", "RAINY"];
 
 function ModalContent({ closeModal }: { closeModal: () => void }) {
   const dispatch = useDispatch();

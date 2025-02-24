@@ -4,34 +4,56 @@ import Button from "@/components/common/atoms/Button";
 import { resetDiary } from "@/store/diarySlice";
 import { RootState } from "@/store/store";
 import { useDispatch, useSelector } from "react-redux";
+import { createDiary } from "@/actions/diary/createDiary";
+import { startTransition } from "react";
+import router from "next/router";
 
 export default function WriteDiaryNavBar() {
   const dispatch = useDispatch();
-  const diary = useSelector((state: RootState) => state.diary);
+  const {
+    title,
+    content,
+    drawing,
+    drawingImage,
+    date,
+    weather,
+    feelings,
+    privateStatus,
+  } = useSelector((state: RootState) => state.diary);
 
-  const submitDiary = async () => {
-    console.log("일기 작성 버튼 클릭");
-
+  async function handleSubmit() {
     if (
-      !diary.title ||
-      !diary.content ||
-      !diary.date ||
-      !diary.weather ||
-      !diary.feelings ||
-      !diary.privateStatus
+      !title ||
+      !content ||
+      !date ||
+      !weather ||
+      !feelings ||
+      !privateStatus
     ) {
-      alert("필수 입력값을 채워주세요");
+      alert("필수 입력 항목을 모두 입력해주세요!");
       return;
     }
-  };
 
-  // const result = await createDiary(diary);
-  // if (result.success) {
-  //   console.log("일기 작성 성공:", result);
-  //   dispatch(resetDiary());
-  // } else {
-  //   console.error("일기 작성 실패:", result.message);
-  // }
+    startTransition(async () => {
+      try {
+        await createDiary({
+          title,
+          content,
+          picture: drawingImage || "",
+          pictureLines: drawing ? JSON.parse(drawing) : [],
+          date,
+          weather: weather,
+          feelings: feelings,
+          privateStatus: privateStatus,
+        });
+
+        clearDiary();
+        router.push("/diary"); // 일기 목록 페이지로 이동
+      } catch (error) {
+        console.error("일기 작성 실패:", error);
+      }
+    });
+  }
 
   const clearDiary = () => {
     dispatch(resetDiary());
@@ -44,7 +66,7 @@ export default function WriteDiaryNavBar() {
         width="w-full"
         textColor="text-white"
         fontWeight="font-bold"
-        onClick={submitDiary}
+        onClick={handleSubmit}
       />
       <Button
         text="새로 쓰기"

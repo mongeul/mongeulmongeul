@@ -1,28 +1,31 @@
-export type Feelings = "happy" | "soso" | "sad" | "";
+import { DrawingLine } from "./drawingTypes";
+
+export type Feelings = "HAPPY" | "SOSO" | "SAD" | "";
 
 export type PrivateStatus = "PUBLIC" | "PRIVATE" | "LOCK";
 
-export type Weather = "sunny" | "cloudy" | "rainy" | "";
+export type Weather = "SUNNY" | "CLOUDY" | "RAINY" | "";
 
-export interface DiaryCreate {
+export interface DiaryRequest {
   title: string;
   content: string;
   date: string;
   weather: Weather;
   feelings: Feelings;
-  drawing?: string;
+  picture?: string;
+  pictureLines?: DrawingLine;
   privateStatus: PrivateStatus;
 }
 
-export interface DiaryRead extends DiaryCreate {
+export interface Diary extends DiaryRequest {
   diaryId: number;
   author: string;
   createdAt: string;
   updatedAt: string;
 }
 
-export interface DiaryCreateResponse {
+export interface DiaryResponse {
   success: boolean;
   message: string;
-  data: DiaryRead | null;
+  data: Diary | null;
 }

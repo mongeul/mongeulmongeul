@@ -8,7 +8,7 @@ import { Feelings } from "@/types/diaryTypes";
 import { getFeelingsIcon } from "@/utils/uiUtils";
 import WebModal from "../../common/atoms/WebModal";
 
-const feelingsOptions: Feelings[] = ["happy", "soso", "sad"];
+const feelingsOptions: Feelings[] = ["HAPPY", "SOSO", "SAD"];
 
 function ModalContent({ closeModal }: { closeModal: () => void }) {
   const dispatch = useDispatch();
@@ -44,8 +44,9 @@ function ModalContent({ closeModal }: { closeModal: () => void }) {
 
 export default function FeelingsSelect() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const selectedFeelings: Feelings =
-    useSelector((state: RootState) => state.diary.feelings) ?? "happy";
+  const selectedFeelings: Feelings = useSelector(
+    (state: RootState) => state.diary.feelings
+  );
 
   const toggleModal = () => setIsModalOpen((prev) => !prev);
 

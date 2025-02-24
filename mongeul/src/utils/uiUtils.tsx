@@ -55,7 +55,7 @@ export function getPrivateStatusIcon(privateStatus: PrivateStatus) {
 
 export function getFeelingsIcon(feelings: Feelings) {
   switch (feelings) {
-    case "happy":
+    case "HAPPY":
       return {
         icon: (
           <RoundIcon backgroundColor="bg-theme-400">
@@ -65,7 +65,7 @@ export function getFeelingsIcon(feelings: Feelings) {
         label: "행복",
       };
 
-    case "soso":
+    case "SOSO":
       return {
         icon: (
           <RoundIcon backgroundColor="bg-theme-300">
@@ -75,7 +75,7 @@ export function getFeelingsIcon(feelings: Feelings) {
         label: "쏘쏘",
       };
 
-    case "sad":
+    case "SAD":
       return {
         icon: (
           <RoundIcon backgroundColor="bg-theme-200">
@@ -99,7 +99,7 @@ export function getFeelingsIcon(feelings: Feelings) {
 
 export function getWeatherIcon(weather: Weather) {
   switch (weather) {
-    case "sunny":
+    case "SUNNY":
       return {
         icon: (
           <RoundIcon backgroundColor="bg-theme-200">
@@ -109,7 +109,7 @@ export function getWeatherIcon(weather: Weather) {
         label: "맑음",
       };
 
-    case "cloudy":
+    case "CLOUDY":
       return {
         icon: (
           <RoundIcon backgroundColor="bg-theme-300">
@@ -119,7 +119,7 @@ export function getWeatherIcon(weather: Weather) {
         label: "흐림",
       };
 
-    case "rainy":
+    case "RAINY":
       return {
         icon: (
           <RoundIcon backgroundColor="bg-theme-400">
