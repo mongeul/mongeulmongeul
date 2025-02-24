@@ -1,9 +1,32 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/store/store";
+import { useSearchParams } from "next/navigation";
+import { handleKakaoLogin } from "@/lib/api/auth";
 import FeedIcon from "@/assets/icons/feed.svg";
 import LoginSection from "@/components/auth/organisms/LoginSection";
+import NicknameModal from "@/components/auth/molecules/NicknameModal";
 
 export default function LoginPage() {
+  const dispatch = useDispatch();
+  const user = useSelector((state: RootState) => state.nickname.nickname);
+  const searchParams = useSearchParams();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useEffect(() => {
+    const kakaoCode = searchParams.get("code");
+
+    if (kakaoCode) {
+      handleKakaoLogin(kakaoCode, dispatch).then((nickname) => {
+        if (!nickname) {
+          setIsModalOpen(true); // 닉네임이 없으면 모달 띄우기
+        }
+      });
+    }
+  }, [searchParams, dispatch]);
+
   return (
     <div className="w-full h-screen flex flex-col md:flex-row items-center justify-center bg-white">
       {/* 왼쪽 영역 (로고 & 텍스트) */}

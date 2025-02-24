@@ -1,17 +1,53 @@
-// 카카오 로그인 URL 요청 (GET)
-// export const getKakaoLoginUrl = async (): Promise<{
-//   success: boolean;
-//   loginUrl?: string;
-// }> => {
-//   try {
-//     const response = await fetch("api/auth/kakao"); // Next.js API Route 호출
+import { apiClient } from "./apiClient";
+import { AppDispatch } from "@/store/store";
+import { setUser } from "@/store/userSlice";
 
-//     if (!response.ok) throw new Error("카카오 로그인 URL 요청 실패");
+// 카카오 로그인 URL 가져오기
+export const getKakaoLoginUrl = async (): Promise<string> => {
+  const data = await apiClient("/api/v1/auth/kakao", { method: "GET" });
+  return data.data.loginUrl;
+};
 
-//     const data = await response.json();
-//     return { success: data.success, loginUrl: data.data?.loginUrl };
-//   } catch (error) {
-//     console.error("카카오 로그인 URL 요청 실패:", error);
-//     return { success: false };
-//   }
-// };
+// 카카오 로그인 처리
+export const handleKakaoLogin = async (
+  kakaoToken: string,
+  dispatch: AppDispatch
+) => {
+  try {
+    const data = await apiClient("/api/v1/auth/kakao", {
+      method: "POST",
+      body: JSON.stringify({ kakaoToken }),
+    });
+
+    if (data.success) {
+      dispatch(setUser(data.data.user)); // Redux에 사용자 정보 저장
+      return data.data.user;
+    }
+    return null;
+  } catch (error) {
+    console.error("로그인 실패:", error);
+    return null;
+  }
+};
+
+// 닉네임 설정 API
+export const updateUserNickname = async (
+  nickname: string,
+  dispatch: AppDispatch
+) => {
+  try {
+    const data = await apiClient("/api/v1/user/nickname", {
+      method: "POST",
+      body: JSON.stringify({ nickname }),
+    });
+
+    if (data.success) {
+      dispatch(setUser({ ...data.data, nickname })); // Redux에 닉네임 업데이트
+      return true;
+    }
+    return false;
+  } catch (error) {
+    console.error("닉네임 설정 실패:", error);
+    return false;
+  }
+};
