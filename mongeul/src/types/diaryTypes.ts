@@ -14,7 +14,7 @@ export interface DiaryCreate {
   disclosure: Disclosure;
 }
 
-export interface DiaryRead extends Omit<DiaryCreate, "date"> {
+export interface DiaryRead extends DiaryCreate {
   diaryId: number;
   author: string;
   createdAt: string;

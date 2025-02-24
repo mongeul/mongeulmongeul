@@ -1,8 +1,6 @@
-interface CalendarHeaderProps {
-  year: number;
-  month: number;
-  onMonthChange: (newYear: number, newMonth: number) => void;
-}
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/store/store";
+import { setSelectedDate, setCurrentMonth } from "@/store/calendarSlice";
 
 const months = [
   "1월",
@@ -19,6 +17,12 @@ const months = [
   "12월",
 ];
 
+interface CalendarHeaderProps {
+  year: number;
+  month: number;
+  onMonthChange: (newMonth: { year: number; month: number }) => void;
+}
+
 const CalendarHeader: React.FC<CalendarHeaderProps> = ({
   year,
   month,
@@ -27,28 +31,23 @@ const CalendarHeader: React.FC<CalendarHeaderProps> = ({
   const handlePrevMonth = () => {
     const newMonth = month === 1 ? 12 : month - 1;
     const newYear = month === 1 ? year - 1 : year;
-    onMonthChange(newYear, newMonth);
+    onMonthChange({ year: newYear, month: newMonth });
   };
 
   const handleNextMonth = () => {
     const newMonth = month === 12 ? 1 : month + 1;
     const newYear = month === 12 ? year + 1 : year;
-    onMonthChange(newYear, newMonth);
+    onMonthChange({ year: newYear, month: newMonth });
   };
 
   return (
     <div className="flex items-center justify-between p-4">
-      {/* 이전 월 버튼 */}
       <button onClick={handlePrevMonth} className="text-lg font-bold px-2">
         ◀
       </button>
-
-      {/* 현재 연도 & 월 표시 */}
       <span className="text-lg font-semibold">
-        {year}년 {months[month - 1]}
+        {year}년 {month}월
       </span>
-
-      {/* 다음 월 버튼 */}
       <button onClick={handleNextMonth} className="text-lg font-bold px-2">
         ▶
       </button>

@@ -1,52 +1,54 @@
-import { useState } from "react";
 import CalendarHeader from "../atoms/CalendarHeader";
 import CalendarRow from "../molecules/CalendarRow";
 import CalendarGrid from "../molecules/CalendarGrid";
+import Card from "@/components/common/atoms/Card";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/store/store";
+import { setSelectedDate, setCurrentMonth } from "@/store/calendarSlice";
 
-const getToday = () => {
-  const today = new Date();
-  return {
-    year: today.getFullYear(),
-    month: today.getMonth() + 1,
-    date: today.getDate(),
+const Calendar = () => {
+  const dispatch = useDispatch();
+  const { currentMonth, diaryDates, selectedDate } = useSelector(
+    (state: RootState) => state.calendar
+  );
+
+  const handleMonthChange = (newMonth: { year: number; month: number }) => {
+    dispatch(setCurrentMonth(newMonth));
   };
-};
 
-interface CalendarProps {
-  diaryDates: string[];
-  onSelectDate: (date: string) => void;
-  onMonthChange: (newDate: { year: number; month: number }) => void;
-}
-
-const Calendar = ({
-  diaryDates,
-  onSelectDate,
-  onMonthChange,
-}: CalendarProps) => {
-  const [currentDate, setCurrentDate] = useState(getToday());
-
-  const handleMonthChange = (newYear: number, newMonth: number) => {
-    setCurrentDate({ ...currentDate, year: newYear, month: newMonth });
-    onMonthChange({ year: newYear, month: newMonth });
+  const handleDateSelect = (date: number) => {
+    const formattedDate = `${currentMonth.year}-${String(
+      currentMonth.month
+    ).padStart(2, "0")}-${String(date).padStart(2, "0")}`;
+    dispatch(setSelectedDate(formattedDate));
   };
 
   return (
-    <div className="max-w-md mx-auto">
-      <CalendarHeader
-        year={currentDate.year}
-        month={currentDate.month}
-        onMonthChange={handleMonthChange}
-      />
-      <CalendarRow />
-      <CalendarGrid
-        year={currentDate.year}
-        month={currentDate.month}
-        selectedDate={currentDate.date}
-        diaryDates={diaryDates}
-        onSelectDate={(date) => {
-          setCurrentDate({ ...currentDate, date });
-        }}
-      />
+    <div className="flex flex-col lg:flex-row w-full">
+      <div className="flex w-full justify-center lg:justify-start flex-grow">
+        <Card width="w-full max-w-md" height="flex-grow">
+          <div className="w-full h-full flex justify-center items-start flex-grow">
+            <div className="max-w-md mx-auto">
+              <CalendarHeader
+                year={currentMonth.year}
+                month={currentMonth.month}
+                onMonthChange={handleMonthChange}
+              />
+              <CalendarRow />
+              <CalendarGrid
+                year={currentMonth.year}
+                month={currentMonth.month}
+                selectedDate={
+                  selectedDate ? Number(selectedDate.split("-")[2]) : undefined
+                }
+                diaryDates={diaryDates}
+                onSelectDate={handleDateSelect}
+              />
+            </div>
+          </div>
+        </Card>
+      </div>
+      <div className="hidden lg:block"></div>
     </div>
   );
 };

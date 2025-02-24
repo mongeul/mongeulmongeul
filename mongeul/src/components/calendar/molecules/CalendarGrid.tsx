@@ -1,3 +1,5 @@
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
 import CalendarDate from "../atoms/CalendarDate";
 
 interface CalendarGridProps {
@@ -16,9 +18,9 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
   year,
   month,
   selectedDate,
-  diaryDates,
   onSelectDate,
 }) => {
+  const { diaryDates } = useSelector((state: RootState) => state.calendar);
   const firstDay = getFirstDayOfMonth(year, month);
   const daysInMonth = new Date(year, month, 0).getDate();
   const totalCells = firstDay + daysInMonth;
