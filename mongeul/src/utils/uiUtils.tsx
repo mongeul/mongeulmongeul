@@ -4,6 +4,8 @@ import UnlockedIcon from "@/assets/icons/unlocked.svg";
 import LockedIcon from "@/assets/icons/locked.svg";
 import HappyIcon from "@/assets/icons/happy.svg";
 import FeelingsIcon from "@/assets/icons/feelings.svg";
+import WeatherIcon from "@/assets/icons/weather.svg";
+import { Weather } from "@/types/diaryTypes";
 import { Feelings } from "@/types/diaryTypes";
 import { PrivateStatus } from "@/types/diaryTypes";
 
@@ -91,6 +93,50 @@ export function getFeelingsIcon(feelings: Feelings) {
           </RoundIcon>
         ),
         label: "기분 없음",
+      };
+  }
+}
+
+export function getWeatherIcon(weather: Weather) {
+  switch (weather) {
+    case "sunny":
+      return {
+        icon: (
+          <RoundIcon backgroundColor="bg-theme-200">
+            <WeatherIcon className="text-white h-9 w-9" />
+          </RoundIcon>
+        ),
+        label: "맑음",
+      };
+
+    case "cloudy":
+      return {
+        icon: (
+          <RoundIcon backgroundColor="bg-theme-300">
+            <WeatherIcon className="text-white h-9 w-9" />
+          </RoundIcon>
+        ),
+        label: "흐림",
+      };
+
+    case "rainy":
+      return {
+        icon: (
+          <RoundIcon backgroundColor="bg-theme-400">
+            <WeatherIcon className="text-white h-9 w-9" />
+          </RoundIcon>
+        ),
+        label: "비",
+      };
+
+    default:
+      return {
+        icon: (
+          <RoundIcon backgroundColor="bg-zinc-300">
+            <WeatherIcon className="text-white h-9 w-9" />
+          </RoundIcon>
+        ),
+        label: "날씨 없음",
       };
   }
 }

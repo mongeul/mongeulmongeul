@@ -1,44 +1,14 @@
+"use client";
+
 import { useState } from "react";
-import RoundIcon from "../../common/atoms/RoundIcon";
-import MobileModal from "../../common/atoms/MobileModal";
-import WeatherIcon from "@/assets/icons/weather.svg";
-import WebModal from "../../common/atoms/WebModal";
-import { Weather } from "@/types/diaryTypes";
-import { setWeather } from "@/store/diarySlice";
 import { useDispatch, useSelector } from "react-redux";
+import { setWeather } from "@/store/diarySlice";
 import { RootState } from "@/store/store";
+import { Weather } from "@/types/diaryTypes";
+import { getWeatherIcon } from "@/utils/uiUtils";
+import WebModal from "../../common/atoms/WebModal";
 
 const weathers: Weather[] = ["sunny", "cloudy", "rainy"];
-
-const getWeatherIcon = (weather: Weather) => {
-  switch (weather) {
-    case "sunny":
-      return (
-        <RoundIcon backgroundColor="bg-theme-200">
-          <WeatherIcon className="text-white h-9 w-9" />
-        </RoundIcon>
-      );
-
-    case "cloudy":
-      return (
-        <RoundIcon backgroundColor="bg-theme-300">
-          <WeatherIcon className="text-white h-9 w-9" />
-        </RoundIcon>
-      );
-    case "rainy":
-      return (
-        <RoundIcon backgroundColor="bg-theme-400">
-          <WeatherIcon className="text-white h-9 w-9" />
-        </RoundIcon>
-      );
-    default:
-      return (
-        <RoundIcon backgroundColor="bg-zinc-300">
-          <WeatherIcon className="text-white h-9 w-9" />
-        </RoundIcon>
-      );
-  }
-};
 
 function ModalContent({ closeModal }: { closeModal: () => void }) {
   const dispatch = useDispatch();
@@ -53,15 +23,19 @@ function ModalContent({ closeModal }: { closeModal: () => void }) {
       <p className="text-gray-600">오늘의 날씨는 어떤가요?</p>
       <div className="flex justify-center p-6">
         <div className="grid grid-cols-3 gap-8">
-          {weathers.map((weather, index) => (
-            <div
-              key={index}
-              className="text-3xl"
-              onClick={() => handleChange(weather)}
-            >
-              {getWeatherIcon(weather)}
-            </div>
-          ))}
+          {weathers.map((weather, index) => {
+            const { icon, label } = getWeatherIcon(weather);
+            return (
+              <div
+                key={index}
+                className="flex flex-col items-center justify-center gap-2 cursor-pointer"
+                onClick={() => handleChange(weather)}
+              >
+                {icon}
+                <p className="text-sm text-gray-600">{label}</p>
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>
@@ -71,26 +45,23 @@ function ModalContent({ closeModal }: { closeModal: () => void }) {
 export default function WeatherSelect() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const selectedWeather: Weather =
-    useSelector((state: RootState) => state.diary.weather) ?? "";
+    useSelector((state: RootState) => state.diary.weather) ?? "sunny";
 
-  const toggleModal = (): void => setIsModalOpen((prev) => !prev);
+  const toggleModal = () => setIsModalOpen((prev) => !prev);
+
+  const { icon, label } = getWeatherIcon(selectedWeather);
 
   return (
     <>
       <div
-        onClick={() => {
-          toggleModal();
-        }}
-        className="flex flex-col items-center justify-center gap-2"
+        onClick={toggleModal}
+        className="flex flex-col items-center justify-center gap-2 cursor-pointer"
       >
-        {getWeatherIcon(selectedWeather)}
-        <p className="text-xs text-zinc-400">오늘의 날씨</p>
+        {icon}
+        <p className="text-xs text-zinc-400">{label}</p>
       </div>
 
       {isModalOpen && (
-        // <MobileModal onClose={toggleModal}>
-        //   <ModalContent />
-        // </MobileModal>
         <WebModal onClose={toggleModal}>
           <ModalContent closeModal={toggleModal} />
         </WebModal>
