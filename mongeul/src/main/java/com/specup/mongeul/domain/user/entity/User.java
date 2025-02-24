@@ -18,7 +18,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "users")
-@SQLDelete(sql = "UPDATE users SET is_deleted = true, deleted_at = NOW() WHERE id = ?")
+@SQLDelete(sql = "UPDATE users SET deleted = true, deleted_at = CURRENT_TIME WHERE id = ?")
 @SQLRestriction("deleted = false")
 public class User extends BaseSoftDeleteEntity {
     @Id
