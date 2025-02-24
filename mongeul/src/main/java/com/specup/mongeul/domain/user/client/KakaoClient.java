@@ -73,7 +73,6 @@ public class KakaoClient {
             return KakaoUserInfo.builder()
                     .id(String.valueOf(userInfoResponse.getId()))
                     .email(userInfoResponse.getKakao_account().getEmail())
-                    .nickname(userInfoResponse.getKakao_account().getProfile().getNickname())
                     .build();
         } catch (Exception e) {
             throw new RuntimeException("카카오 사용자 정보 조회 실패", e);

@@ -1,5 +1,6 @@
 package com.specup.mongeul.domain.user.dto.request;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -7,5 +8,6 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class NicknameRequest {
+    @NotBlank(message = "닉네임은 필수 입력값입니다")
     private String nickname;
 }
