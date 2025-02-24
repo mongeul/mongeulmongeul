@@ -17,8 +17,7 @@ public interface DiaryRepository extends JpaRepository<Diary, Long> {
      * 일기 월별 조회 (캘린더에서 사용)
      */
     @Query("""
-        SELECT d
-        FROM Diary d
+        SELECT d FROM Diary d
         WHERE d.user = :user
           AND d.date >= :startOfMonth
           AND d.date < :startOfNextMonth
@@ -33,7 +32,6 @@ public interface DiaryRepository extends JpaRepository<Diary, Long> {
      * 하루 1개 일기 제한 검증 (데이터 조회안하고 존재여부만 체크)
      */
 //    boolean existsByUserIdAndCreatedAtBetween(@Param("userId") Long userId, @Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
-
     boolean existsByUserIdAndDate(@Param("userId") Long userId, @Param("date") LocalDate date);
 
     /**
@@ -45,16 +43,22 @@ public interface DiaryRepository extends JpaRepository<Diary, Long> {
     /**
      * 피드 무한 스크롤
      */
-    @Query("SELECT d FROM Diary d " +
-            "WHERE d.privateStatus = com.specup.mongeul.domain.diary.entity.ENUM.DiaryPrivate.PUBLIC " +
-            "ORDER BY d.id DESC " +
-            "LIMIT :limit")
-    List<Diary> findAllInfiniteScroll(@Param("limit") Long limit);
+    @Query(value = """
+        SELECT * FROM diaries
+        WHERE private_status = 'PUBLIC'
+          AND (:userId IS NULL OR user_id = :userId)
+        ORDER BY id DESC
+        LIMIT :limit
+    """, nativeQuery = true)
+    List<Diary> findAllInfiniteScroll(@Param("userId") Long userId, @Param("limit") Long limit);
 
-    @Query("SELECT d FROM Diary d " +
-            "WHERE d.privateStatus = com.specup.mongeul.domain.diary.entity.ENUM.DiaryPrivate.PUBLIC " +
-            "AND d.id < :lastDiaryId " +
-            "ORDER BY d.id DESC " +
-            "LIMIT :limit")
-    List<Diary> findAllInfiniteScroll(@Param("lastDiaryId") Long lastDiaryId, @Param("limit") Long limit);
+    @Query(value = """
+        SELECT * FROM diaries
+        WHERE private_status = 'PUBLIC'
+          AND (:userId IS NULL OR user_id = :userId)
+          AND id < :lastDiaryId
+        ORDER BY id DESC
+        LIMIT :limit
+    """, nativeQuery = true)
+    List<Diary> findAllInfiniteScroll(@Param("userId") Long userId, @Param("lastDiaryId") Long lastDiaryId, @Param("limit") Long limit);
 }
