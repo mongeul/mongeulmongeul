@@ -46,7 +46,7 @@ const drawingSlice = createSlice({
       state.redoStack = [];
     },
     removeLine: (state, action: PayloadAction<number>) => {
-      state.history.push([...state.lines]); // 현재 상태를 히스토리에 저장
+      state.history.push([...state.lines]);
       state.lines = state.lines.filter((_, index) => index !== action.payload);
     },
     updateLines: (state, action: PayloadAction<DrawingLine[]>) => {
@@ -56,7 +56,7 @@ const drawingSlice = createSlice({
       if (state.history.length > 0) {
         const lastState = state.history.pop();
         if (lastState) {
-          state.redoStack.push([...state.lines]); // 현재 상태 redoStack에 저장
+          state.redoStack.push([...state.lines]);
           state.lines = lastState;
         }
       }
@@ -65,7 +65,7 @@ const drawingSlice = createSlice({
       if (state.redoStack.length > 0) {
         const redoState = state.redoStack.pop();
         if (redoState) {
-          state.history.push([...state.lines]); // 현재 상태 history에 저장
+          state.history.push([...state.lines]);
           state.lines = redoState;
         }
       }

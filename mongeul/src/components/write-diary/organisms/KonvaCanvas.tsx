@@ -1,16 +1,25 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Stage, Layer, Line } from "react-konva";
 import { RootState } from "@/store/store";
 import { useDispatch, useSelector } from "react-redux";
 import { addLine, removeLine, updateLines } from "@/store/drawingSlice";
 import Card from "@/components/common/atoms/Card";
+import { setStageRef } from "@/utils/stateRef";
 
-export default function KonvaCanvas({ stageRef }: { stageRef: any }) {
+export default function KonvaCanvas() {
   const dispatch = useDispatch();
   const { lines, selectedBrush } = useSelector(
     (state: RootState) => state.drawing
   );
+
+  const stageRef = useRef<any>(null);
   const [isDrawing, setIsDrawing] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (stageRef.current) {
+      setStageRef(stageRef.current);
+    }
+  }, []);
 
   // 그림 그리기 시작
   const handleMouseDown = (e: any) => {
