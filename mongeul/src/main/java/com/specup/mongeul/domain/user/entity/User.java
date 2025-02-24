@@ -2,7 +2,6 @@ package com.specup.mongeul.domain.user.entity;
 
 import com.specup.mongeul.domain.diary.entity.Diary;
 import com.specup.mongeul.domain.diaryemoji.entity.DiaryEmoji;
-import com.specup.mongeul.domain.notification.entity.Notification;
 import com.specup.mongeul.global.common.BaseSoftDeleteEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -20,7 +19,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "users")
 @SQLDelete(sql = "UPDATE users SET is_deleted = true, deleted_at = NOW() WHERE id = ?")
-@SQLRestriction("is_deleted = false")
+@SQLRestriction("deleted = false")
 public class User extends BaseSoftDeleteEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -49,9 +48,6 @@ public class User extends BaseSoftDeleteEntity {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Diary> diaries = new ArrayList<>();
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Notification> notifications = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<DiaryEmoji> diaryAndEmojis = new ArrayList<>();
