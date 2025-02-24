@@ -5,12 +5,12 @@ import PublicIcon from "@/assets/icons/public.svg";
 import UnlockedIcon from "@/assets/icons/unlocked.svg";
 import LockedIcon from "@/assets/icons/locked.svg";
 
-const DiaryDisclosure: React.FC = () => {
+const DiaryPrivateStatus: React.FC = () => {
   const { selectedDiary } = useSelector((state: RootState) => state.calendar);
   if (!selectedDiary) return null;
 
   const { icon, label } = (() => {
-    switch (selectedDiary.disclosure) {
+    switch (selectedDiary.privateStatus) {
       case "PUBLIC":
         return {
           icon: (
@@ -58,4 +58,4 @@ const DiaryDisclosure: React.FC = () => {
   );
 };
 
-export default DiaryDisclosure;
+export default DiaryPrivateStatus;

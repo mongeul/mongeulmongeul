@@ -10,7 +10,7 @@ export default function Navbar() {
 
   return (
     <div className="fixed bottom-0 w-full bg-white flex justify-center">
-      <div className="w-full md:w-2/3 lg:w-1/2 flex p-4 justify-around">
+      <div className="w-full md:w-2/3 lg:w-1/2 flex p-2 justify-around">
         {pathname === "/write-diary" ? (
           <WriteDiaryNavBar />
         ) : pathname === "/write-diary/drawing" ? (

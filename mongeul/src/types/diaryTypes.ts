@@ -1,6 +1,6 @@
 export type Feelings = "happy" | "soso" | "sad" | "";
 
-export type Disclosure = "PUBLIC" | "PRIVATE" | "LOCK";
+export type PrivateStatus = "PUBLIC" | "PRIVATE" | "LOCK";
 
 export type Weather = "sunny" | "cloudy" | "rainy" | "";
 
@@ -11,7 +11,7 @@ export interface DiaryCreate {
   weather: Weather;
   feelings: Feelings;
   drawing?: string;
-  disclosure: Disclosure;
+  privateStatus: PrivateStatus;
 }
 
 export interface DiaryRead extends DiaryCreate {

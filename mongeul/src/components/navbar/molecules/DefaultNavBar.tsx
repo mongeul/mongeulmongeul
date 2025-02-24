@@ -11,7 +11,7 @@ export default function DefaultNavBar() {
   const pathname = usePathname();
 
   return (
-    <>
+    <div className="w-full flex p-2 justify-around">
       <Link href="/feed">
         <FeedIcon
           className={`w-7 h-7 ${
@@ -41,6 +41,6 @@ export default function DefaultNavBar() {
           }`}
         />
       </Link>
-    </>
+    </div>
   );
 }

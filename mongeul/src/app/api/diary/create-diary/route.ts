@@ -10,7 +10,7 @@ export async function POST(req: NextRequest) {
       !body.content ||
       !body.date ||
       !body.feelings ||
-      !body.disclosure ||
+      !body.privateStatus ||
       !body.weather
     ) {
       return NextResponse.json(

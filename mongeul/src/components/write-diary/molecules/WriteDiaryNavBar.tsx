@@ -18,7 +18,7 @@ export default function WriteDiaryNavBar() {
       !diary.date ||
       !diary.weather ||
       !diary.feelings ||
-      !diary.disclosure
+      !diary.privateStatus
     ) {
       alert("필수 입력값을 채워주세요");
       return;

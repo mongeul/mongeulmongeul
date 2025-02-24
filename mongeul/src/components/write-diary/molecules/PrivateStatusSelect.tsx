@@ -5,15 +5,15 @@ import PublicIcon from "@/assets/icons/public.svg";
 import UnlockedIcon from "@/assets/icons/unlocked.svg";
 import LockedIcon from "@/assets/icons/locked.svg";
 import WebModal from "../../common/atoms/WebModal";
-import { setDisclosure } from "@/store/diarySlice";
+import { setPrivateStatus } from "@/store/diarySlice";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
-import { Disclosure } from "@/types/diaryTypes";
+import { PrivateStatus } from "@/types/diaryTypes";
 
-const disclosures: Disclosure[] = ["PUBLIC", "PRIVATE", "LOCK"];
+const privateStatuses: PrivateStatus[] = ["PUBLIC", "PRIVATE", "LOCK"];
 
-const getDisclosureIcon = (disclosure: Disclosure) => {
-  switch (disclosure) {
+const getPrivateStatusIcon = (privateStatus: PrivateStatus) => {
+  switch (privateStatus) {
     case "PUBLIC":
       return {
         icon: (
@@ -57,8 +57,8 @@ const getDisclosureIcon = (disclosure: Disclosure) => {
 function ModalContent({ closeModal }: { closeModal: () => void }) {
   const dispatch = useDispatch();
 
-  const handleChange = (disclosure: Disclosure) => {
-    dispatch(setDisclosure(disclosure));
+  const handleChange = (privateStatus: PrivateStatus) => {
+    dispatch(setPrivateStatus(privateStatus));
     closeModal();
   };
 
@@ -68,14 +68,14 @@ function ModalContent({ closeModal }: { closeModal: () => void }) {
       <div className="flex justify-center p-6">
         <div className="flex flex-col justify-center gap-6">
           <div className="flex flex-row gap-8">
-            {disclosures.map((disclosure, index) => (
+            {privateStatuses.map((privateStatus, index) => (
               <div
                 key={index}
                 className="flex flex-col items-center justify-center gap-4"
-                onClick={() => handleChange(disclosure)}
+                onClick={() => handleChange(privateStatus)}
               >
-                <div>{getDisclosureIcon(disclosure).icon}</div>
-                <div>{getDisclosureIcon(disclosure).label}</div>
+                <div>{getPrivateStatusIcon(privateStatus).icon}</div>
+                <div>{getPrivateStatusIcon(privateStatus).label}</div>
               </div>
             ))}
           </div>
@@ -88,10 +88,10 @@ function ModalContent({ closeModal }: { closeModal: () => void }) {
   );
 }
 
-export default function DisclosureSelect() {
+export default function PrivateStatusSelect() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const selectedDisclosure: Disclosure =
-    useSelector((state: RootState) => state.diary.disclosure) ?? "public";
+  const selectedPrivateStatus: PrivateStatus =
+    useSelector((state: RootState) => state.diary.privateStatus) ?? "public";
 
   const toggleModal = (): void => setIsModalOpen((prev) => !prev);
 
@@ -103,7 +103,7 @@ export default function DisclosureSelect() {
         }}
         className="flex flex-col items-center justify-center gap-2"
       >
-        {getDisclosureIcon(selectedDisclosure).icon}
+        {getPrivateStatusIcon(selectedPrivateStatus).icon}
         <p className="text-xs text-zinc-400">공개 범위</p>
       </div>
 
