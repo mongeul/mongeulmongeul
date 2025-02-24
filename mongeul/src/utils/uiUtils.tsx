@@ -2,6 +2,9 @@ import RoundIcon from "@/components/common/atoms/RoundIcon";
 import PublicIcon from "@/assets/icons/public.svg";
 import UnlockedIcon from "@/assets/icons/unlocked.svg";
 import LockedIcon from "@/assets/icons/locked.svg";
+import HappyIcon from "@/assets/icons/happy.svg";
+import FeelingsIcon from "@/assets/icons/feelings.svg";
+import { Feelings } from "@/types/diaryTypes";
 import { PrivateStatus } from "@/types/diaryTypes";
 
 export function getPrivateStatusIcon(privateStatus: PrivateStatus) {
@@ -44,6 +47,50 @@ export function getPrivateStatusIcon(privateStatus: PrivateStatus) {
           </RoundIcon>
         ),
         label: "전체 공개",
+      };
+  }
+}
+
+export function getFeelingsIcon(feelings: Feelings) {
+  switch (feelings) {
+    case "happy":
+      return {
+        icon: (
+          <RoundIcon backgroundColor="bg-theme-400">
+            <HappyIcon className="text-white h-9 w-9" />
+          </RoundIcon>
+        ),
+        label: "행복",
+      };
+
+    case "soso":
+      return {
+        icon: (
+          <RoundIcon backgroundColor="bg-theme-300">
+            <HappyIcon className="text-white h-9 w-9" />
+          </RoundIcon>
+        ),
+        label: "쏘쏘",
+      };
+
+    case "sad":
+      return {
+        icon: (
+          <RoundIcon backgroundColor="bg-theme-200">
+            <HappyIcon className="text-white h-9 w-9" />
+          </RoundIcon>
+        ),
+        label: "슬픔",
+      };
+
+    default:
+      return {
+        icon: (
+          <RoundIcon backgroundColor="bg-zinc-300">
+            <FeelingsIcon className="text-white h-9 w-9" />
+          </RoundIcon>
+        ),
+        label: "기분 없음",
       };
   }
 }
