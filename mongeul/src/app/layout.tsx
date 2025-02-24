@@ -28,7 +28,7 @@ export default function RootLayout({
         >
           <ClientLayout>
             <Header />
-            <main className="flex w-full md:w-3/4 lg:w-1/2 mx-auto min-h-screen p-4">
+            <main className="flex w-full md:w-3/4 lg:w-1/2 mx-auto min-h-screen p-4 pb-24">
               {children}
             </main>
             <Navbar />
