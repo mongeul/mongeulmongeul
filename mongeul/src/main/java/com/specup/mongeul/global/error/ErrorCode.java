@@ -19,6 +19,9 @@ public enum ErrorCode {
     DIARY_NOT_FOUND(HttpStatus.NOT_FOUND, "일기를 찾을 수 없습니다"),
     DIARY_ALREADY_EXISTS(HttpStatus.BAD_REQUEST, "이미 해당 날짜에는 일기를 작성했습니다."),
     INVALID_DIARY_USER(HttpStatus.FORBIDDEN, "일기 작성자만 가능합니다."),
+    DIARY_LOCK_PASSWORD_REQUIRED(HttpStatus.BAD_REQUEST, "비밀번호를 입력해야 합니다."),
+    DIARY_PASSWORD_NOT_SET(HttpStatus.BAD_REQUEST, "비밀번호가 설정되어 있지 않습니다."),
+    DIARY_INVALID_LOCK_PASSWORD(HttpStatus.BAD_REQUEST, "비밀번호가 일치하지 않습니다."),
 
     // 댓글 관련 에러
     COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "댓글을 찾을 수 없습니다."),
