@@ -1,6 +1,7 @@
 package com.specup.mongeul.domain.comment.controller;
 
-import com.specup.mongeul.domain.comment.dto.request.CommentRequest;
+import com.specup.mongeul.domain.comment.dto.request.CommentCreateRequest;
+import com.specup.mongeul.domain.comment.dto.request.CommentUpdateRequest;
 import com.specup.mongeul.domain.comment.dto.response.CommentResponse;
 import com.specup.mongeul.domain.comment.service.CommentService;
 import com.specup.mongeul.domain.user.entity.User;
@@ -30,13 +31,13 @@ public class CommentController {
 
     @Operation(summary = "댓글 생성", description = "댓글을 생성합니다.")
     @PostMapping("/feeds/{feedId}/comments")
-    public ResponseEntity<ApiResponse<CommentResponse>> create(@AuthenticationPrincipal User user, @PathVariable Long feedId, @Valid @RequestBody CommentRequest request) {
+    public ResponseEntity<ApiResponse<CommentResponse>> create(@AuthenticationPrincipal User user, @PathVariable Long feedId, @Valid @RequestBody CommentCreateRequest request) {
         return ResponseEntity.ok(ApiResponse.success(commentService.create(user.getId(), feedId, request), "댓글 생성 성공"));
     }
 
     @Operation(summary = "댓글 수정", description = "댓글을 수정합니다.")
     @PutMapping("/comments/{commentId}")
-    public ResponseEntity<ApiResponse<CommentResponse>> update(@AuthenticationPrincipal User user, @PathVariable Long commentId, @Valid @RequestBody CommentRequest request) {
+    public ResponseEntity<ApiResponse<CommentResponse>> update(@AuthenticationPrincipal User user, @PathVariable Long commentId, @Valid @RequestBody CommentUpdateRequest request) {
         return ResponseEntity.ok(ApiResponse.success(commentService.update(user.getId(), commentId, request), "댓글 수정 성공"));
     }
 

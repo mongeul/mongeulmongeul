@@ -15,6 +15,7 @@ import lombok.ToString;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +26,7 @@ import java.util.List;
 @Table(name = "diaries",
         indexes = {
             @Index(name = "idx_diaries_private_id", columnList = "private_status, id DESC"),
-            @Index(name = "idx_diaries_user_createdat", columnList = "user_id, created_at")
+            @Index(name = "idx_diaries_user_date", columnList = "user_id, date")
     }
 )
 @SQLDelete(sql = "UPDATE diaries SET deleted = true, deleted_at = CURRENT_TIME WHERE id = ?")
@@ -42,6 +43,12 @@ public class Diary extends BaseSoftDeleteEntity {
     private String content;
 
     private String picture;
+
+//    @Column(nullable = false)
+    private LocalDate date;
+
+    @Column(columnDefinition = "TEXT")
+    private String pictureLines;
 
     @Enumerated(EnumType.STRING)
     private DiaryWeather weather;
@@ -65,12 +72,14 @@ public class Diary extends BaseSoftDeleteEntity {
     private List<DiaryEmoji> diaryEmojis = new ArrayList<>();
 
     public static Diary create(String title, String content, String picture,
-                               DiaryWeather weather, DiaryFeeling feeling,
-                               DiaryPrivate privateStatus, User user) {
+                               LocalDate date, String pictureLines, DiaryWeather weather,
+                               DiaryFeeling feeling, DiaryPrivate privateStatus, User user) {
         Diary diary = new Diary();
         diary.title = title;
         diary.content = content;
         diary.picture = picture;
+        diary.date = date;
+        diary.pictureLines = pictureLines;
         diary.weather = weather;
         diary.feeling = feeling;
         diary.privateStatus = privateStatus;
@@ -79,11 +88,13 @@ public class Diary extends BaseSoftDeleteEntity {
     }
 
     public void update(String title, String content, String picture,
-                       DiaryWeather weather, DiaryFeeling feeling,
-                       DiaryPrivate privateStatus) {
+                       LocalDate date, String pictureLines, DiaryWeather weather,
+                       DiaryFeeling feeling, DiaryPrivate privateStatus) {
         this.title = title;
         this.content = content;
         this.picture = picture;
+        this.date = date;
+        this.pictureLines = pictureLines;
         this.weather = weather;
         this.feeling = feeling;
         this.privateStatus = privateStatus;
