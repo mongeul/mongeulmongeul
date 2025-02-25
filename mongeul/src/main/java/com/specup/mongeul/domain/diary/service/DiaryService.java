@@ -9,8 +9,11 @@ import com.specup.mongeul.domain.diary.dto.response.DiaryDateResponse;
 import com.specup.mongeul.domain.diary.dto.response.DiaryResponse;
 import com.specup.mongeul.domain.diary.dto.response.PictureLineResponse;
 import com.specup.mongeul.domain.diary.entity.Diary;
+import com.specup.mongeul.domain.diary.entity.ENUM.DiaryPrivate;
 import com.specup.mongeul.domain.diary.repository.DiaryRepository;
+import com.specup.mongeul.domain.user.entity.LockPassword;
 import com.specup.mongeul.domain.user.entity.User;
+import com.specup.mongeul.domain.user.repository.LockPasswordRepository;
 import com.specup.mongeul.domain.user.repository.UserRepository;
 import com.specup.mongeul.global.error.CustomException;
 import com.specup.mongeul.global.error.ErrorCode;
@@ -26,6 +29,7 @@ import java.util.List;
 public class DiaryService {
     private final UserRepository userRepository;
     private final DiaryRepository diaryRepository;
+    private final LockPasswordRepository lockPasswordRepository;
     private final ObjectMapper objectMapper;
 
     // 일기 생성
@@ -119,9 +123,23 @@ public class DiaryService {
 
     // 특정 일기 조회
     @Transactional(readOnly = true)
-    public DiaryResponse read(Long diaryId) {
-        return DiaryResponse.from(diaryRepository.findById(diaryId)
-                .orElseThrow(() -> new CustomException(ErrorCode.DIARY_NOT_FOUND)));
+    public DiaryResponse read(Long userId, Long diaryId, String lockPassword) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        Diary diary = diaryRepository.findById(diaryId)
+                .orElseThrow(() -> new CustomException(ErrorCode.DIARY_NOT_FOUND));
+        if (diary.getPrivateStatus() == DiaryPrivate.LOCK) {
+            if (lockPassword == null || lockPassword.isEmpty()) {
+                throw new CustomException(ErrorCode.DIARY_LOCK_PASSWORD_REQUIRED);
+            }
+            LockPassword lock = lockPasswordRepository.findByUser(user)
+                    .orElseThrow(() -> new CustomException(ErrorCode.DIARY_LOCK_PASSWORD_REQUIRED));
+
+            if (!lock.getLockPassword().equals(lockPassword)) {
+                throw new CustomException(ErrorCode.DIARY_INVALID_LOCK_PASSWORD);
+            }
+        }
+        return DiaryResponse.from(diary);
     }
 
     // 일기 삭제
