@@ -1,6 +1,7 @@
+"use client";
+
 import { useState } from "react";
 import Card from "./Card";
-import clsx from "clsx";
 
 interface TextareaProps {
   placeholder: string;

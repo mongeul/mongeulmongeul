@@ -44,8 +44,9 @@ function ModalContent({ closeModal }: { closeModal: () => void }) {
 
 export default function WeatherSelect() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const selectedWeather: Weather =
-    useSelector((state: RootState) => state.diary.weather) ?? "sunny";
+  const selectedWeather: Weather = useSelector(
+    (state: RootState) => state.diary.weather
+  );
 
   const toggleModal = () => setIsModalOpen((prev) => !prev);
 
@@ -58,7 +59,7 @@ export default function WeatherSelect() {
         className="flex flex-col items-center justify-center gap-2 cursor-pointer"
       >
         {icon}
-        <p className="text-xs text-zinc-400">{label}</p>
+        <p className="text-xs text-zinc-400">오늘의 날씨</p>
       </div>
 
       {isModalOpen && (

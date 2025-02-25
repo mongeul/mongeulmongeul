@@ -1,5 +1,3 @@
-"use client";
-
 import WriteForm from "@/components/write-diary/templates/WriteForm";
 
 export default function Page() {

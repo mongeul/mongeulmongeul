@@ -59,7 +59,7 @@ export default function FeelingsSelect() {
         className="flex flex-col items-center justify-center gap-2 cursor-pointer"
       >
         {icon}
-        <p className="text-xs text-zinc-400">{label}</p>
+        <p className="text-xs text-zinc-400">오늘의 기분</p>
       </div>
 
       {isModalOpen && (
