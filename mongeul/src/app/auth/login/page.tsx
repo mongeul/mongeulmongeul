@@ -11,7 +11,7 @@ import NicknameModal from "@/components/auth/molecules/NicknameModal";
 
 export default function LoginPage() {
   const dispatch = useDispatch();
-  const user = useSelector((state: RootState) => state.nickname.nickname);
+  const user = useSelector((state: RootState) => state.user);
   const searchParams = useSearchParams();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -19,8 +19,8 @@ export default function LoginPage() {
     const kakaoCode = searchParams.get("code");
 
     if (kakaoCode) {
-      handleKakaoLogin(kakaoCode, dispatch).then((nickname) => {
-        if (!nickname) {
+      handleKakaoLogin(kakaoCode, dispatch).then((user) => {
+        if (user && !user.nickname) {
           setIsModalOpen(true); // 닉네임이 없으면 모달 띄우기
         }
       });
