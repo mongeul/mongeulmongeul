@@ -2,9 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 import { ThemeProvider } from "@/context/ThemeContext";
-import Header from "@/components/header/orgamisms/Header";
 import ClientLayout from "@/components/layout/ClientLayout";
-import Navbar from "@/components/navbar/organisms/NavBar";
 
 export const metadata: Metadata = {
   title: "몽글몽글",
@@ -24,13 +22,7 @@ export default function RootLayout({
           initialFont="suit"
           initialFontSize={16}
         >
-          <ClientLayout>
-            <Header />
-            <main className="flex w-full md:w-3/4 lg:w-1/2 mx-auto min-h-screen p-4 pb-24">
-              {children}
-            </main>
-            <Navbar />
-          </ClientLayout>
+          <ClientLayout>{children}</ClientLayout>
         </ThemeProvider>
       </body>
     </html>
