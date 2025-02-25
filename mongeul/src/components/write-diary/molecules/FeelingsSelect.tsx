@@ -5,8 +5,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { setFeelings } from "@/store/diarySlice";
 import { RootState } from "@/store/store";
 import { Feelings } from "@/types/diaryTypes";
-import { getFeelingsIcon } from "@/utils/uiUtils";
 import WebModal from "../../common/atoms/WebModal";
+import FeelingsIcon from "@/components/common/atoms/FeelingsIcon";
 
 const feelingsOptions: Feelings[] = ["HAPPY", "SOSO", "SAD"];
 
@@ -24,7 +24,9 @@ function ModalContent({ closeModal }: { closeModal: () => void }) {
       <div className="flex justify-center p-6">
         <div className="grid grid-cols-3 gap-8">
           {feelingsOptions.map((feelings, index) => {
-            const { icon, label } = getFeelingsIcon(feelings);
+            const { icon, label } = FeelingsIcon({
+              feelings: feelings,
+            });
             return (
               <div
                 key={index}
@@ -50,7 +52,7 @@ export default function FeelingsSelect() {
 
   const toggleModal = () => setIsModalOpen((prev) => !prev);
 
-  const { icon, label } = getFeelingsIcon(selectedFeelings);
+  const { icon } = FeelingsIcon({ feelings: selectedFeelings });
 
   return (
     <>
@@ -59,7 +61,7 @@ export default function FeelingsSelect() {
         className="flex flex-col items-center justify-center gap-2 cursor-pointer"
       >
         {icon}
-        <p className="text-xs text-zinc-400">{label}</p>
+        <p className="text-xs text-zinc-400">오늘의 기분</p>
       </div>
 
       {isModalOpen && (
