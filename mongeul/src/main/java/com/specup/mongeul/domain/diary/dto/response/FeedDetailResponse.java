@@ -7,7 +7,7 @@ import com.specup.mongeul.domain.diary.entity.ENUM.DiaryWeather;
 import lombok.Getter;
 import lombok.ToString;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 @Getter
@@ -17,11 +17,10 @@ public class FeedDetailResponse {
     private String title;
     private String content;
     private String picture;
+    private LocalDate date;
     private DiaryWeather weather;
     private DiaryFeeling feeling;
     private DiaryPrivate privateStatus;
-    private LocalDateTime createdAt;
-    private LocalDateTime modifiedAt;
     private List<DiaryEmojiResponse> emojis;
 
     public static FeedDetailResponse from(Diary diary, List<DiaryEmojiResponse> emojis) {
@@ -30,11 +29,10 @@ public class FeedDetailResponse {
         response.title = diary.getTitle();
         response.content = diary.getContent();
         response.picture = diary.getPicture();
+        response.date = diary.getDate();
         response.weather = diary.getWeather();
         response.feeling = diary.getFeeling();
         response.privateStatus = diary.getPrivateStatus();
-        response.createdAt = diary.getCreatedAt();
-        response.modifiedAt = diary.getModifiedAt();
         response.emojis = emojis;
         return response;
     }

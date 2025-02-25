@@ -21,10 +21,10 @@ public class FeedService {
     private final DiaryEmojiRepository diaryEmojiRepository;
 
     @Transactional(readOnly = true)
-    public List<FeedResponse> getFeedAll(Long pageSize, Long lastDiaryId) {
+    public List<FeedResponse> getFeedAll(Long userId, Long pageSize, Long lastDiaryId) {
         List<Diary> diaries = lastDiaryId == null ?
-                diaryRepository.findAllInfiniteScroll(pageSize) :
-                diaryRepository.findAllInfiniteScroll(lastDiaryId, pageSize);
+                diaryRepository.findAllInfiniteScroll(userId, pageSize) :
+                diaryRepository.findAllInfiniteScroll(userId, lastDiaryId, pageSize);
         if (diaries.isEmpty()) {
             return List.of();
         }
