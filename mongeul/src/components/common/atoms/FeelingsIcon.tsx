@@ -8,16 +8,20 @@ import { Feelings } from "@/types/diaryTypes";
 
 interface FeelingsIconProps {
   feelings: Feelings;
+  size?: string;
 }
 
-export default function FeelingsIcon({ feelings }: FeelingsIconProps) {
+export default function FeelingsIcon({
+  feelings,
+  size = "w-9 h-9",
+}: FeelingsIconProps) {
   const status = useMemo(() => {
     switch (feelings) {
       case "HAPPY":
         return {
           icon: (
             <RoundIcon backgroundColor="bg-theme-400">
-              <HappyIcon className="text-white w-9 h-9" />
+              <HappyIcon className={`text-white ${size}`} />
             </RoundIcon>
           ),
           label: "행복",
@@ -26,7 +30,7 @@ export default function FeelingsIcon({ feelings }: FeelingsIconProps) {
         return {
           icon: (
             <RoundIcon backgroundColor="bg-theme-300">
-              <HappyIcon className="text-white w-9 h-9" />
+              <HappyIcon className={`text-white ${size}`} />
             </RoundIcon>
           ),
           label: "쏘쏘",
@@ -35,7 +39,7 @@ export default function FeelingsIcon({ feelings }: FeelingsIconProps) {
         return {
           icon: (
             <RoundIcon backgroundColor="bg-theme-200">
-              <HappyIcon className="text-white w-9 h-9" />
+              <HappyIcon className={`text-white ${size}`} />
             </RoundIcon>
           ),
           label: "슬픔",
@@ -44,13 +48,13 @@ export default function FeelingsIcon({ feelings }: FeelingsIconProps) {
         return {
           icon: (
             <RoundIcon backgroundColor="bg-zinc-300">
-              <FeelingIcon className="text-white w-9 h-9" />
+              <FeelingIcon className={`text-white ${size}`} />
             </RoundIcon>
           ),
           label: "기분 없음",
         };
     }
-  }, [feelings]);
+  }, [feelings, size]);
 
   return status;
 }

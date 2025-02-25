@@ -9,10 +9,12 @@ import { PrivateStatus } from "@/types/diaryTypes";
 
 interface PrivateStatusIconProps {
   privateStatus: PrivateStatus;
+  size?: string;
 }
 
 export default function PrivateStatusIcon({
   privateStatus,
+  size = "w-9 h-9",
 }: PrivateStatusIconProps) {
   const status = useMemo(() => {
     switch (privateStatus) {
@@ -20,7 +22,7 @@ export default function PrivateStatusIcon({
         return {
           icon: (
             <RoundIcon backgroundColor="bg-theme-600">
-              <PublicIcon className="text-white w-9 h-9" />
+              <PublicIcon className={`text-white ${size}`} />
             </RoundIcon>
           ),
           label: "전체 공개",
@@ -29,7 +31,7 @@ export default function PrivateStatusIcon({
         return {
           icon: (
             <RoundIcon backgroundColor="bg-theme-500">
-              <UnlockedIcon className="text-white w-9 h-9" />
+              <UnlockedIcon className={`text-white ${size}`} />
             </RoundIcon>
           ),
           label: "나만 보기",
@@ -38,7 +40,7 @@ export default function PrivateStatusIcon({
         return {
           icon: (
             <RoundIcon backgroundColor="bg-zinc-300">
-              <LockedIcon className="text-white w-9 h-9" />
+              <LockedIcon className={`text-white ${size}`} />
             </RoundIcon>
           ),
           label: "잠금 일기",
@@ -47,13 +49,13 @@ export default function PrivateStatusIcon({
         return {
           icon: (
             <RoundIcon backgroundColor="bg-zinc-300">
-              <PublicIcon className="text-white w-9 h-9" />
+              <PublicIcon className={`text-white ${size}`} />
             </RoundIcon>
           ),
           label: "전체 공개",
         };
     }
-  }, [privateStatus]);
+  }, [privateStatus, size]);
 
   return status;
 }

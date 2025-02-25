@@ -7,16 +7,20 @@ import { Weather } from "@/types/diaryTypes";
 
 interface WeatherIconProps {
   weather: Weather;
+  size?: string;
 }
 
-export default function WeatherIcon({ weather }: WeatherIconProps) {
+export default function WeatherIcon({
+  weather,
+  size = "w-9 h-9",
+}: WeatherIconProps) {
   const status = useMemo(() => {
     switch (weather) {
       case "SUNNY":
         return {
           icon: (
             <RoundIcon backgroundColor="bg-theme-200">
-              <WeatherSvgIcon className="text-white h-9 w-9" />
+              <WeatherSvgIcon className={`text-white ${size}`} />
             </RoundIcon>
           ),
           label: "맑음",
@@ -25,7 +29,7 @@ export default function WeatherIcon({ weather }: WeatherIconProps) {
         return {
           icon: (
             <RoundIcon backgroundColor="bg-theme-300">
-              <WeatherSvgIcon className="text-white h-9 w-9" />
+              <WeatherSvgIcon className={`text-white ${size}`} />
             </RoundIcon>
           ),
           label: "흐림",
@@ -34,7 +38,7 @@ export default function WeatherIcon({ weather }: WeatherIconProps) {
         return {
           icon: (
             <RoundIcon backgroundColor="bg-theme-400">
-              <WeatherSvgIcon className="text-white h-9 w-9" />
+              <WeatherSvgIcon className={`text-white ${size}`} />
             </RoundIcon>
           ),
           label: "비",
@@ -43,13 +47,13 @@ export default function WeatherIcon({ weather }: WeatherIconProps) {
         return {
           icon: (
             <RoundIcon backgroundColor="bg-zinc-300">
-              <WeatherSvgIcon className="text-white h-9 w-9" />
+              <WeatherSvgIcon className={`text-white ${size}`} />
             </RoundIcon>
           ),
           label: "날씨 없음",
         };
     }
-  }, [weather]);
+  }, [weather, size]);
 
   return status;
 }
