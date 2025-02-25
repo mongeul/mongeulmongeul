@@ -5,8 +5,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { setPrivateStatus } from "@/store/diarySlice";
 import { RootState } from "@/store/store";
 import { PrivateStatus } from "@/types/diaryTypes";
-import { getPrivateStatusIcon } from "@/utils/uiUtils";
 import WebModal from "../../common/atoms/WebModal";
+import PrivateStatusIcon from "@/components/common/atoms/PrivateStatusIcon";
 
 const privateStatuses: PrivateStatus[] = ["PUBLIC", "PRIVATE", "LOCK"];
 
@@ -25,7 +25,9 @@ function ModalContent({ closeModal }: { closeModal: () => void }) {
         <div className="flex flex-col justify-center gap-6">
           <div className="flex flex-row gap-8">
             {privateStatuses.map((privateStatus, index) => {
-              const { icon, label } = getPrivateStatusIcon(privateStatus);
+              const { icon, label } = PrivateStatusIcon({
+                privateStatus: privateStatus,
+              });
               return (
                 <div
                   key={index}
@@ -49,10 +51,13 @@ function ModalContent({ closeModal }: { closeModal: () => void }) {
 
 export default function PrivateStatusSelect() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const selectedPrivateStatus: PrivateStatus =
-    useSelector((state: RootState) => state.diary.privateStatus) ?? "public";
+  const selectedPrivateStatus: PrivateStatus = useSelector(
+    (state: RootState) => state.diary.privateStatus
+  );
 
   const toggleModal = (): void => setIsModalOpen((prev) => !prev);
+
+  const { icon } = PrivateStatusIcon({ privateStatus: selectedPrivateStatus });
 
   return (
     <>
@@ -60,7 +65,7 @@ export default function PrivateStatusSelect() {
         onClick={toggleModal}
         className="flex flex-col items-center justify-center gap-2"
       >
-        {getPrivateStatusIcon(selectedPrivateStatus).icon}
+        {icon}
         <p className="text-xs text-zinc-400">공개 범위</p>
       </div>
 

@@ -5,8 +5,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { setWeather } from "@/store/diarySlice";
 import { RootState } from "@/store/store";
 import { Weather } from "@/types/diaryTypes";
-import { getWeatherIcon } from "@/utils/uiUtils";
 import WebModal from "../../common/atoms/WebModal";
+import WeatherIcon from "@/components/common/atoms/WeatherIcon";
 
 const weathers: Weather[] = ["SUNNY", "CLOUDY", "RAINY"];
 
@@ -24,7 +24,9 @@ function ModalContent({ closeModal }: { closeModal: () => void }) {
       <div className="flex justify-center p-6">
         <div className="grid grid-cols-3 gap-8">
           {weathers.map((weather, index) => {
-            const { icon, label } = getWeatherIcon(weather);
+            const { icon, label } = WeatherIcon({
+              weather: weather,
+            });
             return (
               <div
                 key={index}
@@ -50,7 +52,7 @@ export default function WeatherSelect() {
 
   const toggleModal = () => setIsModalOpen((prev) => !prev);
 
-  const { icon, label } = getWeatherIcon(selectedWeather);
+  const { icon } = WeatherIcon({ weather: selectedWeather });
 
   return (
     <>
