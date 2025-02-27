@@ -127,6 +127,13 @@ public class ShareDiaryService {
     }
 
     // 특정 공유일기 조회
+    public ShareDiaryResponse read(Long userId, Long shareDiaryId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        ShareDiary shareDiary = shareDiaryRepository.findById(shareDiaryId)
+                .orElseThrow(() -> new CustomException(ErrorCode.SHARE_DIARY_NOT_FOUND));
+        return ShareDiaryResponse.from(shareDiary);
+    }
 
     // 공유일기 삭제
 }
