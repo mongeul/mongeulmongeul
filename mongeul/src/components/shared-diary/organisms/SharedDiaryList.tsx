@@ -1,60 +1,106 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { setFriends, updateFriendOrder } from "@/store/shareDiarySlice";
+import { getFriends } from "@/lib/api/sharediary";
+import { RootState, AppDispatch } from "@/store/store";
 import SharedDiaryCard from "@/components/shared-diary/molecules/SharedDiaryCard";
-
-interface DiaryData {
-  nickname: string;
-  writer: string;
-  date: string;
-  day: number;
-  count: number;
-}
+import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 
 export default function DiaryList() {
-  const [diaries, setDiaries] = useState<DiaryData[]>([
-    // 임시 데이터 추가
-    { nickname: "승탁이", writer: "승탁이", date: "오늘", day: 98, count: 3 },
-    { nickname: "호주니", writer: "승미니", date: "어제", day: 120, count: 5 },
-    { nickname: "joy", writer: "승미니", date: "4일 전", day: 45, count: 2 },
-  ]);
-  const [loading, setLoading] = useState(false); // 임시 데이터라 로딩 X
+  const dispatch = useDispatch<AppDispatch>();
+  const friends = useSelector((state: RootState) => state.shareDiary.friends);
+  const [loading, setLoading] = useState(false);
+
+  // 임시 데이터 추가
+  useEffect(() => {
+    const savedOrder = localStorage.getItem("friendsOrder");
+    if (savedOrder) {
+      dispatch(setFriends(JSON.parse(savedOrder)));
+    } else {
+      // 초기 데이터 설정
+      const tempData = [
+        { friendId: 1, nickname: "승탁이", day: 98, count: 3, isWriter: false },
+        {
+          friendId: 2,
+          nickname: "호주니",
+          day: 120,
+          count: 5,
+          isWriter: false,
+        },
+        { friendId: 3, nickname: "joy", day: 45, count: 2, isWriter: false },
+      ];
+      dispatch(setFriends(tempData));
+    }
+  }, [dispatch]);
 
   /*
+  // 실제 API 호출 (테스트 후 이걸 다시 활성화하면 됨)
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        setLoading(true);
-        const response = await fetch("/api/v1/friend/list");
-        const data = await response.json();
-        if (data.success) {
-          const formattedData = data.data.content.map((item: any) => ({
-            nickname: item.nickname,
-            writer: item.nickname,
-            date: "오늘",
-            day: item.day,
-            count: item.count,
-          }));
-          setDiaries(formattedData);
-        }
-      } catch (error) {
-        console.error("API 요청 실패:", error);
-      } finally {
-        setLoading(false);
-      }
+      setLoading(true);
+      const friendData = await getFriends();
+      dispatch(setFriends(friendData));
+      setLoading(false);
     };
-
     fetchData();
-  }, []);
+  }, [dispatch]);
   */
+
+  // 드래그 후 순서 변경
+  const onDragEnd = (result: any) => {
+    if (!result.destination) return;
+
+    const reorderedFriends = [...friends];
+    const [movedItem] = reorderedFriends.splice(result.source.index, 1);
+    reorderedFriends.splice(result.destination.index, 0, movedItem);
+
+    // Redux 상태 업데이트
+    dispatch(setFriends(reorderedFriends));
+
+    // 로컬 스토리지에 저장
+    localStorage.setItem("friendsOrder", JSON.stringify(reorderedFriends));
+  };
 
   if (loading) return <p>로딩 중...</p>;
 
   return (
-    <div className="flex flex-col gap-4 px-4">
-      {diaries.map((diary, index) => (
-        <SharedDiaryCard key={index} {...diary} />
-      ))}
-    </div>
+    <DragDropContext onDragEnd={onDragEnd}>
+      <Droppable droppableId="friendsList">
+        {(provided) => (
+          <div
+            ref={provided.innerRef}
+            {...provided.droppableProps}
+            className="space-y-4"
+          >
+            {friends.map((friend, index) => (
+              <Draggable
+                key={friend.friendId.toString()}
+                draggableId={friend.friendId.toString()}
+                index={index}
+              >
+                {(provided) => (
+                  <div
+                    ref={provided.innerRef}
+                    {...provided.draggableProps}
+                    {...provided.dragHandleProps}
+                  >
+                    <SharedDiaryCard
+                      nickname={friend.nickname}
+                      day={friend.day}
+                      count={friend.count}
+                      writer={friend.nickname}
+                      date="오늘"
+                    />
+                  </div>
+                )}
+              </Draggable>
+            ))}
+            {provided.placeholder}
+          </div>
+        )}
+      </Droppable>
+    </DragDropContext>
   );
 }
