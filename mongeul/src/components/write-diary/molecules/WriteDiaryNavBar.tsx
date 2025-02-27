@@ -6,9 +6,10 @@ import { RootState } from "@/store/store";
 import { useDispatch, useSelector } from "react-redux";
 import { createDiary } from "@/actions/diary/createDiary";
 import { startTransition } from "react";
-import router from "next/router";
+import { useRouter } from "next/navigation";
 
 export default function WriteDiaryNavBar() {
+  const router = useRouter();
   const dispatch = useDispatch();
   const {
     title,
@@ -17,19 +18,12 @@ export default function WriteDiaryNavBar() {
     drawingLines,
     date,
     weather,
-    feelings,
+    feeling,
     privateStatus,
   } = useSelector((state: RootState) => state.diary);
 
   async function handleSubmit() {
-    if (
-      !title ||
-      !content ||
-      !date ||
-      !weather ||
-      !feelings ||
-      !privateStatus
-    ) {
+    if (!title || !content || !date || !weather || !feeling || !privateStatus) {
       alert("필수 입력 항목을 모두 입력해주세요!");
       return;
     }
@@ -40,15 +34,19 @@ export default function WriteDiaryNavBar() {
           title,
           content,
           picture: drawing || "",
-          pictureLines: drawingLines ? JSON.parse(drawingLines) : [],
+          pictureLines:
+            typeof drawingLines === "string"
+              ? JSON.parse(drawingLines)
+              : drawingLines,
           date,
           weather: weather,
-          feelings: feelings,
+          feeling: feeling,
           privateStatus: privateStatus,
+          isPublished: true,
         });
 
         clearDiary();
-        router.push("/diary"); // 일기 목록 페이지로 이동
+        router.push("/diary");
       } catch (error) {
         console.error("일기 작성 실패:", error);
       }

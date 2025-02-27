@@ -5,14 +5,17 @@ import { DiaryRequest, DiaryResponse } from "@/types/diaryTypes";
 
 export async function createDiary(data: DiaryRequest): Promise<DiaryResponse> {
   try {
-    const response = await fetch(`/api/v1/diaries`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-      cache: "no-store",
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/diaries`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+        cache: "no-store",
+      }
+    );
 
     if (!response.ok) {
       throw new Error("일기 작성 실패");

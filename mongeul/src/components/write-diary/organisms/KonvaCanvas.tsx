@@ -24,52 +24,69 @@ export default function KonvaCanvas() {
   // 그림 그리기 시작
   const handleMouseDown = (e: any) => {
     if (selectedBrush === "eraser") {
-      handleErase(e);
+      setIsDrawing(true);
+      handleErase(e); // 마우스를 누르자마자 바로 지우기 실행
       return;
     }
 
     setIsDrawing(true);
     const pos = e.target.getStage().getPointerPosition();
-    dispatch(addLine({ points: [pos.x, pos.y] }));
+    if (!pos) return;
+
+    dispatch(
+      addLine({
+        points: [[pos.x, pos.y] as [number, number]],
+      })
+    );
   };
 
-  // 그리는중
+  // 그리는 중 or 지우는 중
   const handleMouseMove = (e: any) => {
-    if (!isDrawing || selectedBrush === "eraser") return;
+    if (!isDrawing) return;
+    if (selectedBrush === "eraser") {
+      handleErase(e); // 지우개 모드일 때 마우스를 움직일 때마다 실행
+      return;
+    }
+
     const stage = e.target.getStage();
     const point = stage.getPointerPosition();
+    if (!point) return;
 
     const newLines = lines.map((line, index) =>
       index === lines.length - 1
-        ? { ...line, points: [...line.points, point.x, point.y] }
+        ? {
+            ...line,
+            points: [...line.points, [point.x, point.y] as [number, number]],
+          }
         : line
     );
 
     dispatch(updateLines(newLines));
   };
 
-  // TODO 드래그도중에 지우기 유지
+  // 지우개
   const handleErase = (e: any) => {
-    if (selectedBrush !== "eraser") return;
-
     const stage = stageRef.current;
-    const clickedPosition = stage.getPointerPosition();
+    if (!stage) return;
 
-    const clickedLineIndex = lines.findIndex((line) =>
-      line.points.some(
-        (_, i) =>
-          i % 2 === 0 &&
-          Math.abs(line.points[i] - clickedPosition.x) < 10 &&
-          Math.abs(line.points[i + 1] - clickedPosition.y) < 10
-      )
+    // 현재 마우스 위치
+    const erasedPosition = stage.getPointerPosition();
+    if (!erasedPosition) return;
+
+    // 마우스가 지나간 위치 근처의 선을 찾아서 삭제
+    const newLines = lines.filter(
+      (line) =>
+        !line.points.some(
+          ([x, y]) =>
+            Math.abs(x - erasedPosition.x) < 15 &&
+            Math.abs(y - erasedPosition.y) < 15
+        )
     );
 
-    if (clickedLineIndex !== -1) {
-      dispatch(removeLine(clickedLineIndex));
-    }
+    dispatch(updateLines(newLines));
   };
 
-  // 그리기 종료
+  // 그리기 또는 지우기 종료
   const handleMouseUp = () => {
     setIsDrawing(false);
   };
@@ -90,7 +107,7 @@ export default function KonvaCanvas() {
             {lines.map((line, i) => (
               <Line
                 key={i}
-                points={line.points}
+                points={line.points.flat()}
                 stroke={line.stroke}
                 strokeWidth={line.strokeWidth}
                 tension={0.5}

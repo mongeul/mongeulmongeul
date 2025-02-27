@@ -1,6 +1,6 @@
 import { DrawingLine } from "./drawingTypes";
 
-export type Feelings = "HAPPY" | "SOSO" | "SAD" | "";
+export type Feeling = "HAPPY" | "SOSO" | "SAD" | "";
 
 export type PrivateStatus = "PUBLIC" | "PRIVATE" | "LOCK";
 
@@ -12,12 +12,13 @@ export interface BaseDiary {
   picture?: string;
   date: string;
   weather: Weather;
-  feelings: Feelings;
+  feeling: Feeling;
   privateStatus: PrivateStatus;
 }
 
 export interface DiaryRequest extends BaseDiary {
   pictureLines?: DrawingLine[];
+  isPublished: boolean;
 }
 
 export interface Diary extends BaseDiary {
