@@ -6,17 +6,17 @@ interface DiaryState {
   selectedBrushSize: number;
   selectedBrush: Brush;
   lines: DrawingLine[];
-  history: DrawingLine[][];
-  redoStack: DrawingLine[][];
+  history: Array<DrawingLine[]>;
+  redoStack: Array<DrawingLine[]>;
 }
 
 const initialState: DiaryState = {
   selectedColor: "#000000",
   selectedBrushSize: 5,
   selectedBrush: "pen",
-  lines: [],
-  history: [],
-  redoStack: [],
+  lines: [] as DrawingLine[],
+  history: [] as Array<DrawingLine[]>,
+  redoStack: [] as Array<DrawingLine[]>,
 };
 
 const drawingSlice = createSlice({
@@ -35,8 +35,8 @@ const drawingSlice = createSlice({
     setBrushType: (state, action: PayloadAction<Brush>) => {
       state.selectedBrush = action.payload;
     },
-    addLine: (state, action: PayloadAction<{ points: number[] }>) => {
-      const newLine = {
+    addLine: (state, action: PayloadAction<{ points: [number, number][] }>) => {
+      const newLine: DrawingLine = {
         points: action.payload.points,
         stroke: state.selectedColor,
         strokeWidth: state.selectedBrushSize,

@@ -3,18 +3,18 @@
 import { useMemo } from "react";
 import RoundIcon from "@/components/common/atoms/RoundIcon";
 import HappyIcon from "@/assets/icons/happy.svg";
-import FeelingIcon from "@/assets/icons/feeling.svg";
+import FeelIcon from "@/assets/icons/feel.svg";
 import { Feeling } from "@/types/diaryTypes";
 
-interface FeelingIconProps {
+interface FeelingsIconProps {
   feeling: Feeling;
   size?: string;
 }
 
-export default function FeelingIcon({
+export default function FeelingsIcon({
   feeling,
   size = "w-9 h-9",
-}: FeelingIconProps) {
+}: FeelingsIconProps) {
   const status = useMemo(() => {
     switch (feeling) {
       case "HAPPY":
@@ -48,7 +48,7 @@ export default function FeelingIcon({
         return {
           icon: (
             <RoundIcon backgroundColor="bg-zinc-300">
-              <FeelingIcon className={`text-white ${size}`} />
+              <FeelIcon className={`text-white ${size}`} />
             </RoundIcon>
           ),
           label: "기분 없음",

@@ -6,7 +6,7 @@ import { setFeeling } from "@/store/diarySlice";
 import { RootState } from "@/store/store";
 import { Feeling } from "@/types/diaryTypes";
 import WebModal from "../../common/atoms/WebModal";
-import FeelingIcon from "@/components/common/atoms/FeelingIcon";
+import FeelingIcon from "@/components/common/atoms/FeelingsIcon";
 
 const feelingOptions: Feeling[] = ["HAPPY", "SOSO", "SAD"];
 

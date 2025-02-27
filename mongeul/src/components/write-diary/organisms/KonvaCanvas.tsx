@@ -30,7 +30,13 @@ export default function KonvaCanvas() {
 
     setIsDrawing(true);
     const pos = e.target.getStage().getPointerPosition();
-    dispatch(addLine({ points: [pos.x, pos.y] }));
+    if (!pos) return;
+
+    dispatch(
+      addLine({
+        points: [[pos.x, pos.y] as [number, number]],
+      })
+    );
   };
 
   // 그리는중
@@ -39,32 +45,44 @@ export default function KonvaCanvas() {
     const stage = e.target.getStage();
     const point = stage.getPointerPosition();
 
+    if (!point) return; // 포인터 없으면 리턴
+
     const newLines = lines.map((line, index) =>
       index === lines.length - 1
-        ? { ...line, points: [...line.points, point.x, point.y] }
+        ? {
+            ...line,
+            points: [...line.points, [point.x, point.y] as [number, number]],
+          }
         : line
     );
 
     dispatch(updateLines(newLines));
   };
 
-  // TODO 드래그도중에 지우기 유지
+  // 드래그 도중에 지우기
   const handleErase = (e: any) => {
     if (selectedBrush !== "eraser") return;
 
     const stage = stageRef.current;
-    const clickedPosition = stage.getPointerPosition();
+    const clickedPosition = stage.getPointerPosition(); // 마우스 클릭 위치
+    if (!clickedPosition) return; // 클릭 위치가 없으면 종료
 
+    // 클릭한 위치와 가까운 점을 찾아서 지우기
     const clickedLineIndex = lines.findIndex((line) =>
-      line.points.some(
-        (_, i) =>
-          i % 2 === 0 &&
-          Math.abs(line.points[i] - clickedPosition.x) < 10 &&
-          Math.abs(line.points[i + 1] - clickedPosition.y) < 10
-      )
+      line.points.some((point: [number, number], i: number) => {
+        const x = point[0]; // x좌표
+        const y = point[1]; // y좌표
+
+        // 마우스 클릭 위치와 가까운지 체크
+        return (
+          Math.abs(x - clickedPosition.x) < 10 &&
+          Math.abs(y - clickedPosition.y) < 10
+        );
+      })
     );
 
     if (clickedLineIndex !== -1) {
+      // 해당 라인을 제거
       dispatch(removeLine(clickedLineIndex));
     }
   };
@@ -90,7 +108,7 @@ export default function KonvaCanvas() {
             {lines.map((line, i) => (
               <Line
                 key={i}
-                points={line.points}
+                points={line.points.flat()}
                 stroke={line.stroke}
                 strokeWidth={line.strokeWidth}
                 tension={0.5}

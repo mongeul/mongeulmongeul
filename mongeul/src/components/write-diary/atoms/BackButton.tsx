@@ -10,6 +10,7 @@ export default function BackButton() {
 
   const handleBackClick = () => {
     setIsModalOpen(true);
+    router.back();
   };
 
   const handleConfirmExit = () => {
