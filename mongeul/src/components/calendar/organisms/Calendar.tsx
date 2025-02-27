@@ -24,31 +24,28 @@ const Calendar = () => {
   };
 
   return (
-    <div className="flex flex-col lg:flex-row w-full">
-      <div className="flex w-full justify-center lg:justify-start flex-grow">
-        <Card width="w-full max-w-md" height="flex-grow">
-          <div className="w-full h-full flex justify-center items-start flex-grow">
-            <div className="max-w-md mx-auto">
-              <CalendarHeader
-                year={currentMonth.year}
-                month={currentMonth.month}
-                onMonthChange={handleMonthChange}
-              />
-              <CalendarRow />
-              <CalendarGrid
-                year={currentMonth.year}
-                month={currentMonth.month}
-                selectedDate={
-                  selectedDate ? Number(selectedDate.split("-")[2]) : undefined
-                }
-                diaryDates={diaryDates}
-                onSelectDate={handleDateSelect}
-              />
-            </div>
+    <div className="">
+      <Card height="min-h-[450px]">
+        <div className="flex justify-center items-center w-full">
+          <div className="">
+            <CalendarHeader
+              year={currentMonth.year}
+              month={currentMonth.month}
+              onMonthChange={handleMonthChange}
+            />
+            <CalendarRow />
+            <CalendarGrid
+              year={currentMonth.year}
+              month={currentMonth.month}
+              selectedDate={
+                selectedDate ? Number(selectedDate.split("-")[2]) : undefined
+              }
+              diaryDates={diaryDates}
+              onSelectDate={handleDateSelect}
+            />
           </div>
-        </Card>
-      </div>
-      <div className="hidden lg:block"></div>
+        </div>
+      </Card>
     </div>
   );
 };

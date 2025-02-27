@@ -6,6 +6,7 @@ import DiaryHeader from "../molecules/DiaryHeader";
 import DiaryTitle from "../atoms/DiaryTitle";
 import DiaryImage from "../atoms/DiaryImage";
 import DiaryContent from "../atoms/DiaryContent";
+import Card from "@/components/common/atoms/Card";
 
 const Diary: React.FC = () => {
   const { selectedDiary } = useSelector((state: RootState) => state.calendar);

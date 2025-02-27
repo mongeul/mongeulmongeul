@@ -45,11 +45,11 @@ export default function Page() {
   };
 
   return (
-    <div className="flex flex-col lg:flex-row w-full min-h-screen">
-      <div className="flex w-full lg:w-1/2 justify-center lg:justify-start flex-grow">
+    <div className="flex flex-col xl:flex-row w-full min-h-screen">
+      <div className="flex-1 justify-center items-start">
         <Calendar />
       </div>
-      <div className="flex w-full lg:w-1/2 justify-center items-center p-4">
+      <div className="flex-1 justify-center items-start">
         <Diary />
       </div>
     </div>
