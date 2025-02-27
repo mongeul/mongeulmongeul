@@ -1,13 +1,12 @@
-package com.specup.mongeul.domain.sharediary.dto.response;
+package com.specup.mongeul.domain.diary.dto.response.ShareDiary;
 
 import com.specup.mongeul.domain.diary.entity.ENUM.DiaryFeeling;
-import com.specup.mongeul.domain.diary.entity.ENUM.DiaryPrivate;
 import com.specup.mongeul.domain.diary.entity.ENUM.DiaryWeather;
-import com.specup.mongeul.domain.sharediary.entity.ShareDiary;
+import com.specup.mongeul.domain.diary.entity.ShareDiary;
 import lombok.Getter;
 import lombok.ToString;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Getter
 @ToString
@@ -16,12 +15,10 @@ public class ShareDiaryResponse {
     private String title;
     private String content;
     private String picture;
+    private LocalDate date;
     private DiaryWeather weather;
     private DiaryFeeling feeling;
-    private DiaryPrivate privateStatus;
-    private Integer turn;
-    private LocalDateTime createdAt;
-    private LocalDateTime modifiedAt;
+    private String turnOwner;
 
     public static ShareDiaryResponse from(ShareDiary shareDiary) {
         ShareDiaryResponse response = new ShareDiaryResponse();
@@ -29,12 +26,10 @@ public class ShareDiaryResponse {
         response.title = shareDiary.getTitle();
         response.content = shareDiary.getContent();
         response.picture = shareDiary.getPicture();
+        response.date = shareDiary.getDate();
         response.weather = shareDiary.getWeather();
         response.feeling = shareDiary.getFeeling();
-        response.privateStatus = shareDiary.getPrivateStatus();
-        response.turn = shareDiary.getTurn();
-        response.createdAt = shareDiary.getCreatedAt();
-        response.modifiedAt = shareDiary.getModifiedAt();
+        response.turnOwner = shareDiary.getTurnOwner().getNickname();
         return response;
     }
 }

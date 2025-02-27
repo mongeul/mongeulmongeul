@@ -3,11 +3,11 @@ package com.specup.mongeul.domain.diary.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.specup.mongeul.domain.diary.dto.common.PictureLineDto;
-import com.specup.mongeul.domain.diary.dto.request.DiaryCreateRequest;
-import com.specup.mongeul.domain.diary.dto.request.DiaryUpdateRequest;
-import com.specup.mongeul.domain.diary.dto.response.DiaryDateResponse;
-import com.specup.mongeul.domain.diary.dto.response.DiaryResponse;
-import com.specup.mongeul.domain.diary.dto.response.PictureLineResponse;
+import com.specup.mongeul.domain.diary.dto.request.Diary.DiaryCreateRequest;
+import com.specup.mongeul.domain.diary.dto.request.Diary.DiaryUpdateRequest;
+import com.specup.mongeul.domain.diary.dto.response.Diary.DiaryDateResponse;
+import com.specup.mongeul.domain.diary.dto.response.Diary.DiaryResponse;
+import com.specup.mongeul.domain.diary.dto.response.Diary.PictureLineResponse;
 import com.specup.mongeul.domain.diary.entity.Diary;
 import com.specup.mongeul.domain.diary.entity.ENUM.DiaryPrivate;
 import com.specup.mongeul.domain.diary.repository.DiaryRepository;
@@ -38,8 +38,7 @@ public class DiaryService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
-        LocalDate date = request.getDate();
-        if (diaryRepository.existsByUserIdAndDate(userId, date)) {
+        if (diaryRepository.existsByUserIdAndDate(userId, request.getDate())) {
             throw new CustomException(ErrorCode.DIARY_ALREADY_EXISTS);
         }
 
@@ -66,8 +65,9 @@ public class DiaryService {
         }
 
         Diary diary = diaryRepository.save(
-                Diary.create(request.getTitle(), request.getContent(), request.getPicture(),
-                        date, pictureLinesJson, request.getWeather(), request.getFeeling(),
+                Diary.create(
+                        request.getTitle(), request.getContent(), request.getPicture(),
+                        request.getDate(), pictureLinesJson, request.getWeather(), request.getFeeling(),
                         request.getPrivateStatus(), user
                 )
         );
@@ -99,7 +99,8 @@ public class DiaryService {
             }
         }
 
-        diary.update(request.getTitle(), request.getContent(), request.getPicture(),
+        diary.update(
+                request.getTitle(), request.getContent(), request.getPicture(),
                 request.getDate(), pictureLinesJson, request.getWeather(),
                 request.getFeeling(), request.getPrivateStatus());
 

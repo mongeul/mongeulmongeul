@@ -1,4 +1,4 @@
-package com.specup.mongeul.domain.diary.dto.request;
+package com.specup.mongeul.domain.diary.dto.request.Diary;
 
 import com.specup.mongeul.domain.diary.dto.common.PictureLineDto;
 import com.specup.mongeul.domain.diary.entity.ENUM.DiaryFeeling;
