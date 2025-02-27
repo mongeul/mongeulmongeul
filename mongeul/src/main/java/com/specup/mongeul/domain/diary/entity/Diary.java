@@ -36,15 +36,14 @@ public class Diary extends BaseSoftDeleteEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 50)
+    @Column(length = 50)
     private String title;
 
-    @Column(nullable = false, columnDefinition = "TEXT")
+    @Column(columnDefinition = "TEXT")
     private String content;
 
     private String picture;
 
-//    @Column(nullable = false)
     private LocalDate date;
 
     @Column(columnDefinition = "TEXT")
@@ -54,11 +53,9 @@ public class Diary extends BaseSoftDeleteEntity {
     private DiaryWeather weather;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     private DiaryFeeling feeling;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     private DiaryPrivate privateStatus;
 
     @ManyToOne(fetch = FetchType.LAZY)

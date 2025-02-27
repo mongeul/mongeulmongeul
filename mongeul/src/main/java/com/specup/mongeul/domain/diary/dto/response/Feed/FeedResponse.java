@@ -1,4 +1,4 @@
-package com.specup.mongeul.domain.diary.dto.response;
+package com.specup.mongeul.domain.diary.dto.response.Feed;
 
 import com.specup.mongeul.domain.diary.entity.Diary;
 import com.specup.mongeul.domain.diary.entity.ENUM.DiaryFeeling;

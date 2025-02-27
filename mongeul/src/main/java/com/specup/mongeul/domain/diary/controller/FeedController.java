@@ -1,7 +1,7 @@
 package com.specup.mongeul.domain.diary.controller;
 
-import com.specup.mongeul.domain.diary.dto.response.FeedDetailResponse;
-import com.specup.mongeul.domain.diary.dto.response.FeedResponse;
+import com.specup.mongeul.domain.diary.dto.response.Feed.FeedDetailResponse;
+import com.specup.mongeul.domain.diary.dto.response.Feed.FeedResponse;
 import com.specup.mongeul.domain.diary.service.FeedService;
 import com.specup.mongeul.domain.user.entity.User;
 import com.specup.mongeul.global.common.ApiResponse;

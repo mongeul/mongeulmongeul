@@ -1,6 +1,6 @@
 package com.specup.mongeul.domain.diaryemoji.repository;
 
-import com.specup.mongeul.domain.diary.dto.response.DiaryEmojiResponse;
+import com.specup.mongeul.domain.diary.dto.response.Diary.DiaryEmojiResponse;
 import com.specup.mongeul.domain.diaryemoji.entity.DiaryEmoji;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

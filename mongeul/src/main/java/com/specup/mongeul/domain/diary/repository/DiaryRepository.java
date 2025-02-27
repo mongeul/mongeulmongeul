@@ -23,16 +23,16 @@ public interface DiaryRepository extends JpaRepository<Diary, Long> {
           AND d.date < :startOfNextMonth
         ORDER BY d.date DESC
     """)
-    List<Diary> findByUserAndDateBetween(
-            @Param("user") User user,
-            @Param("startOfMonth") LocalDate startOfMonth,
-            @Param("startOfNextMonth") LocalDate startOfNextMonth);
+    List<Diary> findByUserAndDateBetween(@Param("user") User user,
+                                         @Param("startOfMonth") LocalDate startOfMonth,
+                                         @Param("startOfNextMonth") LocalDate startOfNextMonth);
 
     /**
      * 하루 1개 일기 제한 검증 (데이터 조회안하고 존재여부만 체크)
      */
 //    boolean existsByUserIdAndCreatedAtBetween(@Param("userId") Long userId, @Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
-    boolean existsByUserIdAndDate(@Param("userId") Long userId, @Param("date") LocalDate date);
+    boolean existsByUserIdAndDate(@Param("userId") Long userId,
+                                  @Param("date") LocalDate date);
 
     /**
      * 하루 1개 일기 제한 검증 (데이터를 조회해서 반환으로 체크)
@@ -50,7 +50,8 @@ public interface DiaryRepository extends JpaRepository<Diary, Long> {
         ORDER BY id DESC
         LIMIT :limit
     """, nativeQuery = true)
-    List<Diary> findAllInfiniteScroll(@Param("userId") Long userId, @Param("limit") Long limit);
+    List<Diary> findAllInfiniteScroll(@Param("userId") Long userId,
+                                      @Param("limit") Long limit);
 
     @Query(value = """
         SELECT * FROM diaries
@@ -60,5 +61,7 @@ public interface DiaryRepository extends JpaRepository<Diary, Long> {
         ORDER BY id DESC
         LIMIT :limit
     """, nativeQuery = true)
-    List<Diary> findAllInfiniteScroll(@Param("userId") Long userId, @Param("lastDiaryId") Long lastDiaryId, @Param("limit") Long limit);
+    List<Diary> findAllInfiniteScroll(@Param("userId") Long userId,
+                                      @Param("lastDiaryId") Long lastDiaryId,
+                                      @Param("limit") Long limit);
 }

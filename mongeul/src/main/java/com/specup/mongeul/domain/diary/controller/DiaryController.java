@@ -1,10 +1,10 @@
 package com.specup.mongeul.domain.diary.controller;
 
-import com.specup.mongeul.domain.diary.dto.request.DiaryCreateRequest;
-import com.specup.mongeul.domain.diary.dto.request.DiaryUpdateRequest;
-import com.specup.mongeul.domain.diary.dto.response.DiaryDateResponse;
-import com.specup.mongeul.domain.diary.dto.response.DiaryResponse;
-import com.specup.mongeul.domain.diary.dto.response.PictureLineResponse;
+import com.specup.mongeul.domain.diary.dto.request.Diary.DiaryCreateRequest;
+import com.specup.mongeul.domain.diary.dto.request.Diary.DiaryUpdateRequest;
+import com.specup.mongeul.domain.diary.dto.response.Diary.DiaryDateResponse;
+import com.specup.mongeul.domain.diary.dto.response.Diary.DiaryResponse;
+import com.specup.mongeul.domain.diary.dto.response.Diary.PictureLineResponse;
 import com.specup.mongeul.domain.diary.service.DiaryService;
 import com.specup.mongeul.domain.user.entity.User;
 import com.specup.mongeul.global.common.ApiResponse;
