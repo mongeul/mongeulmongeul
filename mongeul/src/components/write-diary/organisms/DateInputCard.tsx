@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from "react";
 import Card from "@/components/common/atoms/Card";
 import DatePicker from "react-datepicker";
