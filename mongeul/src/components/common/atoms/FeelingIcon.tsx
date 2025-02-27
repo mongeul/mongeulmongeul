@@ -4,19 +4,19 @@ import { useMemo } from "react";
 import RoundIcon from "@/components/common/atoms/RoundIcon";
 import HappyIcon from "@/assets/icons/happy.svg";
 import FeelingIcon from "@/assets/icons/feeling.svg";
-import { Feelings } from "@/types/diaryTypes";
+import { Feeling } from "@/types/diaryTypes";
 
-interface FeelingsIconProps {
-  feelings: Feelings;
+interface FeelingIconProps {
+  feeling: Feeling;
   size?: string;
 }
 
-export default function FeelingsIcon({
-  feelings,
+export default function FeelingIcon({
+  feeling,
   size = "w-9 h-9",
-}: FeelingsIconProps) {
+}: FeelingIconProps) {
   const status = useMemo(() => {
-    switch (feelings) {
+    switch (feeling) {
       case "HAPPY":
         return {
           icon: (
@@ -54,7 +54,7 @@ export default function FeelingsIcon({
           label: "기분 없음",
         };
     }
-  }, [feelings, size]);
+  }, [feeling, size]);
 
   return status;
 }

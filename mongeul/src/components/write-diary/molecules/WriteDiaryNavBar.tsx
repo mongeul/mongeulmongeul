@@ -17,19 +17,12 @@ export default function WriteDiaryNavBar() {
     drawingLines,
     date,
     weather,
-    feelings,
+    feeling,
     privateStatus,
   } = useSelector((state: RootState) => state.diary);
 
   async function handleSubmit() {
-    if (
-      !title ||
-      !content ||
-      !date ||
-      !weather ||
-      !feelings ||
-      !privateStatus
-    ) {
+    if (!title || !content || !date || !weather || !feeling || !privateStatus) {
       alert("필수 입력 항목을 모두 입력해주세요!");
       return;
     }
@@ -43,7 +36,7 @@ export default function WriteDiaryNavBar() {
           pictureLines: drawingLines ? JSON.parse(drawingLines) : [],
           date,
           weather: weather,
-          feelings: feelings,
+          feeling: feeling,
           privateStatus: privateStatus,
         });
 
