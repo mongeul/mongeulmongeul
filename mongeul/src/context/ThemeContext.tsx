@@ -33,9 +33,10 @@ export function ThemeProvider({
   initialFont,
   initialFontSize,
 }: ThemeProviderProps) {
-  const [theme, setTheme] = useState<Theme | null>(null);
-  const [font, setFont] = useState<Font | null>(null);
-  const [fontSize, setFontSize] = useState<number | null>(null);
+  const [theme, setTheme] = useState<Theme>(initialTheme);
+  const [font, setFont] = useState<Font>(initialFont);
+  const [fontSize, setFontSize] = useState<number>(initialFontSize);
+  const [isInitialized, setIsInitialized] = useState(false);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -48,6 +49,7 @@ export function ThemeProvider({
       setTheme(savedTheme);
       setFont(savedFont);
       setFontSize(savedFontSize);
+      setIsInitialized(true);
     }
   }, []);
 
@@ -75,7 +77,7 @@ export function ThemeProvider({
     }
   }, [fontSize]);
 
-  if (theme === null || font === null || fontSize === null) {
+  if (!isInitialized) {
     return <div style={{ visibility: "hidden" }}>{children}</div>;
   }
 
