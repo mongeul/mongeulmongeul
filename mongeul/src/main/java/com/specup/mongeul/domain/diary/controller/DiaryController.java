@@ -26,11 +26,11 @@ public class DiaryController {
     private final DiaryService diaryService;
 
     @Operation(summary = "캘린더에서 일기 조회", description = "내가 작성한 일기를 월 별로 조회합니다.")
-    @GetMapping("/diaries/{year}/{month}")
+    @GetMapping("/diaries")
     public ResponseEntity<ApiResponse<List<DiaryResponse>>> getCalendarDiaries(
             @AuthenticationPrincipal User user,
-            @PathVariable int year,
-            @PathVariable int month) {
+            @RequestParam int year,
+            @RequestParam int month) {
         return ResponseEntity.ok(ApiResponse.success(diaryService.getCalendarDiaries(user.getId(), year, month), "내가 작성한 일기 목록 조회 성공"));
     }
 
