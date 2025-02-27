@@ -17,6 +17,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class ShareDiaryService {
@@ -107,6 +110,21 @@ public class ShareDiaryService {
     }
 
     // 캘린더 공유일기 조회
+    @Transactional(readOnly = true)
+    public List<ShareDiaryResponse> getCalendarShareDiaries(Long userId, Long groupId, int year, int month) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        Friend group = friendRepository.findById(groupId)
+                .orElseThrow(() -> new CustomException(ErrorCode.GROUP_NOT_FOUND));
+
+        LocalDate startOfMonth = LocalDate.of(year, month, 1);
+        LocalDate startOfNextMonth = startOfMonth.plusMonths(1);
+
+        List<ShareDiary> shareDiaries = shareDiaryRepository.findByGroupAndDateBetween(group, startOfNextMonth, startOfMonth);
+        return shareDiaries.stream()
+                .map(ShareDiaryResponse::from)
+                .toList();
+    }
 
     // 특정 공유일기 조회
 
