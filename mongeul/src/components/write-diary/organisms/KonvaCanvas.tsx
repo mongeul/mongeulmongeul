@@ -24,7 +24,8 @@ export default function KonvaCanvas() {
   // 그림 그리기 시작
   const handleMouseDown = (e: any) => {
     if (selectedBrush === "eraser") {
-      handleErase(e);
+      setIsDrawing(true);
+      handleErase(e); // 마우스를 누르자마자 바로 지우기 실행
       return;
     }
 
@@ -39,13 +40,17 @@ export default function KonvaCanvas() {
     );
   };
 
-  // 그리는중
+  // 그리는 중 or 지우는 중
   const handleMouseMove = (e: any) => {
-    if (!isDrawing || selectedBrush === "eraser") return;
+    if (!isDrawing) return;
+    if (selectedBrush === "eraser") {
+      handleErase(e); // 지우개 모드일 때 마우스를 움직일 때마다 실행
+      return;
+    }
+
     const stage = e.target.getStage();
     const point = stage.getPointerPosition();
-
-    if (!point) return; // 포인터 없으면 리턴
+    if (!point) return;
 
     const newLines = lines.map((line, index) =>
       index === lines.length - 1
@@ -59,35 +64,29 @@ export default function KonvaCanvas() {
     dispatch(updateLines(newLines));
   };
 
-  // 드래그 도중에 지우기
+  // 지우개
   const handleErase = (e: any) => {
-    if (selectedBrush !== "eraser") return;
-
     const stage = stageRef.current;
-    const clickedPosition = stage.getPointerPosition(); // 마우스 클릭 위치
-    if (!clickedPosition) return; // 클릭 위치가 없으면 종료
+    if (!stage) return;
 
-    // 클릭한 위치와 가까운 점을 찾아서 지우기
-    const clickedLineIndex = lines.findIndex((line) =>
-      line.points.some((point: [number, number], i: number) => {
-        const x = point[0]; // x좌표
-        const y = point[1]; // y좌표
+    // 현재 마우스 위치
+    const erasedPosition = stage.getPointerPosition();
+    if (!erasedPosition) return;
 
-        // 마우스 클릭 위치와 가까운지 체크
-        return (
-          Math.abs(x - clickedPosition.x) < 10 &&
-          Math.abs(y - clickedPosition.y) < 10
-        );
-      })
+    // 마우스가 지나간 위치 근처의 선을 찾아서 삭제
+    const newLines = lines.filter(
+      (line) =>
+        !line.points.some(
+          ([x, y]) =>
+            Math.abs(x - erasedPosition.x) < 15 &&
+            Math.abs(y - erasedPosition.y) < 15
+        )
     );
 
-    if (clickedLineIndex !== -1) {
-      // 해당 라인을 제거
-      dispatch(removeLine(clickedLineIndex));
-    }
+    dispatch(updateLines(newLines));
   };
 
-  // 그리기 종료
+  // 그리기 또는 지우기 종료
   const handleMouseUp = () => {
     setIsDrawing(false);
   };
