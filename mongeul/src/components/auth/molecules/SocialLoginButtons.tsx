@@ -1,37 +1,31 @@
 "use client";
 
 import { useEffect, useState } from "react";
-// import { getKakaoLoginUrl } from "@/lib/api/auth";
+import { useDispatch } from "react-redux";
+import { getKakaoLoginUrl } from "@/lib/api/auth";
 import SocialLoginButton from "@/components/auth/atoms/SocialLoginButton";
 import KakaoIcon from "@/assets/icons/kakao.png";
 import NaverIcon from "@/assets/icons/naver.png";
 import GoogleIcon from "@/assets/icons/google.png";
 
 export default function SocialLoginButtons() {
-  const [kakaoLoginUrl, setKakaoLoginUrl] = useState<string | null>(null);
+  const dispatch = useDispatch();
 
-  // useEffect(() => {
-  //   async function fetchKakaoLoginUrl() {
-  //     const result = await getKakaoLoginUrl();
-  //     if (result.success && result.loginUrl) {
-  //       setKakaoLoginUrl(result.loginUrl);
-  //     }
-  //   }
-
-  //   fetchKakaoLoginUrl();
-  // }, []);
+  const handleKakaoLogin = async () => {
+    try {
+      const loginUrl = await getKakaoLoginUrl();
+      window.location.href = loginUrl; // 카카오 로그인 페이지로 이동
+    } catch (error) {
+      console.error("카카오 로그인 URL 요청 실패:", error);
+    }
+  };
 
   return (
     <div className="flex flex-row justify-center items-center gap-6">
       <SocialLoginButton
         icon={KakaoIcon}
         alt="카카오 로그인"
-        onClick={() => {
-          // if (kakaoLoginUrl) {
-          //   window.location.href = kakaoLoginUrl;
-          // }
-          console.log("kakao 로그인 클릭");
-        }}
+        onClick={handleKakaoLogin}
       />
       <SocialLoginButton
         icon={NaverIcon}
