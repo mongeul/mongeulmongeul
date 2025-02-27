@@ -112,8 +112,6 @@ public class ShareDiaryService {
     // 캘린더 공유일기 조회
     @Transactional(readOnly = true)
     public List<ShareDiaryResponse> getCalendarShareDiaries(Long userId, Long groupId, int year, int month) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         Friend group = friendRepository.findById(groupId)
                 .orElseThrow(() -> new CustomException(ErrorCode.GROUP_NOT_FOUND));
 
@@ -128,12 +126,18 @@ public class ShareDiaryService {
 
     // 특정 공유일기 조회
     public ShareDiaryResponse read(Long userId, Long shareDiaryId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         ShareDiary shareDiary = shareDiaryRepository.findById(shareDiaryId)
                 .orElseThrow(() -> new CustomException(ErrorCode.SHARE_DIARY_NOT_FOUND));
         return ShareDiaryResponse.from(shareDiary);
     }
 
     // 공유일기 삭제
+    public void delete(Long userId, Long shareDiaryId) {
+        ShareDiary shareDiary = shareDiaryRepository.findById(shareDiaryId)
+                .orElseThrow(() -> new CustomException(ErrorCode.SHARE_DIARY_NOT_FOUND));
+        if (!shareDiary.getTurnOwner().getId().equals(userId)) {
+            throw new CustomException(ErrorCode.INVALID_SHARE_DIARY_USER);
+        }
+        shareDiaryRepository.delete(shareDiary);
+    }
 }
