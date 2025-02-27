@@ -3,18 +3,21 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import TempAlertModal from "../molecules/TempAlertModal";
+import { resetDiary } from "@/store/diarySlice";
+import { useDispatch } from "react-redux";
 
 export default function BackButton() {
   const router = useRouter();
+  const dispatch = useDispatch();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleBackClick = () => {
     setIsModalOpen(true);
-    router.back();
   };
 
   const handleConfirmExit = () => {
     setIsModalOpen(false);
+    dispatch(resetDiary());
     router.back();
   };
 
