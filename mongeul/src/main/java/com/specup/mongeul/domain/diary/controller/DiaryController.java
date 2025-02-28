@@ -4,7 +4,7 @@ import com.specup.mongeul.domain.diary.dto.request.Diary.DiaryCreateRequest;
 import com.specup.mongeul.domain.diary.dto.request.Diary.DiaryUpdateRequest;
 import com.specup.mongeul.domain.diary.dto.response.Diary.DiaryDateResponse;
 import com.specup.mongeul.domain.diary.dto.response.Diary.DiaryResponse;
-import com.specup.mongeul.domain.diary.dto.response.Diary.PictureLineResponse;
+import com.specup.mongeul.domain.diary.dto.response.Diary.DiaryPictureLineResponse;
 import com.specup.mongeul.domain.diary.service.DiaryService;
 import com.specup.mongeul.domain.user.entity.User;
 import com.specup.mongeul.global.common.ApiResponse;
@@ -71,10 +71,10 @@ public class DiaryController {
 
     @Operation(summary = "그림 조회", description = "그림을 조회합니다.")
     @GetMapping("/diaries/{diaryId}/pictureLines")
-    public ResponseEntity<ApiResponse<PictureLineResponse>> getPictureLines(
+    public ResponseEntity<ApiResponse<DiaryPictureLineResponse>> getPictureLines(
             @AuthenticationPrincipal User user,
             @PathVariable Long diaryId) {
-        return ResponseEntity.ok(ApiResponse.success(diaryService.readPicture(user.getId(), diaryId), "그림 조회 성공"));
+        return ResponseEntity.ok(ApiResponse.success(diaryService.readPicture(diaryId), "그림 조회 성공"));
     }
 
     @Operation(summary = "날짜 조회", description = "일기 작성한 날짜들을 조회합니다.")

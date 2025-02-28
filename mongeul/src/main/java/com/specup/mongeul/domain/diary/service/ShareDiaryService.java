@@ -2,8 +2,10 @@ package com.specup.mongeul.domain.diary.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.specup.mongeul.domain.diary.dto.common.PictureLineDto;
 import com.specup.mongeul.domain.diary.dto.request.ShareDiary.ShareDiaryCreateRequest;
 import com.specup.mongeul.domain.diary.dto.request.ShareDiary.ShareDiaryUpdateRequest;
+import com.specup.mongeul.domain.diary.dto.response.ShareDiary.ShareDiaryPictureLineResponse;
 import com.specup.mongeul.domain.diary.dto.response.ShareDiary.ShareDiaryResponse;
 import com.specup.mongeul.domain.diary.entity.ShareDiary;
 import com.specup.mongeul.domain.diary.repository.ShareDiaryRepository;
@@ -125,7 +127,7 @@ public class ShareDiaryService {
     }
 
     // 특정 공유일기 조회
-    public ShareDiaryResponse read(Long userId, Long shareDiaryId) {
+    public ShareDiaryResponse read(Long shareDiaryId) {
         ShareDiary shareDiary = shareDiaryRepository.findById(shareDiaryId)
                 .orElseThrow(() -> new CustomException(ErrorCode.SHARE_DIARY_NOT_FOUND));
         return ShareDiaryResponse.from(shareDiary);
@@ -140,4 +142,23 @@ public class ShareDiaryService {
         }
         shareDiaryRepository.delete(shareDiary);
     }
+
+    // 공유일기 그림 조회
+    public ShareDiaryPictureLineResponse readPicture(Long shareDiaryId) {
+        ShareDiary shareDiary = shareDiaryRepository.findById(shareDiaryId)
+                .orElseThrow(() -> new CustomException(ErrorCode.SHARE_DIARY_NOT_FOUND));
+
+        List<PictureLineDto> pictureLines = null;
+        if (shareDiary.getPictureLines() != null && !shareDiary.getPictureLines().isEmpty()) {
+            try {
+                pictureLines = objectMapper.readValue(shareDiary.getPictureLines(),
+                        objectMapper.getTypeFactory().constructCollectionType(List.class, PictureLineDto.class));
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException("PictureLines JSON 역직렬화 실패", e);
+            }
+        }
+        return ShareDiaryPictureLineResponse.from(shareDiary.getId(), pictureLines);
+    }
+
+    // 공유일기 작성 날짜 조회
 }
