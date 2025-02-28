@@ -44,14 +44,14 @@ public class ShareDiaryController {
     }
 
     // 공유일기 목록 조회
-//    @GetMapping("/groups/{groupId}/share-diaries")
-//    public ResponseEntity<ApiResponse<List<ShareDiaryResponse>>> getCalendarShareDiaries(
-//            @AuthenticationPrincipal User user,
-//            @PathVariable Long groupId,
-//            @RequestParam int year,
-//            @RequestParam int month) {
-//        return ResponseEntity.ok(ApiResponse.success(shareDiaryService.getCalendarShareDiaries(groupId, year, month), "공유일기 목록 조회 성공"));
-//    }
+    @GetMapping("/groups/{groupId}/share-diaries")
+    public ResponseEntity<ApiResponse<List<ShareDiaryResponse>>> getCalendarShareDiaries(
+            @AuthenticationPrincipal User user,
+            @PathVariable Long groupId,
+            @RequestParam int year,
+            @RequestParam int month) {
+        return ResponseEntity.ok(ApiResponse.success(shareDiaryService.getCalendarShareDiaries(groupId, year, month), "공유일기 목록 조회 성공"));
+    }
 
     // 특정 공유일기 조회
 
