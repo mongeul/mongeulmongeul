@@ -1,10 +1,12 @@
+"use client";
+
 import Button from "@/components/common/atoms/Button";
 import WebModal from "@/components/common/atoms/WebModal";
 import { submitDiary } from "@/lib/api/write-diary";
 import { resetDiary } from "@/store/diarySlice";
 import { RootState } from "@/store/store";
 import { useRouter } from "next/navigation";
-import { startTransition, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 export default function TempAlertModal() {
@@ -27,25 +29,28 @@ export default function TempAlertModal() {
     privateStatus,
   } = useSelector((state: RootState) => state.diary);
 
-  const isDirty =
-    title || content || drawing || drawingLines || weather || feeling;
+  const isDirty = !!(
+    title ||
+    content ||
+    drawing ||
+    drawingLines ||
+    weather ||
+    feeling
+  );
+
+  console.log("isDirty 상태:", isDirty);
 
   // 임시저장
   async function handleSubmit() {
-    if (
-      !title &&
-      !content &&
-      !date &&
-      !weather &&
-      !feeling &&
-      !drawingLines &&
-      !drawing
-    ) {
+    console.log("handleSubmit() 호출됨");
+
+    if (!isDirty) {
       alert("작성한 일기가 없습니다.");
       return;
     }
 
     try {
+      console.log("submitDiary API 요청 시작");
       await submitDiary({
         title,
         content,
@@ -60,14 +65,20 @@ export default function TempAlertModal() {
         privateStatus,
         published: true,
       });
+      console.log("submitDiary API 요청 완료");
 
       dispatch(resetDiary());
+      console.log("Redux 상태 resetDiary() 실행됨");
+
       setIsOpen(false);
+      console.log("모달 닫기");
 
       if (pendingNavigation) {
+        console.log("pendingNavigation 실행됨");
         pendingNavigation();
         setPendingNavigation(null);
       } else {
+        console.log("router.back() 실행됨");
         router.back();
       }
     } catch (error) {
@@ -77,13 +88,20 @@ export default function TempAlertModal() {
 
   // 작성취소
   function clearDiary() {
+    console.log("clearDiary() 호출됨");
+
     dispatch(resetDiary());
+    console.log("Redux 상태 resetDiary() 실행됨");
+
     setIsOpen(false);
+    console.log("모달 닫기");
 
     if (pendingNavigation) {
+      console.log("pendingNavigation 실행됨");
       pendingNavigation();
       setPendingNavigation(null);
     } else {
+      console.log("router.back() 실행됨");
       router.back();
     }
   }
@@ -92,6 +110,7 @@ export default function TempAlertModal() {
   useEffect(() => {
     const handleUnload = (e: BeforeUnloadEvent) => {
       if (isDirty) {
+        console.log("beforeunload 감지됨! (페이지 새로고침)");
         e.preventDefault();
         e.returnValue = "";
       }
@@ -106,14 +125,19 @@ export default function TempAlertModal() {
   useEffect(() => {
     if (isFirstRender.current) {
       history.pushState(null, "", location.href);
+      console.log("history.pushState() 실행됨");
       isFirstRender.current = false;
     }
   }, []);
 
   useEffect(() => {
     const handlePopState = () => {
+      console.log("popstate 이벤트 감지됨 (뒤로가기)");
       if (isDirty) {
+        console.log("isDirty 상태이므로 모달 오픈");
         setIsOpen(true);
+      } else {
+        router.back();
       }
     };
 
@@ -130,7 +154,10 @@ export default function TempAlertModal() {
       href: string,
       options?: { scroll?: boolean }
     ) => {
+      console.log(`confirmNavigation: ${href}`);
+
       if (isDirty) {
+        console.log("isDirty 상태이므로 모달 오픈 & 네비게이션 보류");
         setPendingNavigation(() => () => originalFunction(href, options));
         setIsOpen(true);
         return;
@@ -153,6 +180,7 @@ export default function TempAlertModal() {
   }, [isDirty, router]);
 
   const onCancel = () => {
+    console.log("모달 닫기 버튼 클릭됨");
     setIsOpen(false);
   };
 
@@ -161,10 +189,8 @@ export default function TempAlertModal() {
       {isOpen && (
         <WebModal onClose={onCancel}>
           <div className="flex flex-col justify-center items-center gap-4">
-            <div className="text-lg font-semibold">
-              일기가 아직 저장되지 않았어요!
-            </div>
-            <div className="text-gray-500 flex flex-col justify-center items-center gap-2">
+            <div className="font-semibold">일기가 아직 저장되지 않았어요!</div>
+            <div className="text-gray-500 flex text-sm flex-col justify-center items-center gap-2">
               <div>작성중인 일기를 취소하시겠습니까?</div>
             </div>
 
