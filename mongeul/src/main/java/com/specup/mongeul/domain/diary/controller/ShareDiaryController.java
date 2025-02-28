@@ -34,6 +34,7 @@ public class ShareDiaryController {
     }
 
     // 공유일기 수정
+    @Operation(summary = "공유일기 수정", description = "공유일기를 수정합니다.")
     @PutMapping("/groups/{groupId}/share-diaries/{shareDiaryId}")
     public ResponseEntity<ApiResponse<ShareDiaryResponse>> update(
             @AuthenticationPrincipal User user,
@@ -44,6 +45,7 @@ public class ShareDiaryController {
     }
 
     // 공유일기 목록 조회
+    @Operation(summary = "공유일기 목록 조회(캘린더)", description = "공유일기 목록을 조회합니다.")
     @GetMapping("/groups/{groupId}/share-diaries")
     public ResponseEntity<ApiResponse<List<ShareDiaryResponse>>> getCalendarShareDiaries(
             @AuthenticationPrincipal User user,
@@ -54,6 +56,7 @@ public class ShareDiaryController {
     }
 
     // 특정 공유일기 조회
+
 
     // 공유일기 삭제
 
