@@ -56,7 +56,13 @@ public class ShareDiaryController {
     }
 
     // 특정 공유일기 조회
-
+    @Operation(summary = "특정 공유일기 조회", description = "특정 공유일기를 조회합니다.")
+    @GetMapping("/share-diaries/{shareDiaryId}")
+    public ResponseEntity<ApiResponse<ShareDiaryResponse>> read(
+            @AuthenticationPrincipal User user,
+            @PathVariable Long shareDiaryId) {
+        return ResponseEntity.ok(ApiResponse.success(shareDiaryService.read(shareDiaryId), "공유일기 조회 성공"));
+    }
 
     // 공유일기 삭제
 
