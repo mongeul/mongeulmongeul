@@ -4,6 +4,7 @@ import Button from "@/components/common/atoms/Button";
 import WebModal from "@/components/common/atoms/WebModal";
 import { submitDiary } from "@/lib/api/write-diary";
 import { resetDiary } from "@/store/diarySlice";
+import { resetDrawing } from "@/store/drawingSlice";
 import { RootState } from "@/store/store";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
@@ -68,6 +69,7 @@ export default function TempAlertModal() {
       console.log("submitDiary API 요청 완료");
 
       dispatch(resetDiary());
+      dispatch(resetDrawing());
       console.log("Redux 상태 resetDiary() 실행됨");
 
       setIsOpen(false);
@@ -91,6 +93,7 @@ export default function TempAlertModal() {
     console.log("clearDiary() 호출됨");
 
     dispatch(resetDiary());
+    dispatch(resetDrawing());
     console.log("Redux 상태 resetDiary() 실행됨");
 
     setIsOpen(false);
@@ -156,12 +159,20 @@ export default function TempAlertModal() {
     ) => {
       console.log(`confirmNavigation: ${href}`);
 
+      // /write-diary/drawing 페이지 예외처리
+      if (href === "/write-diary/drawing") {
+        console.log("/write-diary/drawing으로 이동");
+        originalFunction(href, options);
+        return;
+      }
+
       if (isDirty) {
         console.log("isDirty 상태이므로 모달 오픈 & 네비게이션 보류");
         setPendingNavigation(() => () => originalFunction(href, options));
         setIsOpen(true);
         return;
       }
+
       originalFunction(href, options);
     };
 
@@ -182,6 +193,9 @@ export default function TempAlertModal() {
   const onCancel = () => {
     console.log("모달 닫기 버튼 클릭됨");
     setIsOpen(false);
+
+    // 현재 페이지 상태를 다시 push하여 뒤로가기가 발생했을 때 다시 감지되도록 함
+    history.pushState(null, "", location.href);
   };
 
   return (
