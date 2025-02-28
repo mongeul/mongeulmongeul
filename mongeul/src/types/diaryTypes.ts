@@ -30,3 +30,13 @@ export interface DiaryResponse {
   message: string;
   data: Diary | null;
 }
+
+export interface DiaryDate {
+  date: string;
+}
+
+export interface DiaryDatesResponse {
+  success: boolean;
+  message: string;
+  data: DiaryDate[];
+}

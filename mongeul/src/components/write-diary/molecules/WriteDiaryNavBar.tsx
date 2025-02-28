@@ -4,9 +4,9 @@ import Button from "@/components/common/atoms/Button";
 import { resetDiary } from "@/store/diarySlice";
 import { RootState } from "@/store/store";
 import { useDispatch, useSelector } from "react-redux";
-import { submitDiary } from "@/lib/api/diary";
 import { startTransition } from "react";
 import { useRouter } from "next/navigation";
+import { submitDiary } from "@/lib/api/write-diary";
 
 export default function WriteDiaryNavBar() {
   const router = useRouter();

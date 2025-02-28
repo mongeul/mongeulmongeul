@@ -6,20 +6,17 @@ import { DiaryRequest, DiaryResponse } from "@/types/diaryTypes";
 export async function createDiary(data: DiaryRequest): Promise<DiaryResponse> {
   try {
     console.log("request data:", { data });
-    const token = process.env.NEXT_PUBLIC_API_TOKEN;
+    const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/diaries`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(data),
-        cache: "no-store",
-      }
-    );
+    const response = await fetch(`${API_BASE_URL}/api/v1/diaries`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_TOKEN}`,
+      },
+      body: JSON.stringify(data),
+      cache: "no-store",
+    });
 
     if (!response.ok) {
       const errorMessage = await response.text();

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Card from "@/components/common/atoms/Card";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -9,10 +9,10 @@ import { RootState } from "@/store/store";
 import { useDispatch, useSelector } from "react-redux";
 import { setDate } from "@/store/diarySlice";
 import { formatDate } from "@/utils/formatDate";
+import { fetchDiaryDates } from "@/lib/api/write-diary";
 
 function ModalContent({ closeModal }: { closeModal: () => void }) {
   const dispatch = useDispatch();
-
   const selectedDate: string = useSelector(
     (state: RootState) => state.diary.date
   );
@@ -21,6 +21,29 @@ function ModalContent({ closeModal }: { closeModal: () => void }) {
       ? new Date(selectedDate)
       : new Date();
 
+  const [disabledDates, setDisabledDates] = useState<Date[]>([]);
+
+  // 작성된 날짜의 일기 disabled
+  useEffect(() => {
+    async function loadDiaryDates() {
+      try {
+        const year = new Date().getFullYear();
+        const month = new Date().getMonth() + 1;
+        const response = await fetchDiaryDates(year, month);
+
+        if (response.success) {
+          const disabled = response.data.map((item) => new Date(item.date));
+          setDisabledDates(disabled);
+        }
+      } catch (error) {
+        console.error("일기 날짜 조회 실패:", error);
+      }
+    }
+
+    loadDiaryDates();
+  }, []);
+
+  // 날짜 선택
   const handleChange = (date: Date | null) => {
     if (!date) return;
     const formattedDate = date.toISOString().split("T")[0];
@@ -36,6 +59,7 @@ function ModalContent({ closeModal }: { closeModal: () => void }) {
         selected={parsedDate}
         onChange={handleChange}
         maxDate={new Date()}
+        excludeDates={disabledDates}
       />
     </div>
   );
@@ -64,9 +88,6 @@ export default function DateInputCard() {
       </div>
 
       {isModalOpen && (
-        // <MobileModal onClose={toggleModal}>
-        //   <ModalContent />
-        // </MobileModal>
         <WebModal onClose={toggleModal} padding="p-2">
           <ModalContent closeModal={toggleModal} />
         </WebModal>

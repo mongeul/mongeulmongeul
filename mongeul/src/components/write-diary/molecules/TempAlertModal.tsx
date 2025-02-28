@@ -1,9 +1,9 @@
-import { createDiary } from "@/actions/diary/createDiary";
 import Button from "@/components/common/atoms/Button";
 import WebModal from "@/components/common/atoms/WebModal";
+import { submitDiary } from "@/lib/api/write-diary";
 import { resetDiary } from "@/store/diarySlice";
 import { RootState } from "@/store/store";
-import router from "next/router";
+import { useRouter } from "next/navigation";
 import { startTransition } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -17,6 +17,7 @@ export default function TempAlertModal({
   onCancel,
 }: TempAlertModalProps) {
   const dispatch = useDispatch();
+  const router = useRouter();
   const {
     title,
     content,
@@ -44,28 +45,25 @@ export default function TempAlertModal({
 
     startTransition(async () => {
       try {
-        const cleanedDrawing = drawing
-          ? drawing.replace(/^data:image\/\w+;base64,/, "")
-          : "";
-        await createDiary({
+        await submitDiary({
           title,
           content,
-          picture: cleanedDrawing || "",
+          picture: drawing || "",
           pictureLines:
             typeof drawingLines === "string"
               ? JSON.parse(drawingLines)
               : drawingLines,
           date,
-          weather: weather,
-          feeling: feeling,
-          privateStatus: privateStatus,
-          published: false,
+          weather,
+          feeling,
+          privateStatus,
+          published: true,
         });
 
-        clearDiary();
-        router.push("/diary");
+        dispatch(resetDiary());
+        router.back();
       } catch (error) {
-        console.error("일기 임시 저장 실패:", error);
+        console.error("일기 작성 실패:", error);
       }
     });
   }
