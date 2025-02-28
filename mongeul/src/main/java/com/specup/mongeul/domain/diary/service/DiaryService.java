@@ -7,7 +7,7 @@ import com.specup.mongeul.domain.diary.dto.request.Diary.DiaryCreateRequest;
 import com.specup.mongeul.domain.diary.dto.request.Diary.DiaryUpdateRequest;
 import com.specup.mongeul.domain.diary.dto.response.Diary.DiaryDateResponse;
 import com.specup.mongeul.domain.diary.dto.response.Diary.DiaryResponse;
-import com.specup.mongeul.domain.diary.dto.response.Diary.PictureLineResponse;
+import com.specup.mongeul.domain.diary.dto.response.Diary.DiaryPictureLineResponse;
 import com.specup.mongeul.domain.diary.entity.Diary;
 import com.specup.mongeul.domain.diary.entity.ENUM.DiaryPrivate;
 import com.specup.mongeul.domain.diary.repository.DiaryRepository;
@@ -156,9 +156,7 @@ public class DiaryService {
 
     // 그림 조회
     @Transactional(readOnly = true)
-    public PictureLineResponse readPicture(Long userId, Long diaryId) {
-        userRepository.findById(userId)
-                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+    public DiaryPictureLineResponse readPicture(Long diaryId) {
         Diary diary = diaryRepository.findById(diaryId)
                 .orElseThrow(() -> new CustomException(ErrorCode.DIARY_NOT_FOUND));
         List<PictureLineDto> pictureLines = null;
@@ -170,7 +168,7 @@ public class DiaryService {
                 throw new RuntimeException("PictureLines JSON 역직렬화 실패", e);
             }
         }
-        return PictureLineResponse.from(diary.getId(), pictureLines);
+        return DiaryPictureLineResponse.from(diary.getId(), pictureLines);
     }
 
     // 일기 작성 날짜 조회
