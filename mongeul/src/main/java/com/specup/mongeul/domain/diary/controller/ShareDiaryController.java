@@ -34,14 +34,14 @@ public class ShareDiaryController {
     }
 
     // 공유일기 수정
-//    @PutMapping("/groups/{groupId}/share-diaries/{shareDiaryId}")
-//    public ResponseEntity<ApiResponse<ShareDiaryResponse>> update(
-//            @AuthenticationPrincipal User user,
-//            @PathVariable Long groupId,
-//            @PathVariable Long shareDiaryId,
-//            @Valid @RequestBody ShareDiaryUpdateRequest request) {
-//        return ResponseEntity.ok(ApiResponse.success(shareDiaryService.update(user.getId(), groupId, shareDiaryId, request), "공유일기 수정 성공"));
-//    }
+    @PutMapping("/groups/{groupId}/share-diaries/{shareDiaryId}")
+    public ResponseEntity<ApiResponse<ShareDiaryResponse>> update(
+            @AuthenticationPrincipal User user,
+            @PathVariable Long groupId,
+            @PathVariable Long shareDiaryId,
+            @Valid @RequestBody ShareDiaryUpdateRequest request) {
+        return ResponseEntity.ok(ApiResponse.success(shareDiaryService.update(user.getId(), groupId, shareDiaryId, request), "공유일기 수정 성공"));
+    }
 
     // 공유일기 목록 조회
 //    @GetMapping("/groups/{groupId}/share-diaries")
