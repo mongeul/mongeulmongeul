@@ -5,12 +5,16 @@ import { DiaryRequest, DiaryResponse } from "@/types/diaryTypes";
 
 export async function createDiary(data: DiaryRequest): Promise<DiaryResponse> {
   try {
+    console.log("request data:", { data });
+    const token = process.env.NEXT_PUBLIC_API_TOKEN;
+
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/diaries`,
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(data),
         cache: "no-store",
@@ -18,7 +22,8 @@ export async function createDiary(data: DiaryRequest): Promise<DiaryResponse> {
     );
 
     if (!response.ok) {
-      throw new Error("일기 작성 실패");
+      const errorMessage = await response.text();
+      throw new Error(`일기 작성 실패: ${errorMessage}`);
     }
 
     const result: DiaryResponse = await response.json();

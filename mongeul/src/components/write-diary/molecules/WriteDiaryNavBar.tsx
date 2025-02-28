@@ -4,7 +4,7 @@ import Button from "@/components/common/atoms/Button";
 import { resetDiary } from "@/store/diarySlice";
 import { RootState } from "@/store/store";
 import { useDispatch, useSelector } from "react-redux";
-import { createDiary } from "@/actions/diary/createDiary";
+import { submitDiary } from "@/lib/api/diary";
 import { startTransition } from "react";
 import { useRouter } from "next/navigation";
 
@@ -30,7 +30,7 @@ export default function WriteDiaryNavBar() {
 
     startTransition(async () => {
       try {
-        await createDiary({
+        await submitDiary({
           title,
           content,
           picture: drawing || "",
@@ -39,13 +39,13 @@ export default function WriteDiaryNavBar() {
               ? JSON.parse(drawingLines)
               : drawingLines,
           date,
-          weather: weather,
-          feeling: feeling,
-          privateStatus: privateStatus,
-          isPublished: true,
+          weather,
+          feeling,
+          privateStatus,
+          published: true,
         });
 
-        clearDiary();
+        dispatch(resetDiary());
         router.push("/diary");
       } catch (error) {
         console.error("일기 작성 실패:", error);

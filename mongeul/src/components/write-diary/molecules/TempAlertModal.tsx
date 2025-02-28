@@ -44,10 +44,13 @@ export default function TempAlertModal({
 
     startTransition(async () => {
       try {
+        const cleanedDrawing = drawing
+          ? drawing.replace(/^data:image\/\w+;base64,/, "")
+          : "";
         await createDiary({
           title,
           content,
-          picture: drawing || "",
+          picture: cleanedDrawing || "",
           pictureLines:
             typeof drawingLines === "string"
               ? JSON.parse(drawingLines)
@@ -56,7 +59,7 @@ export default function TempAlertModal({
           weather: weather,
           feeling: feeling,
           privateStatus: privateStatus,
-          isPublished: false,
+          published: false,
         });
 
         clearDiary();
