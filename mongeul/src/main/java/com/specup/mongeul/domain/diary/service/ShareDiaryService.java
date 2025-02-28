@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.specup.mongeul.domain.diary.dto.common.PictureLineDto;
 import com.specup.mongeul.domain.diary.dto.request.ShareDiary.ShareDiaryCreateRequest;
 import com.specup.mongeul.domain.diary.dto.request.ShareDiary.ShareDiaryUpdateRequest;
+import com.specup.mongeul.domain.diary.dto.response.ShareDiary.ShareDiaryDateResponse;
 import com.specup.mongeul.domain.diary.dto.response.ShareDiary.ShareDiaryPictureLineResponse;
 import com.specup.mongeul.domain.diary.dto.response.ShareDiary.ShareDiaryResponse;
 import com.specup.mongeul.domain.diary.entity.ShareDiary;
@@ -161,4 +162,16 @@ public class ShareDiaryService {
     }
 
     // 공유일기 작성 날짜 조회
+    public List<ShareDiaryDateResponse> getDates(Long groupId, int year, int month) {
+        Friend group = friendRepository.findById(groupId)
+                .orElseThrow(() -> new CustomException(ErrorCode.GROUP_NOT_FOUND));
+
+        LocalDate startOfMonth = LocalDate.of(year, month, 1);
+        LocalDate startOfNextMonth = startOfMonth.plusMonths(1);
+
+        List<ShareDiary> shareDiaries = shareDiaryRepository.findByGroupAndDateBetween(group, startOfNextMonth, startOfMonth);
+        return shareDiaries.stream()
+                .map(ShareDiaryDateResponse::from)
+                .toList();
+    }
 }
