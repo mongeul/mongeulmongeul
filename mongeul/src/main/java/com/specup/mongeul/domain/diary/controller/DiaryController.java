@@ -78,11 +78,11 @@ public class DiaryController {
     }
 
     @Operation(summary = "날짜 조회", description = "일기 작성한 날짜들을 조회합니다.")
-    @GetMapping("/diaries/date/{year}/{month}")
+    @GetMapping("/diaries/date")
     public ResponseEntity<ApiResponse<List<DiaryDateResponse>>> getDiaryDate(
             @AuthenticationPrincipal User user,
-            @PathVariable int year,
-            @PathVariable int month) {
+            @RequestParam int year,
+            @RequestParam int month) {
         return ResponseEntity.ok(ApiResponse.success(diaryService.getDates(user.getId(), year, month), "일기 작성날짜 목록 조회 성공"));
     }
 }

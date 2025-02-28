@@ -114,7 +114,7 @@ public class ShareDiaryService {
 
     // 캘린더 공유일기 조회
     @Transactional(readOnly = true)
-    public List<ShareDiaryResponse> getCalendarShareDiaries(Long userId, Long groupId, int year, int month) {
+    public List<ShareDiaryResponse> getCalendarShareDiaries(Long groupId, int year, int month) {
         Friend group = friendRepository.findById(groupId)
                 .orElseThrow(() -> new CustomException(ErrorCode.GROUP_NOT_FOUND));
 
@@ -128,6 +128,7 @@ public class ShareDiaryService {
     }
 
     // 특정 공유일기 조회
+    @Transactional(readOnly = true)
     public ShareDiaryResponse read(Long shareDiaryId) {
         ShareDiary shareDiary = shareDiaryRepository.findById(shareDiaryId)
                 .orElseThrow(() -> new CustomException(ErrorCode.SHARE_DIARY_NOT_FOUND));
@@ -135,6 +136,7 @@ public class ShareDiaryService {
     }
 
     // 공유일기 삭제
+    @Transactional
     public void delete(Long userId, Long shareDiaryId) {
         ShareDiary shareDiary = shareDiaryRepository.findById(shareDiaryId)
                 .orElseThrow(() -> new CustomException(ErrorCode.SHARE_DIARY_NOT_FOUND));
@@ -145,6 +147,7 @@ public class ShareDiaryService {
     }
 
     // 공유일기 그림 조회
+    @Transactional(readOnly = true)
     public ShareDiaryPictureLineResponse readPicture(Long shareDiaryId) {
         ShareDiary shareDiary = shareDiaryRepository.findById(shareDiaryId)
                 .orElseThrow(() -> new CustomException(ErrorCode.SHARE_DIARY_NOT_FOUND));
@@ -162,6 +165,7 @@ public class ShareDiaryService {
     }
 
     // 공유일기 작성 날짜 조회
+    @Transactional(readOnly = true)
     public List<ShareDiaryDateResponse> getDates(Long groupId, int year, int month) {
         Friend group = friendRepository.findById(groupId)
                 .orElseThrow(() -> new CustomException(ErrorCode.GROUP_NOT_FOUND));
