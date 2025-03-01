@@ -58,6 +58,8 @@ public class Diary extends BaseSoftDeleteEntity {
     @Enumerated(EnumType.STRING)
     private DiaryPrivate privateStatus;
 
+    private Boolean published;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
@@ -70,7 +72,8 @@ public class Diary extends BaseSoftDeleteEntity {
 
     public static Diary create(String title, String content, String picture,
                                LocalDate date, String pictureLines, DiaryWeather weather,
-                               DiaryFeeling feeling, DiaryPrivate privateStatus, User user) {
+                               DiaryFeeling feeling, DiaryPrivate privateStatus, Boolean published,
+                               User user) {
         Diary diary = new Diary();
         diary.title = title;
         diary.content = content;
@@ -80,13 +83,14 @@ public class Diary extends BaseSoftDeleteEntity {
         diary.weather = weather;
         diary.feeling = feeling;
         diary.privateStatus = privateStatus;
+        diary.published = published;
         diary.user = user;
         return diary;
     }
 
     public void update(String title, String content, String picture,
                        LocalDate date, String pictureLines, DiaryWeather weather,
-                       DiaryFeeling feeling, DiaryPrivate privateStatus) {
+                       DiaryFeeling feeling, DiaryPrivate privateStatus, Boolean published) {
         this.title = title;
         this.content = content;
         this.picture = picture;
@@ -95,5 +99,6 @@ public class Diary extends BaseSoftDeleteEntity {
         this.weather = weather;
         this.feeling = feeling;
         this.privateStatus = privateStatus;
+        this.published = published;
     }
 }
