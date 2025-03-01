@@ -18,7 +18,7 @@ public class ShareDiaryResponse {
     private LocalDate date;
     private DiaryWeather weather;
     private DiaryFeeling feeling;
-    private String turnOwner;
+    private String writer;
 
     public static ShareDiaryResponse from(ShareDiary shareDiary) {
         ShareDiaryResponse response = new ShareDiaryResponse();
@@ -29,7 +29,7 @@ public class ShareDiaryResponse {
         response.date = shareDiary.getDate();
         response.weather = shareDiary.getWeather();
         response.feeling = shareDiary.getFeeling();
-        response.turnOwner = shareDiary.getTurnOwner().getNickname();
+        response.writer = shareDiary.getWriter().getNickname();
         return response;
     }
 }

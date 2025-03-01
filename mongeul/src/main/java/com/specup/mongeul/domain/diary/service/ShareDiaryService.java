@@ -47,10 +47,8 @@ public class ShareDiaryService {
 
         // 차례 검증
         ShareDiary lastDiary = shareDiaryRepository.findLatestByGroup(group);
-        if (lastDiary != null) {
-            if (lastDiary.getTurnOwner().equals(user)) {
-                throw new CustomException(ErrorCode.INVALID_SHARE_DIARY_TURN);
-            }
+        if (lastDiary != null && lastDiary.getWriter().equals(user)) {
+            throw new CustomException(ErrorCode.INVALID_SHARE_DIARY_TURN);
         }
 
         // pictureLines Json 직렬화
@@ -67,11 +65,9 @@ public class ShareDiaryService {
                 ShareDiary.create(
                         request.getTitle(), request.getContent(), request.getPicture(),
                         request.getDate(), pictureLinesJson, request.getWeather(),
-                        request.getFeeling(), group, user)
+                        request.getFeeling(), group, user
+                )
         );
-
-        // 차례 변경
-        shareDiary.switchTurn();
         return ShareDiaryResponse.from(shareDiary);
     }
 
@@ -84,7 +80,7 @@ public class ShareDiaryService {
                 .orElseThrow(() -> new CustomException(ErrorCode.SHARE_DIARY_NOT_FOUND));
 
         // 유저 검증
-        if (!shareDiary.getTurnOwner().getId().equals(userId)) {
+        if (!shareDiary.getWriter().getId().equals(userId)) {
             throw new CustomException(ErrorCode.INVALID_SHARE_DIARY_USER);
         }
 
@@ -140,7 +136,7 @@ public class ShareDiaryService {
     public void delete(Long userId, Long shareDiaryId) {
         ShareDiary shareDiary = shareDiaryRepository.findById(shareDiaryId)
                 .orElseThrow(() -> new CustomException(ErrorCode.SHARE_DIARY_NOT_FOUND));
-        if (!shareDiary.getTurnOwner().getId().equals(userId)) {
+        if (!shareDiary.getWriter().getId().equals(userId)) {
             throw new CustomException(ErrorCode.INVALID_SHARE_DIARY_USER);
         }
         shareDiaryRepository.delete(shareDiary);
