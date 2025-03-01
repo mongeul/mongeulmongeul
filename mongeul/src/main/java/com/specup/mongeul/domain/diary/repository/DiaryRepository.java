@@ -29,6 +29,12 @@ public interface DiaryRepository extends JpaRepository<Diary, Long> {
                                          @Param("startOfNextMonth") LocalDate startOfNextMonth);
 
     /**
+     * 임시저장 일기목록 조회
+     */
+    List<Diary> findByUserAndPublishedOrderByDateDesc(@Param("user") User user,
+                                                      @Param("published") Boolean published);
+
+    /**
      * 하루 1개 일기 제한 검증 (데이터 조회안하고 존재여부만 체크)
      */
 //    boolean existsByUserIdAndCreatedAtBetween(@Param("userId") Long userId, @Param("start") LocalDateTime start, @Param("end") LocalDateTime end);

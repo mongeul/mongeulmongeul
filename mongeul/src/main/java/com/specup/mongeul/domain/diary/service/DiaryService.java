@@ -147,6 +147,17 @@ public class DiaryService {
                 .toList();
     }
 
+    // 일기 임시저장 목록 조회
+    @Transactional(readOnly = true)
+    public List<DiaryResponse> getDraftDiaries(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        List<Diary> diaries = diaryRepository.findByUserAndPublishedOrderByDateDesc(user, false);
+        return diaries.stream()
+                .map(DiaryResponse::from)
+                .toList();
+    }
+
     // 특정 일기 조회
     @Transactional(readOnly = true)
     public DiaryResponse read(Long userId, Long diaryId, String lockPassword) {
