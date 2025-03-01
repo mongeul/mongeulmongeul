@@ -51,12 +51,12 @@ public class ShareDiary extends BaseSoftDeleteEntity {
     private Friend group;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "turn_owner_id", nullable = false)
-    private User turnOwner;
+    @JoinColumn(name = "writer_id", nullable = false)
+    private User writer;
 
     public static ShareDiary create(String title, String content, String picture,
                                     LocalDate date, String pictureLines, DiaryWeather weather,
-                                    DiaryFeeling feeling, Friend group, User turnOwner) {
+                                    DiaryFeeling feeling, Friend group, User writer) {
         ShareDiary shareDiary = new ShareDiary();
         shareDiary.title = title;
         shareDiary.content = content;
@@ -66,7 +66,7 @@ public class ShareDiary extends BaseSoftDeleteEntity {
         shareDiary.weather = weather;
         shareDiary.feeling = feeling;
         shareDiary.group = group;
-        shareDiary.turnOwner = turnOwner;
+        shareDiary.writer = writer;
         return shareDiary;
     }
 
@@ -80,11 +80,5 @@ public class ShareDiary extends BaseSoftDeleteEntity {
         this.pictureLines = pictureLines;
         this.weather = weather;
         this.feeling = feeling;
-    }
-
-    public void switchTurn() {
-        this.turnOwner = this.turnOwner.equals(group.getUser())
-                ? group.getFriend()
-                : group.getUser();
     }
 }
