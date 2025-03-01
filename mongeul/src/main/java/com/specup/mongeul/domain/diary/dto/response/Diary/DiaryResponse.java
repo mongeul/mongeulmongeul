@@ -20,6 +20,7 @@ public class DiaryResponse {
     private DiaryWeather weather;
     private DiaryFeeling feeling;
     private DiaryPrivate privateStatus;
+    private Boolean published;
 
     public static DiaryResponse from(Diary diary) {
         DiaryResponse response = new DiaryResponse();
@@ -31,6 +32,7 @@ public class DiaryResponse {
         response.weather = diary.getWeather();
         response.feeling = diary.getFeeling();
         response.privateStatus = diary.getPrivateStatus();
+        response.published = diary.getPublished();
         return response;
     }
 }
