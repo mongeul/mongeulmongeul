@@ -10,7 +10,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-export default function TempAlertModal() {
+export default function DraftAlertModal() {
   const dispatch = useDispatch();
   const router = useRouter();
   const [pendingNavigation, setPendingNavigation] = useState<

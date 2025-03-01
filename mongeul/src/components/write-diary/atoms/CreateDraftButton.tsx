@@ -1,6 +1,5 @@
 "use client";
 
-import Button from "@/components/common/atoms/Button";
 import { submitDiaryDraft } from "@/lib/api/write-diary";
 import { resetDiary } from "@/store/diarySlice";
 import { resetDrawing } from "@/store/drawingSlice";
@@ -64,7 +63,7 @@ export default function CreateDraftButton() {
     }
   }
   return (
-    <button className="w-full" onClick={handleSubmit}>
+    <button className="w-full text-gray-500" onClick={handleSubmit}>
       임시저장
     </button>
   );
