@@ -34,6 +34,8 @@ public class DiaryController {
         return ResponseEntity.ok(ApiResponse.success(diaryService.getCalendarDiaries(user.getId(), year, month), "내가 작성한 일기 목록 조회 성공"));
     }
 
+    // 임시저장 일기목록 조회
+
     @Operation(summary = "특정 일기 조회", description = "일기를 조회합니다.")
     @GetMapping("/diaries/{diaryId}")
     public ResponseEntity<ApiResponse<DiaryResponse>> read(
@@ -50,6 +52,10 @@ public class DiaryController {
             @Valid @RequestBody DiaryCreateRequest request) {
         return ResponseEntity.ok(ApiResponse.success(diaryService.create(user.getId(), request), "일기 생성 성공"));
     }
+
+    // 임시저장
+
+    // 임시저장 -> 최종저장
 
     @Operation(summary = "일기 수정", description = "일기를 수정합니다.")
     @PutMapping("/diaries/{diaryId}")
