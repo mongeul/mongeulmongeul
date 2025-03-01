@@ -29,6 +29,7 @@ public enum ErrorCode {
     INVALID_SHARE_DIARY_TURN(HttpStatus.BAD_REQUEST, "당신의 차례가 아닙니다."),
     SHARE_DIARY_ALREADY_EXISTS(HttpStatus.BAD_REQUEST, "이미 해당 날짜에는 공유일기가 작성되어 있습니다."),
     INVALID_SHARE_DIARY_USER(HttpStatus.FORBIDDEN, "공유일기 작성자만 가능합니다."),
+    SHARE_DIARY_NOT_UPDATE_DATE(HttpStatus.BAD_REQUEST, "해당 날짜는 당신의 차레가 아니어서 수정이 불가합니다."),
 
     // 댓글 관련 에러
     COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "댓글을 찾을 수 없습니다."),

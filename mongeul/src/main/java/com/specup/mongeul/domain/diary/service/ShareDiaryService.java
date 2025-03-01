@@ -74,6 +74,8 @@ public class ShareDiaryService {
     // 공유일기 수정
     @Transactional
     public ShareDiaryResponse update(Long userId, Long groupId, Long shareDiaryId, ShareDiaryUpdateRequest request) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         Friend group = friendRepository.findById(groupId)
                 .orElseThrow(() -> new CustomException(ErrorCode.GROUP_NOT_FOUND));
         ShareDiary shareDiary = shareDiaryRepository.findById(shareDiaryId)
@@ -89,6 +91,12 @@ public class ShareDiaryService {
             if (shareDiaryRepository.existsByGroupAndDate(group, request.getDate())) {
                 throw new CustomException(ErrorCode.SHARE_DIARY_ALREADY_EXISTS);
             }
+        }
+
+        // 차례 검증
+        ShareDiary lastDiary = shareDiaryRepository.findLatestByGroup(group);
+        if (lastDiary != null && lastDiary.getWriter().equals(user)) {
+            throw new CustomException(ErrorCode.SHARE_DIARY_NOT_UPDATE_DATE);
         }
 
         String pictureLinesJson = null;
