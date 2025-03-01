@@ -2,6 +2,7 @@ package com.specup.mongeul.domain.diary.controller;
 
 import com.specup.mongeul.domain.diary.dto.request.ShareDiary.ShareDiaryCreateRequest;
 import com.specup.mongeul.domain.diary.dto.request.ShareDiary.ShareDiaryUpdateRequest;
+import com.specup.mongeul.domain.diary.dto.response.ShareDiary.ShareDiaryPictureLineResponse;
 import com.specup.mongeul.domain.diary.dto.response.ShareDiary.ShareDiaryResponse;
 import com.specup.mongeul.domain.diary.service.ShareDiaryService;
 import com.specup.mongeul.domain.user.entity.User;
@@ -75,6 +76,13 @@ public class ShareDiaryController {
     }
 
     // 공유일기 그림 조회
+    @Operation(summary = "공유일기 그림 조회", description = "그림을 조회 합니다.")
+    @GetMapping("/share-diaries/{shareDiaryId}/picture-lines")
+    public ResponseEntity<ApiResponse<ShareDiaryPictureLineResponse>> getPictureLines(
+            @AuthenticationPrincipal User user,
+            @PathVariable Long shareDiaryId) {
+        return ResponseEntity.ok(ApiResponse.success(shareDiaryService.readPicture(shareDiaryId), "그림 조회 성공"));
+    }
 
     // 공유일기 작성 날짜 조회
 }
