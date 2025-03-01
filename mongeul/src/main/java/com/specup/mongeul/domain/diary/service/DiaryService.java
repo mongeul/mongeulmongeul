@@ -38,7 +38,7 @@ public class DiaryService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
-        if (diaryRepository.existsByUserIdAndDate(userId, request.getDate())) {
+        if (diaryRepository.existsByUserIdAndDateAndPublished(userId, request.getDate(), true)) {
             throw new CustomException(ErrorCode.DIARY_ALREADY_EXISTS);
         }
 
@@ -68,7 +68,32 @@ public class DiaryService {
                 Diary.create(
                         request.getTitle(), request.getContent(), request.getPicture(),
                         request.getDate(), pictureLinesJson, request.getWeather(), request.getFeeling(),
-                        request.getPrivateStatus(), request.getPublished(), user
+                        request.getPrivateStatus(), true, user
+                )
+        );
+        return DiaryResponse.from(diary);
+    }
+
+    // 일기 임시저장
+    @Transactional
+    public DiaryResponse saveDraft(Long userId, DiaryCreateRequest request) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        String pictureLinesJson = null;
+        if (request.getPictureLines() != null && !request.getPictureLines().isEmpty()) {
+            try {
+                pictureLinesJson = objectMapper.writeValueAsString(request.getPictureLines());
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException("PictureLines Json 직렬화 실패", e);
+            }
+        }
+
+        Diary diary = diaryRepository.save(
+                Diary.create(
+                        request.getTitle(), request.getContent(), request.getPicture(),
+                        request.getDate(), pictureLinesJson, request.getWeather(), request.getFeeling(),
+                        request.getPrivateStatus(), false, user
                 )
         );
         return DiaryResponse.from(diary);
@@ -84,8 +109,8 @@ public class DiaryService {
             throw new CustomException(ErrorCode.INVALID_DIARY_USER);
         }
 
-        if (!diary.getDate().equals(request.getDate())) {
-            if (diaryRepository.existsByUserIdAndDate(userId, request.getDate())) {
+        if (!diary.getDate().equals(request.getDate()) && diary.getPublished()) {
+            if (diaryRepository.existsByUserIdAndDateAndPublished(userId, request.getDate(), true)) {
                 throw new CustomException(ErrorCode.DIARY_ALREADY_EXISTS);
             }
         }
@@ -102,7 +127,7 @@ public class DiaryService {
         diary.update(
                 request.getTitle(), request.getContent(), request.getPicture(),
                 request.getDate(), pictureLinesJson, request.getWeather(),
-                request.getFeeling(), request.getPrivateStatus(), request.getPublished());
+                request.getFeeling(), request.getPrivateStatus(), diary.getPublished());
 
         return DiaryResponse.from(diary);
     }
