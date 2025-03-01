@@ -21,5 +21,4 @@ public class DiaryCreateRequest {
     private DiaryWeather weather;
     private DiaryFeeling feeling;
     private DiaryPrivate privateStatus;
-    private Boolean published;
 }
