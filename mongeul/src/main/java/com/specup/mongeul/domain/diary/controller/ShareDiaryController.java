@@ -2,6 +2,7 @@ package com.specup.mongeul.domain.diary.controller;
 
 import com.specup.mongeul.domain.diary.dto.request.ShareDiary.ShareDiaryCreateRequest;
 import com.specup.mongeul.domain.diary.dto.request.ShareDiary.ShareDiaryUpdateRequest;
+import com.specup.mongeul.domain.diary.dto.response.ShareDiary.ShareDiaryDateResponse;
 import com.specup.mongeul.domain.diary.dto.response.ShareDiary.ShareDiaryPictureLineResponse;
 import com.specup.mongeul.domain.diary.dto.response.ShareDiary.ShareDiaryResponse;
 import com.specup.mongeul.domain.diary.service.ShareDiaryService;
@@ -76,7 +77,7 @@ public class ShareDiaryController {
     }
 
     // 공유일기 그림 조회
-    @Operation(summary = "공유일기 그림 조회", description = "그림을 조회 합니다.")
+    @Operation(summary = "공유일기 그림 조회", description = "그림(pictureLines)을 조회 합니다.")
     @GetMapping("/share-diaries/{shareDiaryId}/picture-lines")
     public ResponseEntity<ApiResponse<ShareDiaryPictureLineResponse>> getPictureLines(
             @AuthenticationPrincipal User user,
@@ -84,5 +85,14 @@ public class ShareDiaryController {
         return ResponseEntity.ok(ApiResponse.success(shareDiaryService.readPicture(shareDiaryId), "그림 조회 성공"));
     }
 
-    // 공유일기 작성 날짜 조회
+    // 공유일기 작성날짜 목록 조회
+    @Operation(summary = "공유일기 작성날짜 목록 조회", description = "그룹의 공유일기가 작성된 날짜 목록을 조회합니다.")
+    @GetMapping("/groups/{groupId}/share-diaries/date")
+    public ResponseEntity<ApiResponse<List<ShareDiaryDateResponse>>> getShareDiaryDates(
+            @AuthenticationPrincipal User user,
+            @PathVariable Long groupId,
+            @RequestParam int year,
+            @RequestParam int month) {
+        return ResponseEntity.ok(ApiResponse.success(shareDiaryService.getDates(groupId, year, month), "공유일기 날짜 목록 조회 성공"));
+    }
 }

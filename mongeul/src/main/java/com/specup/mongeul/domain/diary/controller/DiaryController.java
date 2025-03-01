@@ -79,7 +79,7 @@ public class DiaryController {
 
     @Operation(summary = "날짜 조회", description = "일기 작성한 날짜들을 조회합니다.")
     @GetMapping("/diaries/date")
-    public ResponseEntity<ApiResponse<List<DiaryDateResponse>>> getDiaryDate(
+    public ResponseEntity<ApiResponse<List<DiaryDateResponse>>> getDiaryDates(
             @AuthenticationPrincipal User user,
             @RequestParam int year,
             @RequestParam int month) {
