@@ -70,7 +70,7 @@ public class DiaryController {
     }
 
     @Operation(summary = "그림 조회", description = "그림을 조회합니다.")
-    @GetMapping("/diaries/{diaryId}/pictureLines")
+    @GetMapping("/diaries/{diaryId}/picture-lines")
     public ResponseEntity<ApiResponse<DiaryPictureLineResponse>> getPictureLines(
             @AuthenticationPrincipal User user,
             @PathVariable Long diaryId) {
