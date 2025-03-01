@@ -1,4 +1,5 @@
 import { createDiary } from "@/actions/diary/createDiary";
+import { createDiaryDraft } from "@/actions/diary/createDiaryDraft";
 import { getDiaryDates } from "@/actions/diary/getDiaryDate";
 import {
   DiaryRequest,
@@ -15,6 +16,20 @@ export const submitDiary = async (
     : "";
 
   return await createDiary({
+    ...data,
+    picture: cleanedDrawing,
+  });
+};
+
+// 일기 임시저장
+export const submitDiaryDraft = async (
+  data: DiaryRequest
+): Promise<DiaryResponse> => {
+  const cleanedDrawing = data.picture
+    ? data.picture.replace(/^data:image\/\w+;base64,/, "")
+    : "";
+
+  return await createDiaryDraft({
     ...data,
     picture: cleanedDrawing,
   });

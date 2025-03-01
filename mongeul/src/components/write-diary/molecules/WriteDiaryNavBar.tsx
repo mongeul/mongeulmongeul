@@ -42,7 +42,6 @@ export default function WriteDiaryNavBar() {
           weather,
           feeling,
           privateStatus,
-          published: true,
         });
 
         dispatch(resetDiary());

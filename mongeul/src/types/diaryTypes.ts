@@ -18,7 +18,6 @@ export interface BaseDiary {
 
 export interface DiaryRequest extends BaseDiary {
   pictureLines?: DrawingLine[];
-  published: boolean;
 }
 
 export interface Diary extends BaseDiary {

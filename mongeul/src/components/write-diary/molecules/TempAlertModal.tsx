@@ -2,7 +2,7 @@
 
 import Button from "@/components/common/atoms/Button";
 import WebModal from "@/components/common/atoms/WebModal";
-import { submitDiary } from "@/lib/api/write-diary";
+import { submitDiaryDraft } from "@/lib/api/write-diary";
 import { resetDiary } from "@/store/diarySlice";
 import { resetDrawing } from "@/store/drawingSlice";
 import { RootState } from "@/store/store";
@@ -52,7 +52,7 @@ export default function TempAlertModal() {
 
     try {
       console.log("submitDiary API 요청 시작");
-      await submitDiary({
+      await submitDiaryDraft({
         title,
         content,
         picture: drawing || "",
@@ -64,7 +64,6 @@ export default function TempAlertModal() {
         weather,
         feeling,
         privateStatus,
-        published: true,
       });
       console.log("submitDiary API 요청 완료");
 
