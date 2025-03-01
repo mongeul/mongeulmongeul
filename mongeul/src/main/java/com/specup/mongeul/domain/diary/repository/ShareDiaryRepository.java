@@ -2,7 +2,6 @@ package com.specup.mongeul.domain.diary.repository;
 
 import com.specup.mongeul.domain.diary.entity.ShareDiary;
 import com.specup.mongeul.domain.friends.entity.Friend;
-import com.specup.mongeul.domain.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

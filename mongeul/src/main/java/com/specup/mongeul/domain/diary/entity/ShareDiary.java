@@ -19,7 +19,12 @@ import java.time.LocalDate;
 @Getter
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "share_diaries")
+@Table(name = "share_diaries",
+        indexes = {
+            @Index(name = "idx_share_diary_group_date", columnList = "group_id, date"),
+            @Index(name = "idx_share_diary_group_latest", columnList = "group_id, date DESC")
+    }
+)
 @SQLDelete(sql = "UPDATE share_diaries SET deleted = true, deleted_at = CURRENT_TIME WHERE id = ?")
 @SQLRestriction("deleted = false")
 public class ShareDiary extends BaseSoftDeleteEntity {
