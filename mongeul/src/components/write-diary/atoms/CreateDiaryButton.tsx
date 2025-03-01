@@ -2,7 +2,8 @@
 
 import Button from "@/components/common/atoms/Button";
 import { submitDiary } from "@/lib/api/write-diary";
-import { resetDiary } from "@/store/diarySlice";
+import { resetDiary, setIsSubmit } from "@/store/diarySlice";
+import { resetDrawing } from "@/store/drawingSlice";
 import { RootState } from "@/store/store";
 import { useRouter } from "next/navigation";
 import { startTransition } from "react";
@@ -45,6 +46,11 @@ export default function CreateDiaryButton() {
         });
 
         dispatch(resetDiary());
+        dispatch(resetDrawing());
+
+        // Redux 상태 변경 후 반영될 시간을 확보
+        await new Promise((resolve) => setTimeout(resolve, 0));
+
         router.push("/diary");
       } catch (error) {
         console.error("일기 작성 실패:", error);

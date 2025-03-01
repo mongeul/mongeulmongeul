@@ -54,6 +54,10 @@ export default function CreateDraftButton() {
       });
       dispatch(resetDiary());
       dispatch(resetDrawing());
+
+      // Redux 상태 변경 후 반영될 시간을 확보
+      await new Promise((resolve) => setTimeout(resolve, 0));
+
       router.push("/diary");
     } catch (error) {
       console.error("일기 임시저장 실패:", error);

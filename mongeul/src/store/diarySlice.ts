@@ -10,6 +10,7 @@ interface DiaryState {
   feeling: Feeling;
   weather: Weather;
   privateStatus: PrivateStatus;
+  isSubmit: boolean;
 }
 
 const initialState: DiaryState = {
@@ -21,6 +22,7 @@ const initialState: DiaryState = {
   feeling: "" as Feeling,
   weather: "" as Weather,
   privateStatus: "PRIVATE" as PrivateStatus,
+  isSubmit: false,
 };
 
 const diarySlice = createSlice({
@@ -51,6 +53,9 @@ const diarySlice = createSlice({
     setPrivateStatus: (state, action: PayloadAction<PrivateStatus>) => {
       state.privateStatus = action.payload;
     },
+    setIsSubmit: (state, action: PayloadAction<boolean>) => {
+      state.isSubmit = action.payload;
+    },
     resetDiary: () => initialState,
   },
 });
@@ -65,5 +70,6 @@ export const {
   setWeather,
   setPrivateStatus,
   resetDiary,
+  setIsSubmit,
 } = diarySlice.actions;
 export default diarySlice.reducer;
