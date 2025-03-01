@@ -65,6 +65,14 @@ public class ShareDiaryController {
     }
 
     // 공유일기 삭제
+    @Operation(summary = "공유일기 삭제", description = "공유일기를 삭제합니다.")
+    @DeleteMapping("/share-diaries/{shareDiaryId}")
+    public ResponseEntity<ApiResponse<Void>> delete(
+            @AuthenticationPrincipal User user,
+            @PathVariable Long shareDiaryId) {
+        shareDiaryService.delete(user.getId(), shareDiaryId);
+        return ResponseEntity.noContent().build();
+    }
 
     // 공유일기 그림 조회
 
