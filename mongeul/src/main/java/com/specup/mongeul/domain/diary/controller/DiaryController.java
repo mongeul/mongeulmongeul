@@ -57,7 +57,7 @@ public class DiaryController {
             @Valid @RequestBody DiaryCreateRequest request) {
         return ResponseEntity.ok(ApiResponse.success(diaryService.create(user.getId(), request), "일기 생성 성공"));
     }
-    
+
     @Operation(summary = "일기 임시저장", description = "일기를 임시로 저장합니다.")
     @PostMapping("/diaries/drafts")
     public ResponseEntity<ApiResponse<DiaryResponse>> saveDraft(
@@ -65,8 +65,14 @@ public class DiaryController {
             @Valid @RequestBody DiaryCreateRequest request) {
         return ResponseEntity.ok(ApiResponse.success(diaryService.saveDraft(user.getId(), request), "일기 임시저장 성공"));
     }
-
-    // 임시저장 -> 최종저장
+    
+    @Operation(summary = "일기 임시저장 -> 일기작성", description = "임시저장 된 일기로 일기를 작성합니다.")
+    @PostMapping("/diaries/{diaryId}/publish")
+    public ResponseEntity<ApiResponse<DiaryResponse>> publish(
+            @AuthenticationPrincipal User user,
+            @PathVariable Long diaryId) {
+        return ResponseEntity.ok(ApiResponse.success(diaryService.publish(user.getId(), diaryId), "임시저장 된 일기로 일기 생성 성공"));
+    }
 
     @Operation(summary = "일기 수정", description = "일기를 수정합니다.")
     @PutMapping("/diaries/{diaryId}")
