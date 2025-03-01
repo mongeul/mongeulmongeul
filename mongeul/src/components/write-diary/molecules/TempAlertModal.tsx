@@ -83,7 +83,7 @@ export default function TempAlertModal() {
         router.back();
       }
     } catch (error) {
-      console.error("일기 작성 실패:", error);
+      console.error("일기 임시저장 실패:", error);
     }
   }
 
