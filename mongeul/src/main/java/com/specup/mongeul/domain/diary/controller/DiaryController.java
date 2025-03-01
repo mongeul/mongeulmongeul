@@ -33,8 +33,13 @@ public class DiaryController {
             @RequestParam int month) {
         return ResponseEntity.ok(ApiResponse.success(diaryService.getCalendarDiaries(user.getId(), year, month), "내가 작성한 일기 목록 조회 성공"));
     }
-
-    // 임시저장 일기목록 조회
+    
+    @Operation(summary = "임시저장 일기목록 조회", description = "임시저장 된 일기목록을 조회합니다.")
+    @GetMapping("/diaries/drafts")
+    public ResponseEntity<ApiResponse<List<DiaryResponse>>> getDraftDiaries(
+            @AuthenticationPrincipal User user) {
+        return ResponseEntity.ok(ApiResponse.success(diaryService.getDraftDiaries(user.getId())));
+    }
 
     @Operation(summary = "특정 일기 조회", description = "일기를 조회합니다.")
     @GetMapping("/diaries/{diaryId}")
