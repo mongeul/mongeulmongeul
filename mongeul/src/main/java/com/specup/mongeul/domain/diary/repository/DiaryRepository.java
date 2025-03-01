@@ -21,6 +21,7 @@ public interface DiaryRepository extends JpaRepository<Diary, Long> {
         WHERE d.user = :user
           AND d.date >= :startOfMonth
           AND d.date < :startOfNextMonth
+          AND d.published = true
         ORDER BY d.date DESC
     """)
     List<Diary> findByUserAndDateBetween(@Param("user") User user,
@@ -31,8 +32,9 @@ public interface DiaryRepository extends JpaRepository<Diary, Long> {
      * 하루 1개 일기 제한 검증 (데이터 조회안하고 존재여부만 체크)
      */
 //    boolean existsByUserIdAndCreatedAtBetween(@Param("userId") Long userId, @Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
-    boolean existsByUserIdAndDate(@Param("userId") Long userId,
-                                  @Param("date") LocalDate date);
+    boolean existsByUserIdAndDateAndPublished(@Param("userId") Long userId,
+                                              @Param("date") LocalDate date,
+                                              @Param("published")Boolean published);
 
     /**
      * 하루 1개 일기 제한 검증 (데이터를 조회해서 반환으로 체크)
@@ -47,6 +49,7 @@ public interface DiaryRepository extends JpaRepository<Diary, Long> {
         SELECT * FROM diaries
         WHERE private_status = 'PUBLIC'
           AND (:userId IS NULL OR user_id = :userId)
+          AND published = true
         ORDER BY id DESC
         LIMIT :limit
     """, nativeQuery = true)
@@ -58,6 +61,7 @@ public interface DiaryRepository extends JpaRepository<Diary, Long> {
         WHERE private_status = 'PUBLIC'
           AND (:userId IS NULL OR user_id = :userId)
           AND id < :lastDiaryId
+          AND published = true
         ORDER BY id DESC
         LIMIT :limit
     """, nativeQuery = true)

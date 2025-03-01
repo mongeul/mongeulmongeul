@@ -68,7 +68,7 @@ public class DiaryService {
                 Diary.create(
                         request.getTitle(), request.getContent(), request.getPicture(),
                         request.getDate(), pictureLinesJson, request.getWeather(), request.getFeeling(),
-                        request.getPrivateStatus(), user
+                        request.getPrivateStatus(), request.getPublished(), user
                 )
         );
         return DiaryResponse.from(diary);
@@ -102,7 +102,7 @@ public class DiaryService {
         diary.update(
                 request.getTitle(), request.getContent(), request.getPicture(),
                 request.getDate(), pictureLinesJson, request.getWeather(),
-                request.getFeeling(), request.getPrivateStatus());
+                request.getFeeling(), request.getPrivateStatus(), request.getPublished());
 
         return DiaryResponse.from(diary);
     }
