@@ -1,3 +1,5 @@
+import FeedListTemplates from "@/components/feed/templates/FeedListTemplates";
+
 export default function Page() {
-  return <div>피드</div>;
+  return <FeedListTemplates />;
 }
