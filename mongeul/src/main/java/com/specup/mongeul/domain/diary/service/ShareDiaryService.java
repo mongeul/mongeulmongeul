@@ -125,7 +125,7 @@ public class ShareDiaryService {
         LocalDate startOfMonth = LocalDate.of(year, month, 1);
         LocalDate startOfNextMonth = startOfMonth.plusMonths(1);
 
-        List<ShareDiary> shareDiaries = shareDiaryRepository.findByGroupAndDateBetween(group, startOfNextMonth, startOfMonth);
+        List<ShareDiary> shareDiaries = shareDiaryRepository.findByGroupAndDateBetween(group, startOfMonth, startOfNextMonth);
         return shareDiaries.stream()
                 .map(ShareDiaryResponse::from)
                 .toList();
@@ -177,7 +177,7 @@ public class ShareDiaryService {
         LocalDate startOfMonth = LocalDate.of(year, month, 1);
         LocalDate startOfNextMonth = startOfMonth.plusMonths(1);
 
-        List<ShareDiary> shareDiaries = shareDiaryRepository.findByGroupAndDateBetween(group, startOfNextMonth, startOfMonth);
+        List<ShareDiary> shareDiaries = shareDiaryRepository.findByGroupAndDateBetween(group, startOfMonth, startOfNextMonth);
         return shareDiaries.stream()
                 .map(ShareDiaryDateResponse::from)
                 .toList();
