@@ -17,11 +17,15 @@ const feedSlice = createSlice({
     setMyFeed: (state, action: PayloadAction<boolean>) => {
       state.myFeed = action.payload;
     },
-    setLastDiaryId: (state, action: PayloadAction<number>) => {
+    setLastDiaryId: (state, action: PayloadAction<number | null>) => {
       state.lastDiaryId = action.payload;
+    },
+    resetFeed(state) {
+      state.lastDiaryId = null;
+      state.myFeed = false;
     },
   },
 });
 
-export const { setMyFeed, setLastDiaryId } = feedSlice.actions;
+export const { setMyFeed, setLastDiaryId, resetFeed } = feedSlice.actions;
 export default feedSlice.reducer;

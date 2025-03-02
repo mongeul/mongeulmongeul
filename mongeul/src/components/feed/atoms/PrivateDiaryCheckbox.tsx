@@ -1,17 +1,22 @@
 "use client";
 
 import CheckBox from "@/components/common/atoms/CheckBox";
+import { setMyFeed } from "@/store/feedSlice";
+import { RootState } from "@/store/store";
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function PrivateDiaryCheckbox() {
-  const [isPrivate, setIsPrivate] = useState(false);
+  const dispatch = useDispatch();
+  const myFeed = useSelector((state: RootState) => state.feed.myFeed);
   const handleToggle = () => {
-    setIsPrivate(!isPrivate);
+    dispatch(setMyFeed(!myFeed));
   };
+
   return (
     <CheckBox
       label="내 일기 보기"
-      isChecked={isPrivate}
+      isChecked={myFeed}
       handleToggle={handleToggle}
     />
   );
