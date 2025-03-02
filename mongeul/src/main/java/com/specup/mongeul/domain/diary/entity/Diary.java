@@ -25,8 +25,9 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "diaries",
         indexes = {
-            @Index(name = "idx_diaries_private_id", columnList = "private_status, id DESC"),
-            @Index(name = "idx_diaries_user_date", columnList = "user_id, date")
+            @Index(name = "idx_diaries_private_published_id", columnList = "private_status, published, id DESC"),
+            @Index(name = "idx_diaries_user_date_published", columnList = "user_id, date, published"),
+            @Index(name = "idx_diaries_user_published_date", columnList = "user_id, published, date DESC")
     }
 )
 @SQLDelete(sql = "UPDATE diaries SET deleted = true, deleted_at = CURRENT_TIME WHERE id = ?")
@@ -36,15 +37,14 @@ public class Diary extends BaseSoftDeleteEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 50)
+    @Column(length = 50)
     private String title;
 
-    @Column(nullable = false, columnDefinition = "TEXT")
+    @Column(columnDefinition = "TEXT")
     private String content;
 
     private String picture;
 
-//    @Column(nullable = false)
     private LocalDate date;
 
     @Column(columnDefinition = "TEXT")
@@ -54,12 +54,12 @@ public class Diary extends BaseSoftDeleteEntity {
     private DiaryWeather weather;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     private DiaryFeeling feeling;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     private DiaryPrivate privateStatus;
+
+    private Boolean published;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
@@ -73,7 +73,8 @@ public class Diary extends BaseSoftDeleteEntity {
 
     public static Diary create(String title, String content, String picture,
                                LocalDate date, String pictureLines, DiaryWeather weather,
-                               DiaryFeeling feeling, DiaryPrivate privateStatus, User user) {
+                               DiaryFeeling feeling, DiaryPrivate privateStatus, Boolean published,
+                               User user) {
         Diary diary = new Diary();
         diary.title = title;
         diary.content = content;
@@ -83,13 +84,14 @@ public class Diary extends BaseSoftDeleteEntity {
         diary.weather = weather;
         diary.feeling = feeling;
         diary.privateStatus = privateStatus;
+        diary.published = published;
         diary.user = user;
         return diary;
     }
 
     public void update(String title, String content, String picture,
                        LocalDate date, String pictureLines, DiaryWeather weather,
-                       DiaryFeeling feeling, DiaryPrivate privateStatus) {
+                       DiaryFeeling feeling, DiaryPrivate privateStatus, Boolean published) {
         this.title = title;
         this.content = content;
         this.picture = picture;
@@ -98,5 +100,6 @@ public class Diary extends BaseSoftDeleteEntity {
         this.weather = weather;
         this.feeling = feeling;
         this.privateStatus = privateStatus;
+        this.published = published;
     }
 }

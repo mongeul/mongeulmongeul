@@ -1,6 +1,6 @@
 package mongeul.diary.api;
 
-import com.specup.mongeul.domain.diary.dto.response.DiaryResponse;
+import com.specup.mongeul.domain.diary.dto.response.Diary.DiaryResponse;
 import com.specup.mongeul.domain.diary.entity.ENUM.DiaryFeeling;
 import com.specup.mongeul.domain.diary.entity.ENUM.DiaryPrivate;
 import com.specup.mongeul.domain.diary.entity.ENUM.DiaryWeather;

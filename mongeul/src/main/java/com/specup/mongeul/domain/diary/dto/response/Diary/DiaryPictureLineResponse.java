@@ -1,4 +1,4 @@
-package com.specup.mongeul.domain.diary.dto.response;
+package com.specup.mongeul.domain.diary.dto.response.Diary;
 
 import com.specup.mongeul.domain.diary.dto.common.PictureLineDto;
 import lombok.Getter;
@@ -8,12 +8,12 @@ import java.util.List;
 
 @Getter
 @ToString
-public class PictureLineResponse {
+public class DiaryPictureLineResponse {
     private Long diaryId;
     private List<PictureLineDto> pictureLines;
 
-    public static PictureLineResponse from(Long diaryId, List<PictureLineDto> pictureLines) {
-        PictureLineResponse response = new PictureLineResponse();
+    public static DiaryPictureLineResponse from(Long diaryId, List<PictureLineDto> pictureLines) {
+        DiaryPictureLineResponse response = new DiaryPictureLineResponse();
         response.diaryId = diaryId;
         response.pictureLines = pictureLines;
         return response;

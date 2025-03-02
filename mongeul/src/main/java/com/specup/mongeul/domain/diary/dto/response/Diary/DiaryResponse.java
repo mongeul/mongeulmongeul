@@ -1,4 +1,4 @@
-package com.specup.mongeul.domain.diary.dto.response;
+package com.specup.mongeul.domain.diary.dto.response.Diary;
 
 import com.specup.mongeul.domain.diary.entity.Diary;
 import com.specup.mongeul.domain.diary.entity.ENUM.DiaryFeeling;
@@ -8,7 +8,6 @@ import lombok.Getter;
 import lombok.ToString;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @Getter
 @ToString
@@ -21,6 +20,7 @@ public class DiaryResponse {
     private DiaryWeather weather;
     private DiaryFeeling feeling;
     private DiaryPrivate privateStatus;
+    private Boolean published;
 
     public static DiaryResponse from(Diary diary) {
         DiaryResponse response = new DiaryResponse();
@@ -32,6 +32,7 @@ public class DiaryResponse {
         response.weather = diary.getWeather();
         response.feeling = diary.getFeeling();
         response.privateStatus = diary.getPrivateStatus();
+        response.published = diary.getPublished();
         return response;
     }
 }

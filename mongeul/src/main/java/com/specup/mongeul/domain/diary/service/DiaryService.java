@@ -3,11 +3,11 @@ package com.specup.mongeul.domain.diary.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.specup.mongeul.domain.diary.dto.common.PictureLineDto;
-import com.specup.mongeul.domain.diary.dto.request.DiaryCreateRequest;
-import com.specup.mongeul.domain.diary.dto.request.DiaryUpdateRequest;
-import com.specup.mongeul.domain.diary.dto.response.DiaryDateResponse;
-import com.specup.mongeul.domain.diary.dto.response.DiaryResponse;
-import com.specup.mongeul.domain.diary.dto.response.PictureLineResponse;
+import com.specup.mongeul.domain.diary.dto.request.Diary.DiaryCreateRequest;
+import com.specup.mongeul.domain.diary.dto.request.Diary.DiaryUpdateRequest;
+import com.specup.mongeul.domain.diary.dto.response.Diary.DiaryDateResponse;
+import com.specup.mongeul.domain.diary.dto.response.Diary.DiaryResponse;
+import com.specup.mongeul.domain.diary.dto.response.Diary.DiaryPictureLineResponse;
 import com.specup.mongeul.domain.diary.entity.Diary;
 import com.specup.mongeul.domain.diary.entity.ENUM.DiaryPrivate;
 import com.specup.mongeul.domain.diary.repository.DiaryRepository;
@@ -38,8 +38,7 @@ public class DiaryService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
-        LocalDate date = request.getDate();
-        if (diaryRepository.existsByUserIdAndDate(userId, date)) {
+        if (diaryRepository.existsByUserIdAndDateAndPublished(userId, request.getDate(), true)) {
             throw new CustomException(ErrorCode.DIARY_ALREADY_EXISTS);
         }
 
@@ -66,11 +65,54 @@ public class DiaryService {
         }
 
         Diary diary = diaryRepository.save(
-                Diary.create(request.getTitle(), request.getContent(), request.getPicture(),
-                        date, pictureLinesJson, request.getWeather(), request.getFeeling(),
-                        request.getPrivateStatus(), user
+                Diary.create(
+                        request.getTitle(), request.getContent(), request.getPicture(),
+                        request.getDate(), pictureLinesJson, request.getWeather(), request.getFeeling(),
+                        request.getPrivateStatus(), true, user
                 )
         );
+        return DiaryResponse.from(diary);
+    }
+
+    // 일기 임시저장
+    @Transactional
+    public DiaryResponse saveDraft(Long userId, DiaryCreateRequest request) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        String pictureLinesJson = null;
+        if (request.getPictureLines() != null && !request.getPictureLines().isEmpty()) {
+            try {
+                pictureLinesJson = objectMapper.writeValueAsString(request.getPictureLines());
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException("PictureLines Json 직렬화 실패", e);
+            }
+        }
+
+        Diary diary = diaryRepository.save(
+                Diary.create(
+                        request.getTitle(), request.getContent(), request.getPicture(),
+                        request.getDate(), pictureLinesJson, request.getWeather(), request.getFeeling(),
+                        request.getPrivateStatus(), false, user
+                )
+        );
+        return DiaryResponse.from(diary);
+    }
+
+    // 임시저장 -> 최종저장
+    @Transactional
+    public DiaryResponse publish(Long userId, Long diaryId) {
+        Diary diary = diaryRepository.findById(diaryId)
+                .orElseThrow(() -> new CustomException(ErrorCode.DIARY_NOT_FOUND));
+        if (!diary.getUser().getId().equals(userId)) {
+            throw new CustomException(ErrorCode.INVALID_DIARY_USER);
+        }
+        if (diaryRepository.existsByUserIdAndDateAndPublished(userId, diary.getDate(), true)) {
+            throw new CustomException(ErrorCode.DIARY_ALREADY_EXISTS);
+        }
+        diary.update(diary.getTitle(), diary.getContent(), diary.getPicture(),
+                diary.getDate(), diary.getPictureLines(), diary.getWeather(),
+                diary.getFeeling(), diary.getPrivateStatus(), true);
         return DiaryResponse.from(diary);
     }
 
@@ -84,8 +126,8 @@ public class DiaryService {
             throw new CustomException(ErrorCode.INVALID_DIARY_USER);
         }
 
-        if (!diary.getDate().equals(request.getDate())) {
-            if (diaryRepository.existsByUserIdAndDate(userId, request.getDate())) {
+        if (!diary.getDate().equals(request.getDate()) && diary.getPublished()) {
+            if (diaryRepository.existsByUserIdAndDateAndPublished(userId, request.getDate(), true)) {
                 throw new CustomException(ErrorCode.DIARY_ALREADY_EXISTS);
             }
         }
@@ -99,9 +141,10 @@ public class DiaryService {
             }
         }
 
-        diary.update(request.getTitle(), request.getContent(), request.getPicture(),
+        diary.update(
+                request.getTitle(), request.getContent(), request.getPicture(),
                 request.getDate(), pictureLinesJson, request.getWeather(),
-                request.getFeeling(), request.getPrivateStatus());
+                request.getFeeling(), request.getPrivateStatus(), diary.getPublished());
 
         return DiaryResponse.from(diary);
     }
@@ -116,6 +159,17 @@ public class DiaryService {
         LocalDate startOfNextMonth = startOfMonth.plusMonths(1);
 
         List<Diary> diaries = diaryRepository.findByUserAndDateBetween(user, startOfMonth, startOfNextMonth);
+        return diaries.stream()
+                .map(DiaryResponse::from)
+                .toList();
+    }
+
+    // 일기 임시저장 목록 조회
+    @Transactional(readOnly = true)
+    public List<DiaryResponse> getDraftDiaries(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        List<Diary> diaries = diaryRepository.findByUserAndPublishedOrderByDateDesc(user, false);
         return diaries.stream()
                 .map(DiaryResponse::from)
                 .toList();
@@ -155,9 +209,7 @@ public class DiaryService {
 
     // 그림 조회
     @Transactional(readOnly = true)
-    public PictureLineResponse readPicture(Long userId, Long diaryId) {
-        userRepository.findById(userId)
-                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+    public DiaryPictureLineResponse readPicture(Long diaryId) {
         Diary diary = diaryRepository.findById(diaryId)
                 .orElseThrow(() -> new CustomException(ErrorCode.DIARY_NOT_FOUND));
         List<PictureLineDto> pictureLines = null;
@@ -169,7 +221,7 @@ public class DiaryService {
                 throw new RuntimeException("PictureLines JSON 역직렬화 실패", e);
             }
         }
-        return PictureLineResponse.from(diary.getId(), pictureLines);
+        return DiaryPictureLineResponse.from(diary.getId(), pictureLines);
     }
 
     // 일기 작성 날짜 조회

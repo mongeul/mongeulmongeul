@@ -1,6 +1,6 @@
 package com.specup.mongeul.domain.diaryemoji.repository;
 
-import com.specup.mongeul.domain.diary.dto.response.DiaryEmojiResponse;
+import com.specup.mongeul.domain.diary.dto.response.Diary.DiaryEmojiResponse;
 import com.specup.mongeul.domain.diaryemoji.entity.DiaryEmoji;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -20,7 +20,7 @@ public interface DiaryEmojiRepository extends JpaRepository<DiaryEmoji, Long> {
     /**
      * 이모지 개수 세기 (group by, count 사용)
      */
-    @Query("SELECT new com.specup.mongeul.domain.diary.dto.response.DiaryEmojiResponse(de.emoji.type, COUNT(de)) " +
+    @Query("SELECT new com.specup.mongeul.domain.diary.dto.response.Diary.DiaryEmojiResponse(de.emoji.type, COUNT(de)) " +
             "FROM DiaryEmoji de " +
             "WHERE de.diary.id = :diaryId " +
             "GROUP BY de.emoji.type")

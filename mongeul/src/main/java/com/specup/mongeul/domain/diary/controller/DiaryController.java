@@ -1,10 +1,10 @@
 package com.specup.mongeul.domain.diary.controller;
 
-import com.specup.mongeul.domain.diary.dto.request.DiaryCreateRequest;
-import com.specup.mongeul.domain.diary.dto.request.DiaryUpdateRequest;
-import com.specup.mongeul.domain.diary.dto.response.DiaryDateResponse;
-import com.specup.mongeul.domain.diary.dto.response.DiaryResponse;
-import com.specup.mongeul.domain.diary.dto.response.PictureLineResponse;
+import com.specup.mongeul.domain.diary.dto.request.Diary.DiaryCreateRequest;
+import com.specup.mongeul.domain.diary.dto.request.Diary.DiaryUpdateRequest;
+import com.specup.mongeul.domain.diary.dto.response.Diary.DiaryDateResponse;
+import com.specup.mongeul.domain.diary.dto.response.Diary.DiaryResponse;
+import com.specup.mongeul.domain.diary.dto.response.Diary.DiaryPictureLineResponse;
 import com.specup.mongeul.domain.diary.service.DiaryService;
 import com.specup.mongeul.domain.user.entity.User;
 import com.specup.mongeul.global.common.ApiResponse;
@@ -26,12 +26,19 @@ public class DiaryController {
     private final DiaryService diaryService;
 
     @Operation(summary = "캘린더에서 일기 조회", description = "내가 작성한 일기를 월 별로 조회합니다.")
-    @GetMapping("/diaries/{year}/{month}")
+    @GetMapping("/diaries")
     public ResponseEntity<ApiResponse<List<DiaryResponse>>> getCalendarDiaries(
             @AuthenticationPrincipal User user,
-            @PathVariable int year,
-            @PathVariable int month) {
+            @RequestParam int year,
+            @RequestParam int month) {
         return ResponseEntity.ok(ApiResponse.success(diaryService.getCalendarDiaries(user.getId(), year, month), "내가 작성한 일기 목록 조회 성공"));
+    }
+
+    @Operation(summary = "임시저장 일기목록 조회", description = "임시저장 된 일기목록을 조회합니다.")
+    @GetMapping("/diaries/drafts")
+    public ResponseEntity<ApiResponse<List<DiaryResponse>>> getDraftDiaries(
+            @AuthenticationPrincipal User user) {
+        return ResponseEntity.ok(ApiResponse.success(diaryService.getDraftDiaries(user.getId()), "임시저장 일기 목록 조회 성공"));
     }
 
     @Operation(summary = "특정 일기 조회", description = "일기를 조회합니다.")
@@ -49,6 +56,22 @@ public class DiaryController {
             @AuthenticationPrincipal User user,
             @Valid @RequestBody DiaryCreateRequest request) {
         return ResponseEntity.ok(ApiResponse.success(diaryService.create(user.getId(), request), "일기 생성 성공"));
+    }
+
+    @Operation(summary = "일기 임시저장", description = "일기를 임시로 저장합니다.")
+    @PostMapping("/diaries/drafts")
+    public ResponseEntity<ApiResponse<DiaryResponse>> saveDraft(
+            @AuthenticationPrincipal User user,
+            @Valid @RequestBody DiaryCreateRequest request) {
+        return ResponseEntity.ok(ApiResponse.success(diaryService.saveDraft(user.getId(), request), "일기 임시저장 성공"));
+    }
+
+    @Operation(summary = "일기 임시저장 -> 일기작성", description = "임시저장 된 일기로 일기를 작성합니다.")
+    @PostMapping("/diaries/{diaryId}/publish")
+    public ResponseEntity<ApiResponse<DiaryResponse>> publish(
+            @AuthenticationPrincipal User user,
+            @PathVariable Long diaryId) {
+        return ResponseEntity.ok(ApiResponse.success(diaryService.publish(user.getId(), diaryId), "임시저장 된 일기로 일기 생성 성공"));
     }
 
     @Operation(summary = "일기 수정", description = "일기를 수정합니다.")
@@ -70,19 +93,19 @@ public class DiaryController {
     }
 
     @Operation(summary = "그림 조회", description = "그림을 조회합니다.")
-    @GetMapping("/diaries/{diaryId}/pictureLines")
-    public ResponseEntity<ApiResponse<PictureLineResponse>> getPictureLines(
+    @GetMapping("/diaries/{diaryId}/picture-lines")
+    public ResponseEntity<ApiResponse<DiaryPictureLineResponse>> getPictureLines(
             @AuthenticationPrincipal User user,
             @PathVariable Long diaryId) {
-        return ResponseEntity.ok(ApiResponse.success(diaryService.readPicture(user.getId(), diaryId), "그림 조회 성공"));
+        return ResponseEntity.ok(ApiResponse.success(diaryService.readPicture(diaryId), "그림 조회 성공"));
     }
 
     @Operation(summary = "날짜 조회", description = "일기 작성한 날짜들을 조회합니다.")
-    @GetMapping("/diaries/date/{year}/{month}")
-    public ResponseEntity<ApiResponse<List<DiaryDateResponse>>> getDiaryDate(
+    @GetMapping("/diaries/date")
+    public ResponseEntity<ApiResponse<List<DiaryDateResponse>>> getDiaryDates(
             @AuthenticationPrincipal User user,
-            @PathVariable int year,
-            @PathVariable int month) {
+            @RequestParam int year,
+            @RequestParam int month) {
         return ResponseEntity.ok(ApiResponse.success(diaryService.getDates(user.getId(), year, month), "일기 작성날짜 목록 조회 성공"));
     }
 }
