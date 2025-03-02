@@ -10,7 +10,7 @@ export async function getDiaryDates(
     const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
     const response = await fetch(
-      `${API_BASE_URL}/api/v1/diaries/date/${year}/${month}`,
+      `${API_BASE_URL}/api/v1/diaries/date?year=${year}&month=${month}`,
       {
         method: "GET",
         headers: {

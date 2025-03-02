@@ -7,9 +7,9 @@ interface DraftListModalProps {
 
 export default function DraftListModal({ onClose }: DraftListModalProps) {
   return (
-    <WebModal onClose={onClose}>
-      <div>
-        <div>임시 저장 목록</div>
+    <WebModal padding="" onClose={onClose}>
+      <div className="w-72 flex flex-col justify-center items-center gap-4">
+        <div className="text-sm">임시 저장 목록</div>
         <DraftList />
       </div>
     </WebModal>

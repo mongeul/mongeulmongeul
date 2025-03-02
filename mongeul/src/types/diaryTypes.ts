@@ -22,12 +22,13 @@ export interface DiaryRequest extends BaseDiary {
 
 export interface Diary extends BaseDiary {
   diaryId: number;
+  published: boolean;
 }
 
 export interface DiaryResponse {
   success: boolean;
   message: string;
-  data: Diary | null;
+  data: Diary[] | null;
 }
 
 export interface DiaryDate {

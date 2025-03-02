@@ -1,6 +1,7 @@
 import { createDiary } from "@/actions/diary/createDiary";
 import { createDiaryDraft } from "@/actions/diary/createDiaryDraft";
 import { getDiaryDates } from "@/actions/diary/getDiaryDate";
+import { getDiaryDraft } from "@/actions/diary/getDiaryDraft";
 import {
   DiaryRequest,
   DiaryResponse,
@@ -41,4 +42,9 @@ export async function fetchDiaryDates(
   month: number
 ): Promise<DiaryDatesResponse> {
   return await getDiaryDates(year, month);
+}
+
+// 일기 임시저장 목록 조회
+export async function fetchDiaryDraft(): Promise<DiaryResponse> {
+  return await getDiaryDraft();
 }

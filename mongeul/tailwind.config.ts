@@ -11,6 +11,7 @@ export default {
     extend: {
       fontSize: {
         base: "var(--font-size)",
+        "2xs": "calc(var(--font-size) * 0.7)",
         sm: "calc(var(--font-size) * 0.875)",
         lg: "calc(var(--font-size) * 1.125)",
         xl: "calc(var(--font-size) * 1.25)",
