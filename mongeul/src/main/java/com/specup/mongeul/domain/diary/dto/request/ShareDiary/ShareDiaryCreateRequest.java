@@ -1,8 +1,7 @@
-package com.specup.mongeul.domain.diary.dto.request;
+package com.specup.mongeul.domain.diary.dto.request.ShareDiary;
 
 import com.specup.mongeul.domain.diary.dto.common.PictureLineDto;
 import com.specup.mongeul.domain.diary.entity.ENUM.DiaryFeeling;
-import com.specup.mongeul.domain.diary.entity.ENUM.DiaryPrivate;
 import com.specup.mongeul.domain.diary.entity.ENUM.DiaryWeather;
 import lombok.Getter;
 import lombok.ToString;
@@ -12,7 +11,7 @@ import java.util.List;
 
 @Getter
 @ToString
-public class DiaryUpdateRequest {
+public class ShareDiaryCreateRequest {
     private String title;
     private String content;
     private String picture;
@@ -20,5 +19,4 @@ public class DiaryUpdateRequest {
     private List<PictureLineDto> pictureLines;
     private DiaryWeather weather;
     private DiaryFeeling feeling;
-    private DiaryPrivate privateStatus;
 }

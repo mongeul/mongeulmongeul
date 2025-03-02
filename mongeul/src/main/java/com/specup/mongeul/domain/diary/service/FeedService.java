@@ -1,8 +1,8 @@
 package com.specup.mongeul.domain.diary.service;
 
-import com.specup.mongeul.domain.diary.dto.response.DiaryEmojiResponse;
-import com.specup.mongeul.domain.diary.dto.response.FeedDetailResponse;
-import com.specup.mongeul.domain.diary.dto.response.FeedResponse;
+import com.specup.mongeul.domain.diary.dto.response.Diary.DiaryEmojiResponse;
+import com.specup.mongeul.domain.diary.dto.response.Feed.FeedDetailResponse;
+import com.specup.mongeul.domain.diary.dto.response.Feed.FeedResponse;
 import com.specup.mongeul.domain.diary.entity.Diary;
 import com.specup.mongeul.domain.diary.repository.DiaryRepository;
 import com.specup.mongeul.domain.diaryemoji.repository.DiaryEmojiRepository;

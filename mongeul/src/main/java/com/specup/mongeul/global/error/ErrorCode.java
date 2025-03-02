@@ -23,6 +23,14 @@ public enum ErrorCode {
     DIARY_PASSWORD_NOT_SET(HttpStatus.BAD_REQUEST, "비밀번호가 설정되어 있지 않습니다."),
     DIARY_INVALID_LOCK_PASSWORD(HttpStatus.BAD_REQUEST, "비밀번호가 일치하지 않습니다."),
 
+    // 공유일기 관련 에러
+    GROUP_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 그룹을 찾을 수 없습니다."),
+    SHARE_DIARY_NOT_FOUND(HttpStatus.NOT_FOUND, "공유일기를 찾을 수 없습니다."),
+    INVALID_SHARE_DIARY_TURN(HttpStatus.BAD_REQUEST, "당신의 차례가 아닙니다."),
+    SHARE_DIARY_ALREADY_EXISTS(HttpStatus.BAD_REQUEST, "이미 해당 날짜에는 공유일기가 작성되어 있습니다."),
+    INVALID_SHARE_DIARY_USER(HttpStatus.FORBIDDEN, "공유일기 작성자만 가능합니다."),
+    SHARE_DIARY_NOT_UPDATE_DATE(HttpStatus.BAD_REQUEST, "해당 날짜는 당신의 차레가 아니어서 수정이 불가합니다."),
+
     // 댓글 관련 에러
     COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "댓글을 찾을 수 없습니다."),
     INVALID_COMMENT_USER(HttpStatus.FORBIDDEN, "댓글 작성자만 가능합니다."),

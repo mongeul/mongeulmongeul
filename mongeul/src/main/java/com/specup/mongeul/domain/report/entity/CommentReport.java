@@ -17,7 +17,7 @@ import org.hibernate.annotations.SQLRestriction;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "comment_report",
         uniqueConstraints = {
-            @UniqueConstraint(columnNames = {"comment_id", "reporter_id"})
+            @UniqueConstraint(columnNames = {"comment_id", "user_id"})
         }
 )
 @SQLDelete(sql = "UPDATE comment_report SET deleted = true, deleted_at = CURRENT_TIME WHERE id = ?")
