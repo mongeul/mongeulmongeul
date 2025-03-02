@@ -68,6 +68,13 @@ public class ShareDiaryController {
     }
 
     // 공유일기 임시저장 목록 조회
+    @Operation(summary = "공유일기 임시저장 목록 조회", description = "임시저장 된 공유일기 목록을 조회합니다.")
+    @GetMapping("/groups/{groupId}/share-diaries/drafts")
+    public ResponseEntity<ApiResponse<List<ShareDiaryResponse>>> getDraftShareDiaries(
+            @AuthenticationPrincipal User user,
+            @PathVariable Long groupId) {
+        return ResponseEntity.ok(ApiResponse.success(shareDiaryService.getDraftShareDiaries(groupId)));
+    }
 
     // 특정 공유일기 조회
     @Operation(summary = "특정 공유일기 조회", description = "특정 공유일기를 조회합니다.")
