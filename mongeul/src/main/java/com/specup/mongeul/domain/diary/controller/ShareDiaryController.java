@@ -35,6 +35,16 @@ public class ShareDiaryController {
         return ResponseEntity.ok(ApiResponse.success(shareDiaryService.create(user.getId(), groupId, request), "공유일기 작성 성공"));
     }
 
+    // 공유일기 임시저장
+    @Operation(summary = "공유일기 임시저장", description = "공유일기를 임시저장 합니다.")
+    @PostMapping("/groups/{groupId}/share-diaries/drafts")
+    public ResponseEntity<ApiResponse<ShareDiaryResponse>> draft(
+            @AuthenticationPrincipal User user,
+            @PathVariable Long groupId,
+            ShareDiaryCreateRequest request) {
+        return ResponseEntity.ok(ApiResponse.success(shareDiaryService.saveDraft(user.getId(), groupId, request), "공유일기 임시저장 성공"));
+    }
+
     // 공유일기 수정
     @Operation(summary = "공유일기 수정", description = "공유일기를 수정합니다.")
     @PutMapping("/groups/{groupId}/share-diaries/{shareDiaryId}")
@@ -56,6 +66,8 @@ public class ShareDiaryController {
             @RequestParam int month) {
         return ResponseEntity.ok(ApiResponse.success(shareDiaryService.getCalendarShareDiaries(groupId, year, month), "공유일기 목록 조회 성공"));
     }
+
+    // 공유일기 임시저장 목록 조회
 
     // 특정 공유일기 조회
     @Operation(summary = "특정 공유일기 조회", description = "특정 공유일기를 조회합니다.")
