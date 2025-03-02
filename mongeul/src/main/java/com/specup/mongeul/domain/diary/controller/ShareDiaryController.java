@@ -41,7 +41,7 @@ public class ShareDiaryController {
     public ResponseEntity<ApiResponse<ShareDiaryResponse>> draft(
             @AuthenticationPrincipal User user,
             @PathVariable Long groupId,
-            ShareDiaryCreateRequest request) {
+            @Valid @RequestBody ShareDiaryCreateRequest request) {
         return ResponseEntity.ok(ApiResponse.success(shareDiaryService.saveDraft(user.getId(), groupId, request), "공유일기 임시저장 성공"));
     }
 
@@ -73,7 +73,7 @@ public class ShareDiaryController {
     public ResponseEntity<ApiResponse<List<ShareDiaryResponse>>> getDraftShareDiaries(
             @AuthenticationPrincipal User user,
             @PathVariable Long groupId) {
-        return ResponseEntity.ok(ApiResponse.success(shareDiaryService.getDraftShareDiaries(groupId)));
+        return ResponseEntity.ok(ApiResponse.success(shareDiaryService.getDraftShareDiaries(user.getId(), groupId), "임시저장 목록 조회 성공"));
     }
 
     // 특정 공유일기 조회

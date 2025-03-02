@@ -2,6 +2,7 @@ package com.specup.mongeul.domain.diary.repository;
 
 import com.specup.mongeul.domain.diary.entity.ShareDiary;
 import com.specup.mongeul.domain.friends.entity.Friend;
+import com.specup.mongeul.domain.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -19,8 +20,9 @@ public interface ShareDiaryRepository extends JpaRepository<ShareDiary, Long> {
                                              @Param("published") Boolean published);
 
     // 임시저장 공유일기 목록 조회
-    List<ShareDiary> findByGroupAndPublishedOrderByDateDesc(@Param("group") Friend group,
-                                                            @Param("published") Boolean published);
+    List<ShareDiary> findByWriterAndGroupAndPublishedOrderByDateDesc(@Param("writer") User user,
+                                                                     @Param("group") Friend group,
+                                                                     @Param("published") Boolean published);
 
     // 해당 그룹의 최근 공유일기 조회
     @Query("""
