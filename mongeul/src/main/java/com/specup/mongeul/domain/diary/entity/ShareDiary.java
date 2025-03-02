@@ -51,6 +51,8 @@ public class ShareDiary extends BaseSoftDeleteEntity {
     @Enumerated(EnumType.STRING)
     private DiaryFeeling feeling;
 
+    private Boolean published;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "group_id", nullable = false)
     private Friend group;
@@ -61,7 +63,8 @@ public class ShareDiary extends BaseSoftDeleteEntity {
 
     public static ShareDiary create(String title, String content, String picture,
                                     LocalDate date, String pictureLines, DiaryWeather weather,
-                                    DiaryFeeling feeling, Friend group, User writer) {
+                                    DiaryFeeling feeling, Boolean published, Friend group,
+                                    User writer) {
         ShareDiary shareDiary = new ShareDiary();
         shareDiary.title = title;
         shareDiary.content = content;
@@ -70,6 +73,7 @@ public class ShareDiary extends BaseSoftDeleteEntity {
         shareDiary.pictureLines = pictureLines;
         shareDiary.weather = weather;
         shareDiary.feeling = feeling;
+        shareDiary.published = published;
         shareDiary.group = group;
         shareDiary.writer = writer;
         return shareDiary;
@@ -77,7 +81,7 @@ public class ShareDiary extends BaseSoftDeleteEntity {
 
     public void update(String title, String content, String picture,
                                     LocalDate date, String pictureLines, DiaryWeather weather,
-                                    DiaryFeeling feeling) {
+                                    DiaryFeeling feeling, Boolean published) {
         this.title = title;
         this.content = content;
         this.picture = picture;
@@ -85,5 +89,6 @@ public class ShareDiary extends BaseSoftDeleteEntity {
         this.pictureLines = pictureLines;
         this.weather = weather;
         this.feeling = feeling;
+        this.published = published;
     }
 }
