@@ -7,8 +7,8 @@ interface DiaryState {
   content: string;
   drawing: string | null;
   drawingLines: string | null;
-  feeling: Feeling;
-  weather: Weather;
+  feeling: Feeling | null;
+  weather: Weather | null;
   privateStatus: PrivateStatus;
 }
 
@@ -18,8 +18,8 @@ const initialState: DiaryState = {
   content: "",
   drawing: null,
   drawingLines: null,
-  feeling: "" as Feeling,
-  weather: "" as Weather,
+  feeling: null,
+  weather: null,
   privateStatus: "PRIVATE" as PrivateStatus,
 };
 
