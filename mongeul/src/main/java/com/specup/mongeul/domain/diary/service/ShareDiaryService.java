@@ -41,7 +41,7 @@ public class ShareDiaryService {
                 .orElseThrow(() -> new CustomException(ErrorCode.GROUP_NOT_FOUND));
 
         // 일기 하루 1개 검증
-        if (shareDiaryRepository.existsByGroupAndDate(group, request.getDate())) {
+        if (shareDiaryRepository.existsByGroupAndDateAndPublished(group, request.getDate(), true)) {
             throw new CustomException(ErrorCode.SHARE_DIARY_ALREADY_EXISTS);
         }
 
@@ -65,11 +65,13 @@ public class ShareDiaryService {
                 ShareDiary.create(
                         request.getTitle(), request.getContent(), request.getPicture(),
                         request.getDate(), pictureLinesJson, request.getWeather(),
-                        request.getFeeling(), group, user
+                        request.getFeeling(), true, group, user
                 )
         );
         return ShareDiaryResponse.from(shareDiary);
     }
+
+    // 공유일기 임시저장
 
     // 공유일기 수정
     @Transactional
@@ -87,8 +89,8 @@ public class ShareDiaryService {
         }
 
         // 날짜 검증
-        if (!shareDiary.getDate().equals(request.getDate())) {
-            if (shareDiaryRepository.existsByGroupAndDate(group, request.getDate())) {
+        if (!shareDiary.getDate().equals(request.getDate()) && shareDiary.getPublished()) {
+            if (shareDiaryRepository.existsByGroupAndDateAndPublished(group, request.getDate(), true)) {
                 throw new CustomException(ErrorCode.SHARE_DIARY_ALREADY_EXISTS);
             }
         }
@@ -111,7 +113,7 @@ public class ShareDiaryService {
         shareDiary.update(
                 request.getTitle(), request.getContent(), request.getPicture(),
                 request.getDate(), pictureLinesJson, request.getWeather(),
-                request.getFeeling());
+                request.getFeeling(), shareDiary.getPublished());
 
         return ShareDiaryResponse.from(shareDiary);
     }
@@ -130,6 +132,8 @@ public class ShareDiaryService {
                 .map(ShareDiaryResponse::from)
                 .toList();
     }
+
+    // 공유일기 임시저장 목록 조회
 
     // 특정 공유일기 조회
     @Transactional(readOnly = true)
