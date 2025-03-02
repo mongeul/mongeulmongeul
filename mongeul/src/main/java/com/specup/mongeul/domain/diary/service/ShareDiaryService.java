@@ -122,7 +122,7 @@ public class ShareDiaryService {
 
         // 차례 검증
         ShareDiary lastDiary = shareDiaryRepository.findLatestByGroup(group);
-        if (lastDiary != null && lastDiary.getWriter().equals(user)) {
+        if (lastDiary != null && lastDiary.getWriter().equals(user) && shareDiary.getPublished()) {
             throw new CustomException(ErrorCode.SHARE_DIARY_NOT_UPDATE_DATE);
         }
 
@@ -160,10 +160,12 @@ public class ShareDiaryService {
 
     // 공유일기 임시저장 목록 조회
     @Transactional(readOnly = true)
-    public List<ShareDiaryResponse> getDraftShareDiaries(Long groupId) {
+    public List<ShareDiaryResponse> getDraftShareDiaries(Long userId, Long groupId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         Friend group = friendRepository.findById(groupId)
                 .orElseThrow(() -> new CustomException(ErrorCode.GROUP_NOT_FOUND));
-        List<ShareDiary> shareDiaries = shareDiaryRepository.findByGroupAndPublishedOrderByDateDesc(group, false);
+        List<ShareDiary> shareDiaries = shareDiaryRepository.findByWriterAndGroupAndPublishedOrderByDateDesc(user, group, false);
         return shareDiaries.stream()
                 .map(ShareDiaryResponse::from)
                 .toList();
