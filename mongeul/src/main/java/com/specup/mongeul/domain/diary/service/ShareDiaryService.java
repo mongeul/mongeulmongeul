@@ -159,6 +159,15 @@ public class ShareDiaryService {
     }
 
     // 공유일기 임시저장 목록 조회
+    @Transactional(readOnly = true)
+    public List<ShareDiaryResponse> getDraftShareDiaries(Long groupId) {
+        Friend group = friendRepository.findById(groupId)
+                .orElseThrow(() -> new CustomException(ErrorCode.GROUP_NOT_FOUND));
+        List<ShareDiary> shareDiaries = shareDiaryRepository.findByGroupAndPublishedOrderByDateDesc(group, false);
+        return shareDiaries.stream()
+                .map(ShareDiaryResponse::from)
+                .toList();
+    }
 
     // 특정 공유일기 조회
     @Transactional(readOnly = true)
