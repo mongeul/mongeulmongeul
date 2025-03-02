@@ -23,6 +23,8 @@ public interface ShareDiaryRepository extends JpaRepository<ShareDiary, Long> {
     List<ShareDiary> findByWriterAndGroupAndPublishedOrderByDateDesc(@Param("writer") User user,
                                                                      @Param("group") Friend group,
                                                                      @Param("published") Boolean published);
+    // 공유일기 1개 여부
+    Long countByGroupAndPublished(Friend group, Boolean published);
 
     // 해당 그룹의 최근 공유일기 조회
     @Query("""

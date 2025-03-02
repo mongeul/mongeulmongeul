@@ -122,7 +122,8 @@ public class ShareDiaryService {
 
         // 차례 검증
         ShareDiary lastDiary = shareDiaryRepository.findLatestByGroup(group);
-        if (lastDiary != null && lastDiary.getWriter().equals(user) && shareDiary.getPublished()) {
+        boolean isOnlyDiary = shareDiaryRepository.countByGroupAndPublished(group, true) == 1;
+        if (!isOnlyDiary && lastDiary != null && lastDiary.getWriter().equals(user) && shareDiary.getPublished()) {
             throw new CustomException(ErrorCode.SHARE_DIARY_NOT_UPDATE_DATE);
         }
 
