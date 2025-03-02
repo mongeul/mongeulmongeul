@@ -72,6 +72,31 @@ public class ShareDiaryService {
     }
 
     // 공유일기 임시저장
+    @Transactional
+    public ShareDiaryResponse saveDraft(Long userId, Long groupId, ShareDiaryCreateRequest request) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        Friend group = friendRepository.findById(groupId)
+                .orElseThrow(() -> new CustomException(ErrorCode.GROUP_NOT_FOUND));
+
+        String pictureLinesJson = null;
+        if (request.getPictureLines() != null && !request.getPictureLines().isEmpty()) {
+            try {
+                pictureLinesJson = objectMapper.writeValueAsString(request.getPictureLines());
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException("PictureLines Json 직렬화 실패", e);
+            }
+        }
+
+        ShareDiary shareDiary = shareDiaryRepository.save(
+                ShareDiary.create(
+                        request.getTitle(), request.getContent(), request.getPicture(),
+                        request.getDate(), pictureLinesJson, request.getWeather(),
+                        request.getFeeling(), false, group, user
+                )
+        );
+        return ShareDiaryResponse.from(shareDiary);
+    }
 
     // 공유일기 수정
     @Transactional
