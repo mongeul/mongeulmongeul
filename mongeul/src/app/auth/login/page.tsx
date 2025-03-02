@@ -17,6 +17,7 @@ export default function LoginPage() {
 
   useEffect(() => {
     const kakaoCode = searchParams.get("code");
+    console.log("카카오에서 받은 인가 코드:", kakaoCode);
 
     if (kakaoCode) {
       handleKakaoLogin(kakaoCode, dispatch).then((user) => {

@@ -47,7 +47,12 @@ export default function DiaryList() {
     fetchData();
   }, [dispatch]);
   */
-
+  const handleDeleteFriend = (friendId: number) => {
+    const updatedFriends = friends.filter(
+      (friend) => friend.friendId !== friendId
+    );
+    dispatch(setFriends(updatedFriends)); // Redux 상태 업데이트
+  };
   // 드래그 후 순서 변경
   const onDragEnd = (result: any) => {
     if (!result.destination) return;
@@ -87,11 +92,13 @@ export default function DiaryList() {
                     {...provided.dragHandleProps}
                   >
                     <SharedDiaryCard
+                      friendId={friend.friendId}
                       nickname={friend.nickname}
                       day={friend.day}
                       count={friend.count}
                       writer={friend.nickname}
                       date="오늘"
+                      onDelete={handleDeleteFriend}
                     />
                   </div>
                 )}

@@ -26,7 +26,8 @@ export const getFriends = async (): Promise<Friend[]> => {
 export const generateFriendCode = async () => {
   try {
     const response = await apiClient("/api/v1/friend/code");
-    return response.data;
+    console.log("API 응답 전체:", response);
+    return response;
   } catch (error) {
     console.error("친구 코드 발급 실패:", error);
     throw error;
@@ -37,7 +38,7 @@ export const generateFriendCode = async () => {
 export const getFriendByCode = async (code: string) => {
   try {
     const response = await apiClient(`/api/v1/friend/${code}`);
-    return response.data;
+    return response;
   } catch (error) {
     console.error("친구 코드 조회 실패:", error);
     throw error;
@@ -54,6 +55,20 @@ export const addFriend = async (code: string) => {
     return response;
   } catch (error) {
     console.error("친구 추가 실패:", error);
+    throw error;
+  }
+};
+
+// 친구 삭제 API (delete)
+export const deleteFriend = async (friendId: number) => {
+  try {
+    const response = await apiClient(`/api/v1/friend/${friendId}`, {
+      method: "DELETE",
+    });
+    console.log("친구 삭제 성공:", response);
+    return response;
+  } catch (error) {
+    console.error("친구 삭제 실패:", error);
     throw error;
   }
 };
