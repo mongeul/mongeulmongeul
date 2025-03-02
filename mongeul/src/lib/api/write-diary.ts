@@ -1,8 +1,10 @@
-import { createDiary } from "@/actions/diary/createDiary";
-import { createDiaryDraft } from "@/actions/diary/createDiaryDraft";
-import { deleteDiary } from "@/actions/diary/deleteDiary";
-import { getDiaryDates } from "@/actions/diary/getDiaryDate";
-import { getDiaryDraft } from "@/actions/diary/getDiaryDraft";
+import {
+  createDiary,
+  createDiaryDraft,
+  deleteDiary,
+  getDiaryDates,
+  getDiaryDraft,
+} from "@/actions/write-diary";
 import {
   DiaryRequest,
   DiaryResponse,
