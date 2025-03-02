@@ -21,8 +21,10 @@ import java.time.LocalDate;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "share_diaries",
         indexes = {
-            @Index(name = "idx_share_diary_group_date", columnList = "group_id, date"),
-            @Index(name = "idx_share_diary_group_latest", columnList = "group_id, date DESC")
+            @Index(name = "idx_share_diary_group_date_published", columnList = "group_id, date, published"),
+            @Index(name = "idx_share_diary_writer_group_published_date", columnList = "writer_id, group_id, published, date DESC"),
+            @Index(name = "idx_share_diary_group_published", columnList = "group_id, published"),
+            @Index(name = "idx_share_diary_group_published_latest", columnList = "group_id, published, date DESC")
     }
 )
 @SQLDelete(sql = "UPDATE share_diaries SET deleted = true, deleted_at = CURRENT_TIME WHERE id = ?")
