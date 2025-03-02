@@ -19,6 +19,7 @@ public class ShareDiaryResponse {
     private DiaryWeather weather;
     private DiaryFeeling feeling;
     private String writer;
+    private Boolean published;
 
     public static ShareDiaryResponse from(ShareDiary shareDiary) {
         ShareDiaryResponse response = new ShareDiaryResponse();
@@ -30,6 +31,7 @@ public class ShareDiaryResponse {
         response.weather = shareDiary.getWeather();
         response.feeling = shareDiary.getFeeling();
         response.writer = shareDiary.getWriter().getNickname();
+        response.published = shareDiary.getPublished();
         return response;
     }
 }
