@@ -1,12 +1,12 @@
 "use client";
 
 import FeelingIcon from "@/components/common/atoms/FeelingsIcon";
-import { Feed } from "@/types/feedTypes";
+import { FeedPreview } from "@/types/feedTypes";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
 interface FeedItemProps {
-  feed: Feed;
+  feed: FeedPreview;
 }
 
 export default function FeedItem({ feed }: FeedItemProps) {
