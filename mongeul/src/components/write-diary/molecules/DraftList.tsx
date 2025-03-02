@@ -4,26 +4,15 @@ import { useEffect, useState } from "react";
 import { fetchDiaryDraft } from "@/lib/api/write-diary";
 import { Diary } from "@/types/diaryTypes";
 import DraftItem from "../atoms/DraftItem";
-import { useDispatch } from "react-redux";
-import {
-  setContent,
-  setDate,
-  setDrawing,
-  setFeeling,
-  setPrivateStatus,
-  setTitle,
-  setWeather,
-} from "@/store/diarySlice";
 
 interface DraftListProps {
-  onClose: () => void; // 모달 닫기 함수 추가
+  onClose: () => void;
 }
 
 export default function DraftList({ onClose }: DraftListProps) {
   const [drafts, setDrafts] = useState<Diary[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const dispatch = useDispatch();
 
   useEffect(() => {
     async function loadDrafts() {
@@ -43,16 +32,11 @@ export default function DraftList({ onClose }: DraftListProps) {
     loadDrafts();
   }, []);
 
-  const handleDraft = (draft: Diary): void => {
-    dispatch(setTitle(draft.title));
-    dispatch(setContent(draft.content));
-    dispatch(setDate(draft.date));
-    dispatch(setFeeling(draft.feeling));
-    dispatch(setPrivateStatus(draft.privateStatus));
-    dispatch(setWeather(draft.weather));
-    dispatch(setDrawing(draft.picture || ""));
-
-    onClose();
+  // 임시저장 일기 삭제
+  const handleDeleteDraft = (diaryId: number) => {
+    setDrafts((prevDrafts) =>
+      prevDrafts.filter((draft) => draft.diaryId !== diaryId)
+    );
   };
 
   if (loading) return <div>로딩 중...</div>;
@@ -62,13 +46,12 @@ export default function DraftList({ onClose }: DraftListProps) {
     <div className="w-full gap-3">
       {drafts.length > 0 ? (
         drafts.map((draft) => (
-          <div
+          <DraftItem
             key={draft.diaryId}
-            className="border-b border-gray-100 last:border-b-0 cursor-pointer"
-            onClick={() => handleDraft(draft)}
-          >
-            <DraftItem draft={draft} />
-          </div>
+            draft={draft}
+            onDelete={handleDeleteDraft}
+            onClose={onClose}
+          />
         ))
       ) : (
         <div className="text-xs text-gray-400 p-4 w-full h-40 flex justify-center items-center">

@@ -1,5 +1,6 @@
 import { createDiary } from "@/actions/diary/createDiary";
 import { createDiaryDraft } from "@/actions/diary/createDiaryDraft";
+import { deleteDiary } from "@/actions/diary/deleteDiary";
 import { getDiaryDates } from "@/actions/diary/getDiaryDate";
 import { getDiaryDraft } from "@/actions/diary/getDiaryDraft";
 import {
@@ -47,4 +48,11 @@ export async function fetchDiaryDates(
 // 일기 임시저장 목록 조회
 export async function fetchDiaryDraft(): Promise<DiaryResponse> {
   return await getDiaryDraft();
+}
+
+// 임시저장 일기 삭제
+export async function deleteDraft(
+  diaryId: number
+): Promise<{ success: boolean; message: string }> {
+  return await deleteDiary({ diaryId });
 }
