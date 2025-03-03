@@ -1,4 +1,7 @@
-import { ReactNode } from "react";
+"use client";
+
+import { ReactNode, useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import DefaultLayout from "./DefaultLayout";
 
 interface ParellelLayoutProps {
@@ -10,15 +13,48 @@ export default function ParellelLayout({
   children,
   detail,
 }: ParellelLayoutProps) {
-  // TODO 모바일 반응형 children / detail 하나만 보이기, 헤더 뒤로가기 추가
+  const [isMobile, setIsMobile] = useState(false);
+  const pathname = usePathname();
+
+  const showChildrenFirstRoutes = [
+    "/diary",
+    "/feed",
+    "/setting",
+    "/shared-diary",
+  ];
+  const shouldShowChildrenFirst = showChildrenFirstRoutes.includes(pathname);
+
+  useEffect(() => {
+    const checkScreenSize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkScreenSize();
+    window.addEventListener("resize", checkScreenSize);
+
+    return () => {
+      window.removeEventListener("resize", checkScreenSize);
+    };
+  }, []);
+
   return (
-    <div className="flex gap-4 w-full justify-center gap-12">
-      <div className="w-full md:w-1/2 hidden md:block">
-        <DefaultLayout>{children}</DefaultLayout>
-      </div>
-      <div className="w-full md:w-1/2 block">
-        <DefaultLayout>{detail}</DefaultLayout>
-      </div>
+    <div className="flex gap-4 w-full justify-center gap-10">
+      {!isMobile ? (
+        <>
+          <div className="w-full md:w-1/2">
+            <DefaultLayout>{children}</DefaultLayout>
+          </div>
+          <div className="w-full md:w-1/2">
+            <DefaultLayout>{detail}</DefaultLayout>
+          </div>
+        </>
+      ) : (
+        <div className="w-full">
+          <DefaultLayout>
+            {shouldShowChildrenFirst ? children : detail}
+          </DefaultLayout>
+        </div>
+      )}
     </div>
   );
 }

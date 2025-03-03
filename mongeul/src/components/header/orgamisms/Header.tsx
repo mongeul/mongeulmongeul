@@ -1,20 +1,34 @@
 "use client";
 
-import Link from "next/link";
-import NotificationIcon from "@/assets/icons/notification.svg";
+import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
+import MobileHeader from "../molecules/MobileHeader";
+import WebHeader from "../molecules/WebHeader";
 
 export default function Header() {
+  const [isMobile, setIsMobile] = useState(false);
+  const pathname = usePathname();
+
+  const alwaysShowWebHeader = ["/diary", "/feed", "/setting", "/shared-diary"];
+  const shouldShowWebHeader = alwaysShowWebHeader.includes(pathname);
+
+  useEffect(() => {
+    const checkScreenSize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkScreenSize();
+    window.addEventListener("resize", checkScreenSize);
+
+    return () => {
+      window.removeEventListener("resize", checkScreenSize);
+    };
+  }, []);
+
   return (
     <div className="w-full flex justify-center">
       <div className="w-full md:w-3/4 flex justify-between p-4">
-        <Link href="/">몽글몽글</Link>
-        <Link href="/notification">
-          <NotificationIcon
-            className="w-6 h-6 text-zinc-400"
-            width={24}
-            height={24}
-          />
-        </Link>
+        {shouldShowWebHeader || !isMobile ? <WebHeader /> : <MobileHeader />}
       </div>
     </div>
   );

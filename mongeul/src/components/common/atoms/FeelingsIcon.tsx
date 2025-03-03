@@ -3,20 +3,20 @@
 import { useMemo } from "react";
 import RoundIcon from "@/components/common/atoms/RoundIcon";
 import HappyIcon from "@/assets/icons/happy.svg";
-import FeelingIcon from "@/assets/icons/feeling.svg";
-import { Feelings } from "@/types/diaryTypes";
+import FeelIcon from "@/assets/icons/feel.svg";
+import { Feeling } from "@/types/diaryTypes";
 
 interface FeelingsIconProps {
-  feelings: Feelings;
+  feeling: Feeling;
   size?: string;
 }
 
 export default function FeelingsIcon({
-  feelings,
+  feeling,
   size = "w-9 h-9",
 }: FeelingsIconProps) {
   const status = useMemo(() => {
-    switch (feelings) {
+    switch (feeling) {
       case "HAPPY":
         return {
           icon: (
@@ -48,13 +48,13 @@ export default function FeelingsIcon({
         return {
           icon: (
             <RoundIcon backgroundColor="bg-zinc-300">
-              <FeelingIcon className={`text-white ${size}`} />
+              <FeelIcon className={`text-white ${size}`} />
             </RoundIcon>
           ),
           label: "기분 없음",
         };
     }
-  }, [feelings, size]);
+  }, [feeling, size]);
 
   return status;
 }
