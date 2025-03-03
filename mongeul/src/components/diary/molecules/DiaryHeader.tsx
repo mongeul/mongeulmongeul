@@ -12,7 +12,7 @@ const DiaryHeader: React.FC = () => {
   return (
     <div className="flex items-center justify-between w-full p-2">
       <DiaryDate />
-      <div className="flex space-x-3">
+      <div className="flex space-x-10">
         <DiaryWeather />
         <DiaryPrivateStatusIcon />
       </div>
