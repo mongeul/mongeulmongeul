@@ -6,7 +6,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { setSelectedDate, setCurrentMonth } from "@/store/calendarSlice";
 
-const Calendar = () => {
+interface CalendarProps {
+  onSelectDate: (date: string) => void;
+}
+
+const Calendar: React.FC<CalendarProps> = ({ onSelectDate }) => {
   const dispatch = useDispatch();
   const { currentMonth, diaryDates, selectedDate } = useSelector(
     (state: RootState) => state.calendar
@@ -21,6 +25,7 @@ const Calendar = () => {
       currentMonth.month
     ).padStart(2, "0")}-${String(date).padStart(2, "0")}`;
     dispatch(setSelectedDate(formattedDate));
+    onSelectDate(formattedDate);
   };
 
   return (

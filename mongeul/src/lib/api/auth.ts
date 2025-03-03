@@ -4,7 +4,7 @@ import { setUser } from "@/store/userSlice";
 
 // 카카오 로그인 URL 가져오기
 export const getKakaoLoginUrl = async (): Promise<string> => {
-  const data = await apiClient("/api/v1/auth/kakao", { method: "GET" });
+  const data = await apiClient(`/api/v1/auth/kakao`, { method: "GET" });
   return data.data.loginUrl;
 };
 

@@ -4,6 +4,7 @@ import { RootState } from "@/store/store";
 import Image from "next/image";
 import WeatherIcon from "@/assets/icons/weather.svg";
 import { useEffect, useState } from "react";
+import FeedIcon from "@/assets/icons/feed.svg";
 
 const DiaryWeather: React.FC = () => {
   const { selectedDiary } = useSelector((state: RootState) => state.calendar);
@@ -40,13 +41,7 @@ const DiaryWeather: React.FC = () => {
           className="opacity-70"
         />
       ) : (
-        <Image
-          src={WeatherIcon.src}
-          alt="Default Weather Icon"
-          width={24}
-          height={24}
-          className="opacity-70"
-        />
+        <FeedIcon className="w-10 h-10 text-blue-300" />
       )}
     </div>
   );

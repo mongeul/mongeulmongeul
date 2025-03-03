@@ -7,23 +7,28 @@ import DiaryTitle from "../atoms/DiaryTitle";
 import DiaryImage from "../atoms/DiaryImage";
 import DiaryContent from "../atoms/DiaryContent";
 import Card from "@/components/common/atoms/Card";
+import { Diary as DiaryType } from "@/types/diaryTypes";
 
-const Diary: React.FC = () => {
+interface DiaryProps {
+  diary?: DiaryType | null;
+}
+
+const Diary: React.FC<DiaryProps> = ({ diary }) => {
   const { selectedDiary } = useSelector((state: RootState) => state.calendar);
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-lg max-w-md">
+    <div>
       {selectedDiary ? (
-        <>
-          <DiaryHeader />
-          <DiaryTitle />
-          <DiaryImage />
-          <DiaryContent />
-        </>
+        <Card height="min-h-[200px] lg:min-h-[450px]">
+          <div className="flex flex-col items-start w-full">
+            <DiaryHeader />
+            <DiaryTitle />
+            <DiaryImage />
+            <DiaryContent />
+          </div>
+        </Card>
       ) : (
-        <div className="text-center text-gray-400">
-          📭 선택한 날짜에 일기가 없습니다.
-        </div>
+        <div></div>
       )}
     </div>
   );

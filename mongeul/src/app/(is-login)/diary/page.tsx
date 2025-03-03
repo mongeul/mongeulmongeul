@@ -14,16 +14,16 @@ import {
 
 export default function Page() {
   const dispatch = useDispatch();
-  const { selectedDate, currentMonth } = useSelector(
+  const { selectedDate, currentMonth, selectedDiary } = useSelector(
     (state: RootState) => state.calendar
   );
 
   useEffect(() => {
+    console.log("현재 선택된 월:", currentMonth);
+
     const fetchDiaryData = async () => {
-      const formattedDate = `${currentMonth.year}-${String(
-        currentMonth.month
-      ).padStart(2, "0")}`;
-      const diaries = await fetchDiaries(formattedDate);
+      const diaries = await fetchDiaries(currentMonth.year, currentMonth.month);
+      console.log("일기데이터", diaries);
       dispatch(setDiaryDates(diaries.map((diary) => diary.date)));
     };
 
@@ -33,7 +33,10 @@ export default function Page() {
   const handleDateSelect = (date: string) => {
     console.log(`${date} 날짜 클릭됨 / API 요청 실행`);
 
-    fetchDiaries(date).then((diaries) => {
+    // 연도와 월 추출
+    const [year, month] = date.split("-").map(Number);
+
+    fetchDiaries(year, month).then((diaries) => {
       if (diaries.length > 0) {
         dispatch(setSelectedDiary(diaries[0]));
       } else {
@@ -45,12 +48,12 @@ export default function Page() {
   };
 
   return (
-    <div className="flex flex-col xl:flex-row w-full min-h-screen">
+    <div className="flex flex-col xl:flex-row w-full gap-4 min-h-screen">
       <div className="flex-1 justify-center items-start">
-        <Calendar />
+        <Calendar onSelectDate={handleDateSelect} />
       </div>
       <div className="flex-1 justify-center items-start">
-        <Diary />
+        {selectedDiary ? <Diary diary={selectedDiary} /> : <div></div>}
       </div>
     </div>
   );
