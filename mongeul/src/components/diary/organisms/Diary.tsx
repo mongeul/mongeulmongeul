@@ -20,7 +20,7 @@ const Diary: React.FC<DiaryProps> = ({ diary }) => {
     <div>
       {selectedDiary ? (
         <Card height="min-h-[200px] lg:min-h-[450px]">
-          <div className="flex flex-col items-start w-full">
+          <div className="flex flex-col items-start w-full p-4">
             <DiaryHeader />
             <DiaryTitle />
             <DiaryImage />
