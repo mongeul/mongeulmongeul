@@ -11,10 +11,10 @@ const CalendarIcon: React.FC<CalendarIconProps> = ({
   hasDiary = false,
   diaryImage,
 }) => {
-  if (hasDiary && diaryImage) {
+  if (hasDiary) {
     return (
       // <Image src={diaryImage} alt="Diary" className="w-6 h-6 rounded-md" />
-      <FeedIcon className="w-6 h-6 text-skyblue-300" />
+      <FeedIcon className="w-6 h-6 text-blue-300" />
     );
   }
   return <FeedIcon className="w-6 h-6 text-gray-300" />;

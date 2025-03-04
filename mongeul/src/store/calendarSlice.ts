@@ -8,10 +8,14 @@ interface CalendarState {
   diaryDates: string[];
 }
 
+const today = new Date();
 const initialState: CalendarState = {
   selectedDate: "",
   selectedDiary: null,
-  currentMonth: { year: 2025, month: 2 },
+  currentMonth: {
+    year: today.getFullYear(),
+    month: today.getMonth() + 1,
+  },
   diaryDates: [],
 };
 

@@ -1,20 +1,23 @@
 import { Diary } from "@/types/diaryTypes";
+import { apiClient } from "./apiClient";
 
 // 내 일기 달력 다이어리 보기
-export const fetchDiaries = async (date?: string): Promise<Diary[]> => {
+export const fetchDiaries = async (
+  year: number,
+  month: number
+): Promise<Diary[]> => {
   try {
-    const query = date ? `?date=${date}` : "";
-    const response = await fetch(`/api/diary/me${query}`, {
+    const query = `?year=${year}&month=${month}`;
+
+    const response = await apiClient(`/api/v1/diaries${query}`, {
       method: "GET",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_TOKEN}`,
+      },
     });
 
-    if (!response.ok) throw new Error("내일기 가져오기 실패");
-
-    const data = await response.json();
-    console.log("일기 데이터:", data);
-
-    return data?.data?.content || [];
+    console.log("일기 데이터:", response);
+    return response.success ? response.data : [];
   } catch (error) {
     console.error("일기 조회 오류:", error);
     return [];
