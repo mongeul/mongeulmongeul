@@ -7,8 +7,8 @@ interface DiaryState {
   content: string;
   drawing: string | null;
   drawingLines: string | null;
-  feeling: Feeling | null;
-  weather: Weather | null;
+  feeling: Feeling;
+  weather: Weather;
   privateStatus: PrivateStatus;
 }
 

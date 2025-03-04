@@ -2,7 +2,7 @@
 
 import Button from "@/components/common/atoms/Button";
 import { submitDiary } from "@/lib/api/write-diary";
-import { resetDiary, setIsSubmit } from "@/store/diarySlice";
+import { resetDiary } from "@/store/diarySlice";
 import { resetDrawing } from "@/store/drawingSlice";
 import { RootState } from "@/store/store";
 import { useRouter } from "next/navigation";
