@@ -1,11 +1,13 @@
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 
+// 일 찾기
 const getDateofMonth = (dateString: string) => {
   const date = new Date(dateString);
   return String(date.getDate()).padStart(2, "0");
 };
 
+// 요일 찾기
 const getDayofWeek = (dateString: string) => {
   const date = new Date(dateString);
   return new Intl.DateTimeFormat("ko-KR", { weekday: "short" }).format(date);
