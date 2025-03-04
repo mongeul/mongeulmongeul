@@ -27,7 +27,7 @@ export default function Header() {
 
   return (
     <div className="w-full flex justify-center">
-      <div className="w-full md:w-3/4 flex justify-between p-4">
+      <div className="w-full flex justify-between p-4">
         {shouldShowWebHeader || !isMobile ? <WebHeader /> : <MobileHeader />}
       </div>
     </div>

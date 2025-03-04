@@ -38,13 +38,13 @@ export default function ParellelLayout({
   }, []);
 
   return (
-    <div className="flex gap-4 w-full justify-center gap-10">
+    <div className="flex w-full justify-center gap-10">
       {!isMobile ? (
         <>
-          <div className="w-full md:w-1/2">
+          <div className="w-full lg:w-1/2">
             <DefaultLayout>{children}</DefaultLayout>
           </div>
-          <div className="w-full md:w-1/2">
+          <div className="w-full lg:w-1/2">
             <DefaultLayout>{detail}</DefaultLayout>
           </div>
         </>
