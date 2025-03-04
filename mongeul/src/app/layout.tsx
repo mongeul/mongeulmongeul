@@ -3,6 +3,7 @@ import "./globals.css";
 
 import { ThemeProvider } from "@/context/ThemeContext";
 import ClientLayout from "@/components/layout/ClientLayout";
+import QueryProvider from "@/components/layout/QueryClientProvider";
 
 export const metadata: Metadata = {
   title: "몽글몽글",
@@ -17,13 +18,15 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body className="bg-theme-50 flex flex-col items-center">
-        <ThemeProvider
-          initialTheme="sky"
-          initialFont="suit"
-          initialFontSize={16}
-        >
-          <ClientLayout>{children}</ClientLayout>
-        </ThemeProvider>
+        <QueryProvider>
+          <ThemeProvider
+            initialTheme="sky"
+            initialFont="suit"
+            initialFontSize={16}
+          >
+            <ClientLayout>{children}</ClientLayout>
+          </ThemeProvider>
+        </QueryProvider>
       </body>
     </html>
   );
