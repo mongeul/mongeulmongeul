@@ -20,10 +20,7 @@ const feedSlice = createSlice({
     setLastDiaryId: (state, action: PayloadAction<number | null>) => {
       state.lastDiaryId = action.payload;
     },
-    resetFeed(state) {
-      state.lastDiaryId = null;
-      state.myFeed = false;
-    },
+    resetFeed: () => initialState,
   },
 });
 

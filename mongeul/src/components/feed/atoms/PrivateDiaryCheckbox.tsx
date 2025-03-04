@@ -3,7 +3,6 @@
 import CheckBox from "@/components/common/atoms/CheckBox";
 import { setMyFeed } from "@/store/feedSlice";
 import { RootState } from "@/store/store";
-import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 export default function PrivateDiaryCheckbox() {
