@@ -172,7 +172,7 @@ public class DiaryService {
     public List<DiaryDraftResponse> getDraftDiaries(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
-        List<Diary> diaries = diaryRepository.findByUserAndPublishedOrderByDateDesc(user, false);
+        List<Diary> diaries = diaryRepository.findByUserAndPublishedOrderByDateDescIdDesc(user, false);
         return diaries.stream()
                 .map(DiaryDraftResponse::from)
                 .toList();
