@@ -4,6 +4,7 @@ import { fetchFeedDetail } from "@/lib/api/feed";
 import { FeedDetail } from "@/types/feedTypes";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import FeedDetailContainer from "../organisms/FeedDetailContainer";
 
 export default function FeedDetailTemplates() {
   const { id } = useParams();
@@ -42,8 +43,7 @@ export default function FeedDetailTemplates() {
 
   return (
     <div className="w-full flex flex-col justify-center items-center">
-      <h1>{feed.title}</h1>
-      <p>{feed.content}</p>
+      {feed && <FeedDetailContainer feed={feed} />}
     </div>
   );
 }
