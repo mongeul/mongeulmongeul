@@ -20,7 +20,7 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
   selectedDate,
   onSelectDate,
 }) => {
-  const { diaryDates } = useSelector((state: RootState) => state.calendar);
+  const { diaryEntries } = useSelector((state: RootState) => state.calendar);
   const firstDay = getFirstDayOfMonth(year, month);
   const daysInMonth = new Date(year, month, 0).getDate();
   const totalCells = firstDay + daysInMonth;
@@ -37,12 +37,17 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
           2,
           "0"
         )}-${String(index + 1).padStart(2, "0")}`;
+
+        const hasDiary = diaryEntries.some(
+          (entry) => entry.date === formattedDate
+        );
+
         return (
           <CalendarDate
             key={index}
             date={index + 1}
             isSelected={index + 1 === selectedDate}
-            hasDiary={diaryDates.includes(formattedDate)}
+            hasDiary={hasDiary}
             onClick={() => onSelectDate(index + 1)}
           />
         );

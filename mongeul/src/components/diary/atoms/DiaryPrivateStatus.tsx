@@ -6,7 +6,7 @@ const DiaryPrivateStatus: React.FC = () => {
   const { selectedDiary } = useSelector((state: RootState) => state.calendar);
   if (!selectedDiary) return null;
 
-  const { icon, label } = PrivateStatusIcon({
+  const { icon } = PrivateStatusIcon({
     privateStatus: selectedDiary.privateStatus,
   });
 

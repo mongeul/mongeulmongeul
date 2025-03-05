@@ -23,3 +23,25 @@ export const fetchDiaries = async (
     return [];
   }
 };
+
+// 일기 상세 조회
+export const fetchMyDiary = async (
+  diaryId: number,
+  lockPassword?: string
+): Promise<Diary | null> => {
+  try {
+    const query = lockPassword ? `?lockPassword=${lockPassword}` : "";
+    const response = await apiClient(`/api/v1/diaries/${diaryId}${query}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_TOKEN}`,
+      },
+    });
+
+    console.log(`일기 (${diaryId}) 데이터:`, response);
+    return response.success ? response.data : null;
+  } catch (error) {
+    console.error(`일기 (${diaryId}) 조회 오류:`, error);
+    return null;
+  }
+};
