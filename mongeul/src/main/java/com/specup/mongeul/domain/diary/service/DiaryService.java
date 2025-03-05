@@ -208,7 +208,7 @@ public class DiaryService {
             throw new CustomException(ErrorCode.INVALID_DIARY_USER);
         }
 
-        // 🔹 Google Drive 이미지 삭제 (파일 URL이 있을 경우)
+        // Google Drive 이미지 삭제 (파일 URL이 있을 경우)
         if (diary.getPicture() != null && diary.getPicture().contains("id=")) {
             try {
                 googleDriveService.deleteFile(diary.getPicture());
