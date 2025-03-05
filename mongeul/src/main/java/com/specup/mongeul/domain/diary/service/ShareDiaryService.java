@@ -12,6 +12,7 @@ import com.specup.mongeul.domain.diary.entity.ShareDiary;
 import com.specup.mongeul.domain.diary.repository.ShareDiaryRepository;
 import com.specup.mongeul.domain.friends.entity.Friend;
 import com.specup.mongeul.domain.friends.repository.FriendRepository;
+import com.specup.mongeul.domain.service.GoogleDriveService;
 import com.specup.mongeul.domain.user.entity.User;
 import com.specup.mongeul.domain.user.repository.UserRepository;
 import com.specup.mongeul.global.error.CustomException;
@@ -19,6 +20,7 @@ import com.specup.mongeul.global.error.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -30,7 +32,7 @@ public class ShareDiaryService {
     private final UserRepository userRepository;
     private final FriendRepository friendRepository;
     private final ObjectMapper objectMapper;
-
+    private final GoogleDriveService googleDriveService;
 
     // 공유일기 생성
     @Transactional
@@ -51,20 +53,30 @@ public class ShareDiaryService {
             throw new CustomException(ErrorCode.INVALID_SHARE_DIARY_TURN);
         }
 
-        // pictureLines Json 직렬화
-        String pictureLinesJson = null;
-        if (request.getPictureLines() != null && !request.getPictureLines().isEmpty()) {
+        MultipartFile picture = request.getPicture();
+        // 그림 URL 생성
+        String pictureUrl = null;
+        if (picture != null && !picture.isEmpty()) {
             try {
-                pictureLinesJson = objectMapper.writeValueAsString(request.getPictureLines());
-            } catch (JsonProcessingException e) {
-                throw new RuntimeException("PictureLines Json 직렬화 실패", e);
+                // 임시 파일 생성 및 업로드
+                java.io.File tempFile = java.io.File.createTempFile("temp-", null);
+                picture.transferTo(tempFile);
+
+                pictureUrl = googleDriveService.uploadFile(tempFile, picture.getContentType(), groupId, request.getDate(), false);
+
+                // 파일 자동 삭제 (try-with-resources 활용)
+                if (!tempFile.delete()) {
+                    tempFile.getAbsolutePath();
+                }
+            } catch (Exception e) {
+                throw new RuntimeException("파일 업로드 실패", e);
             }
         }
 
         ShareDiary shareDiary = shareDiaryRepository.save(
                 ShareDiary.create(
-                        request.getTitle(), request.getContent(), request.getPicture(),
-                        request.getDate(), pictureLinesJson, request.getWeather(),
+                        request.getTitle(), request.getContent(), pictureUrl,
+                        request.getDate(), request.getPictureLines(), request.getWeather(),
                         request.getFeeling(), true, group, user
                 )
         );
