@@ -46,20 +46,6 @@ public class DiaryService {
         }
 
         MultipartFile picture = request.getPicture();
-
-//        LocalDateTime startOfDay = LocalDateTime.now().with(LocalTime.MIN);
-//        LocalDateTime endOfDay = LocalDateTime.now().with(LocalTime.MAX);
-
-        // 일기 하루에 1개 검증 로직 (데이터 조회 ver)
-//        if (diaryRepository.findByUserIdAndCreatedAtBetween(userId, startOfDay, endOfDay).isPresent()) {
-//            throw new CustomException(ErrorCode.DIARY_ALREADY_EXISTS);
-//        }
-
-        // 일기 하루에 1개 검증 로직 (존재여부 체크 ver) 이전
-//        if (diaryRepository.existsByUserIdAndCreatedAtBetween(userId, startOfDay, endOfDay)) {
-//            throw new CustomException(ErrorCode.DIARY_ALREADY_EXISTS);
-//        }
-
         // 그림 URL 생성
         String pictureUrl = null;
         if (picture != null && !picture.isEmpty()) {
@@ -95,19 +81,10 @@ public class DiaryService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
-        String pictureLinesJson = null;
-        if (request.getPictureLines() != null && !request.getPictureLines().isEmpty()) {
-            try {
-                pictureLinesJson = objectMapper.writeValueAsString(request.getPictureLines());
-            } catch (JsonProcessingException e) {
-                throw new RuntimeException("PictureLines Json 직렬화 실패", e);
-            }
-        }
-
         Diary diary = diaryRepository.save(
                 Diary.create(
                         request.getTitle(), request.getContent(), null,
-                        request.getDate(), pictureLinesJson, request.getWeather(), request.getFeeling(),
+                        request.getDate(), request.getPictureLines(), request.getWeather(), request.getFeeling(),
                         request.getPrivateStatus(), false, user
                 )
         );
@@ -147,18 +124,25 @@ public class DiaryService {
             }
         }
 
-        String pictureLinesJson = null;
-        if (request.getPictureLines() != null && !request.getPictureLines().isEmpty()) {
+        MultipartFile newPicture = request.getPicture();
+        String pictureUrl = diary.getPicture();
+
+        if (newPicture != null && !newPicture.isEmpty()) {
             try {
-                pictureLinesJson = objectMapper.writeValueAsString(request.getPictureLines());
-            } catch (JsonProcessingException e) {
-                throw new RuntimeException("PictureLines Json 직렬화 실패", e);
+                // 새 이미지 업로드 (자동 덮어쓰기 로직 포함)
+                java.io.File tempFile = java.io.File.createTempFile("temp-", null);
+                newPicture.transferTo(tempFile);
+                pictureUrl = googleDriveService.uploadFile(tempFile, newPicture.getContentType(), userId, request.getDate(), true);
+
+                tempFile.delete();
+            } catch (Exception e) {
+                throw new RuntimeException("파일 업로드 실패", e);
             }
         }
 
         diary.update(
-                request.getTitle(), request.getContent(), null,
-                request.getDate(), pictureLinesJson, request.getWeather(),
+                request.getTitle(), request.getContent(), pictureUrl,
+                request.getDate(), request.getPictureLines(), request.getWeather(),
                 request.getFeeling(), request.getPrivateStatus(), diary.getPublished());
 
         return DiaryResponse.from(diary);
@@ -218,6 +202,15 @@ public class DiaryService {
                 .orElseThrow(() -> new CustomException(ErrorCode.DIARY_NOT_FOUND));
         if (!diary.getUser().getId().equals(userId)) {
             throw new CustomException(ErrorCode.INVALID_DIARY_USER);
+        }
+
+        if (diary.getPicture() != null) {
+            try {
+                String fileId = googleDriveService.extractGoogleDriveFileId(diary.getPicture());
+                googleDriveService.deleteFile(fileId);
+            } catch (Exception e) {
+                System.out.println("Google Drive 파일 삭제 실패: " + e.getMessage());
+            }
         }
         diaryRepository.delete(diary);
     }
