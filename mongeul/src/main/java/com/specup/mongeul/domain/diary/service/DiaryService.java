@@ -11,6 +11,7 @@ import com.specup.mongeul.domain.diary.dto.response.Diary.DiaryPictureLineRespon
 import com.specup.mongeul.domain.diary.entity.Diary;
 import com.specup.mongeul.domain.diary.entity.ENUM.DiaryPrivate;
 import com.specup.mongeul.domain.diary.repository.DiaryRepository;
+import com.specup.mongeul.domain.service.GoogleDriveService;
 import com.specup.mongeul.domain.user.entity.LockPassword;
 import com.specup.mongeul.domain.user.entity.User;
 import com.specup.mongeul.domain.user.repository.LockPasswordRepository;
@@ -20,6 +21,7 @@ import com.specup.mongeul.global.error.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -31,6 +33,7 @@ public class DiaryService {
     private final DiaryRepository diaryRepository;
     private final LockPasswordRepository lockPasswordRepository;
     private final ObjectMapper objectMapper;
+    private final GoogleDriveService googleDriveService;
 
     // 일기 생성
     @Transactional
@@ -41,6 +44,8 @@ public class DiaryService {
         if (diaryRepository.existsByUserIdAndDateAndPublished(userId, request.getDate(), true)) {
             throw new CustomException(ErrorCode.DIARY_ALREADY_EXISTS);
         }
+
+        MultipartFile picture = request.getPicture();
 
 //        LocalDateTime startOfDay = LocalDateTime.now().with(LocalTime.MIN);
 //        LocalDateTime endOfDay = LocalDateTime.now().with(LocalTime.MAX);
@@ -55,19 +60,29 @@ public class DiaryService {
 //            throw new CustomException(ErrorCode.DIARY_ALREADY_EXISTS);
 //        }
 
-        String pictureLinesJson = null;
-        if (request.getPictureLines() != null && !request.getPictureLines().isEmpty()) {
+        // 그림 URL 생성
+        String pictureUrl = null;
+        if (picture != null && !picture.isEmpty()) {
             try {
-                pictureLinesJson = objectMapper.writeValueAsString(request.getPictureLines());
-            } catch (JsonProcessingException e) {
-                throw new RuntimeException("PictureLines Json 직렬화 실패", e);
+                // 임시 파일 생성 및 업로드
+                java.io.File tempFile = java.io.File.createTempFile("temp-", null);
+                picture.transferTo(tempFile);
+
+                pictureUrl = googleDriveService.uploadFile(tempFile, picture.getContentType(), userId, request.getDate(), true);
+
+                // 파일 자동 삭제 (try-with-resources 활용)
+                if (!tempFile.delete()) {
+                    tempFile.getAbsolutePath();
+                }
+            } catch (Exception e) {
+                throw new RuntimeException("파일 업로드 실패", e);
             }
         }
 
         Diary diary = diaryRepository.save(
                 Diary.create(
-                        request.getTitle(), request.getContent(), request.getPicture(),
-                        request.getDate(), pictureLinesJson, request.getWeather(), request.getFeeling(),
+                        request.getTitle(), request.getContent(), pictureUrl,
+                        request.getDate(), request.getPictureLines(), request.getWeather(), request.getFeeling(),
                         request.getPrivateStatus(), true, user
                 )
         );
@@ -91,7 +106,7 @@ public class DiaryService {
 
         Diary diary = diaryRepository.save(
                 Diary.create(
-                        request.getTitle(), request.getContent(), request.getPicture(),
+                        request.getTitle(), request.getContent(), null,
                         request.getDate(), pictureLinesJson, request.getWeather(), request.getFeeling(),
                         request.getPrivateStatus(), false, user
                 )
@@ -142,7 +157,7 @@ public class DiaryService {
         }
 
         diary.update(
-                request.getTitle(), request.getContent(), request.getPicture(),
+                request.getTitle(), request.getContent(), null,
                 request.getDate(), pictureLinesJson, request.getWeather(),
                 request.getFeeling(), request.getPrivateStatus(), diary.getPublished());
 
