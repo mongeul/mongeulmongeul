@@ -5,24 +5,24 @@ export interface Emoji {
   count: number;
 }
 
-export interface FeedPreview {
+export interface FeedListItem {
   feedId: number;
   feeling: Feeling;
 }
 
-export interface Feed extends BaseDiary {
+export interface FeedListResponse {
+  success: boolean;
+  message: string;
+  data: FeedListItem[];
+}
+
+export interface FeedDetail extends BaseDiary {
   feedId: number;
   emojis: Emoji[];
 }
 
-export interface FeedResponse {
+export interface FeedDetailResponse {
   success: boolean;
   message: string;
-  data: Feed[];
-}
-
-export interface FeedsResponse {
-  success: boolean;
-  message: string;
-  data: FeedPreview[];
+  data: FeedDetail;
 }

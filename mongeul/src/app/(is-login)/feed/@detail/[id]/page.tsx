@@ -1,9 +1,5 @@
-"use client";
-
-import { useParams } from "next/navigation";
+import FeedDetailTemplates from "@/components/feed/templates/FeedDetailTemplates";
 
 export default function FeedPage() {
-  const { id } = useParams();
-
-  return <div>피드 ID: {id}</div>;
+  return <FeedDetailTemplates />;
 }
