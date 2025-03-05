@@ -12,7 +12,7 @@ interface CalendarProps {
 
 const Calendar: React.FC<CalendarProps> = ({ onSelectDate }) => {
   const dispatch = useDispatch();
-  const { currentMonth, diaryDates, selectedDate } = useSelector(
+  const { currentMonth, diaryEntries, selectedDate } = useSelector(
     (state: RootState) => state.calendar
   );
 
@@ -45,7 +45,7 @@ const Calendar: React.FC<CalendarProps> = ({ onSelectDate }) => {
               selectedDate={
                 selectedDate ? Number(selectedDate.split("-")[2]) : undefined
               }
-              diaryDates={diaryDates}
+              diaryDates={diaryEntries.map((entry) => entry.date)}
               onSelectDate={handleDateSelect}
             />
           </div>

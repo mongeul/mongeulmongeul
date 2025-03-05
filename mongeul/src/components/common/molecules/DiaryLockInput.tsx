@@ -1,7 +1,13 @@
 import { useState, useRef } from "react";
 import Input from "../atoms/Input";
 
-export default function DiaryLockInput() {
+interface DiaryLockInputProps {
+  onPasswordChange?: (password: string) => void;
+}
+
+const DiaryLockInput: React.FC<DiaryLockInputProps> = ({
+  onPasswordChange,
+}) => {
   const [diaryPassword, setDiaryPassword] = useState(["", "", "", ""]);
   const inputRefs = Array.from({ length: 4 }, () =>
     useRef<HTMLInputElement | null>(null)
@@ -18,6 +24,10 @@ export default function DiaryLockInput() {
     const newDiaryPassword = [...diaryPassword];
     newDiaryPassword[index] = value;
     setDiaryPassword(newDiaryPassword);
+
+    if (onPasswordChange) {
+      onPasswordChange(newDiaryPassword.join(""));
+    }
 
     // 다음 Input으로 자동 포커스 이동
     if (value && index < 3 && inputRefs[index + 1]?.current) {
@@ -51,4 +61,6 @@ export default function DiaryLockInput() {
       ))}
     </div>
   );
-}
+};
+
+export default DiaryLockInput;
