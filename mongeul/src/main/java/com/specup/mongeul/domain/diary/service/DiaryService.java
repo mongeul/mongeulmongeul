@@ -225,6 +225,7 @@ public class DiaryService {
     public DiaryPictureLineResponse readPicture(Long diaryId) {
         Diary diary = diaryRepository.findById(diaryId)
                 .orElseThrow(() -> new CustomException(ErrorCode.DIARY_NOT_FOUND));
+
         List<PictureLineDto> pictureLines = null;
         if (diary.getPictureLines() != null && !diary.getPictureLines().isEmpty()) {
             try {
