@@ -4,8 +4,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.specup.mongeul.domain.diary.dto.common.PictureLineDto;
 import com.specup.mongeul.domain.diary.dto.request.Diary.DiaryCreateRequest;
+import com.specup.mongeul.domain.diary.dto.request.Diary.DiaryDraftRequest;
 import com.specup.mongeul.domain.diary.dto.request.Diary.DiaryUpdateRequest;
 import com.specup.mongeul.domain.diary.dto.response.Diary.DiaryDateResponse;
+import com.specup.mongeul.domain.diary.dto.response.Diary.DiaryDraftResponse;
 import com.specup.mongeul.domain.diary.dto.response.Diary.DiaryResponse;
 import com.specup.mongeul.domain.diary.dto.response.Diary.DiaryPictureLineResponse;
 import com.specup.mongeul.domain.diary.entity.Diary;
@@ -77,7 +79,7 @@ public class DiaryService {
 
     // 일기 임시저장
     @Transactional
-    public DiaryResponse saveDraft(Long userId, DiaryCreateRequest request) {
+    public DiaryDraftResponse saveDraft(Long userId, DiaryDraftRequest request) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
@@ -88,25 +90,25 @@ public class DiaryService {
                         request.getPrivateStatus(), false, user
                 )
         );
-        return DiaryResponse.from(diary);
+        return DiaryDraftResponse.from(diary);
     }
 
     // 임시저장 -> 최종저장
-    @Transactional
-    public DiaryResponse publish(Long userId, Long diaryId) {
-        Diary diary = diaryRepository.findById(diaryId)
-                .orElseThrow(() -> new CustomException(ErrorCode.DIARY_NOT_FOUND));
-        if (!diary.getUser().getId().equals(userId)) {
-            throw new CustomException(ErrorCode.INVALID_DIARY_USER);
-        }
-        if (diaryRepository.existsByUserIdAndDateAndPublished(userId, diary.getDate(), true)) {
-            throw new CustomException(ErrorCode.DIARY_ALREADY_EXISTS);
-        }
-        diary.update(diary.getTitle(), diary.getContent(), diary.getPicture(),
-                diary.getDate(), diary.getPictureLines(), diary.getWeather(),
-                diary.getFeeling(), diary.getPrivateStatus(), true);
-        return DiaryResponse.from(diary);
-    }
+//    @Transactional
+//    public DiaryResponse publish(Long userId, Long diaryId) {
+//        Diary diary = diaryRepository.findById(diaryId)
+//                .orElseThrow(() -> new CustomException(ErrorCode.DIARY_NOT_FOUND));
+//        if (!diary.getUser().getId().equals(userId)) {
+//            throw new CustomException(ErrorCode.INVALID_DIARY_USER);
+//        }
+//        if (diaryRepository.existsByUserIdAndDateAndPublished(userId, diary.getDate(), true)) {
+//            throw new CustomException(ErrorCode.DIARY_ALREADY_EXISTS);
+//        }
+//        diary.update(diary.getTitle(), diary.getContent(), diary.getPicture(),
+//                diary.getDate(), diary.getPictureLines(), diary.getWeather(),
+//                diary.getFeeling(), diary.getPrivateStatus(), true);
+//        return DiaryResponse.from(diary);
+//    }
 
     // 일기 수정
     @Transactional
@@ -138,6 +140,8 @@ public class DiaryService {
             } catch (Exception e) {
                 throw new RuntimeException("파일 업로드 실패", e);
             }
+        } else {
+            pictureUrl = null;
         }
 
         diary.update(
@@ -165,12 +169,12 @@ public class DiaryService {
 
     // 일기 임시저장 목록 조회
     @Transactional(readOnly = true)
-    public List<DiaryResponse> getDraftDiaries(Long userId) {
+    public List<DiaryDraftResponse> getDraftDiaries(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         List<Diary> diaries = diaryRepository.findByUserAndPublishedOrderByDateDesc(user, false);
         return diaries.stream()
-                .map(DiaryResponse::from)
+                .map(DiaryDraftResponse::from)
                 .toList();
     }
 
@@ -204,14 +208,15 @@ public class DiaryService {
             throw new CustomException(ErrorCode.INVALID_DIARY_USER);
         }
 
-        if (diary.getPicture() != null) {
+        // 🔹 Google Drive 이미지 삭제 (파일 URL이 있을 경우)
+        if (diary.getPicture() != null && diary.getPicture().contains("id=")) {
             try {
-                String fileId = googleDriveService.extractGoogleDriveFileId(diary.getPicture());
-                googleDriveService.deleteFile(fileId);
+                googleDriveService.deleteFile(diary.getPicture());
             } catch (Exception e) {
-                System.out.println("Google Drive 파일 삭제 실패: " + e.getMessage());
+                System.out.println("⚠️ Google Drive 파일 삭제 실패 (무시) : " + e.getMessage());
             }
         }
+
         diaryRepository.delete(diary);
     }
 
