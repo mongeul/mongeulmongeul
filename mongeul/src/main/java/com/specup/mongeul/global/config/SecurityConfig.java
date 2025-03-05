@@ -43,7 +43,8 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/**",
                                 "/api/auth/kakao",     // 카카오 로그인 URL 조회
-                                "/api/auth/kakao/**"   // 카카오 로그인 콜백
+                                "/api/auth/kakao/**",  // 카카오 로그인 콜백
+                                "/api/drive/**"
                         ).permitAll()
                         .anyRequest().authenticated())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
