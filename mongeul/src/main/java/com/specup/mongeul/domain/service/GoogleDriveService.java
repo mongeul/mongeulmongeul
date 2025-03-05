@@ -22,10 +22,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.security.GeneralSecurityException;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.LocalDate;
+import java.util.*;
 
 @Service
 public class GoogleDriveService {
@@ -44,8 +42,11 @@ public class GoogleDriveService {
     @Value("${google.drive.auth-server-port}")
     private int authServerPort;
 
-    @Value("${google.drive.upload-folder-id}")
-    private String uploadFolderId;
+    @Value("${google.drive.upload-folder-ids.diary}")
+    private String diaryUploadFolderId;
+
+    @Value("${google.drive.upload-folder-ids.share-diary}")
+    private String shareDiaryUploadFolderId;
 
     private Credential getCredentials(final HttpTransport HTTP_TRANSPORT) throws IOException {
         // 경로 객체 생성
@@ -142,44 +143,52 @@ public class GoogleDriveService {
     /**
      * 파일 업로드 로직
      */
-    public Map<String, String> processAndUploadFile(MultipartFile file, String fileName) throws Exception {
-        // 파일명이 제공되지 않은 경우 원본 파일명 사용
-        if (fileName == null || fileName.trim().isEmpty()) {
-            fileName = file.getOriginalFilename();
-        }
+//    public Map<String, String> processAndUploadFile(MultipartFile file, String fileName) throws Exception {
+//        // 파일명이 제공되지 않은 경우 원본 파일명 사용
+//        if (fileName == null || fileName.trim().isEmpty()) {
+//            fileName = file.getOriginalFilename();
+//        }
+//
+//        // ContentType 확인 (MIME 타입 자동 감지)
+//        String mimeType = file.getContentType();
+//        if (mimeType == null || mimeType.trim().isEmpty()) {
+//            // ContentType이 없는 경우 파일 확장자로 유추
+//            String extension = getFileExtension(fileName);
+//            mimeType = getMimeTypeFromExtension(extension);
+//        }
+//
+//        // MultipartFile을 임시 파일로 변환
+//        java.io.File tempFile = java.io.File.createTempFile("temp-", null);
+//        file.transferTo(tempFile);
+//
+//        // 구글 드라이브에 업로드
+//        String fileUrl = uploadFile(tempFile, mimeType, fileName);
+//
+//        // 임시 파일 삭제
+//        tempFile.delete();
+//
+//        Map<String, String> response = new HashMap<>();
+//        response.put("fileUrl", fileUrl);
+//        response.put("fileName", fileName);
+//        response.put("mimeType", mimeType);
+//
+//        return response;
+//    }
 
-        // ContentType 확인 (MIME 타입 자동 감지)
-        String mimeType = file.getContentType();
-        if (mimeType == null || mimeType.trim().isEmpty()) {
-            // ContentType이 없는 경우 파일 확장자로 유추
-            String extension = getFileExtension(fileName);
-            mimeType = getMimeTypeFromExtension(extension);
-        }
-
-        // MultipartFile을 임시 파일로 변환
-        java.io.File tempFile = java.io.File.createTempFile("temp-", null);
-        file.transferTo(tempFile);
-
-        // 구글 드라이브에 업로드
-        String fileUrl = uploadFile(tempFile, mimeType, fileName);
-
-        // 임시 파일 삭제
-        tempFile.delete();
-
-        Map<String, String> response = new HashMap<>();
-        response.put("fileUrl", fileUrl);
-        response.put("fileName", fileName);
-        response.put("mimeType", mimeType);
-
-        return response;
-    }
-
-    public String uploadFile(java.io.File filePath, String mimeType, String fileName) throws Exception {
+    // 일기 그림 업로드
+    public String uploadFile(java.io.File filePath, String mimeType, Long userId, LocalDate date, boolean isDiary) throws Exception {
         Drive driveService = getDriveService();
+
+        String uploadFolderId = isDiary ? diaryUploadFolderId : shareDiaryUploadFolderId;
+        String fileExtension = filePath.getName().substring(filePath.getName().lastIndexOf("."));
+        String newFileName = userId + "_" + date.toString() + fileExtension;
+
+        // 덮어쓰기 (기존 파일 삭제)
+        deleteExistingFile(driveService, newFileName, uploadFolderId);
 
         // 파일 메타데이터 설정
         File fileMetadata = new File();
-        fileMetadata.setName(fileName);
+        fileMetadata.setName(newFileName);
         fileMetadata.setParents(Collections.singletonList(uploadFolderId));
 
         // 파일 업로드
@@ -198,6 +207,19 @@ public class GoogleDriveService {
         return "https://drive.google.com/uc?id=" + uploadedFile.getId();
     }
 
+    private void deleteExistingFile(Drive driveService, String fileName, String folderId) throws Exception {
+        FileList result = driveService.files().list()
+                .setQ("name = '" + fileName + "' and '" + folderId + "' in parents and trashed = false")
+                .setFields("files(id)")
+                .execute();
+
+        List<File> files = result.getFiles();
+        if (!files.isEmpty()) {
+            for (File file : files) {
+                driveService.files().delete(file.getId()).execute();
+            }
+        }
+    }
 
     public void deleteFile(String fileId) throws Exception {
         Drive driveService = getDriveService();

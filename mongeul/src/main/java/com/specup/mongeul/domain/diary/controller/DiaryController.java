@@ -12,9 +12,11 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -51,10 +53,10 @@ public class DiaryController {
     }
 
     @Operation(summary = "일기 작성", description = "일기를 작성합니다.")
-    @PostMapping("/diaries")
+    @PostMapping(value = "/diaries", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ApiResponse<DiaryResponse>> create(
             @AuthenticationPrincipal User user,
-            @Valid @RequestBody DiaryCreateRequest request) {
+            @ModelAttribute DiaryCreateRequest request) {
         return ResponseEntity.ok(ApiResponse.success(diaryService.create(user.getId(), request), "일기 생성 성공"));
     }
 
