@@ -77,11 +77,11 @@ public class DiaryController {
     }
 
     @Operation(summary = "일기 수정", description = "일기를 수정합니다.")
-    @PutMapping("/diaries/{diaryId}")
+    @PutMapping(value = "/diaries/{diaryId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ApiResponse<DiaryResponse>> update(
             @AuthenticationPrincipal User user,
             @PathVariable Long diaryId,
-            @Valid @RequestBody DiaryUpdateRequest request) {
+            @ModelAttribute DiaryUpdateRequest request) {
         return ResponseEntity.ok(ApiResponse.success(diaryService.update(user.getId(), diaryId, request), "일기 수정 성공"));
     }
 
