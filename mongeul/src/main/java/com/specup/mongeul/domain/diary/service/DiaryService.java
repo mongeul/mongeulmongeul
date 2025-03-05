@@ -213,7 +213,7 @@ public class DiaryService {
             try {
                 googleDriveService.deleteFile(diary.getPicture());
             } catch (Exception e) {
-                System.out.println("⚠️ Google Drive 파일 삭제 실패 (무시) : " + e.getMessage());
+                throw new RuntimeException("파일 삭제 실패", e);
             }
         }
 
