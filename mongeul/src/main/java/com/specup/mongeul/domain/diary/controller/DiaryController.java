@@ -1,8 +1,10 @@
 package com.specup.mongeul.domain.diary.controller;
 
 import com.specup.mongeul.domain.diary.dto.request.Diary.DiaryCreateRequest;
+import com.specup.mongeul.domain.diary.dto.request.Diary.DiaryDraftRequest;
 import com.specup.mongeul.domain.diary.dto.request.Diary.DiaryUpdateRequest;
 import com.specup.mongeul.domain.diary.dto.response.Diary.DiaryDateResponse;
+import com.specup.mongeul.domain.diary.dto.response.Diary.DiaryDraftResponse;
 import com.specup.mongeul.domain.diary.dto.response.Diary.DiaryResponse;
 import com.specup.mongeul.domain.diary.dto.response.Diary.DiaryPictureLineResponse;
 import com.specup.mongeul.domain.diary.service.DiaryService;
@@ -38,7 +40,7 @@ public class DiaryController {
 
     @Operation(summary = "임시저장 일기목록 조회", description = "임시저장 된 일기목록을 조회합니다.")
     @GetMapping("/diaries/drafts")
-    public ResponseEntity<ApiResponse<List<DiaryResponse>>> getDraftDiaries(
+    public ResponseEntity<ApiResponse<List<DiaryDraftResponse>>> getDraftDiaries(
             @AuthenticationPrincipal User user) {
         return ResponseEntity.ok(ApiResponse.success(diaryService.getDraftDiaries(user.getId()), "임시저장 일기 목록 조회 성공"));
     }
@@ -62,19 +64,19 @@ public class DiaryController {
 
     @Operation(summary = "일기 임시저장", description = "일기를 임시로 저장합니다.")
     @PostMapping("/diaries/drafts")
-    public ResponseEntity<ApiResponse<DiaryResponse>> saveDraft(
+    public ResponseEntity<ApiResponse<DiaryDraftResponse>> saveDraft(
             @AuthenticationPrincipal User user,
-            @Valid @RequestBody DiaryCreateRequest request) {
+            @Valid @RequestBody DiaryDraftRequest request) {
         return ResponseEntity.ok(ApiResponse.success(diaryService.saveDraft(user.getId(), request), "일기 임시저장 성공"));
     }
 
-    @Operation(summary = "일기 임시저장 -> 일기작성", description = "임시저장 된 일기로 일기를 작성합니다.")
-    @PostMapping("/diaries/{diaryId}/publish")
-    public ResponseEntity<ApiResponse<DiaryResponse>> publish(
-            @AuthenticationPrincipal User user,
-            @PathVariable Long diaryId) {
-        return ResponseEntity.ok(ApiResponse.success(diaryService.publish(user.getId(), diaryId), "임시저장 된 일기로 일기 생성 성공"));
-    }
+//    @Operation(summary = "일기 임시저장 -> 일기작성", description = "임시저장 된 일기로 일기를 작성합니다.")
+//    @PostMapping("/diaries/{diaryId}/publish")
+//    public ResponseEntity<ApiResponse<DiaryResponse>> publish(
+//            @AuthenticationPrincipal User user,
+//            @PathVariable Long diaryId) {
+//        return ResponseEntity.ok(ApiResponse.success(diaryService.publish(user.getId(), diaryId), "임시저장 된 일기로 일기 생성 성공"));
+//    }
 
     @Operation(summary = "일기 수정", description = "일기를 수정합니다.")
     @PutMapping(value = "/diaries/{diaryId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
