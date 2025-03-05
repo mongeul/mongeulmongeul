@@ -254,7 +254,7 @@ public class DiaryService {
     }
 
     // 오늘 일기 작성여부 확인
-    public boolean isTodayDiaries(Long userId, LocalDate date) {
-        return diaryRepository.existsByUserIdAndDateAndPublished(userId, date, true);
+    public boolean isTodayDiaries(Long userId, LocalDate today) {
+        return diaryRepository.existsByUserIdAndDateAndPublished(userId, today, true);
     }
 }
