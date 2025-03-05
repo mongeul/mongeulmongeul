@@ -207,6 +207,7 @@ public class GoogleDriveService {
         return "https://drive.google.com/uc?id=" + uploadedFile.getId();
     }
 
+    // 덮어쓰기
     private void deleteExistingFile(Drive driveService, String fileName, String folderId) throws Exception {
         FileList result = driveService.files().list()
                 .setQ("name = '" + fileName + "' and '" + folderId + "' in parents and trashed = false")
@@ -221,14 +222,23 @@ public class GoogleDriveService {
         }
     }
 
-    public void deleteFile(String fileId) throws Exception {
-        Drive driveService = getDriveService();
-        driveService.files().delete(fileId).execute();
+    // 삭제
+    public void deleteFile(String fileUrl) {
+        try {
+            String fileId = extractGoogleDriveFileId(fileUrl);
+            Drive driveService = getDriveService();
+            driveService.files().delete(fileId).execute();
+        } catch (Exception e) {
+            throw new RuntimeException("Google Drive 파일 삭제 실패: " + e.getMessage(), e);
+        }
     }
 
-    public List<File> listFiles() throws Exception {
-        Drive driveService = getDriveService();
-        FileList result = driveService.files().list().setPageSize(10).setFields("files(id, name)").execute();
-        return result.getFiles();
+    // 파일아이디 찾기
+    public String extractGoogleDriveFileId(String fileUrl) {
+        if (fileUrl == null || !fileUrl.contains("id=")) {
+            throw new IllegalArgumentException("올바른 Google Drive 파일 URL이 아닙니다: " + fileUrl);
+        }
+        return fileUrl.substring(fileUrl.indexOf("id=") + 3);
     }
+
 }
