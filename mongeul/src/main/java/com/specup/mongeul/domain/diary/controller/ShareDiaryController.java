@@ -1,8 +1,10 @@
 package com.specup.mongeul.domain.diary.controller;
 
 import com.specup.mongeul.domain.diary.dto.request.ShareDiary.ShareDiaryCreateRequest;
+import com.specup.mongeul.domain.diary.dto.request.ShareDiary.ShareDiaryDraftRequest;
 import com.specup.mongeul.domain.diary.dto.request.ShareDiary.ShareDiaryUpdateRequest;
 import com.specup.mongeul.domain.diary.dto.response.ShareDiary.ShareDiaryDateResponse;
+import com.specup.mongeul.domain.diary.dto.response.ShareDiary.ShareDiaryDraftResponse;
 import com.specup.mongeul.domain.diary.dto.response.ShareDiary.ShareDiaryPictureLineResponse;
 import com.specup.mongeul.domain.diary.dto.response.ShareDiary.ShareDiaryResponse;
 import com.specup.mongeul.domain.diary.service.ShareDiaryService;
@@ -12,6 +14,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -27,32 +30,32 @@ public class ShareDiaryController {
 
     // 공유일기 작성
     @Operation(summary = "공유일기 작성", description = "공유일기를 작성합니다.")
-    @PostMapping("/groups/{groupId}/share-diaries")
+    @PostMapping(value = "/groups/{groupId}/share-diaries", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ApiResponse<ShareDiaryResponse>> create(
             @AuthenticationPrincipal User user,
             @PathVariable Long groupId,
-            @Valid @RequestBody ShareDiaryCreateRequest request) {
+            @ModelAttribute ShareDiaryCreateRequest request) {
         return ResponseEntity.ok(ApiResponse.success(shareDiaryService.create(user.getId(), groupId, request), "공유일기 작성 성공"));
     }
 
     // 공유일기 임시저장
     @Operation(summary = "공유일기 임시저장", description = "공유일기를 임시저장 합니다.")
     @PostMapping("/groups/{groupId}/share-diaries/drafts")
-    public ResponseEntity<ApiResponse<ShareDiaryResponse>> draft(
+    public ResponseEntity<ApiResponse<ShareDiaryDraftResponse>> draft(
             @AuthenticationPrincipal User user,
             @PathVariable Long groupId,
-            @Valid @RequestBody ShareDiaryCreateRequest request) {
+            @Valid @RequestBody ShareDiaryDraftRequest request) {
         return ResponseEntity.ok(ApiResponse.success(shareDiaryService.saveDraft(user.getId(), groupId, request), "공유일기 임시저장 성공"));
     }
 
     // 공유일기 수정
     @Operation(summary = "공유일기 수정", description = "공유일기를 수정합니다.")
-    @PutMapping("/groups/{groupId}/share-diaries/{shareDiaryId}")
+    @PutMapping(value = "/groups/{groupId}/share-diaries/{shareDiaryId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ApiResponse<ShareDiaryResponse>> update(
             @AuthenticationPrincipal User user,
             @PathVariable Long groupId,
             @PathVariable Long shareDiaryId,
-            @Valid @RequestBody ShareDiaryUpdateRequest request) {
+            @ModelAttribute ShareDiaryUpdateRequest request) {
         return ResponseEntity.ok(ApiResponse.success(shareDiaryService.update(user.getId(), groupId, shareDiaryId, request), "공유일기 수정 성공"));
     }
 
@@ -70,7 +73,7 @@ public class ShareDiaryController {
     // 공유일기 임시저장 목록 조회
     @Operation(summary = "공유일기 임시저장 목록 조회", description = "임시저장 된 공유일기 목록을 조회합니다.")
     @GetMapping("/groups/{groupId}/share-diaries/drafts")
-    public ResponseEntity<ApiResponse<List<ShareDiaryResponse>>> getDraftShareDiaries(
+    public ResponseEntity<ApiResponse<List<ShareDiaryDraftResponse>>> getDraftShareDiaries(
             @AuthenticationPrincipal User user,
             @PathVariable Long groupId) {
         return ResponseEntity.ok(ApiResponse.success(shareDiaryService.getDraftShareDiaries(user.getId(), groupId), "임시저장 목록 조회 성공"));

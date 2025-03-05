@@ -31,7 +31,7 @@ public interface DiaryRepository extends JpaRepository<Diary, Long> {
     /**
      * 임시저장 일기목록 조회
      */
-    List<Diary> findByUserAndPublishedOrderByDateDesc(@Param("user") User user,
+    List<Diary> findByUserAndPublishedOrderByDateDescIdDesc(@Param("user") User user,
                                                       @Param("published") Boolean published);
 
     /**
@@ -56,6 +56,7 @@ public interface DiaryRepository extends JpaRepository<Diary, Long> {
         WHERE private_status = 'PUBLIC'
           AND (:userId IS NULL OR user_id = :userId)
           AND published = true
+          AND deleted = false
         ORDER BY id DESC
         LIMIT :limit
     """, nativeQuery = true)
@@ -68,6 +69,7 @@ public interface DiaryRepository extends JpaRepository<Diary, Long> {
           AND (:userId IS NULL OR user_id = :userId)
           AND id < :lastDiaryId
           AND published = true
+          AND deleted = false
         ORDER BY id DESC
         LIMIT :limit
     """, nativeQuery = true)
