@@ -218,6 +218,7 @@ public class GoogleDriveService {
         if (!files.isEmpty()) {
             for (File file : files) {
                 driveService.files().delete(file.getId()).execute();
+                Thread.sleep(2000);
             }
         }
     }
