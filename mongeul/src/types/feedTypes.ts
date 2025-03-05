@@ -24,5 +24,5 @@ export interface FeedDetail extends BaseDiary {
 export interface FeedDetailResponse {
   success: boolean;
   message: string;
-  data: FeedDetail[];
+  data: FeedDetail;
 }

@@ -1,5 +1,5 @@
 import { getFeedDetail, getFeedList } from "@/actions/feed";
-import { FeedListResponse } from "@/types/feedTypes";
+import { FeedDetailResponse, FeedListResponse } from "@/types/feedTypes";
 
 // 피드 리스트 불러오기
 export async function fetchFeedList(
@@ -10,8 +10,9 @@ export async function fetchFeedList(
   return await getFeedList(pageSize, lastDiaryId, myFeed);
 }
 
+// 피드 디테일 불러오기
 export async function fetchFeedDetail(
   feedId: number
-): Promise<FeedListResponse> {
+): Promise<FeedDetailResponse> {
   return await getFeedDetail(feedId);
 }
