@@ -4,8 +4,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.specup.mongeul.domain.diary.dto.common.PictureLineDto;
 import com.specup.mongeul.domain.diary.dto.request.ShareDiary.ShareDiaryCreateRequest;
+import com.specup.mongeul.domain.diary.dto.request.ShareDiary.ShareDiaryDraftRequest;
 import com.specup.mongeul.domain.diary.dto.request.ShareDiary.ShareDiaryUpdateRequest;
 import com.specup.mongeul.domain.diary.dto.response.ShareDiary.ShareDiaryDateResponse;
+import com.specup.mongeul.domain.diary.dto.response.ShareDiary.ShareDiaryDraftResponse;
 import com.specup.mongeul.domain.diary.dto.response.ShareDiary.ShareDiaryPictureLineResponse;
 import com.specup.mongeul.domain.diary.dto.response.ShareDiary.ShareDiaryResponse;
 import com.specup.mongeul.domain.diary.entity.ShareDiary;
@@ -85,29 +87,20 @@ public class ShareDiaryService {
 
     // 공유일기 임시저장
     @Transactional
-    public ShareDiaryResponse saveDraft(Long userId, Long groupId, ShareDiaryCreateRequest request) {
+    public ShareDiaryDraftResponse saveDraft(Long userId, Long groupId, ShareDiaryDraftRequest request) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         Friend group = friendRepository.findById(groupId)
                 .orElseThrow(() -> new CustomException(ErrorCode.GROUP_NOT_FOUND));
 
-        String pictureLinesJson = null;
-        if (request.getPictureLines() != null && !request.getPictureLines().isEmpty()) {
-            try {
-                pictureLinesJson = objectMapper.writeValueAsString(request.getPictureLines());
-            } catch (JsonProcessingException e) {
-                throw new RuntimeException("PictureLines Json 직렬화 실패", e);
-            }
-        }
-
         ShareDiary shareDiary = shareDiaryRepository.save(
                 ShareDiary.create(
-                        request.getTitle(), request.getContent(), request.getPicture(),
-                        request.getDate(), pictureLinesJson, request.getWeather(),
+                        request.getTitle(), request.getContent(), null,
+                        request.getDate(), request.getPictureLines(), request.getWeather(),
                         request.getFeeling(), false, group, user
                 )
         );
-        return ShareDiaryResponse.from(shareDiary);
+        return ShareDiaryDraftResponse.from(shareDiary);
     }
 
     // 공유일기 수정
