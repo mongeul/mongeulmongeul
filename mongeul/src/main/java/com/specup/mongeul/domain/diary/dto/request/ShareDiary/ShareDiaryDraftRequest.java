@@ -15,7 +15,7 @@ public class ShareDiaryDraftRequest {
     private String title;
     private String content;
     private LocalDate date;
-    private List<PictureLineDto> pictureLines;
+    private String pictureLines;
     private DiaryWeather weather;
     private DiaryFeeling feeling;
 }
