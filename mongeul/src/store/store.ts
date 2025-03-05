@@ -3,7 +3,9 @@ import diaryReducer from "./diarySlice";
 import drawingReducer from "./drawingSlice";
 import calendarReducer from "./calendarSlice";
 import userReducer from "./userSlice";
+import shareDiaryReducer from "./shareDiarySlice";
 import feedReducer from "./feedSlice";
+
 
 export const store = configureStore({
   reducer: {
@@ -11,6 +13,7 @@ export const store = configureStore({
     drawing: drawingReducer,
     calendar: calendarReducer,
     user: userReducer,
+    shareDiary: shareDiaryReducer,
     feed: feedReducer,
   },
 });
