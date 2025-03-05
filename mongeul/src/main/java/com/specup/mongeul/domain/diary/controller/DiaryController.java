@@ -10,6 +10,8 @@ import com.specup.mongeul.domain.diary.dto.response.Diary.DiaryPictureLineRespon
 import com.specup.mongeul.domain.diary.service.DiaryService;
 import com.specup.mongeul.domain.user.entity.User;
 import com.specup.mongeul.global.common.ApiResponse;
+import com.specup.mongeul.global.error.CustomException;
+import com.specup.mongeul.global.error.ErrorCode;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -20,6 +22,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Tag(name = "Diary", description = "일기 API")
@@ -111,5 +114,16 @@ public class DiaryController {
             @RequestParam int year,
             @RequestParam int month) {
         return ResponseEntity.ok(ApiResponse.success(diaryService.getDates(user.getId(), year, month), "일기 작성날짜 목록 조회 성공"));
+    }
+
+    @Operation(summary = "일기 작성여부 조회", description = "오늘 일기 작성여부를 확인합니다.")
+    @GetMapping("/diaries/today")
+    public ResponseEntity<ApiResponse<Void>> isTodayDiaries(
+            @AuthenticationPrincipal User user,
+            @RequestParam LocalDate today) {
+        if (diaryService.isTodayDiaries(user.getId(), today)) {
+            throw new CustomException(ErrorCode.DIARY_ALREADY_EXISTS);
+        }
+        return ResponseEntity.noContent().build();
     }
 }
