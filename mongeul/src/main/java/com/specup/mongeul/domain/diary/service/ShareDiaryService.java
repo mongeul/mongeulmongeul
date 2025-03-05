@@ -132,18 +132,27 @@ public class ShareDiaryService {
             throw new CustomException(ErrorCode.SHARE_DIARY_NOT_UPDATE_DATE);
         }
 
-        String pictureLinesJson = null;
-        if (request.getPictureLines() != null && !request.getPictureLines().isEmpty()) {
+        MultipartFile newPicture = request.getPicture();
+        String pictureUrl = shareDiary.getPicture();
+
+        if (newPicture != null && !newPicture.isEmpty()) {
             try {
-                pictureLinesJson = objectMapper.writeValueAsString(request.getPictureLines());
-            } catch (JsonProcessingException e) {
-                throw new RuntimeException("PictureLines Json 직렬화 실패", e);
+                // 새 이미지 업로드 (자동 덮어쓰기 로직 포함)
+                java.io.File tempFile = java.io.File.createTempFile("temp-", null);
+                newPicture.transferTo(tempFile);
+                pictureUrl = googleDriveService.uploadFile(tempFile, newPicture.getContentType(), userId, request.getDate(), true);
+
+                tempFile.delete();
+            } catch (Exception e) {
+                throw new RuntimeException("파일 업로드 실패", e);
             }
+        } else {
+            pictureUrl = null;
         }
 
         shareDiary.update(
-                request.getTitle(), request.getContent(), request.getPicture(),
-                request.getDate(), pictureLinesJson, request.getWeather(),
+                request.getTitle(), request.getContent(), pictureUrl,
+                request.getDate(), request.getPictureLines(), request.getWeather(),
                 request.getFeeling(), shareDiary.getPublished());
 
         return ShareDiaryResponse.from(shareDiary);
@@ -166,14 +175,14 @@ public class ShareDiaryService {
 
     // 공유일기 임시저장 목록 조회
     @Transactional(readOnly = true)
-    public List<ShareDiaryResponse> getDraftShareDiaries(Long userId, Long groupId) {
+    public List<ShareDiaryDraftResponse> getDraftShareDiaries(Long userId, Long groupId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         Friend group = friendRepository.findById(groupId)
                 .orElseThrow(() -> new CustomException(ErrorCode.GROUP_NOT_FOUND));
         List<ShareDiary> shareDiaries = shareDiaryRepository.findByWriterAndGroupAndPublishedOrderByDateDesc(user, group, false);
         return shareDiaries.stream()
-                .map(ShareDiaryResponse::from)
+                .map(ShareDiaryDraftResponse::from)
                 .toList();
     }
 
