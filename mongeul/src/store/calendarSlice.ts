@@ -1,11 +1,17 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Diary } from "@/types/diaryTypes";
 
+interface DiaryEntry {
+  date: string;
+  diaryId: number;
+  privateStatus: string;
+}
+
 interface CalendarState {
   selectedDate: string;
-  selectedDiary: Diary | null;
+  selectedDiary: Diary | "LOCK" | null;
   currentMonth: { year: number; month: number };
-  diaryDates: string[];
+  diaryEntries: DiaryEntry[];
 }
 
 const today = new Date();
@@ -16,7 +22,7 @@ const initialState: CalendarState = {
     year: today.getFullYear(),
     month: today.getMonth() + 1,
   },
-  diaryDates: [],
+  diaryEntries: [],
 };
 
 const calendarSlice = createSlice({
@@ -26,7 +32,7 @@ const calendarSlice = createSlice({
     setSelectedDate: (state, action: PayloadAction<string>) => {
       state.selectedDate = action.payload;
     },
-    setSelectedDiary: (state, action: PayloadAction<Diary | null>) => {
+    setSelectedDiary: (state, action: PayloadAction<Diary | "LOCK" | null>) => {
       state.selectedDiary = action.payload;
     },
     setCurrentMonth: (
@@ -35,8 +41,8 @@ const calendarSlice = createSlice({
     ) => {
       state.currentMonth = action.payload;
     },
-    setDiaryDates: (state, action: PayloadAction<string[]>) => {
-      state.diaryDates = action.payload;
+    setDiaryEntries: (state, action: PayloadAction<DiaryEntry[]>) => {
+      state.diaryEntries = action.payload;
     },
   },
 });
@@ -45,6 +51,6 @@ export const {
   setSelectedDate,
   setSelectedDiary,
   setCurrentMonth,
-  setDiaryDates,
+  setDiaryEntries,
 } = calendarSlice.actions;
 export default calendarSlice.reducer;
