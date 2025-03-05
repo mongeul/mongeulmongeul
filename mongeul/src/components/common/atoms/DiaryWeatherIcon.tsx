@@ -1,11 +1,11 @@
 import WeatherIcon from "@/components/common/atoms/WeatherIcon";
 import { Weather } from "@/types/diaryTypes";
 
-interface FeedWeatherIconProps {
+interface DiaryWeatherIconProps {
   weather: Weather;
 }
 
-export default function FeedWeatherIcon({ weather }: FeedWeatherIconProps) {
+export default function DiaryWeatherIcon({ weather }: DiaryWeatherIconProps) {
   const { icon } = WeatherIcon({ weather, size: "h-4 w-4" });
 
   return icon;

@@ -4,7 +4,7 @@ import { fetchFeedDetail } from "@/lib/api/feed";
 import { FeedDetail } from "@/types/feedTypes";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import FeedDetailContainer from "../organisms/FeedDetailContainer";
+import DiaryDetailContainer from "../../common/organisms/DiaryDetailContainer";
 
 export default function FeedDetailTemplates() {
   const { id } = useParams();
@@ -43,7 +43,7 @@ export default function FeedDetailTemplates() {
 
   return (
     <div className="w-full flex flex-col justify-center items-center">
-      {feed && <FeedDetailContainer feed={feed} />}
+      {feed && <DiaryDetailContainer diary={feed} />}
     </div>
   );
 }

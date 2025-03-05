@@ -1,10 +1,10 @@
 import Card from "@/components/common/atoms/Card";
 
-interface ContentCardProps {
+interface DiaryContentCardProps {
   content: string;
 }
 
-export default function ContentCard({ content }: ContentCardProps) {
+export default function DiaryContentCard({ content }: DiaryContentCardProps) {
   return (
     <Card>
       <div>{content}</div>

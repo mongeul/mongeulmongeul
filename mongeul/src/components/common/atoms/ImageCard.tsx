@@ -5,5 +5,5 @@ interface ImageCardProps {
 }
 
 export default function ImageCard({ picture }: ImageCardProps) {
-  return <Image src={picture} alt={"피드 디테일 이미지"}></Image>;
+  return <Image src={picture} alt={"이미지"}></Image>;
 }
