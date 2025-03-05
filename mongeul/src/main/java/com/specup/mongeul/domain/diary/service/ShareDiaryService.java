@@ -140,7 +140,7 @@ public class ShareDiaryService {
                 // 새 이미지 업로드 (자동 덮어쓰기 로직 포함)
                 java.io.File tempFile = java.io.File.createTempFile("temp-", null);
                 newPicture.transferTo(tempFile);
-                pictureUrl = googleDriveService.uploadFile(tempFile, newPicture.getContentType(), userId, request.getDate(), true);
+                pictureUrl = googleDriveService.uploadFile(tempFile, newPicture.getContentType(), groupId, request.getDate(), false);
 
                 tempFile.delete();
             } catch (Exception e) {
