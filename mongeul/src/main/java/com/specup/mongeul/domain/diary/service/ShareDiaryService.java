@@ -202,6 +202,16 @@ public class ShareDiaryService {
         if (!shareDiary.getWriter().getId().equals(userId)) {
             throw new CustomException(ErrorCode.INVALID_SHARE_DIARY_USER);
         }
+
+        // Google Drive 이미지 삭제 (파일 URL이 있을 경우)
+        if (shareDiary.getPicture() != null && shareDiary.getPicture().contains("id=")) {
+            try {
+                googleDriveService.deleteFile(shareDiary.getPicture());
+            } catch (Exception e) {
+                throw new RuntimeException("파일 삭제 실패", e);
+            }
+        }
+
         shareDiaryRepository.delete(shareDiary);
     }
 
