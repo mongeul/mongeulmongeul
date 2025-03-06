@@ -4,7 +4,7 @@ import DrawingCard from "../organisms/DrawingCard";
 import IconCard from "../organisms/IconCard";
 import TitleCard from "../organisms/TitleCard";
 
-export default function WriteForm() {
+export default function WriteForm({ diaryId }: { diaryId: number | null }) {
   return (
     <div className="flex flex-col w-full gap-4">
       <DateInputCard />

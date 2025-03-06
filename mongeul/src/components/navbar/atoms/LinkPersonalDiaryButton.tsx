@@ -21,8 +21,8 @@ export default function LinkPersonalDiaryButton({
     const isDiary = await fetchIsWrite(today);
 
     if (isDiary) {
-      alert("이미 오늘의 일기를 작성하셨습니다!");
-      // 오늘 일기로 렌더링
+      // 오늘 일기로 렌더링 또는 수정 페이지로 이동
+      router.push(`/write-diary?id=${isDiary.data}`);
     } else {
       router.push("/write-diary"); // 작성 페이지로 이동
     }
