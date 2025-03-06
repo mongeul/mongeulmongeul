@@ -93,10 +93,19 @@ public class ShareDiaryService {
         Friend group = friendRepository.findById(groupId)
                 .orElseThrow(() -> new CustomException(ErrorCode.GROUP_NOT_FOUND));
 
+        String pictureLinesJson = null;
+        if (request.getPictureLines() != null && !request.getPictureLines().isEmpty()) {
+            try {
+                pictureLinesJson = objectMapper.writeValueAsString(request.getPictureLines());
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException("PictureLines Json 직렬화 실패", e);
+            }
+        }
+
         ShareDiary shareDiary = shareDiaryRepository.save(
                 ShareDiary.create(
                         request.getTitle(), request.getContent(), null,
-                        request.getDate(), request.getPictureLines(), request.getWeather(),
+                        request.getDate(), pictureLinesJson, request.getWeather(),
                         request.getFeeling(), false, group, user
                 )
         );
