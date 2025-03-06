@@ -29,10 +29,21 @@ export interface Diary extends BaseDiary {
   published: boolean;
 }
 
+export interface Draft extends Omit<BaseDiary, "picture" | "pictureLines"> {
+  diaryId: number;
+  published: boolean;
+}
+
 export interface DiaryResponse {
   success: boolean;
   message: string;
   data: Diary[] | null;
+}
+
+export interface DraftResponse {
+  success: boolean;
+  message: string;
+  data: Draft[] | null;
 }
 
 export interface DiaryDate {

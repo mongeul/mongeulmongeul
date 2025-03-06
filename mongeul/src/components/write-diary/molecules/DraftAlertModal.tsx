@@ -55,7 +55,6 @@ export default function DraftAlertModal() {
       await submitDiaryDraft({
         title,
         content,
-        picture: drawing || "",
         pictureLines:
           typeof drawingLines === "string"
             ? JSON.parse(drawingLines)

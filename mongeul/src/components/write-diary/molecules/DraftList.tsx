@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { fetchDiaryDraft } from "@/lib/api/write-diary";
-import { Diary } from "@/types/diaryTypes";
+import { Draft } from "@/types/diaryTypes";
 import DraftItem from "../atoms/DraftItem";
 
 interface DraftListProps {
@@ -10,7 +10,7 @@ interface DraftListProps {
 }
 
 export default function DraftList({ onClose }: DraftListProps) {
-  const [drafts, setDrafts] = useState<Diary[]>([]);
+  const [drafts, setDrafts] = useState<Draft[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 

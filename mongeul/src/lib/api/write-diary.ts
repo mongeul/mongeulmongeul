@@ -10,6 +10,7 @@ import {
   DiaryResponse,
   DiaryDatesResponse,
   DraftRequest,
+  DraftResponse,
 } from "@/types/diaryTypes";
 
 // 일기 작성
@@ -22,7 +23,7 @@ export const submitDiary = async (
 // 일기 임시저장
 export const submitDiaryDraft = async (
   data: DraftRequest
-): Promise<DiaryResponse> => {
+): Promise<DraftResponse> => {
   return await createDiaryDraft(data);
 };
 
@@ -35,7 +36,7 @@ export async function fetchDiaryDates(
 }
 
 // 일기 임시저장 목록 조회
-export async function fetchDiaryDraft(): Promise<DiaryResponse> {
+export async function fetchDiaryDraft(): Promise<DraftResponse> {
   return await getDiaryDraft();
 }
 

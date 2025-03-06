@@ -6,6 +6,7 @@ import {
   DiaryResponse,
   DiaryDatesResponse,
   DraftRequest,
+  DraftResponse,
 } from "@/types/diaryTypes";
 
 // 일기 작성
@@ -14,16 +15,16 @@ export async function createDiary(data: DiaryRequest): Promise<DiaryResponse> {
     console.log("request data:", { data });
     const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
-    // FormData 객체 생성
     const formData = new FormData();
 
-    // 기본 필드 추가 (picture는 별도로 처리)
     formData.append("title", data.title);
     formData.append("content", data.content);
     formData.append("date", data.date);
     formData.append("weather", data.weather ?? "");
     formData.append("feeling", data.feeling ?? "");
     formData.append("privateStatus", data.privateStatus);
+
+    console.log("form data:", formData);
 
     // 그림 데이터
     if (data.picture) {
@@ -40,6 +41,7 @@ export async function createDiary(data: DiaryRequest): Promise<DiaryResponse> {
       method: "POST",
       headers: {
         Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_TOKEN}`,
+        "Content-Type": "multipart/form-data",
       },
       body: formData,
       cache: "no-store",
@@ -63,7 +65,7 @@ export async function createDiary(data: DiaryRequest): Promise<DiaryResponse> {
 // 일기 임시저장
 export async function createDiaryDraft(
   data: DraftRequest
-): Promise<DiaryResponse> {
+): Promise<DraftResponse> {
   try {
     console.log("request data:", { data });
     const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
@@ -83,7 +85,7 @@ export async function createDiaryDraft(
       throw new Error(`일기 임시저장 실패: ${errorMessage}`);
     }
 
-    const result: DiaryResponse = await response.json();
+    const result: DraftResponse = await response.json();
 
     return result;
   } catch (error) {
@@ -128,7 +130,7 @@ export async function deleteDiary({
 }
 
 // 임시저장 일기 조회
-export async function getDiaryDraft(): Promise<DiaryResponse> {
+export async function getDiaryDraft(): Promise<DraftResponse> {
   try {
     const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -146,7 +148,7 @@ export async function getDiaryDraft(): Promise<DiaryResponse> {
       throw new Error(`일기 임시장 조회 실패: ${errorMessage}`);
     }
 
-    const result: DiaryResponse = await response.json();
+    const result: DraftResponse = await response.json();
     return result;
   } catch (error) {
     console.error("일기 임시저장 조회 에러:", error);
