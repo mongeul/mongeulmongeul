@@ -22,6 +22,7 @@ export default function LinkPersonalDiaryButton({
 
     if (isDiary) {
       alert("이미 오늘의 일기를 작성하셨습니다!");
+      // 오늘 일기로 렌더링
     } else {
       router.push("/write-diary"); // 작성 페이지로 이동
     }

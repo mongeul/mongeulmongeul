@@ -11,8 +11,11 @@ import {
   setCurrentMonth,
   setDiaryEntries,
 } from "@/store/calendarSlice";
+import { useRouter } from "next/navigation";
+import { setDate } from "@/store/diarySlice";
 
 export default function Page() {
+  const router = useRouter();
   const dispatch = useDispatch();
   const { selectedDate, currentMonth, selectedDiary } = useSelector(
     (state: RootState) => state.calendar
@@ -49,6 +52,9 @@ export default function Page() {
     const entry = diaryEntries.find((entry) => entry.date === date);
     if (!entry) {
       dispatch(setSelectedDiary(null));
+      dispatch(setDate(date));
+      router.push("/write-diary");
+
       return;
     }
 
