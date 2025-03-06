@@ -116,14 +116,12 @@ public class DiaryController {
         return ResponseEntity.ok(ApiResponse.success(diaryService.getDates(user.getId(), year, month), "일기 작성날짜 목록 조회 성공"));
     }
 
-    @Operation(summary = "일기 작성여부 조회", description = "오늘 일기 작성여부를 확인합니다.")
-    @GetMapping("/diaries/today")
-    public ResponseEntity<ApiResponse<Void>> isTodayDiaries(
+    @Operation(summary = "날짜로 작성 일기 ID 조회", description = "해당 날짜 일기의 ID를 확인합니다.")
+    @GetMapping("/diaries/find")
+    public ResponseEntity<ApiResponse<Long>> getDiaryId(
             @AuthenticationPrincipal User user,
             @RequestParam LocalDate today) {
-        if (diaryService.isTodayDiaries(user.getId(), today)) {
-            throw new CustomException(ErrorCode.DIARY_ALREADY_EXISTS);
-        }
-        return ResponseEntity.noContent().build();
+        Long diaryId = diaryService.getDiaryId(user.getId(), today);
+        return ResponseEntity.ok(ApiResponse.success(diaryId, diaryId != null ? "일기 ID 조회 성공" : "해당 날짜에 작성된 날짜 없음"));
     }
 }

@@ -27,6 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -83,10 +84,19 @@ public class DiaryService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
+        String pictureLinesJson = null;
+        if (request.getPictureLines() != null && !request.getPictureLines().isEmpty()) {
+            try {
+                pictureLinesJson = objectMapper.writeValueAsString(request.getPictureLines());
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException("PictureLines Json 직렬화 실패", e);
+            }
+        }
+
         Diary diary = diaryRepository.save(
                 Diary.create(
                         request.getTitle(), request.getContent(), null,
-                        request.getDate(), request.getPictureLines(), request.getWeather(), request.getFeeling(),
+                        request.getDate(), pictureLinesJson, request.getWeather(), request.getFeeling(),
                         request.getPrivateStatus(), false, user
                 )
         );
@@ -253,8 +263,12 @@ public class DiaryService {
                 .toList();
     }
 
-    // 오늘 일기 작성여부 확인
-    public boolean isTodayDiaries(Long userId, LocalDate today) {
-        return diaryRepository.existsByUserIdAndDateAndPublished(userId, today, true);
+    // 해당날짜 다이어리 id 찾기
+    @Transactional(readOnly = true)
+    public Long getDiaryId(Long userId, LocalDate today) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        return diaryRepository.findDiaryIdByUserIdAndDateAndPublished(user, today)
+                .orElse(null);
     }
 }
