@@ -4,6 +4,7 @@ import {
   deleteDiary,
   getDiaryDates,
   getDiaryDraft,
+  getIsDiary,
 } from "@/actions/write-diary";
 import {
   DiaryRequest,
@@ -11,6 +12,7 @@ import {
   DiaryDatesResponse,
   DraftRequest,
   DraftResponse,
+  IsDiaryResponse,
 } from "@/types/diaryTypes";
 
 // 일기 작성
@@ -45,4 +47,9 @@ export async function deleteDraft(
   diaryId: number
 ): Promise<{ success: boolean; message: string }> {
   return await deleteDiary({ diaryId });
+}
+
+// 일기 작성 여부 조회
+export async function fetchIsWrite(today: string): Promise<IsDiaryResponse> {
+  return await getIsDiary(today);
 }

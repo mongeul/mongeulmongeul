@@ -55,3 +55,9 @@ export interface DiaryDatesResponse {
   message: string;
   data: DiaryDate[];
 }
+
+export interface IsDiaryResponse {
+  success: boolean;
+  data: number | null;
+  message: string;
+}

@@ -7,6 +7,7 @@ import {
   DiaryDatesResponse,
   DraftRequest,
   DraftResponse,
+  IsDiaryResponse,
 } from "@/types/diaryTypes";
 
 // 일기 작성
@@ -41,7 +42,6 @@ export async function createDiary(data: DiaryRequest): Promise<DiaryResponse> {
       method: "POST",
       headers: {
         Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_TOKEN}`,
-        "Content-Type": "multipart/form-data",
       },
       body: formData,
       cache: "no-store",
@@ -185,6 +185,37 @@ export async function getDiaryDates(
     return result;
   } catch (error) {
     console.error("일기 날짜 조회 에러:", error);
+    throw error;
+  }
+}
+
+// 특정 날짜 일기 작성 여부 조회
+export async function getIsDiary(today: string): Promise<IsDiaryResponse> {
+  try {
+    const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+
+    const response = await fetch(
+      `${API_BASE_URL}/api/v1/diaries/find?today=${today}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_TOKEN}`,
+        },
+        cache: "no-store",
+      }
+    );
+
+    if (!response.ok) {
+      const errorMessage = await response.text();
+      throw new Error(`일기 작성 여부 조회 실패: ${errorMessage}`);
+    }
+
+    const result: IsDiaryResponse = await response.json();
+
+    return result;
+  } catch (error) {
+    console.error("특정 날짜 일기 작성 여부 조회 에러:", error);
     throw error;
   }
 }
