@@ -5,6 +5,7 @@ import {
   getDiaryDates,
   getDiaryDraft,
   getIsDiary,
+  updateDiary,
 } from "@/actions/write-diary";
 import {
   DiaryRequest,
@@ -20,6 +21,14 @@ export const submitDiary = async (
   data: DiaryRequest
 ): Promise<DiaryResponse> => {
   return await createDiary(data);
+};
+
+// 일기 수정
+export const submitUpdateDiary = async (
+  data: DiaryRequest,
+  diaryId: number
+): Promise<DiaryResponse> => {
+  return await updateDiary(data, diaryId);
 };
 
 // 일기 임시저장

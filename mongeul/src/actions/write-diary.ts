@@ -62,6 +62,61 @@ export async function createDiary(data: DiaryRequest): Promise<DiaryResponse> {
   }
 }
 
+// 일기 수정
+export async function updateDiary(
+  data: DiaryRequest,
+  diaryId: number
+): Promise<DiaryResponse> {
+  try {
+    console.log("request data:", { data });
+    const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+
+    const formData = new FormData();
+
+    formData.append("title", data.title);
+    formData.append("content", data.content);
+    formData.append("date", data.date);
+    formData.append("weather", data.weather ?? "");
+    formData.append("feeling", data.feeling ?? "");
+    formData.append("privateStatus", data.privateStatus);
+
+    console.log("form data:", formData);
+
+    // 그림 데이터
+    if (data.picture) {
+      const blob = await (await fetch(data.picture)).blob();
+      formData.append("picture", blob, "drawing.png");
+    }
+
+    // 그림 선 데이터 json
+    if (data.pictureLines) {
+      formData.append("pictureLines", JSON.stringify(data.pictureLines));
+    }
+
+    const response = await fetch(`${API_BASE_URL}/api/v1/diaries/${diaryId}`, {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_TOKEN}`,
+      },
+      body: formData,
+      cache: "no-store",
+    });
+
+    if (!response.ok) {
+      const errorMessage = await response.text();
+      throw new Error(`일기 수정 실패: ${errorMessage}`);
+    }
+
+    const result: DiaryResponse = await response.json();
+    revalidatePath("/diary"); // 일기 목록 데이터 새로고침
+
+    return result;
+  } catch (error) {
+    console.error("일기 수정 에러 발생:", error);
+    throw error;
+  }
+}
+
 // 일기 임시저장
 export async function createDiaryDraft(
   data: DraftRequest
