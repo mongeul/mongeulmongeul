@@ -266,7 +266,9 @@ public class DiaryService {
     // 해당날짜 다이어리 id 찾기
     @Transactional(readOnly = true)
     public Long getDiaryId(Long userId, LocalDate today) {
-        return diaryRepository.findDiaryByUserIdAndDateAndPublished(userId, today, true)
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        return diaryRepository.findDiaryIdByUserIdAndDateAndPublished(user, today)
                 .orElse(null);
     }
 }
