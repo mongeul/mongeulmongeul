@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface DiaryRepository extends JpaRepository<Diary, Long> {
@@ -43,9 +44,9 @@ public interface DiaryRepository extends JpaRepository<Diary, Long> {
                                               @Param("published") Boolean published);
 
     // 해당 날짜 작성한 일기 찾기
-    Diary findByUserIdAndDateAndPublished(@Param("userId") Long userId,
-                                          @Param("date") LocalDate date,
-                                          @Param("published") Boolean published);
+    Optional<Long> findDiaryByUserIdAndDateAndPublished(@Param("userId") Long userId,
+                                                        @Param("date") LocalDate date,
+                                                        @Param("published") Boolean published);
 
     /**
      * 하루 1개 일기 제한 검증 (데이터를 조회해서 반환으로 체크)

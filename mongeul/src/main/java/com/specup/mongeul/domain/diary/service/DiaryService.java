@@ -27,6 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -262,8 +263,10 @@ public class DiaryService {
                 .toList();
     }
 
-    // 오늘 일기 작성여부 확인
-    public boolean isTodayDiaries(Long userId, LocalDate today) {
-        return diaryRepository.existsByUserIdAndDateAndPublished(userId, today, true);
+    // 해당날짜 다이어리 id 찾기
+    @Transactional(readOnly = true)
+    public Long getDiaryId(Long userId, LocalDate today) {
+        return diaryRepository.findDiaryByUserIdAndDateAndPublished(userId, today, true)
+                .orElse(null);
     }
 }
