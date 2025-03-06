@@ -6,8 +6,8 @@ interface DiaryContentCardProps {
 
 export default function DiaryContentCard({ content }: DiaryContentCardProps) {
   return (
-    <Card>
-      <div>{content}</div>
+    <Card width="w-full">
+      <div className="w-full">{content}</div>
     </Card>
   );
 }
