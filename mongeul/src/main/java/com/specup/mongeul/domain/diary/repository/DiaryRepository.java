@@ -40,7 +40,12 @@ public interface DiaryRepository extends JpaRepository<Diary, Long> {
 //    boolean existsByUserIdAndCreatedAtBetween(@Param("userId") Long userId, @Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
     boolean existsByUserIdAndDateAndPublished(@Param("userId") Long userId,
                                               @Param("date") LocalDate date,
-                                              @Param("published")Boolean published);
+                                              @Param("published") Boolean published);
+
+    // 해당 날짜 작성한 일기 찾기
+    Diary findByUserIdAndDateAndPublished(@Param("userId") Long userId,
+                                          @Param("date") LocalDate date,
+                                          @Param("published") Boolean published);
 
     /**
      * 하루 1개 일기 제한 검증 (데이터를 조회해서 반환으로 체크)
