@@ -1,26 +1,26 @@
-import { Brush, DrawingLine } from "@/types/drawingTypes";
+import { Brush, PictureLine } from "@/types/pictureTypes";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-interface DiaryState {
+interface PictureState {
   selectedColor: string;
   selectedBrushSize: number;
   selectedBrush: Brush;
-  lines: DrawingLine[];
-  history: Array<DrawingLine[]>;
-  redoStack: Array<DrawingLine[]>;
+  lines: PictureLine[];
+  history: Array<PictureLine[]>;
+  redoStack: Array<PictureLine[]>;
 }
 
-const initialState: DiaryState = {
+const initialState: PictureState = {
   selectedColor: "#000000",
   selectedBrushSize: 5,
   selectedBrush: "pen",
-  lines: [] as DrawingLine[],
-  history: [] as Array<DrawingLine[]>,
-  redoStack: [] as Array<DrawingLine[]>,
+  lines: [] as PictureLine[],
+  history: [] as Array<PictureLine[]>,
+  redoStack: [] as Array<PictureLine[]>,
 };
 
-const drawingSlice = createSlice({
-  name: "drawing",
+const pictureSlice = createSlice({
+  name: "picture",
   initialState,
   reducers: {
     setColor: (state, action: PayloadAction<string>) => {
@@ -36,7 +36,7 @@ const drawingSlice = createSlice({
       state.selectedBrush = action.payload;
     },
     addLine: (state, action: PayloadAction<{ points: [number, number][] }>) => {
-      const newLine: DrawingLine = {
+      const newLine: PictureLine = {
         points: action.payload.points,
         stroke: state.selectedColor,
         strokeWidth: state.selectedBrushSize,
@@ -49,7 +49,7 @@ const drawingSlice = createSlice({
       state.history.push([...state.lines]);
       state.lines = state.lines.filter((_, index) => index !== action.payload);
     },
-    updateLines: (state, action: PayloadAction<DrawingLine[]>) => {
+    updateLines: (state, action: PayloadAction<PictureLine[]>) => {
       state.lines = action.payload;
     },
     undo: (state) => {
@@ -70,7 +70,7 @@ const drawingSlice = createSlice({
         }
       }
     },
-    resetDrawing: () => initialState,
+    resetPicture: () => initialState,
   },
 });
 
@@ -83,6 +83,6 @@ export const {
   updateLines,
   undo,
   redo,
-  resetDrawing,
-} = drawingSlice.actions;
-export default drawingSlice.reducer;
+  resetPicture,
+} = pictureSlice.actions;
+export default pictureSlice.reducer;

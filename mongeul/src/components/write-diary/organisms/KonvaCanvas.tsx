@@ -2,18 +2,18 @@ import React, { useEffect, useRef, useState } from "react";
 import { Stage, Layer, Line } from "react-konva";
 import { RootState } from "@/store/store";
 import { useDispatch, useSelector } from "react-redux";
-import { addLine, removeLine, updateLines } from "@/store/drawingSlice";
+import { addLine, updateLines } from "@/store/pictureSlice";
 import Card from "@/components/common/atoms/Card";
 import { setStageRef } from "@/utils/stateRef";
 
 export default function KonvaCanvas() {
   const dispatch = useDispatch();
   const { lines, selectedBrush } = useSelector(
-    (state: RootState) => state.drawing
+    (state: RootState) => state.picture
   );
 
   const stageRef = useRef<any>(null);
-  const [isDrawing, setIsDrawing] = useState<boolean>(false);
+  const [isPicture, setIsPicture] = useState<boolean>(false);
 
   useEffect(() => {
     if (stageRef.current) {
@@ -24,12 +24,12 @@ export default function KonvaCanvas() {
   // 그림 그리기 시작
   const handleMouseDown = (e: any) => {
     if (selectedBrush === "eraser") {
-      setIsDrawing(true);
+      setIsPicture(true);
       handleErase(e); // 마우스를 누르자마자 바로 지우기 실행
       return;
     }
 
-    setIsDrawing(true);
+    setIsPicture(true);
     const pos = e.target.getStage().getPointerPosition();
     if (!pos) return;
 
@@ -42,7 +42,7 @@ export default function KonvaCanvas() {
 
   // 그리는 중 or 지우는 중
   const handleMouseMove = (e: any) => {
-    if (!isDrawing) return;
+    if (!isPicture) return;
     if (selectedBrush === "eraser") {
       handleErase(e); // 지우개 모드일 때 마우스를 움직일 때마다 실행
       return;
@@ -88,7 +88,7 @@ export default function KonvaCanvas() {
 
   // 그리기 또는 지우기 종료
   const handleMouseUp = () => {
-    setIsDrawing(false);
+    setIsPicture(false);
   };
 
   return (

@@ -1,7 +1,7 @@
 "use client";
 
 import ColorButton from "../atoms/ColorButton";
-import { setColor } from "@/store/drawingSlice";
+import { setColor } from "@/store/pictureSlice";
 import { RootState } from "@/store/store";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -24,7 +24,7 @@ const colors = [
 export default function ColorPalette() {
   const dispatch = useDispatch();
   const selectedColor = useSelector(
-    (state: RootState) => state.drawing.selectedColor
+    (state: RootState) => state.picture.selectedColor
   );
 
   return (

@@ -4,7 +4,7 @@ import ColorPalette from "../molecules/ColorPalette";
 import UndoRedoButtons from "../molecules/UndoRedoButtons";
 import BrushSelectPalette from "../molecules/BrushSelectPalette";
 
-export default function DrawingToolCard() {
+export default function PictureToolCard() {
   return (
     <Card width="w-full" padding="">
       <div className="w-full flex justify-center items-center flex-col">

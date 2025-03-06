@@ -3,7 +3,7 @@
 import Button from "@/components/common/atoms/Button";
 import { submitDiary, submitUpdateDiary } from "@/lib/api/write-diary";
 import { resetDiary } from "@/store/diarySlice";
-import { resetDrawing } from "@/store/drawingSlice";
+import { resetPicture } from "@/store/pictureSlice";
 import { RootState } from "@/store/store";
 import { useRouter, useSearchParams } from "next/navigation";
 import { startTransition, useState } from "react";
@@ -19,8 +19,8 @@ export default function CreateDiaryButton() {
   const {
     title,
     content,
-    drawing,
-    drawingLines,
+    picture,
+    pictureLines,
     date,
     weather,
     feeling,
@@ -43,11 +43,11 @@ export default function CreateDiaryButton() {
             {
               title,
               content,
-              picture: drawing || "",
+              picture: picture || "",
               pictureLines:
-                typeof drawingLines === "string"
-                  ? JSON.parse(drawingLines)
-                  : drawingLines,
+                typeof pictureLines === "string"
+                  ? JSON.parse(pictureLines)
+                  : pictureLines,
               date,
               weather,
               feeling,
@@ -60,11 +60,11 @@ export default function CreateDiaryButton() {
           await submitDiary({
             title,
             content,
-            picture: drawing || "",
+            picture: picture || "",
             pictureLines:
-              typeof drawingLines === "string"
-                ? JSON.parse(drawingLines)
-                : drawingLines,
+              typeof pictureLines === "string"
+                ? JSON.parse(pictureLines)
+                : pictureLines,
             date,
             weather,
             feeling,
@@ -72,7 +72,7 @@ export default function CreateDiaryButton() {
           });
         }
 
-        await Promise.all([dispatch(resetDiary()), dispatch(resetDrawing())]);
+        await Promise.all([dispatch(resetDiary()), dispatch(resetPicture())]);
 
         router.push("/diary");
       } catch (error) {

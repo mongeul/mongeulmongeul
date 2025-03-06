@@ -1,4 +1,4 @@
-import { DrawingLine } from "./drawingTypes";
+import { PictureLine } from "./pictureTypes";
 
 export type Feeling = "HAPPY" | "SOSO" | "SAD" | "ANGRY" | "WOW" | null;
 
@@ -17,11 +17,11 @@ export interface BaseDiary {
 }
 
 export interface DiaryRequest extends BaseDiary {
-  pictureLines?: DrawingLine[];
+  pictureLines?: PictureLine[];
 }
 
 export interface DraftRequest extends Omit<BaseDiary, "picture"> {
-  pictureLines?: DrawingLine[];
+  pictureLines?: PictureLine[];
 }
 
 export interface Diary extends BaseDiary {

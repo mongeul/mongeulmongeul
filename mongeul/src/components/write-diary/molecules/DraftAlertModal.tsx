@@ -4,7 +4,7 @@ import Button from "@/components/common/atoms/Button";
 import WebModal from "@/components/common/atoms/WebModal";
 import { submitDiaryDraft } from "@/lib/api/write-diary";
 import { resetDiary } from "@/store/diarySlice";
-import { resetDrawing } from "@/store/drawingSlice";
+import { resetPicture } from "@/store/pictureSlice";
 import { RootState } from "@/store/store";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
@@ -23,8 +23,8 @@ export default function DraftAlertModal() {
     title,
     content,
     date,
-    drawing,
-    drawingLines,
+    picture,
+    pictureLines,
     weather,
     feeling,
     privateStatus,
@@ -33,8 +33,8 @@ export default function DraftAlertModal() {
   const isDirty = !!(
     title ||
     content ||
-    drawing ||
-    drawingLines ||
+    picture ||
+    pictureLines ||
     weather ||
     feeling
   );
@@ -56,9 +56,9 @@ export default function DraftAlertModal() {
         title,
         content,
         pictureLines:
-          typeof drawingLines === "string"
-            ? JSON.parse(drawingLines)
-            : drawingLines,
+          typeof pictureLines === "string"
+            ? JSON.parse(pictureLines)
+            : pictureLines,
         date,
         weather,
         feeling,
@@ -67,7 +67,7 @@ export default function DraftAlertModal() {
       console.log("submitDiary API 요청 완료");
 
       dispatch(resetDiary());
-      dispatch(resetDrawing());
+      dispatch(resetPicture());
       console.log("Redux 상태 resetDiary() 실행됨");
 
       setIsOpen(false);
@@ -91,7 +91,7 @@ export default function DraftAlertModal() {
     console.log("clearDiary() 호출됨");
 
     dispatch(resetDiary());
-    dispatch(resetDrawing());
+    dispatch(resetPicture());
     console.log("Redux 상태 resetDiary() 실행됨");
 
     setIsOpen(false);
@@ -157,9 +157,9 @@ export default function DraftAlertModal() {
     ) => {
       console.log(`confirmNavigation: ${href}`);
 
-      // /write-diary/drawing 페이지 예외처리
-      if (href === "/write-diary/drawing") {
-        console.log("/write-diary/drawing으로 이동");
+      // /write-diary/picture 페이지 예외처리
+      if (href === "/write-diary/picture") {
+        console.log("/write-diary/picture 이동");
         originalFunction(href, options);
         return;
       }

@@ -6,7 +6,7 @@ import { deleteDraft } from "@/lib/api/write-diary";
 import {
   setContent,
   setDate,
-  setDrawing,
+  setPicture,
   setFeeling,
   setPrivateStatus,
   setTitle,
@@ -45,7 +45,7 @@ export default function DraftItem({
     dispatch(setFeeling(draft.feeling));
     dispatch(setPrivateStatus(draft.privateStatus));
     dispatch(setWeather(draft.weather));
-    dispatch(setDrawing(draft.picture || ""));
+    dispatch(setPicture(draft.picture || ""));
 
     onClose();
   };

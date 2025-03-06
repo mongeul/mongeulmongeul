@@ -1,34 +1,33 @@
 "use client";
 
 import Button from "@/components/common/atoms/Button";
-import { setDrawing, setDrawingLines } from "@/store/diarySlice";
-import { resetDrawing } from "@/store/drawingSlice";
+import { setPicture, setPictureLines } from "@/store/diarySlice";
+import { resetPicture } from "@/store/pictureSlice";
 import { RootState } from "@/store/store";
 import { stageRef } from "@/utils/stateRef";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 
-export default function DrawingNavBar() {
+export default function PictureNavBar() {
   const dispatch = useDispatch();
-  const { lines } = useSelector((state: RootState) => state.drawing);
+  const { lines } = useSelector((state: RootState) => state.picture);
   const router = useRouter();
 
-  function saveDrawing() {
+  function savePicture() {
     if (lines.length === 0) {
       alert("저장할 그림이 없습니다!");
       return;
     }
 
-    // JSON 저장
-    const drawingJSON = JSON.stringify(lines);
-    dispatch(setDrawingLines(drawingJSON));
-    console.log("JSON 저장 완료:", drawingJSON);
+    dispatch(setPictureLines(lines));
+
+    console.log("JSON 저장 완료:", lines);
 
     // 전역 변수에서 가져온 stageRef를 활용하여 이미지 저장
     if (stageRef) {
-      const drawingImage = stageRef.toDataURL();
-      dispatch(setDrawing(drawingImage));
-      console.log("이미지 저장 완료:", drawingImage);
+      const pictureImage = stageRef.toDataURL();
+      dispatch(setPicture(pictureImage));
+      console.log("이미지 저장 완료:", pictureImage);
     } else {
       console.error("stageRef가 null입니다. 확인해주세요.");
     }
@@ -36,8 +35,8 @@ export default function DrawingNavBar() {
     router.back();
   }
 
-  const clearDrawing = () => {
-    dispatch(resetDrawing());
+  const clearPicture = () => {
+    dispatch(resetPicture());
   };
 
   return (
@@ -47,7 +46,7 @@ export default function DrawingNavBar() {
         width="w-full"
         textColor="text-white"
         fontWeight="font-bold"
-        onClick={saveDrawing}
+        onClick={savePicture}
       />
       <Button
         text="다시 그리기"
@@ -56,7 +55,7 @@ export default function DrawingNavBar() {
         backgroundColor="bg-white"
         textColor="text-theme-400"
         fontWeight="font-bold"
-        onClick={clearDrawing}
+        onClick={clearPicture}
       />
     </div>
   );

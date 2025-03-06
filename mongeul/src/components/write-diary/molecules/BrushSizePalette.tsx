@@ -3,14 +3,14 @@
 import { useDispatch, useSelector } from "react-redux";
 import BrushSizeButton from "../atoms/BrushSizeButton";
 import { RootState } from "@/store/store";
-import { setBrushSize } from "@/store/drawingSlice";
+import { setBrushSize } from "@/store/pictureSlice";
 
 const sizes = [5, 20, 35];
 
 export default function BrushSizePalette() {
   const dispatch = useDispatch();
   const selectedBrushSize = useSelector(
-    (state: RootState) => state.drawing.selectedBrushSize
+    (state: RootState) => state.picture.selectedBrushSize
   );
 
   return (

@@ -5,6 +5,7 @@ import {
   getDiaryDates,
   getDiaryDraft,
   getIsDiary,
+  getPictureLines,
   updateDiary,
 } from "@/actions/write-diary";
 import {
@@ -15,6 +16,7 @@ import {
   DraftResponse,
   IsDiaryResponse,
 } from "@/types/diaryTypes";
+import { PictureLineResponse } from "@/types/pictureTypes";
 
 // 일기 작성
 export const submitDiary = async (
@@ -61,4 +63,11 @@ export async function deleteDraft(
 // 일기 작성 여부 조회
 export async function fetchIsWrite(today: string): Promise<IsDiaryResponse> {
   return await getIsDiary(today);
+}
+
+// 그림일기 라인 조회
+export async function fetchPictureLines(
+  diaryId: number
+): Promise<PictureLineResponse> {
+  return await getPictureLines(diaryId);
 }
