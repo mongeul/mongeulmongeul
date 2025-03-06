@@ -1,9 +1,9 @@
-import DrawingForm from "@/components/write-diary/templates/DrawingForm";
+import PictureForm from "@/components/write-diary/templates/PictureForm";
 
 export default function Page() {
   return (
     <div className="w-full flex items-center justify-center">
-      <DrawingForm />
+      <PictureForm />
     </div>
   );
 }

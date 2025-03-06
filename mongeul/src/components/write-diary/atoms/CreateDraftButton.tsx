@@ -2,7 +2,7 @@
 
 import { submitDiaryDraft } from "@/lib/api/write-diary";
 import { resetDiary } from "@/store/diarySlice";
-import { resetDrawing } from "@/store/drawingSlice";
+import { resetPicture } from "@/store/pictureSlice";
 import { RootState } from "@/store/store";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
@@ -14,21 +14,13 @@ export default function CreateDraftButton() {
     title,
     content,
     date,
-    drawing,
-    drawingLines,
+    pictureLines,
     weather,
     feeling,
     privateStatus,
   } = useSelector((state: RootState) => state.diary);
 
-  const isDirty = !!(
-    title ||
-    content ||
-    drawing ||
-    drawingLines ||
-    weather ||
-    feeling
-  );
+  const isDirty = !!(title || content || pictureLines || weather || feeling);
 
   // 임시저장
   async function handleSubmit() {
@@ -41,18 +33,17 @@ export default function CreateDraftButton() {
       await submitDiaryDraft({
         title,
         content,
-        picture: drawing || "",
         pictureLines:
-          typeof drawingLines === "string"
-            ? JSON.parse(drawingLines)
-            : drawingLines,
+          typeof pictureLines === "string"
+            ? JSON.parse(pictureLines)
+            : pictureLines,
         date,
         weather,
         feeling,
         privateStatus,
       });
       dispatch(resetDiary());
-      dispatch(resetDrawing());
+      dispatch(resetPicture());
 
       // Redux 상태 변경 후 반영될 시간을 확보
       await new Promise((resolve) => setTimeout(resolve, 0));

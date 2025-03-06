@@ -3,7 +3,7 @@
 import { usePathname } from "next/navigation";
 import DefaultNavBar from "../molecules/DefaultNavBar";
 import WriteDiaryNavBar from "@/components/write-diary/molecules/WriteDiaryNavBar";
-import DrawingNavBar from "@/components/write-diary/molecules/DrawingNavBar";
+import PictureNavBar from "@/components/write-diary/molecules/PictureNavBar";
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -13,8 +13,8 @@ export default function Navbar() {
       <div className="w-full md:w-2/3 lg:w-1/2 flex p-2 justify-around">
         {pathname === "/write-diary" ? (
           <WriteDiaryNavBar />
-        ) : pathname === "/write-diary/drawing" ? (
-          <DrawingNavBar />
+        ) : pathname === "/write-diary/picture" ? (
+          <PictureNavBar />
         ) : (
           <DefaultNavBar />
         )}

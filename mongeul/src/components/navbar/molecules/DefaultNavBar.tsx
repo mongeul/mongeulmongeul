@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import WriteButton from "../atoms/WriteButton";
+import LinkWriteButton from "../atoms/LinkWriteButton";
 import DiaryIcon from "@/assets/icons/diary.svg";
 import FeedIcon from "@/assets/icons/feed.svg";
 import SharedDiaryIcon from "@/assets/icons/shared-diary.svg";
@@ -26,7 +26,7 @@ export default function DefaultNavBar() {
           }`}
         />
       </Link>
-      <WriteButton />
+      <LinkWriteButton />
       <Link href="/shared-diary">
         <SharedDiaryIcon
           className={`w-7 h-7 ${
