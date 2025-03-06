@@ -20,6 +20,10 @@ export interface DiaryRequest extends BaseDiary {
   pictureLines?: DrawingLine[];
 }
 
+export interface DraftRequest extends Omit<BaseDiary, "picture"> {
+  pictureLines?: DrawingLine[];
+}
+
 export interface Diary extends BaseDiary {
   diaryId: number;
   published: boolean;

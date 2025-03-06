@@ -6,11 +6,12 @@ import { resetDiary } from "@/store/diarySlice";
 import { resetDrawing } from "@/store/drawingSlice";
 import { RootState } from "@/store/store";
 import { useRouter } from "next/navigation";
-import { startTransition } from "react";
+import { startTransition, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 export default function CreateDiaryButton() {
   const router = useRouter();
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const dispatch = useDispatch();
   const {
     title,
@@ -30,6 +31,8 @@ export default function CreateDiaryButton() {
     }
 
     startTransition(async () => {
+      if (isSubmitting) return;
+      setIsSubmitting(true);
       try {
         await submitDiary({
           title,
@@ -54,6 +57,8 @@ export default function CreateDiaryButton() {
         router.push("/diary");
       } catch (error) {
         console.error("일기 작성 실패:", error);
+      } finally {
+        setTimeout(() => setIsSubmitting(false), 500);
       }
     });
   }
@@ -65,6 +70,8 @@ export default function CreateDiaryButton() {
       textColor="text-white"
       fontWeight="font-bold"
       onClick={handleSubmit}
+      disabled={isSubmitting}
+      backgroundColor={isSubmitting ? "bg-gray-300" : "bg-theme-400"}
     />
   );
 }

@@ -9,34 +9,21 @@ import {
   DiaryRequest,
   DiaryResponse,
   DiaryDatesResponse,
+  DraftRequest,
 } from "@/types/diaryTypes";
 
 // 일기 작성
 export const submitDiary = async (
   data: DiaryRequest
 ): Promise<DiaryResponse> => {
-  const cleanedDrawing = data.picture
-    ? data.picture.replace(/^data:image\/\w+;base64,/, "")
-    : "";
-
-  return await createDiary({
-    ...data,
-    picture: cleanedDrawing,
-  });
+  return await createDiary(data);
 };
 
 // 일기 임시저장
 export const submitDiaryDraft = async (
-  data: DiaryRequest
+  data: DraftRequest
 ): Promise<DiaryResponse> => {
-  const cleanedDrawing = data.picture
-    ? data.picture.replace(/^data:image\/\w+;base64,/, "")
-    : "";
-
-  return await createDiaryDraft({
-    ...data,
-    picture: cleanedDrawing,
-  });
+  return await createDiaryDraft(data);
 };
 
 // 일기 작성된 date 불러오기

@@ -5,6 +5,7 @@ import {
   DiaryRequest,
   DiaryResponse,
   DiaryDatesResponse,
+  DraftRequest,
 } from "@/types/diaryTypes";
 
 // 일기 작성
@@ -13,13 +14,34 @@ export async function createDiary(data: DiaryRequest): Promise<DiaryResponse> {
     console.log("request data:", { data });
     const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
+    // FormData 객체 생성
+    const formData = new FormData();
+
+    // 기본 필드 추가 (picture는 별도로 처리)
+    formData.append("title", data.title);
+    formData.append("content", data.content);
+    formData.append("date", data.date);
+    formData.append("weather", data.weather ?? "");
+    formData.append("feeling", data.feeling ?? "");
+    formData.append("privateStatus", data.privateStatus);
+
+    // 그림 데이터
+    if (data.picture) {
+      const blob = await (await fetch(data.picture)).blob();
+      formData.append("picture", blob, "drawing.png");
+    }
+
+    // 그림 선 데이터 json
+    if (data.pictureLines) {
+      formData.append("pictureLines", JSON.stringify(data.pictureLines));
+    }
+
     const response = await fetch(`${API_BASE_URL}/api/v1/diaries`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
         Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_TOKEN}`,
       },
-      body: JSON.stringify(data),
+      body: formData,
       cache: "no-store",
     });
 
@@ -29,7 +51,7 @@ export async function createDiary(data: DiaryRequest): Promise<DiaryResponse> {
     }
 
     const result: DiaryResponse = await response.json();
-    // revalidatePath("/diary"); // 일기 목록 데이터 새로고침
+    revalidatePath("/diary"); // 일기 목록 데이터 새로고침
 
     return result;
   } catch (error) {
@@ -40,7 +62,7 @@ export async function createDiary(data: DiaryRequest): Promise<DiaryResponse> {
 
 // 일기 임시저장
 export async function createDiaryDraft(
-  data: DiaryRequest
+  data: DraftRequest
 ): Promise<DiaryResponse> {
   try {
     console.log("request data:", { data });
