@@ -5,6 +5,8 @@ import { FeedDetail } from "@/types/feedTypes";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import DiaryDetailContainer from "../../common/organisms/DiaryDetailContainer";
+import FeedEmojiContainer from "../organisms/FeedEmojiContainer";
+import FeedCommentButton from "../atoms/FeedCommentButton";
 
 export default function FeedDetailTemplates() {
   const { id } = useParams();
@@ -43,7 +45,13 @@ export default function FeedDetailTemplates() {
 
   return (
     <div className="w-full flex flex-col justify-center items-center">
-      {feed && <DiaryDetailContainer diary={feed} />}
+      <div className="w-full">
+        <DiaryDetailContainer diary={feed} />
+        <div className="flex flex-row gap-2 h-auto p-4">
+          <FeedCommentButton />
+          <FeedEmojiContainer emojis={feed.emojis} />
+        </div>
+      </div>
     </div>
   );
 }
