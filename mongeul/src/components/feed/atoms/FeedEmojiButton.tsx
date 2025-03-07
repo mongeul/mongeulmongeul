@@ -6,6 +6,6 @@ interface FeedEmojiButtonProps {
 }
 
 export default function FeedEmojiButton({ emoji }: FeedEmojiButtonProps) {
-  const { icon } = FeelingsIcon({ feeling: emoji });
+  const { icon } = FeelingsIcon({ feeling: emoji, size: "w-4 h-4" });
   return <button>{icon}</button>;
 }
