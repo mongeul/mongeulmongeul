@@ -1,15 +1,15 @@
 "use client";
 
 import FeelingIcon from "@/components/common/atoms/FeelingsIcon";
-import { FeedPreview } from "@/types/feedTypes";
+import { FeedListItem } from "@/types/feedTypes";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-interface FeedItemProps {
-  feed: FeedPreview;
+interface FeedListItemProps {
+  feed: FeedListItem;
 }
 
-export default function FeedItem({ feed }: FeedItemProps) {
+export default function FeedItem({ feed }: FeedListItemProps) {
   const { icon } = FeelingIcon({ feeling: feed.feeling });
 
   // 아이콘의 초기 위치를 중앙(50%, 50%)으로 설정

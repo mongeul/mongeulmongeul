@@ -1,12 +1,13 @@
 import { PrivateStatus, Feeling, Weather } from "@/types/diaryTypes";
+import { PictureLine } from "@/types/pictureTypes";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface DiaryState {
   title: string;
   date: string;
   content: string;
-  drawing: string | null;
-  drawingLines: string | null;
+  picture: string | null;
+  pictureLines: PictureLine[] | null;
   feeling: Feeling;
   weather: Weather;
   privateStatus: PrivateStatus;
@@ -16,8 +17,8 @@ const initialState: DiaryState = {
   title: "",
   date: new Date().toISOString().split("T")[0],
   content: "",
-  drawing: null,
-  drawingLines: null,
+  picture: null,
+  pictureLines: null,
   feeling: null,
   weather: null,
   privateStatus: "PRIVATE" as PrivateStatus,
@@ -36,11 +37,11 @@ const diarySlice = createSlice({
     setContent: (state, action: PayloadAction<string>) => {
       state.content = action.payload;
     },
-    setDrawing: (state, action: PayloadAction<string | null>) => {
-      state.drawing = action.payload;
+    setPicture: (state, action: PayloadAction<string | null>) => {
+      state.picture = action.payload;
     },
-    setDrawingLines: (state, action: PayloadAction<string | null>) => {
-      state.drawingLines = action.payload;
+    setPictureLines: (state, action: PayloadAction<PictureLine[] | null>) => {
+      state.pictureLines = action.payload ?? [];
     },
     setFeeling: (state, action: PayloadAction<Feeling>) => {
       state.feeling = action.payload;
@@ -59,8 +60,8 @@ export const {
   setTitle,
   setDate,
   setContent,
-  setDrawing,
-  setDrawingLines,
+  setPicture,
+  setPictureLines,
   setFeeling,
   setWeather,
   setPrivateStatus,

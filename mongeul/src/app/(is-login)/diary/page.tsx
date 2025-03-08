@@ -11,8 +11,11 @@ import {
   setCurrentMonth,
   setDiaryEntries,
 } from "@/store/calendarSlice";
+import { useRouter } from "next/navigation";
+import { setDate } from "@/store/diarySlice";
 
 export default function Page() {
+  const router = useRouter();
   const dispatch = useDispatch();
   const { selectedDate, currentMonth, selectedDiary } = useSelector(
     (state: RootState) => state.calendar
@@ -43,12 +46,23 @@ export default function Page() {
   }, [currentMonth, dispatch]);
 
   const handleDateSelect = async (date: string) => {
+    // 미래날짜 선택시 return
+    const selectedDateStr = date;
+    const todayStr = new Date().toISOString().split("T")[0];
+
+    if (selectedDateStr > todayStr) {
+      return;
+    }
+
     console.log(`${date} 날짜 클릭됨 / API 요청 실행`);
     dispatch(setSelectedDate(date));
 
     const entry = diaryEntries.find((entry) => entry.date === date);
     if (!entry) {
       dispatch(setSelectedDiary(null));
+      dispatch(setDate(date));
+      router.push("/write-diary");
+
       return;
     }
 

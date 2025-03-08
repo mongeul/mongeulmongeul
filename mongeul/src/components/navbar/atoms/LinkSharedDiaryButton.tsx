@@ -1,17 +1,22 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { ReactElement } from "react";
 
-interface WriteButtonDetailProps {
+interface LinkSharedDiaryButtonProps {
   text: string;
   icon: ReactElement;
-  onClick: () => void;
+  toggleButton: () => void;
 }
 
-export default function WriteButtonDetail({
+export default function LinkSharedDiaryButton({
   text,
   icon,
-  onClick,
-}: WriteButtonDetailProps) {
+  toggleButton,
+}: LinkSharedDiaryButtonProps) {
+  const writeSharedDiary = (): void => {
+    console.log("공유 다이어리 작성");
+    toggleButton();
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -19,7 +24,7 @@ export default function WriteButtonDetail({
       exit={{ opacity: 0, y: 20 }}
       transition={{ duration: 0.3 }}
       className="bg-white shadow-md rounded-full px-4 py-3 flex items-center justify-center gap-2"
-      onClick={() => onClick()}
+      onClick={writeSharedDiary}
     >
       {icon}
       {text}

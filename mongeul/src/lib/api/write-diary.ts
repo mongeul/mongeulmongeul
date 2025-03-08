@@ -4,39 +4,40 @@ import {
   deleteDiary,
   getDiaryDates,
   getDiaryDraft,
+  getIsDiary,
+  getPictureLines,
+  updateDiary,
 } from "@/actions/write-diary";
 import {
   DiaryRequest,
   DiaryResponse,
   DiaryDatesResponse,
+  DraftRequest,
+  DraftResponse,
+  IsDiaryResponse,
 } from "@/types/diaryTypes";
+import { PictureLineResponse } from "@/types/pictureTypes";
 
 // 일기 작성
 export const submitDiary = async (
   data: DiaryRequest
 ): Promise<DiaryResponse> => {
-  const cleanedDrawing = data.picture
-    ? data.picture.replace(/^data:image\/\w+;base64,/, "")
-    : "";
+  return await createDiary(data);
+};
 
-  return await createDiary({
-    ...data,
-    picture: cleanedDrawing,
-  });
+// 일기 수정
+export const submitUpdateDiary = async (
+  data: DiaryRequest,
+  diaryId: number
+): Promise<DiaryResponse> => {
+  return await updateDiary(data, diaryId);
 };
 
 // 일기 임시저장
 export const submitDiaryDraft = async (
-  data: DiaryRequest
-): Promise<DiaryResponse> => {
-  const cleanedDrawing = data.picture
-    ? data.picture.replace(/^data:image\/\w+;base64,/, "")
-    : "";
-
-  return await createDiaryDraft({
-    ...data,
-    picture: cleanedDrawing,
-  });
+  data: DraftRequest
+): Promise<DraftResponse> => {
+  return await createDiaryDraft(data);
 };
 
 // 일기 작성된 date 불러오기
@@ -48,7 +49,7 @@ export async function fetchDiaryDates(
 }
 
 // 일기 임시저장 목록 조회
-export async function fetchDiaryDraft(): Promise<DiaryResponse> {
+export async function fetchDiaryDraft(): Promise<DraftResponse> {
   return await getDiaryDraft();
 }
 
@@ -57,4 +58,16 @@ export async function deleteDraft(
   diaryId: number
 ): Promise<{ success: boolean; message: string }> {
   return await deleteDiary({ diaryId });
+}
+
+// 일기 작성 여부 조회
+export async function fetchIsWrite(today: string): Promise<IsDiaryResponse> {
+  return await getIsDiary(today);
+}
+
+// 그림일기 라인 조회
+export async function fetchPictureLines(
+  diaryId: number
+): Promise<PictureLineResponse> {
+  return await getPictureLines(diaryId);
 }

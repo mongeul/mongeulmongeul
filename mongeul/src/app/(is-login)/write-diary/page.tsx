@@ -1,5 +1,7 @@
-import DraftAlertModal from "@/components/write-diary/molecules/DraftAlertModal";
+"use client";
+import { useSearchParams } from "next/navigation";
 import WriteForm from "@/components/write-diary/templates/WriteForm";
+import DraftAlertModal from "@/components/write-diary/molecules/DraftAlertModal";
 
 export default function Page() {
   return (

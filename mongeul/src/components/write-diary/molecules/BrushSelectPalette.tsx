@@ -2,9 +2,9 @@
 
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
-import { setBrushType } from "@/store/drawingSlice";
+import { setBrushType } from "@/store/pictureSlice";
 import BrushSelectButton from "../atoms/BrushSelectButton";
-import { Brush } from "@/types/drawingTypes";
+import { Brush } from "@/types/pictureTypes";
 import PencilIcon from "@/assets/icons/pencil.svg";
 import PenIcon from "@/assets/icons/pen.svg";
 import EraserIcon from "@/assets/icons/eraser.svg";
@@ -15,7 +15,7 @@ const brushes: Brush[] = ["pen", "pencil", "eraser"];
 export default function BrushSelectPalette() {
   const dispatch = useDispatch();
   const selectedBrush = useSelector(
-    (state: RootState) => state.drawing.selectedBrush
+    (state: RootState) => state.picture.selectedBrush
   );
 
   const getBrushIcon = (brush: Brush) => {

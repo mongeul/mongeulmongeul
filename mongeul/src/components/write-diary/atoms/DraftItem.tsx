@@ -1,12 +1,12 @@
 import Image from "next/image";
-import { Diary } from "@/types/diaryTypes";
+import { Diary, Draft } from "@/types/diaryTypes";
 import { formatDate } from "@/utils/formatDate";
 import CloseIcon from "@/assets/icons/close.svg";
 import { deleteDraft } from "@/lib/api/write-diary";
 import {
   setContent,
   setDate,
-  setDrawing,
+  setPicture,
   setFeeling,
   setPrivateStatus,
   setTitle,
@@ -15,7 +15,7 @@ import {
 import { useDispatch } from "react-redux";
 
 interface DraftItemProps {
-  draft: Diary;
+  draft: Draft;
   onDelete: (diaryId: number) => void;
   onClose: () => void;
 }
@@ -45,7 +45,7 @@ export default function DraftItem({
     dispatch(setFeeling(draft.feeling));
     dispatch(setPrivateStatus(draft.privateStatus));
     dispatch(setWeather(draft.weather));
-    dispatch(setDrawing(draft.picture || ""));
+    dispatch(setPicture(draft.picture || ""));
 
     onClose();
   };
@@ -69,21 +69,6 @@ export default function DraftItem({
         <div className="w-full text-xs text-gray-500 line-clamp-2 overflow-hidden">
           {draft.content || "내용없음"}
         </div>
-        {/* 사진 */}
-        {draft.picture && (
-          <div className="w-full flex justify-center items-stretch">
-            <div className="w-full h-auto max-h-[120px] flex items-center">
-              <Image
-                src={draft.picture}
-                alt="임시 저장 그림"
-                width={0}
-                height={0}
-                sizes="100vw"
-                className="w-auto h-full rounded-md object-cover"
-              />
-            </div>
-          </div>
-        )}
       </div>
       {/* 삭제버튼 */}
       <button

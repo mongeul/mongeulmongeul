@@ -2,11 +2,11 @@
 
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useEffect, useRef } from "react";
-import { fetchFeedsList } from "@/lib/api/feed";
+import { fetchFeedList } from "@/lib/api/feed";
 import { RootState } from "@/store/store";
 import { useSelector } from "react-redux";
-import FeedItem from "../atoms/FeedItem";
-import { FeedsResponse, FeedPreview } from "@/types/feedTypes";
+import FeedItem from "../atoms/FeedListItem";
+import { FeedListResponse, FeedListItem } from "@/types/feedTypes";
 
 export default function FeedList() {
   const myFeed = useSelector((state: RootState) => state.feed.myFeed);
@@ -23,11 +23,11 @@ export default function FeedList() {
     isLoading,
     isError,
     error,
-  } = useInfiniteQuery<FeedsResponse, Error>({
+  } = useInfiniteQuery<FeedListResponse, Error>({
     queryKey: ["feeds", myFeed], // 쿼리 키: 동일한 요청을 캐싱하여 관리
     queryFn: async ({ pageParam = null }) => {
       console.log("pageParam:", pageParam, "myFeed:", myFeed);
-      const result = await fetchFeedsList(
+      const result = await fetchFeedList(
         pageSize,
         typeof pageParam === "number" ? pageParam : null,
         myFeed
@@ -99,7 +99,7 @@ export default function FeedList() {
           console.log("페이지 데이터 :", page);
           return page.data;
         })
-        .map((feed: FeedPreview) => (
+        .map((feed: FeedListItem) => (
           <div key={feed.feedId} className="relative w-full h-40">
             <FeedItem feed={feed} />
           </div>
