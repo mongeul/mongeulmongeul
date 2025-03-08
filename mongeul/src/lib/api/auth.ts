@@ -1,6 +1,6 @@
-import { apiClient } from "./apiClient";
+import { apiClient, getCookie } from "./apiClient";
 import { AppDispatch } from "@/store/store";
-import { setUser } from "@/store/userSlice";
+import { setUser, clearUser } from "@/store/userSlice";
 
 // 카카오 로그인 URL 가져오기
 export const getKakaoLoginUrl = async (): Promise<string> => {
@@ -26,11 +26,12 @@ export const handleKakaoLogin = async (
     console.log("🟢카카오 로그인 응답:", data);
 
     if (data.success) {
-      const { accessToken, user } = data.data;
+      const { accessToken, refreshToken, user } = data.data;
       console.log("🔍 로그인 후 받은 유저 정보:", user);
 
-      dispatch(setUser({ ...user, accessToken }));
-      localStorage.setItem("accessToken", accessToken);
+      dispatch(setUser({ ...user }));
+      document.cookie = `accessToken=${accessToken}; path=/; max-age=604800; secure; samesite=strict`; // 30분 (1800초)
+      document.cookie = `refreshToken=${refreshToken}; path=/; max-age=604800; secure; samesite=strict`; // 7일 (604800초)
 
       return user;
     }
@@ -83,5 +84,41 @@ export const updateUserNickname = async (
   } catch (error) {
     console.error("닉네임 설정 실패:", error);
     return false;
+  }
+};
+
+// 로그아웃 API
+export const handleLogout = async (dispatch: AppDispatch) => {
+  try {
+    console.log("📡 로그아웃 요청 시작");
+
+    const accessToken = getCookie("accessToken");
+    const refreshToken = getCookie("refreshToken");
+
+    if (!accessToken || !refreshToken) {
+      console.error("❌ 저장된 토큰이 없습니다.");
+      return;
+    }
+
+    const data = await apiClient("/api/user/logout", {
+      method: "POST",
+      body: JSON.stringify({ accessToken, refreshToken }),
+    });
+
+    if (data.success) {
+      console.log("🟢 로그아웃 성공!");
+
+      dispatch(clearUser()); // Redux 상태 초기화
+
+      // 쿠키 삭제 (만료시간을 과거로 설정)
+      document.cookie =
+        "accessToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+      document.cookie =
+        "refreshToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+    } else {
+      console.error("❌ 로그아웃 실패:", data.message);
+    }
+  } catch (error) {
+    console.error("❌ 로그아웃 요청 중 오류 발생:", error);
   }
 };

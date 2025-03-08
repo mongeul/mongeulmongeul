@@ -47,9 +47,10 @@ export default function LoginPage() {
           console.log("🔍 유저 정보 확인:", user);
           console.log("🔍 user.nickname 값:", user.nickname);
 
-          if (!user.nickname) {
+          if (user.nickname === null) {
             console.log("🛑 닉네임이 null이므로 모달을 띄움");
-          } else {
+            setIsModalOpen(true);
+          } else if (user.nickname) {
             console.log("✅ 로그인 성공! 메인 페이지로 이동");
             router.push("/feed");
           }
@@ -65,16 +66,22 @@ export default function LoginPage() {
       });
   }, [searchParams, dispatch, router]);
 
+  // 닉네임이 null이면 모달 띄우기
   useEffect(() => {
-    if (!user.nickname) {
-      console.log("🛑 닉네임이 null이므로 모달을 띄움");
+    if (user.id && user.nickname === null) {
+      console.log("🚨 닉네임이 null이므로 모달을 띄움");
       setIsModalOpen(true);
     }
-    if (user.nickname) {
+  }, [user.id, user.nickname]);
+
+  // 닉네임이 설정되면 모달 자동 닫기
+  useEffect(() => {
+    if (user.nickname && isModalOpen) {
       console.log("✅ 닉네임이 설정되었으므로 모달 닫음");
       setIsModalOpen(false);
+      router.replace("/feed"); // 모달 닫고 이동
     }
-  }, [user.nickname]);
+  }, [user.nickname, isModalOpen, router]);
 
   return (
     <div className="w-full h-screen flex flex-col md:flex-row items-center justify-center bg-white">
