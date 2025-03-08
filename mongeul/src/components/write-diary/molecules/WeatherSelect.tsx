@@ -8,7 +8,7 @@ import { Weather } from "@/types/diaryTypes";
 import WebModal from "../../common/atoms/WebModal";
 import WeatherIcon from "@/components/common/atoms/WeatherIcon";
 
-const weathers: Weather[] = ["SUNNY", "CLOUDY", "RAINY"];
+const weathers: Weather[] = ["SUNNY", "CLOUDY", "RAINY", "SNOWY"];
 
 function ModalContent({ closeModal }: { closeModal: () => void }) {
   const dispatch = useDispatch();
@@ -21,8 +21,8 @@ function ModalContent({ closeModal }: { closeModal: () => void }) {
   return (
     <div className="flex flex-col items-center justify-center">
       <p className="text-gray-600">오늘의 날씨는 어떤가요?</p>
-      <div className="flex justify-center p-6">
-        <div className="grid grid-cols-3 gap-8">
+      <div className="flex justify-center pt-6 pb-4">
+        <div className="grid grid-cols-4 gap-8">
           {weathers.map((weather, index) => {
             const { icon, label } = WeatherIcon({
               weather: weather,

@@ -1,8 +1,9 @@
-import React, { ReactNode } from "react";
+import React, { ReactNode, useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 
 interface BubbleProps {
   children: ReactNode;
+  onClose?: () => void;
 }
 
 const bounceVariants = {
@@ -16,9 +17,28 @@ const bounceVariants = {
   exit: { opacity: 0, scale: 0.8, y: 10 },
 };
 
-export default function Bubble({ children }: BubbleProps) {
+export default function Bubble({ children, onClose }: BubbleProps) {
+  const bubbleRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        bubbleRef.current &&
+        !bubbleRef.current.contains(event.target as Node)
+      ) {
+        onClose?.();
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [onClose]);
+
   return (
     <motion.div
+      ref={bubbleRef}
       initial="hidden"
       animate="visible"
       exit="exit"

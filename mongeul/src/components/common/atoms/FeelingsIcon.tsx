@@ -24,25 +24,43 @@ export default function FeelingsIcon({
               <HappyIcon className={`text-white ${size}`} />
             </RoundIcon>
           ),
-          label: "행복",
+          label: "행복해요",
         };
-      case "SOSO":
+      case "SAD":
         return {
           icon: (
             <RoundIcon backgroundColor="bg-theme-300">
               <HappyIcon className={`text-white ${size}`} />
             </RoundIcon>
           ),
-          label: "쏘쏘",
+          label: "슬퍼요",
         };
-      case "SAD":
+      case "ANGRY":
         return {
           icon: (
             <RoundIcon backgroundColor="bg-theme-200">
               <HappyIcon className={`text-white ${size}`} />
             </RoundIcon>
           ),
-          label: "슬픔",
+          label: "화나요",
+        };
+      case "WOW":
+        return {
+          icon: (
+            <RoundIcon backgroundColor="bg-theme-200">
+              <HappyIcon className={`text-white ${size}`} />
+            </RoundIcon>
+          ),
+          label: "놀라워요",
+        };
+      case "SOSO":
+        return {
+          icon: (
+            <RoundIcon backgroundColor="bg-theme-200">
+              <HappyIcon className={`text-white ${size}`} />
+            </RoundIcon>
+          ),
+          label: "그저그래요",
         };
       default:
         return {

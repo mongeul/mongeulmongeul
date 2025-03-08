@@ -9,9 +9,9 @@ export default function FeedEmojiBubble() {
   }[] = [
     { emojiId: 1, label: "HAPPY" },
     { emojiId: 2, label: "SAD" },
-    { emojiId: 3, label: "WOW" },
-    { emojiId: 4, label: "SOSO" },
-    { emojiId: 5, label: "ANGRY" },
+    { emojiId: 3, label: "ANGRY" },
+    { emojiId: 4, label: "WOW" },
+    { emojiId: 5, label: "SOSO" },
   ];
   return (
     <Bubble>

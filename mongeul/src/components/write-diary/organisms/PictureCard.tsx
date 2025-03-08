@@ -4,7 +4,7 @@ import { RootState } from "@/store/store";
 import Card from "@/components/common/atoms/Card";
 import Link from "next/link";
 import { useSelector, useDispatch } from "react-redux";
-import { resetPicture } from "@/store/pictureSlice";
+import { resetPicture, updateLines } from "@/store/pictureSlice";
 import { setPicture, setPictureLines } from "@/store/diarySlice";
 import CloseIcon from "@/assets/icons/close.svg";
 import PaletteIcon from "@/assets/icons/palette.svg";
@@ -21,14 +21,19 @@ export default function PictureCard({ diaryId }: { diaryId: number | null }) {
     dispatch(setPictureLines([]));
   };
 
-  const getPictureLines = async () => {
-    if (diaryId) {
-      try {
-        const response = await fetchPictureLines(diaryId);
-        dispatch(setPictureLines(response.data));
-      } catch (error) {
-        console.error("그림 데이터를 불러오는 중 오류 발생:", error);
+  const handlePictureLines = async (diaryId: number | null) => {
+    if (!diaryId) return;
+
+    try {
+      const pictureLinesResponse = await fetchPictureLines(diaryId);
+      console.log(pictureLinesResponse);
+
+      if (pictureLinesResponse.pictureLines) {
+        dispatch(setPictureLines(pictureLinesResponse.pictureLines));
+        dispatch(updateLines(pictureLinesResponse.pictureLines));
       }
+    } catch (error) {
+      console.error("일기 라인 불러오기 실패:", error);
     }
   };
 
@@ -46,7 +51,7 @@ export default function PictureCard({ diaryId }: { diaryId: number | null }) {
             <Link href="/write-diary/picture">
               <div
                 className="w-full flex justify-center items-center"
-                onClick={getPictureLines}
+                onClick={() => handlePictureLines(diaryId)}
               >
                 <img src={picture} alt="저장된 그림" />
               </div>

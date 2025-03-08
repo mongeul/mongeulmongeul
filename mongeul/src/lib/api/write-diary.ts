@@ -16,7 +16,7 @@ import {
   DraftResponse,
   IsDiaryResponse,
 } from "@/types/diaryTypes";
-import { PictureLineResponse } from "@/types/pictureTypes";
+import { PictureLine } from "@/types/pictureTypes";
 
 // 일기 작성
 export const submitDiary = async (
@@ -66,8 +66,9 @@ export async function fetchIsWrite(today: string): Promise<IsDiaryResponse> {
 }
 
 // 그림일기 라인 조회
-export async function fetchPictureLines(
-  diaryId: number
-): Promise<PictureLineResponse> {
+export async function fetchPictureLines(diaryId: number): Promise<{
+  diaryId: number;
+  pictureLines: PictureLine[];
+}> {
   return await getPictureLines(diaryId);
 }

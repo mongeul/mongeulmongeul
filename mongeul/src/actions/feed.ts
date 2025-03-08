@@ -99,13 +99,13 @@ export async function postFeedEmoji(
 
     if (!response.ok) {
       const errorMessage = await response.text();
-      throw new Error(`피드 이포지 추가 실패: ${errorMessage}`);
+      throw new Error(`피드 이모지 추가 실패: ${errorMessage}`);
     }
 
     const result: FeedEmojiresponse = await response.json();
     return result;
   } catch (error) {
-    console.error("피드 이포지 추가 에러:", error);
+    console.error("피드 이모지 추가 에러:", error);
     throw error;
   }
 }
@@ -132,13 +132,13 @@ export async function deleteFeedEmoji(
 
     if (!response.ok) {
       const errorMessage = await response.text();
-      throw new Error(`피드 이포지 삭제 실패: ${errorMessage}`);
+      throw new Error(`피드 이모지 삭제 실패: ${errorMessage}`);
     }
 
     const result: FeedEmojiresponse = await response.json();
     return result;
   } catch (error) {
-    console.error("피드 이포지 삭제 에러:", error);
+    console.error("피드 이모지 삭제 에러:", error);
     throw error;
   }
 }
