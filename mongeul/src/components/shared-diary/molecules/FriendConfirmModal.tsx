@@ -27,10 +27,10 @@ export default function FriendConfirmModal({
   };
 
   return (
-    <div className="flex flex-col items-center p-6">
-      <h2 className="text-xl font-semibold">친구 추가</h2>
+    <div className="flex flex-col items-center p-5">
+      <h2 className="text-xl font-semibold">친구 닉네임 확인</h2>
       <p className="text-gray-600 mt-3">이 사용자가 맞습니까?</p>
-      <div className="my-5 p-4 border rounded-lg text-xl font-semibold">
+      <div className="w-full text-center my-5 p-4 border rounded-3xl text-xl font-semibold border-theme-400">
         {nickname}
       </div>
       <Button

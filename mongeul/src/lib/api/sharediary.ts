@@ -50,7 +50,7 @@ export const addFriend = async (code: string) => {
   try {
     const response = await apiClient("/api/v1/friend", {
       method: "POST",
-      body: JSON.stringify({ code }),
+      body: JSON.stringify({ code: Number(code) }),
     });
     return response;
   } catch (error) {

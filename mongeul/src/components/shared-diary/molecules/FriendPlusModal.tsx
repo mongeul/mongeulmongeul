@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Button from "@/components/common/atoms/Button";
+import Input from "@/components/common/atoms/Input";
 import { getFriendByCode } from "@/lib/api/sharediary";
 
 export default function FriendPlusModalContent({
@@ -9,54 +10,49 @@ export default function FriendPlusModalContent({
 }: {
   onConfirm: (nickname: string, code: string) => void;
 }) {
-  const [code, setCode] = useState(["", "", "", ""]);
+  const [code, setCode] = useState("");
   const [error, setError] = useState("");
 
-  const handleChange = (index: number, value: string) => {
-    if (/^\d?$/.test(value)) {
-      // 숫자 1자리만 입력 가능
-      const newCode = [...code];
-      newCode[index] = value;
-      setCode(newCode);
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    if (/^\d*$/.test(value) && value.length <= 4) {
+      setCode(value);
     }
   };
 
   const handleSubmit = async () => {
-    const codeString = code.join(""); // 배열을 문자열로 변환
-    if (codeString.length !== 4) {
+    if (code.length !== 4) {
       setError("4자리 코드를 입력해주세요.");
       return;
     }
 
     try {
-      const response = await getFriendByCode(codeString);
+      const response = await getFriendByCode(code);
       if (response.success && response.data?.nickname) {
-        onConfirm(response.data.nickname, codeString);
+        onConfirm(response.data.nickname, code);
       } else {
         setError("사용자를 찾을 수 없습니다.");
       }
     } catch (error) {
-      setError("API 요청 실패");
+      setError("친구추가 할 수 없습니다. 코드를 다시 확인해주세요.");
       console.error("친구 조회 실패:", error);
     }
   };
 
   return (
-    <div className="flex flex-col items-center p-6">
+    <div className="flex flex-col items-center p-5">
       <h2 className="text-xl font-semibold">친구 추가</h2>
       <p className="text-gray-600 mt-3">친구가 알려준 코드를 입력해주세요</p>
 
-      <div className="flex gap-2 my-7">
-        {code.map((num, index) => (
-          <input
-            key={index}
-            type="text"
-            maxLength={1}
-            value={num}
-            onChange={(e) => handleChange(index, e.target.value)}
-            className="w-12 h-12 text-center border border-gray-300 rounded-lg text-xl font-semibold focus:outline-none focus:ring-2 focus:ring-theme-500"
-          />
-        ))}
+      <div className="w-full my-5">
+        <Input
+          placeholder="4자리 코드 입력"
+          value={code}
+          onChange={handleChange}
+          maxLength={4}
+          borderColor="border-gray-300"
+          className="w-full p-2 text-xl text-center"
+        />
       </div>
 
       {error && <p className="text-red-500 text-sm mb-5">{error}</p>}
