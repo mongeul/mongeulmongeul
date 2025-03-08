@@ -1,6 +1,6 @@
 package com.specup.mongeul.domain.diary.dto.response.Feed;
 
-import com.specup.mongeul.domain.diary.dto.response.Diary.DiaryEmojiResponse;
+import com.specup.mongeul.domain.diaryemoji.dto.response.DiaryEmojiResponse;
 import com.specup.mongeul.domain.diary.entity.Diary;
 import com.specup.mongeul.domain.diary.entity.ENUM.DiaryFeeling;
 import com.specup.mongeul.domain.diary.entity.ENUM.DiaryPrivate;
