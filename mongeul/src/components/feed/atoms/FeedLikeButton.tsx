@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Feeling } from "@/types/diaryTypes";
 import LikeIcon from "@/assets/icons/like.svg";
 import FeedEmojiBubble from "../molecules/FeedEmojiBubble";
 import { AnimatePresence } from "framer-motion";

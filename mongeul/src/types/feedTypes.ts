@@ -26,3 +26,9 @@ export interface FeedDetailResponse {
   message: string;
   data: FeedDetail;
 }
+
+export interface FeedEmojiresponse {
+  success: boolean;
+  message: string;
+  data: {};
+}

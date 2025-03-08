@@ -1,4 +1,9 @@
-import { FeedDetailResponse, FeedListResponse } from "@/types/feedTypes";
+import { Feeling } from "@/types/diaryTypes";
+import {
+  FeedDetailResponse,
+  FeedEmojiresponse,
+  FeedListResponse,
+} from "@/types/feedTypes";
 
 // 피드 리스트 조회
 export async function getFeedList(
@@ -68,6 +73,72 @@ export async function getFeedDetail(
     return result;
   } catch (error) {
     console.error("피드 디테일 조회 에러:", error);
+    throw error;
+  }
+}
+
+// 피드 감정표현 추가
+export async function postFeedEmoji(
+  feedId: number,
+  emojiId: number
+): Promise<FeedEmojiresponse> {
+  try {
+    const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+
+    const response = await fetch(
+      `${API_BASE_URL}/api/v1/feeds/${feedId}/emojis/${emojiId}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_TOKEN}`,
+        },
+        cache: "no-cache",
+      }
+    );
+
+    if (!response.ok) {
+      const errorMessage = await response.text();
+      throw new Error(`피드 이포지 추가 실패: ${errorMessage}`);
+    }
+
+    const result: FeedEmojiresponse = await response.json();
+    return result;
+  } catch (error) {
+    console.error("피드 이포지 추가 에러:", error);
+    throw error;
+  }
+}
+
+// 피드 감정표현 삭제
+export async function deleteFeedEmoji(
+  feedId: number,
+  emojiId: number
+): Promise<FeedEmojiresponse> {
+  try {
+    const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+
+    const response = await fetch(
+      `${API_BASE_URL}/api/v1/feeds/${feedId}/emojis/${emojiId}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_TOKEN}`,
+        },
+        cache: "no-cache",
+      }
+    );
+
+    if (!response.ok) {
+      const errorMessage = await response.text();
+      throw new Error(`피드 이포지 삭제 실패: ${errorMessage}`);
+    }
+
+    const result: FeedEmojiresponse = await response.json();
+    return result;
+  } catch (error) {
+    console.error("피드 이포지 삭제 에러:", error);
     throw error;
   }
 }
