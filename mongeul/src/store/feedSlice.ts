@@ -4,13 +4,11 @@ import { Feeling } from "@/types/diaryTypes";
 
 interface FeedState {
   myFeed: boolean;
-  feedDetailId: number | null;
   feedDetailEmojis: FeedEmoji[];
 }
 
 const initialState: FeedState = {
   myFeed: false,
-  feedDetailId: null,
   feedDetailEmojis: [],
 };
 
@@ -18,6 +16,9 @@ const feedSlice = createSlice({
   name: "feed",
   initialState,
   reducers: {
+    setMyFeed: (state, action: PayloadAction<boolean>) => {
+      state.myFeed = action.payload;
+    },
     setFeedDetailEmojis: (state, action: PayloadAction<FeedEmoji[]>) => {
       state.feedDetailEmojis = action.payload;
     },
@@ -47,5 +48,6 @@ const feedSlice = createSlice({
   },
 });
 
-export const { setFeedDetailEmojis, toggleEmoji } = feedSlice.actions;
+export const { setMyFeed, setFeedDetailEmojis, toggleEmoji } =
+  feedSlice.actions;
 export default feedSlice.reducer;

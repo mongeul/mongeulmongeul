@@ -52,10 +52,12 @@ export default function FeedDetailTemplates() {
     <div className="w-full flex flex-col justify-center items-center">
       <div className="w-full">
         <DiaryDetailContainer diary={feed} />
-        <div className="flex flex-row flex-wrap items-center gap-2 h-auto py-4 px-2">
-          <FeedCommentButton />
-          <FeedLikeButton />
-          <FeedEmojiGroup />
+        <div className="w-full overflow-x-auto flex items-center scrollbar-hide">
+          <div className="flex flex-row items-center gap-2 min-w-max py-4 px-4">
+            <FeedCommentButton />
+            <FeedLikeButton />
+            <FeedEmojiGroup />
+          </div>
         </div>
       </div>
     </div>
