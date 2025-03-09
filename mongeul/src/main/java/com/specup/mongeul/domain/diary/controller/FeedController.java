@@ -35,7 +35,9 @@ public class FeedController {
 
     @Operation(summary = "특정 피드 조회", description = "특정 피드를 조회합니다.")
     @GetMapping("/feeds/{feedId}")
-    public ResponseEntity<ApiResponse<FeedDetailResponse>> getFeedDetail(@PathVariable Long feedId) {
-        return ResponseEntity.ok(ApiResponse.success(feedService.getFeedDetail(feedId), "피드 조회 성공"));
+    public ResponseEntity<ApiResponse<FeedDetailResponse>> getFeedDetail(
+            @AuthenticationPrincipal User user,
+            @PathVariable Long feedId) {
+        return ResponseEntity.ok(ApiResponse.success(feedService.getFeedDetail(user.getId(), feedId), "피드 조회 성공"));
     }
 }

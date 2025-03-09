@@ -6,6 +6,7 @@ import com.specup.mongeul.domain.diary.dto.response.Feed.FeedResponse;
 import com.specup.mongeul.domain.diary.entity.Diary;
 import com.specup.mongeul.domain.diary.repository.DiaryRepository;
 import com.specup.mongeul.domain.diaryemoji.repository.DiaryEmojiRepository;
+import com.specup.mongeul.domain.emoji.repository.EmojiRepository;
 import com.specup.mongeul.global.error.CustomException;
 import com.specup.mongeul.global.error.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,7 @@ import java.util.List;
 public class FeedService {
     private final DiaryRepository diaryRepository;
     private final DiaryEmojiRepository diaryEmojiRepository;
+    private final EmojiRepository emojiRepository;
 
     @Transactional(readOnly = true)
     public List<FeedResponse> getFeedAll(Long userId, Long pageSize, Long lastDiaryId) {
@@ -34,10 +36,19 @@ public class FeedService {
     }
 
     @Transactional(readOnly = true)
-    public FeedDetailResponse getFeedDetail(Long diaryId) {
+    public FeedDetailResponse getFeedDetail(Long userId, Long diaryId) {
         Diary diary = diaryRepository.findById(diaryId)
                 .orElseThrow(() -> new CustomException(ErrorCode.DIARY_NOT_FOUND));
         List<DiaryEmojiResponse> emojis = diaryEmojiRepository.findEmojiCountByDiaryId(diaryId);
+        List<Long> selectedEmojiIds = diaryEmojiRepository.findSelectedEmojiIdsByDiaryIdAndUserId(diaryId, userId);
+
+        emojis.forEach(response ->
+                response.setIsSelected(selectedEmojiIds.contains(
+                        emojiRepository.findByType(response.getEmojiType())
+                                .orElseThrow(() -> new CustomException(ErrorCode.EMOJI_NOT_FOUND))
+                                .getId()
+                ))
+        );
         return FeedDetailResponse.from(diary, emojis);
     }
 }

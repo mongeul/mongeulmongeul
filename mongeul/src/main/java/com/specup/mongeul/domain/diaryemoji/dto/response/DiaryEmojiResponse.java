@@ -1,12 +1,10 @@
 package com.specup.mongeul.domain.diaryemoji.dto.response;
 
 import com.specup.mongeul.domain.emoji.entity.ENUM.EmojiType;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 @Getter
+@Setter
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
