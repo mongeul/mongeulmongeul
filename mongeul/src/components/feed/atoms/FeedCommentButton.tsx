@@ -2,6 +2,6 @@ import CommentIcon from "@/assets/icons/comment.svg";
 
 export default function FeedCommentButton() {
   return (
-    <CommentIcon className="h-5 w-5 text-theme-400 justify-center items-center" />
+    <CommentIcon className="h-6 w-6 text-theme-400 justify-center items-center" />
   );
 }

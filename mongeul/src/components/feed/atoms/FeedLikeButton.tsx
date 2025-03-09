@@ -39,7 +39,7 @@ export default function FeedLikeButton() {
         onClick={toggleBubble}
         className="flex justify-center items-center"
       >
-        <LikeIcon className="h-5 w-5 text-theme-400" />
+        <LikeIcon className="h-6 w-6 text-theme-400" />
       </button>
       <AnimatePresence>
         {isOpen && (

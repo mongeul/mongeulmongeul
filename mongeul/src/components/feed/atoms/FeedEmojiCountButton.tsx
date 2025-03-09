@@ -37,7 +37,7 @@ export default function FeedEmojiCountButton({
     }
   };
 
-  const icon = <FeedEmojiButton emoji={emoji} isSelected={isSelected} />;
+  const icon = <FeedEmojiButton emoji={emoji} />;
   const feelingCount = count >= 1000 ? "+999" : String(count);
 
   return (
