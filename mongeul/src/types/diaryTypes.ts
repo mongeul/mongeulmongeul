@@ -1,18 +1,18 @@
 import { PictureLine } from "./pictureTypes";
 
-export type Feeling = "HAPPY" | "SOSO" | "SAD" | "ANGRY" | "WOW" | null;
+export type Feeling = "HAPPY" | "SOSO" | "SAD" | "ANGRY" | "WOW";
 
 export type PrivateStatus = "PUBLIC" | "PRIVATE" | "LOCK";
 
-export type Weather = "SUNNY" | "CLOUDY" | "RAINY" | "SNOWY" | null;
+export type Weather = "SUNNY" | "CLOUDY" | "RAINY" | "SNOWY";
 
 export interface BaseDiary {
   title: string;
   content: string;
   picture?: string;
   date: string;
-  weather: Weather;
-  feeling: Feeling;
+  weather: Weather | null;
+  feeling: Feeling | null;
   privateStatus: PrivateStatus;
 }
 

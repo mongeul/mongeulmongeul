@@ -21,7 +21,7 @@ function ModalContent({ closeModal }: { closeModal: () => void }) {
   return (
     <div className="flex flex-col items-center justify-center">
       <p>공개 범위를 선택하세요</p>
-      <div className="flex justify-center p-6">
+      <div className="flex justify-center pt-6 pb-4">
         <div className="flex flex-col justify-center gap-6">
           <div className="flex flex-row gap-8">
             {privateStatuses.map((privateStatus, index) => {
@@ -35,7 +35,7 @@ function ModalContent({ closeModal }: { closeModal: () => void }) {
                   onClick={() => handleChange(privateStatus)}
                 >
                   <div>{icon}</div>
-                  <div>{label}</div>
+                  <div className="text-sm">{label}</div>
                 </div>
               );
             })}

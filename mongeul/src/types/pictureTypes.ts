@@ -8,6 +8,9 @@ export interface PictureLine {
 
 export interface PictureLineResponse {
   diaryId: number;
-  data: PictureLine[];
+  data: {
+    diaryId: number;
+    pictureLines: PictureLine[];
+  };
   message: string;
 }

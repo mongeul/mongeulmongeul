@@ -12,6 +12,7 @@ interface ButtonProps {
   textColor?: string;
   fontWeight?: string;
   roundSize?: string;
+  padding?: string;
   onClick: () => void;
   disabled?: boolean;
 }
@@ -26,6 +27,7 @@ export default function Button({
   textColor = "text-black",
   fontWeight = "font-normal",
   roundSize = "rounded-3xl",
+  padding = "px-4 py-3",
   onClick,
   disabled = false,
 }: ButtonProps) {
@@ -39,7 +41,8 @@ export default function Button({
         `${textColor}`,
         `${roundSize}`,
         `${fontWeight}`,
-        "px-4 py-3 flex items-center justify-center gap-2"
+        `${padding}`,
+        "flex items-center justify-center gap-2"
       )}
       onClick={disabled ? undefined : onClick}
       disabled={disabled}

@@ -8,7 +8,7 @@ import { Feeling } from "@/types/diaryTypes";
 import WebModal from "../../common/atoms/WebModal";
 import FeelingIcon from "@/components/common/atoms/FeelingsIcon";
 
-const feelingOptions: Feeling[] = ["HAPPY", "SOSO", "SAD"];
+const feelingOptions: Feeling[] = ["HAPPY", "SOSO", "SAD", "ANGRY", "WOW"];
 
 function ModalContent({ closeModal }: { closeModal: () => void }) {
   const dispatch = useDispatch();
@@ -21,7 +21,7 @@ function ModalContent({ closeModal }: { closeModal: () => void }) {
   return (
     <div className="flex flex-col items-center justify-center">
       <p className="text-gray-600">오늘 하루 기분이 어떠셨나요?</p>
-      <div className="flex justify-center p-6">
+      <div className="flex justify-center pt-6 pb-4">
         <div className="grid grid-cols-3 gap-8">
           {feelingOptions.map((feeling, index) => {
             const { icon, label } = FeelingIcon({
@@ -34,7 +34,7 @@ function ModalContent({ closeModal }: { closeModal: () => void }) {
                 onClick={() => handleChange(feeling)}
               >
                 {icon}
-                <p className="text-sm text-gray-600">{label}</p>
+                <p className="text-sm text-gray-500">{label}</p>
               </div>
             );
           })}
