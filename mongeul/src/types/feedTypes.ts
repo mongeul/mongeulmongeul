@@ -5,6 +5,10 @@ export interface Emoji {
   count: number;
 }
 
+export interface FeedEmoji extends Emoji {
+  isSelected: boolean;
+}
+
 export interface FeedListItem {
   feedId: number;
   feeling: Feeling;
@@ -18,7 +22,7 @@ export interface FeedListResponse {
 
 export interface FeedDetail extends BaseDiary {
   feedId: number;
-  emojis: Emoji[];
+  emojis: FeedEmoji[];
 }
 
 export interface FeedDetailResponse {
@@ -30,5 +34,5 @@ export interface FeedDetailResponse {
 export interface FeedEmojiresponse {
   success: boolean;
   message: string;
-  data: {};
+  data: null;
 }

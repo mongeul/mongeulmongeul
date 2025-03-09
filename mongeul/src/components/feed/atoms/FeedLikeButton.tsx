@@ -34,8 +34,11 @@ export default function FeedLikeButton() {
   }, [isOpen]);
 
   return (
-    <div className="relative inline-block">
-      <button onClick={toggleBubble}>
+    <div className="relative inline-block justify-center items-center">
+      <button
+        onClick={toggleBubble}
+        className="flex justify-center items-center"
+      >
         <LikeIcon className="h-5 w-5 text-theme-400" />
       </button>
       <AnimatePresence>

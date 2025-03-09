@@ -1,16 +1,20 @@
-import { Emoji } from "@/types/feedTypes";
+import { RootState } from "@/store/store";
+import { useSelector } from "react-redux";
 import FeedEmojiCountButton from "../atoms/FeedEmojiCountButton";
 
-interface FeedEmojiGroupProps {
-  emojis: Emoji[];
-}
+export default function FeedEmojiGroup() {
+  const emojis = useSelector((state: RootState) => state.feed.feedDetailEmojis);
 
-export default function FeedEmojiGroup({ emojis }: FeedEmojiGroupProps) {
   return (
-    <div>
+    <div className="flex flex-row gap-2">
       {emojis.map((emoji) => {
         return (
-          <FeedEmojiCountButton emoji={emoji.emojiType} count={emoji.count} />
+          <FeedEmojiCountButton
+            key={emoji.emojiType}
+            emoji={emoji.emojiType}
+            count={emoji.count}
+            isSelected={emoji.isSelected}
+          />
         );
       })}
     </div>

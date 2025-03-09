@@ -1,23 +1,27 @@
 import Bubble from "@/components/common/atoms/Bubble";
 import FeedEmojiButton from "../atoms/FeedEmojiButton";
 import { Feeling } from "@/types/diaryTypes";
+import { RootState } from "@/store/store";
+import { useSelector } from "react-redux";
 
 export default function FeedEmojiBubble() {
-  const emojis: {
-    emojiId: number;
-    label: Feeling;
-  }[] = [
-    { emojiId: 1, label: "HAPPY" },
-    { emojiId: 2, label: "SAD" },
-    { emojiId: 3, label: "ANGRY" },
-    { emojiId: 4, label: "WOW" },
-    { emojiId: 5, label: "SOSO" },
-  ];
+  const feedEmojis = useSelector(
+    (state: RootState) => state.feed.feedDetailEmojis
+  );
+
+  const emojis: Feeling[] = ["HAPPY", "SAD", "ANGRY", "WOW", "SOSO"];
+
   return (
     <Bubble>
-      {emojis.map((emoji) => (
-        <FeedEmojiButton key={emoji.emojiId} emoji={emoji.label} />
-      ))}
+      {emojis.map((emoji) => {
+        const isSelected = feedEmojis.some(
+          (e) => e.emojiType === emoji && e.isSelected
+        );
+
+        return (
+          <FeedEmojiButton key={emoji} emoji={emoji} isSelected={isSelected} />
+        );
+      })}
     </Bubble>
   );
 }

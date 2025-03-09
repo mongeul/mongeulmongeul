@@ -5,10 +5,14 @@ import { FeedDetail } from "@/types/feedTypes";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import DiaryDetailContainer from "../../common/organisms/DiaryDetailContainer";
-import FeedEmojiContainer from "../organisms/FeedEmojiContainer";
 import FeedCommentButton from "../atoms/FeedCommentButton";
+import { useDispatch } from "react-redux";
+import { setFeedDetailEmojis } from "@/store/feedSlice";
+import FeedEmojiGroup from "../molecules/FeedEmojiGroup";
+import FeedLikeButton from "../atoms/FeedLikeButton";
 
 export default function FeedDetailTemplates() {
+  const dispatch = useDispatch();
   const { id } = useParams();
   const [feed, setFeed] = useState<FeedDetail | null>(null);
   const [error, setError] = useState<string>("");
@@ -25,6 +29,7 @@ export default function FeedDetailTemplates() {
         const data = await fetchFeedDetail(Number(id));
         if (data?.success && data.data) {
           setFeed(data.data);
+          dispatch(setFeedDetailEmojis(data.data.emojis));
         } else {
           setError("게시물을 불러오는 데 실패했습니다.");
         }
@@ -37,7 +42,7 @@ export default function FeedDetailTemplates() {
     }
 
     loadFeed();
-  }, [id]);
+  }, [dispatch, id]);
 
   if (loading) return <p>로딩 중...</p>;
   if (error) return <p>{error}</p>;
@@ -47,9 +52,10 @@ export default function FeedDetailTemplates() {
     <div className="w-full flex flex-col justify-center items-center">
       <div className="w-full">
         <DiaryDetailContainer diary={feed} />
-        <div className="flex flex-row gap-2 h-auto p-4">
+        <div className="flex flex-row flex-wrap items-center gap-2 h-auto py-4 px-2">
           <FeedCommentButton />
-          <FeedEmojiContainer emojis={feed.emojis} />
+          <FeedLikeButton />
+          <FeedEmojiGroup />
         </div>
       </div>
     </div>

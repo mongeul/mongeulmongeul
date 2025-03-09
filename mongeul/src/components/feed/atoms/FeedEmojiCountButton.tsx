@@ -1,21 +1,53 @@
 import Button from "@/components/common/atoms/Button";
 import { Feeling } from "@/types/diaryTypes";
 import FeedEmojiButton from "./FeedEmojiButton";
+import { deleteFeedEmoji, postFeedEmoji } from "@/actions/feed";
+import { toggleEmoji } from "@/store/feedSlice";
+import { getEmojiId } from "@/utils/getEmojiId";
+import { useParams } from "next/navigation";
+import { useDispatch } from "react-redux";
 
 interface FeedEmojiCountButtonProps {
   emoji: Feeling;
   count: number;
+  isSelected: boolean;
 }
 
 export default function FeedEmojiCountButton({
   emoji,
   count,
+  isSelected,
 }: FeedEmojiCountButtonProps) {
-  const toggleButton = () => {
-    console.log("이모티콘 클릭");
+  const { id } = useParams();
+  const dispatch = useDispatch();
+
+  const toggleButton = async () => {
+    if (!id) return;
+
+    dispatch(toggleEmoji(emoji));
+
+    try {
+      if (isSelected) {
+        await deleteFeedEmoji(Number(id), getEmojiId(emoji));
+      } else {
+        await postFeedEmoji(Number(id), getEmojiId(emoji));
+      }
+    } catch (error) {
+      console.error("이모지 업데이트 실패:", error);
+    }
   };
 
-  const icon = <FeedEmojiButton emoji={emoji} />;
+  const icon = <FeedEmojiButton emoji={emoji} isSelected={isSelected} />;
+  const feelingCount = count >= 1000 ? "+999" : String(count);
 
-  return <Button text={String(count)} icon={icon} onClick={toggleButton} />;
+  return (
+    <Button
+      text={feelingCount}
+      borderColor="border border-theme-400"
+      backgroundColor="bg-theme-50"
+      padding="px-2 py-1"
+      icon={icon}
+      onClick={toggleButton}
+    />
+  );
 }

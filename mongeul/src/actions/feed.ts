@@ -135,6 +135,10 @@ export async function deleteFeedEmoji(
       throw new Error(`피드 이모지 삭제 실패: ${errorMessage}`);
     }
 
+    if (response.status === 204) {
+      return { success: true, message: "이모지 삭제 성공", data: null };
+    }
+
     const result: FeedEmojiresponse = await response.json();
     return result;
   } catch (error) {
