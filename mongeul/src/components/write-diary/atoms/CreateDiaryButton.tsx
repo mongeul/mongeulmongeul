@@ -6,7 +6,7 @@ import { resetDiary } from "@/store/diarySlice";
 import { resetPicture } from "@/store/pictureSlice";
 import { RootState } from "@/store/store";
 import { useRouter, useSearchParams } from "next/navigation";
-import { startTransition, useState } from "react";
+import { startTransition, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 export default function CreateDiaryButton() {
@@ -14,6 +14,7 @@ export default function CreateDiaryButton() {
   const diaryId: number | null = Number(searchParams.get("id")) || null;
 
   const router = useRouter();
+  const isSubmittingRef = useRef<boolean>(false);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const dispatch = useDispatch();
   const {
@@ -33,9 +34,11 @@ export default function CreateDiaryButton() {
       return;
     }
 
+    if (isSubmittingRef.current) return;
+    isSubmittingRef.current = true;
+    setIsSubmitting(true);
+
     startTransition(async () => {
-      if (isSubmitting) return;
-      setIsSubmitting(true);
       try {
         if (diaryId) {
           // 수정
@@ -78,7 +81,10 @@ export default function CreateDiaryButton() {
       } catch (error) {
         console.error("일기 작성 실패:", error);
       } finally {
-        setTimeout(() => setIsSubmitting(false), 500);
+        setTimeout(() => {
+          isSubmittingRef.current = false;
+          setIsSubmitting(false);
+        }, 500);
       }
     });
   }
