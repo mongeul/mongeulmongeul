@@ -1,6 +1,6 @@
 "use client";
 
-import { submitDiaryDraft } from "@/lib/api/write-diary";
+import { submitDiaryDraft, submitUpdateDiary } from "@/lib/api/write-diary";
 import { resetDiary } from "@/store/diarySlice";
 import { resetPicture } from "@/store/pictureSlice";
 import { RootState } from "@/store/store";
@@ -11,6 +11,8 @@ export default function CreateDraftButton() {
   const dispatch = useDispatch();
   const router = useRouter();
   const {
+    isDraft,
+    draftId,
     title,
     content,
     date,
@@ -29,28 +31,59 @@ export default function CreateDraftButton() {
       return;
     }
 
-    try {
-      await submitDiaryDraft({
-        title,
-        content,
-        pictureLines:
-          typeof pictureLines === "string"
-            ? JSON.parse(pictureLines)
-            : pictureLines,
-        date,
-        weather,
-        feeling,
-        privateStatus,
-      });
-      dispatch(resetDiary());
-      dispatch(resetPicture());
+    // 임시저장 수정
+    if (isDraft && draftId) {
+      try {
+        await submitUpdateDiary(
+          {
+            title,
+            content,
+            pictureLines:
+              typeof pictureLines === "string"
+                ? JSON.parse(pictureLines)
+                : pictureLines,
+            date,
+            weather,
+            feeling,
+            privateStatus,
+          },
+          draftId
+        );
+        dispatch(resetDiary());
+        dispatch(resetPicture());
 
-      // Redux 상태 변경 후 반영될 시간을 확보
-      await new Promise((resolve) => setTimeout(resolve, 0));
+        // Redux 상태 변경 후 반영될 시간을 확보
+        await new Promise((resolve) => setTimeout(resolve, 0));
 
-      router.push("/diary");
-    } catch (error) {
-      console.error("일기 임시저장 실패:", error);
+        router.push("/diary");
+      } catch (error) {
+        console.error("일기 임시저장 실패:", error);
+      }
+    } else {
+      // 발행된 일기 수정
+      try {
+        await submitDiaryDraft({
+          title,
+          content,
+          pictureLines:
+            typeof pictureLines === "string"
+              ? JSON.parse(pictureLines)
+              : pictureLines,
+          date,
+          weather,
+          feeling,
+          privateStatus,
+        });
+        dispatch(resetDiary());
+        dispatch(resetPicture());
+
+        // Redux 상태 변경 후 반영될 시간을 확보
+        await new Promise((resolve) => setTimeout(resolve, 0));
+
+        router.push("/diary");
+      } catch (error) {
+        console.error("일기 임시저장 실패:", error);
+      }
     }
   }
   return (
