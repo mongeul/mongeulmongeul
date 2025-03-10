@@ -1,18 +1,18 @@
-import Image from "next/image";
 import { Diary, Draft } from "@/types/diaryTypes";
 import { formatDate } from "@/utils/formatDate";
 import CloseIcon from "@/assets/icons/close.svg";
-import { deleteDraft } from "@/lib/api/write-diary";
+import { deleteDraft, fetchPictureLines } from "@/lib/api/write-diary";
 import {
   setContent,
   setDate,
-  setPicture,
   setFeeling,
   setPrivateStatus,
   setTitle,
   setWeather,
+  setPictureLines,
 } from "@/store/diarySlice";
 import { useDispatch } from "react-redux";
+import { updateLines } from "@/store/pictureSlice";
 
 interface DraftItemProps {
   draft: Draft;
@@ -37,15 +37,33 @@ export default function DraftItem({
     }
   };
 
+  // 임시저장 일기 라인 조회
+  const handlePictureLines = async (diaryId: number) => {
+    try {
+      const pictureLinesResponse = await fetchPictureLines(diaryId);
+      console.log(pictureLinesResponse);
+
+      if (pictureLinesResponse.pictureLines) {
+        // diary Redux에 라인 저장
+        dispatch(setPictureLines(pictureLinesResponse.pictureLines));
+
+        // picture Redux에 라인 저장
+        dispatch(updateLines(pictureLinesResponse.pictureLines));
+      }
+    } catch (error) {
+      console.error("일기 라인 불러오기 실패", error);
+    }
+  };
+
   // 임시저장 일기 선택
   const onSelectDraft = (draft: Diary) => {
+    handlePictureLines(draft.diaryId);
     dispatch(setTitle(draft.title));
     dispatch(setContent(draft.content));
     dispatch(setDate(draft.date));
     dispatch(setFeeling(draft.feeling));
     dispatch(setPrivateStatus(draft.privateStatus));
     dispatch(setWeather(draft.weather));
-    dispatch(setPicture(draft.picture || ""));
 
     onClose();
   };

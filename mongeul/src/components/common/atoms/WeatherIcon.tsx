@@ -43,6 +43,15 @@ export default function WeatherIcon({
           ),
           label: "비",
         };
+      case "SNOWY":
+        return {
+          icon: (
+            <RoundIcon backgroundColor="bg-theme-500">
+              <WeatherSvgIcon className={`text-white ${size}`} />
+            </RoundIcon>
+          ),
+          label: "눈",
+        };
       default:
         return {
           icon: (

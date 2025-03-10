@@ -263,7 +263,11 @@ export async function getIsDiary(today: string): Promise<IsDiaryResponse> {
   }
 }
 
-export async function getPictureLines(diaryId: number): Promise<PictureLine[]> {
+// 그림일기 Lines 조회
+export async function getPictureLines(diaryId: number): Promise<{
+  diaryId: number;
+  pictureLines: PictureLine[];
+}> {
   try {
     const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -275,7 +279,7 @@ export async function getPictureLines(diaryId: number): Promise<PictureLine[]> {
           "Content-Type": "application/json",
           Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_TOKEN}`,
         },
-        cache: "no-store",
+        cache: "force-cache",
       }
     );
 
@@ -285,7 +289,6 @@ export async function getPictureLines(diaryId: number): Promise<PictureLine[]> {
     }
 
     const result: PictureLineResponse = await response.json();
-
     return result.data;
   } catch (error) {
     console.error("그림일기 Lines 조회 에러:", error);
