@@ -12,9 +12,11 @@ import {
   setPictureLines,
   setIsDraft,
   setDraftId,
+  setPicture,
 } from "@/store/diarySlice";
 import { useDispatch } from "react-redux";
 import { updateLines } from "@/store/pictureSlice";
+import { convertLinesToImage } from "@/utils/convertLinesToImage";
 
 interface DraftItemProps {
   draft: Draft;
@@ -39,18 +41,23 @@ export default function DraftItem({
     }
   };
 
-  // 임시저장 일기 라인 조회
+  // 임시저장 일기 라인 조회 후 이미지 변환
   const handlePictureLines = async (diaryId: number) => {
+    console.log("임시저장 일기 불러오기");
     try {
       const pictureLinesResponse = await fetchPictureLines(diaryId);
       console.log(pictureLinesResponse);
 
       if (pictureLinesResponse.pictureLines) {
-        // diary Redux에 라인 저장
+        // Redux 상태 업데이트
         dispatch(setPictureLines(pictureLinesResponse.pictureLines));
-
-        // picture Redux에 라인 저장
         dispatch(updateLines(pictureLinesResponse.pictureLines));
+
+        // 캔버스를 만들고 이미지 변환 후 Redux 저장
+        const imageDataUrl = await convertLinesToImage(
+          pictureLinesResponse.pictureLines
+        );
+        dispatch(setPicture(imageDataUrl));
       }
     } catch (error) {
       console.error("일기 라인 불러오기 실패", error);
