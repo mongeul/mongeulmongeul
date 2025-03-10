@@ -1,13 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 import LinkPersonalDiaryButton from "./LinkPersonalDiaryButton";
 import LinkSharedDiaryButton from "./LinkSharedDiaryButton";
 import DiaryIcon from "@/assets/icons/diary.svg";
 import WriteIcon from "@/assets/icons/write.svg";
 import SharedDiaryIcon from "@/assets/icons/shared-diary.svg";
-import Link from "next/link";
 
 export default function LinkWriteButton() {
   const [isOpen, setIsOpen] = useState<boolean>(false);

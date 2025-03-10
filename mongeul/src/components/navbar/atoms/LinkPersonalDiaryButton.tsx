@@ -1,5 +1,5 @@
 import { useRouter } from "next/navigation";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import { ReactElement } from "react";
 import { fetchIsWrite } from "@/lib/api/write-diary";
 

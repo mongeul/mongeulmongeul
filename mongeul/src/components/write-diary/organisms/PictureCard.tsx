@@ -9,6 +9,7 @@ import { setPicture, setPictureLines } from "@/store/diarySlice";
 import CloseIcon from "@/assets/icons/close.svg";
 import PaletteIcon from "@/assets/icons/palette.svg";
 import { fetchPictureLines } from "@/lib/api/write-diary";
+import Image from "next/image";
 
 export default function PictureCard({ diaryId }: { diaryId: number | null }) {
   const dispatch = useDispatch();
@@ -53,7 +54,13 @@ export default function PictureCard({ diaryId }: { diaryId: number | null }) {
                 className="w-full flex justify-center items-center"
                 onClick={() => handlePictureLines(diaryId)}
               >
-                <img src={picture} alt="저장된 그림" />
+                <Image
+                  src={picture}
+                  alt="저장된 그림"
+                  width={500}
+                  height={500}
+                  layout="intrinsic"
+                />
               </div>
             </Link>
           </div>
