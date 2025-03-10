@@ -10,6 +10,8 @@ import {
   setTitle,
   setWeather,
   setPictureLines,
+  setIsDraft,
+  setDraftId,
 } from "@/store/diarySlice";
 import { useDispatch } from "react-redux";
 import { updateLines } from "@/store/pictureSlice";
@@ -64,6 +66,8 @@ export default function DraftItem({
     dispatch(setFeeling(draft.feeling));
     dispatch(setPrivateStatus(draft.privateStatus));
     dispatch(setWeather(draft.weather));
+    dispatch(setIsDraft(true));
+    dispatch(setDraftId(draft.diaryId));
 
     onClose();
   };

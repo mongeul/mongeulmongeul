@@ -1,7 +1,11 @@
 "use client";
 
 import Button from "@/components/common/atoms/Button";
-import { submitDiary, submitUpdateDiary } from "@/lib/api/write-diary";
+import {
+  deleteDraft,
+  submitDiary,
+  submitUpdateDiary,
+} from "@/lib/api/write-diary";
 import { resetDiary } from "@/store/diarySlice";
 import { resetPicture } from "@/store/pictureSlice";
 import { RootState } from "@/store/store";
@@ -18,6 +22,8 @@ export default function CreateDiaryButton() {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const dispatch = useDispatch();
   const {
+    isDraft,
+    draftId,
     title,
     content,
     picture,
@@ -60,6 +66,7 @@ export default function CreateDiaryButton() {
           );
         } else {
           // 새로 작성
+          console.log("임시저장 살태 : ", draftId, isDraft);
           await submitDiary({
             title,
             content,
@@ -73,6 +80,10 @@ export default function CreateDiaryButton() {
             feeling,
             privateStatus,
           });
+          if (isDraft && typeof draftId === "number") {
+            await deleteDraft(draftId);
+            console.log("임시저장 삭제 완료");
+          }
         }
 
         await Promise.all([dispatch(resetDiary()), dispatch(resetPicture())]);
