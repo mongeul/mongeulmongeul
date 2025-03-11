@@ -9,6 +9,7 @@ interface CardProps {
   padding?: string;
   roundSize?: string;
   className?: string;
+  bgColor?: string;
 }
 
 export default function Card({
@@ -19,6 +20,7 @@ export default function Card({
   borderColor = "border-white",
   roundSize = "rounded-3xl",
   className,
+  bgColor = "flex bg-white",
 }: CardProps) {
   return (
     <div
@@ -28,8 +30,8 @@ export default function Card({
         `${padding}`,
         `border ${borderColor}`,
         `${roundSize}`,
-        `${className}`,
-        "flex bg-white"
+        bgColor,
+        `${className}`
       )}
     >
       {children}

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Button from "@/components/common/atoms/Button";
 import Input from "@/components/common/atoms/Input";
-import { getFriendByCode } from "@/lib/api/sharediary";
+import { getFriendByCode } from "@/lib/api/shared-diary";
 
 export default function FriendPlusModalContent({
   onConfirm,

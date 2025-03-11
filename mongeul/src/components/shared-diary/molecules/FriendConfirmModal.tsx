@@ -1,7 +1,7 @@
 "use client";
 
 import Button from "@/components/common/atoms/Button";
-import { addFriend } from "@/lib/api/sharediary";
+import { addFriend } from "@/lib/api/shared-diary";
 
 export default function FriendConfirmModal({
   nickname,

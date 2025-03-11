@@ -1,4 +1,5 @@
 const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "";
+const TOKEN = process.env.NEXT_PUBLIC_TEST_TOKEN || "";
 
 export const getCookie = (name: string): string | null => {
   const match = document.cookie.match(new RegExp(`(^| )${name}=([^;]+)`));
@@ -20,7 +21,7 @@ export const apiClient = async (
     credentials: "include", // 쿠키 포함
     headers: {
       "Content-Type": "application/json",
-      Authorization: accessToken ? `Bearer ${accessToken}` : "",
+      Authorization: `Bearer ${accessToken}`,
       ...options.headers,
     },
   });

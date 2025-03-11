@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { generateFriendCode } from "@/lib/api/sharediary";
+import { generateFriendCode } from "@/lib/api/shared-diary";
 import Button from "@/components/common/atoms/Button";
 import WebModal from "@/components/common/atoms/WebModal";
 import FriendIcon from "@/assets/icons/friend2.svg";
