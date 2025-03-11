@@ -1,4 +1,3 @@
-import { Feeling } from "@/types/diaryTypes";
 import {
   FeedDetailResponse,
   FeedEmojiresponse,

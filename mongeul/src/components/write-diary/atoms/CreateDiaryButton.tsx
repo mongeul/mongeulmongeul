@@ -12,6 +12,7 @@ import { RootState } from "@/store/store";
 import { useRouter, useSearchParams } from "next/navigation";
 import { startTransition, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import DiarySubmitSpinner from "../molecules/DiarySubmitSpinner";
 
 export default function CreateDiaryButton() {
   const searchParams = useSearchParams();
@@ -66,7 +67,7 @@ export default function CreateDiaryButton() {
           );
         } else {
           // 새로 작성
-          console.log("임시저장 살태 : ", draftId, isDraft);
+          console.log("임시저장 상태:", draftId, isDraft);
           await submitDiary({
             title,
             content,
@@ -101,14 +102,23 @@ export default function CreateDiaryButton() {
   }
 
   return (
-    <Button
-      text={diaryId ? "수정하기" : "작성하기"}
-      width="w-full"
-      textColor="text-white"
-      fontWeight="font-bold"
-      onClick={handleSubmit}
-      disabled={isSubmitting}
-      backgroundColor={isSubmitting ? "bg-gray-300" : "bg-theme-400"}
-    />
+    <>
+      {/* 일기 작성중 */}
+      {isSubmitting && (
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 z-50">
+          <DiarySubmitSpinner />
+        </div>
+      )}
+
+      <Button
+        text={diaryId ? "수정하기" : "작성하기"}
+        width="w-full"
+        textColor="text-white"
+        fontWeight="font-bold"
+        onClick={handleSubmit}
+        disabled={isSubmitting}
+        backgroundColor={isSubmitting ? "bg-gray-300" : "bg-theme-400"}
+      />
+    </>
   );
 }

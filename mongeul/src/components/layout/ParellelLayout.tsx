@@ -44,28 +44,29 @@ export default function ParellelLayout({
   return (
     <div className="flex w-full justify-center gap-8 overflow-hidden">
       {isBaseRoute ? (
-        <div className="w-full lg:w-1/2">
+        <div className="flex justify-center w-full lg:w-1/2">
           <DefaultLayout>{children}</DefaultLayout>
         </div>
       ) : !isMobile ? (
         <AnimatePresence mode="sync">
-          {/* 기존 화면 */}
-          <div className="w-full lg:w-1/2">
+          {/* 새로운 화면 */}
+          <div className="flex justify-center w-full lg:w-1/2">
             <DefaultLayout>{children}</DefaultLayout>
           </div>
+
           {/* 새로운 화면 */}
           <motion.div
             key={`${pathname}-detail`}
             initial={{ x: -50, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             transition={{ duration: 0.5, ease: "easeInOut" }}
-            className="w-full lg:w-1/2"
+            className="flex justify-center w-full lg:w-1/2"
           >
             <DefaultLayout>{detail}</DefaultLayout>
           </motion.div>
         </AnimatePresence>
       ) : (
-        <div className="w-full">
+        <div className="flex justify-center w-full">
           <DefaultLayout>
             {shouldShowChildrenFirst ? children : detail}
           </DefaultLayout>
