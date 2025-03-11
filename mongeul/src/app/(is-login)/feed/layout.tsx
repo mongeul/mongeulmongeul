@@ -8,5 +8,5 @@ export default function Layout({
   children: ReactNode;
   detail: ReactNode;
 }) {
-  return <ParellelLayout children={children} detail={detail} />;
+  return <ParellelLayout detail={detail}>{children}</ParellelLayout>;
 }
