@@ -6,7 +6,7 @@ interface DiaryContentCardProps {
 
 export default function DiaryContentCard({ content }: DiaryContentCardProps) {
   return (
-    <Card width="w-full">
+    <Card width="w-full" padding="px-6 py-5">
       <div className="w-full whitespace-pre-line">{content}</div>
     </Card>
   );
