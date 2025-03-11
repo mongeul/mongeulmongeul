@@ -21,6 +21,17 @@ export default function KonvaCanvas() {
     }
   }, []);
 
+  const changeOpacity = (color: string, opacity: number) => {
+    if (color.startsWith("rgba")) return color;
+    if (color.startsWith("#")) {
+      const r = parseInt(color.substring(1, 3), 16);
+      const g = parseInt(color.substring(3, 5), 16);
+      const b = parseInt(color.substring(5, 7), 16);
+      return `rgba(${r}, ${g}, ${b}, ${opacity})`;
+    }
+    return color;
+  };
+
   // 그림 그리기 시작
   const handleMouseDown = (e: any) => {
     if (selectedBrush === "eraser") {
@@ -44,7 +55,7 @@ export default function KonvaCanvas() {
   const handleMouseMove = (e: any) => {
     if (!isPicture) return;
     if (selectedBrush === "eraser") {
-      handleErase(e); // 지우개 모드일 때 마우스를 움직일 때마다 실행
+      handleErase(e);
       return;
     }
 
@@ -57,6 +68,11 @@ export default function KonvaCanvas() {
         ? {
             ...line,
             points: [...line.points, [point.x, point.y] as [number, number]],
+            stroke:
+              selectedBrush === "highlighter"
+                ? changeOpacity(line.stroke, 0.6)
+                : line.stroke,
+            strokeWidth: line.strokeWidth,
           }
         : line
     );
