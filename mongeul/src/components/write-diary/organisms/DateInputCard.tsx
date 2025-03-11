@@ -19,7 +19,7 @@ function ModalContent({ closeModal }: { closeModal: () => void }) {
   const [currentMonth, setCurrentMonth] = useState(parsedDate.getMonth());
   const [currentYear, setCurrentYear] = useState(parsedDate.getFullYear());
 
-  // ✅ 월 변경 시 작성된 날짜 조회
+  // 월 변경 시 작성된 날짜 조회
   useEffect(() => {
     async function loadDiaryDates() {
       try {
@@ -33,9 +33,9 @@ function ModalContent({ closeModal }: { closeModal: () => void }) {
       }
     }
     loadDiaryDates();
-  }, [currentMonth, currentYear]); // ✅ 달이 바뀔 때마다 실행
+  }, [currentMonth, currentYear]);
 
-  // ✅ 현재 보고 있는 달의 날짜만 보이도록 설정
+  // 현재 보고 있는 월의 날짜만 보이도록 설정
   const renderDayContents = (day: number, date: Date) => {
     return date.getMonth() === currentMonth ? (
       <span>{day}</span>
@@ -44,13 +44,11 @@ function ModalContent({ closeModal }: { closeModal: () => void }) {
     );
   };
 
-  // ✅ 달 변경 감지해서 상태 업데이트
   const handleMonthChange = (date: Date) => {
     setCurrentMonth(date.getMonth());
     setCurrentYear(date.getFullYear());
   };
 
-  // 날짜 선택
   const handleChange = (date: Date | null) => {
     if (!date) return;
     const formattedDate = date.toISOString().split("T")[0];
@@ -64,10 +62,10 @@ function ModalContent({ closeModal }: { closeModal: () => void }) {
         inline
         selected={parsedDate}
         onChange={handleChange}
-        onMonthChange={handleMonthChange} // ✅ 월 변경 감지
+        onMonthChange={handleMonthChange}
         maxDate={new Date()} // 미래 날짜 제한
         excludeDates={disabledDates} // 작성된 날짜 비활성화
-        renderDayContents={renderDayContents} // ✅ 현재 달만 보이도록 설정
+        renderDayContents={renderDayContents}
       />
     </div>
   );

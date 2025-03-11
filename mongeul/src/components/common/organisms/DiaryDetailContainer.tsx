@@ -1,3 +1,5 @@
+"use client";
+
 import { FeedDetail } from "@/types/feedTypes";
 import DiaryHeader from "../molecules/DiaryHeader";
 import DiaryContentCard from "../atoms/DiaryContentCard";
@@ -14,8 +16,8 @@ export default function DiaryDetailContainer({
   return (
     <div className="w-full flex flex-col justify-center items-center gap-4">
       <DiaryHeader
-        weather={diary.weather}
-        feeling={diary.feeling}
+        weather={diary.weather!}
+        feeling={diary.feeling!}
         privateStatus={diary.privateStatus}
         title={diary.title}
         date={diary.date}
