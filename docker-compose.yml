@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  mongeulmongeul-spring:
+    container_name: mongeulmongeul-spring
+    image: mongeulmongeul-spring
+    environment:
+      - TZ=Asia/Seoul
+    privileged: true
+    networks:
+      - mongeulmongeul-network
+
+networks:
+  mongeulmongeul-network:
+    external: true
