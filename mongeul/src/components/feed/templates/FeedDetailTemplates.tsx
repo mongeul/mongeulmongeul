@@ -10,6 +10,7 @@ import { useDispatch } from "react-redux";
 import { setFeedDetailEmojis } from "@/store/feedSlice";
 import FeedEmojiGroup from "../molecules/FeedEmojiGroup";
 import FeedLikeButton from "../atoms/FeedLikeButton";
+import { DiaryDetailSkeleton } from "@/components/skeletons";
 
 export default function FeedDetailTemplates() {
   const dispatch = useDispatch();
@@ -44,7 +45,7 @@ export default function FeedDetailTemplates() {
     loadFeed();
   }, [dispatch, id]);
 
-  if (loading) return <p>로딩 중...</p>;
+  if (loading) return <DiaryDetailSkeleton />;
   if (error) return <p>{error}</p>;
   if (!feed) return <p>게시물을 찾을 수 없습니다.</p>;
 
