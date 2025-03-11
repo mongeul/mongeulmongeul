@@ -42,7 +42,7 @@ export default function ParellelLayout({
   }, []);
 
   return (
-    <div className="flex w-full justify-center gap-8 overflow-hidden">
+    <div className="flex w-full justify-center overflow-hidden">
       {isBaseRoute ? (
         <div className="flex justify-center w-full lg:w-1/2">
           <DefaultLayout>{children}</DefaultLayout>
