@@ -6,6 +6,9 @@ services:
     image: mongeulmongeul-spring
     build:
       context: mongeul/
+      dockerfile: Dockerfile
+      args:
+        PLATFORM: linux/arm64
     environment:
       - TZ=Asia/Seoul
     privileged: true
