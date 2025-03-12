@@ -1,7 +1,13 @@
+"use client";
+
 import { Diary, Draft } from "@/types/diaryTypes";
 import { formatDate } from "@/utils/formatDate";
 import CloseIcon from "@/assets/icons/close.svg";
-import { deleteDraft, fetchPictureLines } from "@/lib/api/write-diary";
+import {
+  deleteDraft,
+  fetchIsWrite,
+  fetchPictureLines,
+} from "@/lib/api/write-diary";
 import {
   setContent,
   setDate,
@@ -10,9 +16,16 @@ import {
   setTitle,
   setWeather,
   setPictureLines,
+  setIsDraft,
+  setDraftId,
+  setPicture,
 } from "@/store/diarySlice";
 import { useDispatch } from "react-redux";
 import { updateLines } from "@/store/pictureSlice";
+import { convertLinesToImage } from "@/utils/convertLinesToImage";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import UpdateAlertModal from "../molecules/UpdateAlertModal";
 
 interface DraftItemProps {
   draft: Draft;
@@ -26,6 +39,9 @@ export default function DraftItem({
   onClose,
 }: DraftItemProps) {
   const dispatch = useDispatch();
+  const router = useRouter();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [pendingDiaryId, setPendingDiaryId] = useState<number | null>(null);
 
   // 임시저장 일기 삭제
   const handleDelete = async (diaryId: number) => {
@@ -37,18 +53,26 @@ export default function DraftItem({
     }
   };
 
-  // 임시저장 일기 라인 조회
+  // 임시저장 일기 라인 조회 후 이미지 변환
   const handlePictureLines = async (diaryId: number) => {
+    console.log("임시저장 일기 불러오기");
     try {
       const pictureLinesResponse = await fetchPictureLines(diaryId);
       console.log(pictureLinesResponse);
 
-      if (pictureLinesResponse.pictureLines) {
-        // diary Redux에 라인 저장
+      if (
+        pictureLinesResponse.pictureLines &&
+        pictureLinesResponse.pictureLines.length > 0
+      ) {
+        // Redux 상태 업데이트
         dispatch(setPictureLines(pictureLinesResponse.pictureLines));
-
-        // picture Redux에 라인 저장
         dispatch(updateLines(pictureLinesResponse.pictureLines));
+
+        // 캔버스를 만들고 이미지 변환 후 Redux 저장
+        const imageDataUrl = await convertLinesToImage(
+          pictureLinesResponse.pictureLines
+        );
+        dispatch(setPicture(imageDataUrl));
       }
     } catch (error) {
       console.error("일기 라인 불러오기 실패", error);
@@ -56,7 +80,21 @@ export default function DraftItem({
   };
 
   // 임시저장 일기 선택
-  const onSelectDraft = (draft: Diary) => {
+  const onSelectDraft = async (draft: Diary) => {
+    const isDiary = await fetchIsWrite(draft.date);
+
+    if (isDiary?.data) {
+      // 이미 작성된 날짜의 임시저장 일기라면 모달 표시
+      setPendingDiaryId(isDiary.data);
+      setIsModalOpen(true);
+    } else {
+      // 새롭게 작성하는 경우
+      proceedToEdit(draft);
+    }
+  };
+
+  // 확인 버튼을 눌렀을 때만 페이지 이동
+  const proceedToEdit = (draft: Diary) => {
     handlePictureLines(draft.diaryId);
     dispatch(setTitle(draft.title));
     dispatch(setContent(draft.content));
@@ -64,8 +102,15 @@ export default function DraftItem({
     dispatch(setFeeling(draft.feeling));
     dispatch(setPrivateStatus(draft.privateStatus));
     dispatch(setWeather(draft.weather));
+    dispatch(setIsDraft(true));
+    dispatch(setDraftId(draft.diaryId));
 
     onClose();
+
+    if (pendingDiaryId) {
+      router.push(`/write-diary?id=${pendingDiaryId}`);
+      setPendingDiaryId(null);
+    }
   };
 
   return (
@@ -98,6 +143,13 @@ export default function DraftItem({
       >
         <CloseIcon className="h-4 w-4 text-gray-300" />
       </button>
+      {isModalOpen && (
+        <UpdateAlertModal
+          closeModal={() => setIsModalOpen(false)}
+          onConfirm={() => proceedToEdit(draft)}
+          date={formatDate(draft.date)}
+        />
+      )}
     </div>
   );
 }

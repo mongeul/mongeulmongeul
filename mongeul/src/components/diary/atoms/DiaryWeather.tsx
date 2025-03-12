@@ -6,7 +6,7 @@ import WeatherIcon from "@/components/common/atoms/WeatherIcon";
 const DiaryWeather: React.FC = () => {
   const { selectedDiary } = useSelector((state: RootState) => state.calendar);
 
-  if (!selectedDiary || !selectedDiary.weather) return null;
+  if (selectedDiary === "LOCK" || !selectedDiary?.weather) return null;
 
   const { icon } = WeatherIcon({
     weather: selectedDiary.weather,

@@ -269,6 +269,7 @@ export async function getPictureLines(diaryId: number): Promise<{
   pictureLines: PictureLine[];
 }> {
   try {
+    console.log("저장된 그림 서버액션에서 불러오기");
     const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
     const response = await fetch(
@@ -279,7 +280,7 @@ export async function getPictureLines(diaryId: number): Promise<{
           "Content-Type": "application/json",
           Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_TOKEN}`,
         },
-        cache: "force-cache",
+        cache: "no-store",
       }
     );
 
@@ -287,7 +288,7 @@ export async function getPictureLines(diaryId: number): Promise<{
       const errorMessage = await response.text();
       throw new Error(`그림 일기 Lines 조회 실패: ${errorMessage}`);
     }
-
+    console.log("저장된 그림 상태", response);
     const result: PictureLineResponse = await response.json();
     return result.data;
   } catch (error) {

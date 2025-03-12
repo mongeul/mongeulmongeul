@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  mongeulmongeul-react:
+    container_name: mongeulmongeul-react
+    image: mongeulmongeul-react
+    environment:
+      - TZ=Asia/Seoul
+    networks:
+      - mongeulmongeul-network
+
+networks:
+  mongeulmongeul-network:
+    external: true

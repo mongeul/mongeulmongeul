@@ -10,7 +10,7 @@ export const apiClient = async (
   url: string,
   options: RequestInit = {}
 ): Promise<any> => {
-  let accessToken = getCookie("accessToken");
+  const accessToken = getCookie("accessToken");
   const fullUrl = `${BASE_URL}${url}`;
 
   console.log("📡 API 요청 URL:", fullUrl);
