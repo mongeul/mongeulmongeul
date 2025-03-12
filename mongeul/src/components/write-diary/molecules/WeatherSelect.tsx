@@ -48,7 +48,7 @@ export default function WeatherSelect() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const selectedWeather: Weather = useSelector(
     (state: RootState) => state.diary.weather
-  );
+  ) as Weather;
 
   const toggleModal = () => setIsModalOpen((prev) => !prev);
 

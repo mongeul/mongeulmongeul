@@ -48,7 +48,7 @@ export default function FeelingSelect() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const selectedFeeling: Feeling = useSelector(
     (state: RootState) => state.diary.feeling
-  );
+  ) as Feeling;
 
   const toggleModal = () => setIsModalOpen((prev) => !prev);
 
