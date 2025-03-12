@@ -10,6 +10,7 @@ const DiaryLockInput: React.FC<DiaryLockInputProps> = ({
 }) => {
   const [diaryPassword, setDiaryPassword] = useState(["", "", "", ""]);
   const inputRefs = Array.from({ length: 4 }, () =>
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     useRef<HTMLInputElement | null>(null)
   );
 

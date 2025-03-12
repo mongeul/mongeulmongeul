@@ -16,7 +16,7 @@ const getDayofWeek = (dateString: string) => {
 const DiaryDate: React.FC = () => {
   const { selectedDiary } = useSelector((state: RootState) => state.calendar);
 
-  if (!selectedDiary) return null;
+  if (!selectedDiary || selectedDiary === "LOCK") return null;
 
   const date = getDateofMonth(selectedDiary.date);
   const day = getDayofWeek(selectedDiary.date);
