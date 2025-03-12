@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { useSearchParams, useRouter } from "next/navigation";
@@ -10,6 +10,14 @@ import LoginSection from "@/components/auth/organisms/LoginSection";
 import NicknameModal from "@/components/auth/molecules/NicknameModal";
 
 export default function LoginPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <Login />
+    </Suspense>
+  );
+}
+
+function Login() {
   const dispatch = useDispatch();
   const user = useSelector((state: RootState) => state.user);
   const searchParams = useSearchParams();
@@ -56,7 +64,6 @@ export default function LoginPage() {
           }
         }
       })
-
       .catch(() => {
         console.log(
           "❌ 인가 코드 만료! 새로운 코드 요청을 위해 카카오 로그인 페이지로 이동"
