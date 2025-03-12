@@ -3,21 +3,31 @@ import { apiClient } from "./apiClient";
 export interface Friend {
   friendId: number;
   nickname: string;
-  day: number;
-  count: number;
-  isWriter: boolean;
+  daysFromStart: number;
+  diaryCount: number;
+  writer: boolean;
 }
 
 // 친구 목록 조회 API
 export const getFriends = async (): Promise<Friend[]> => {
   try {
     const response = await apiClient("/api/v1/friend");
-    if (response.data.success) {
-      return response.data.data.content;
+
+    console.log("📢 API 요청 응답:", response);
+
+    if (response.success && Array.isArray(response.data)) {
+      console.log("✅ 친구 목록 조회 성공:", response.data);
+      return response.data;
     }
+
+    if (response.success && response.data.data) {
+      console.log("✅ 친구 목록 조회 성공 (data.data):", response.data.data);
+      return response.data.data;
+    }
+
     return [];
   } catch (error) {
-    console.error("친구 목록 불러오기 실패:", error);
+    console.error("❌ 친구 목록 불러오기 실패:", error);
     return [];
   }
 };
@@ -48,9 +58,8 @@ export const getFriendByCode = async (code: string) => {
 // 친구 추가 API (코드 입력 후 친구 등록)
 export const addFriend = async (code: string) => {
   try {
-    const response = await apiClient("/api/v1/friend", {
+    const response = await apiClient(`/api/v1/friend?code=${code}`, {
       method: "POST",
-      body: JSON.stringify({ code }),
     });
     return response;
   } catch (error) {

@@ -126,7 +126,26 @@ export function useTheme() {
         setFontSize: () => {},
       };
     }
-    throw new Error("useTheme 훅은 ThemeProvider 내부에서만 사용해야 합니다.");
+    return {
+      theme: "sky",
+      setTheme: () => {
+        throw new Error(
+          "useTheme 훅은 ThemeProvider 내부에서만 사용해야 합니다."
+        );
+      },
+      font: "suit",
+      setFont: () => {
+        throw new Error(
+          "useTheme 훅은 ThemeProvider 내부에서만 사용해야 합니다."
+        );
+      },
+      fontSize: 16,
+      setFontSize: () => {
+        throw new Error(
+          "useTheme 훅은 ThemeProvider 내부에서만 사용해야 합니다."
+        );
+      },
+    };
   }
   return context;
 }

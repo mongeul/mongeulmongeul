@@ -40,7 +40,7 @@ export default function CodeModalContent({ code, onClose }: CodeModalProps) {
   };
 
   return (
-    <div className="flex flex-col items-center text-center">
+    <div className="flex flex-col items-center text-center p-5">
       <h2 className="text-lg font-semibold">내 코드 발급</h2>
       <p className="text-sm text-gray-500 mt-2">
         친구에게 내 코드를 알려주세요.

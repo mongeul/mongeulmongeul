@@ -1,11 +1,11 @@
-import dynamic from "next/dynamic";
 import { useEffect, useRef, useState } from "react";
-import { Stage, Layer, Line } from "react-konva";
+import dynamic from "next/dynamic";
 import { RootState } from "@/store/store";
 import { useDispatch, useSelector } from "react-redux";
 import { addLine, updateLines } from "@/store/pictureSlice";
 import Card from "@/components/common/atoms/Card";
 import { setStageRef } from "@/utils/stateRef";
+import { Stage, Layer, Line } from "react-konva";
 
 const KonvaCanvas = () => {
   const dispatch = useDispatch();

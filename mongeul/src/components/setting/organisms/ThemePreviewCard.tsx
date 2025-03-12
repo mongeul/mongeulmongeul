@@ -7,7 +7,8 @@ export default function ThemePreviewCard() {
     friendId: 0,
     nickname: "몽글이",
     day: 10,
-    count: 1,
+    count: 5,
+    writer: true,
     date: "오늘",
   };
   return (
@@ -16,7 +17,7 @@ export default function ThemePreviewCard() {
       nickname={preview.nickname}
       day={preview.day}
       count={preview.count}
-      writer={preview.nickname}
+      writer={preview.writer}
       date="오늘"
       onDelete={() => {}}
     />

@@ -3,50 +3,32 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setFriends, updateFriendOrder } from "@/store/shareDiarySlice";
-import { getFriends } from "@/lib/api/sharediary";
+import { getFriends } from "@/lib/api/shared-diary";
 import { RootState, AppDispatch } from "@/store/store";
 import SharedDiaryCard from "@/components/shared-diary/molecules/SharedDiaryCard";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 
 export default function DiaryList() {
   const dispatch = useDispatch<AppDispatch>();
-  const friends = useSelector((state: RootState) => state.shareDiary.friends);
+  const friends =
+    useSelector((state: RootState) => state.shareDiary.friends) || [];
+
+  console.log("📢 Redux friends 상태:", friends);
+
   const [loading, setLoading] = useState(false);
 
-  // 임시 데이터 추가
-  useEffect(() => {
-    const savedOrder = localStorage.getItem("friendsOrder");
-    if (savedOrder) {
-      dispatch(setFriends(JSON.parse(savedOrder)));
-    } else {
-      // 초기 데이터 설정
-      const tempData = [
-        { friendId: 1, nickname: "승탁이", day: 98, count: 3, isWriter: false },
-        {
-          friendId: 2,
-          nickname: "호주니",
-          day: 120,
-          count: 5,
-          isWriter: false,
-        },
-        { friendId: 3, nickname: "joy", day: 45, count: 2, isWriter: false },
-      ];
-      dispatch(setFriends(tempData));
-    }
-  }, [dispatch]);
-
-  /*
-  // 실제 API 호출 (테스트 후 이걸 다시 활성화하면 됨)
+  // 실제 API 호출
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       const friendData = await getFriends();
+      console.log("📢 API에서 받은 friends 데이터:", friendData);
       dispatch(setFriends(friendData));
       setLoading(false);
     };
     fetchData();
   }, [dispatch]);
-  */
+
   const handleDeleteFriend = (friendId: number) => {
     const updatedFriends = friends.filter(
       (friend) => friend.friendId !== friendId
@@ -94,9 +76,9 @@ export default function DiaryList() {
                     <SharedDiaryCard
                       friendId={friend.friendId}
                       nickname={friend.nickname}
-                      day={friend.day}
-                      count={friend.count}
-                      writer={friend.nickname}
+                      day={friend.daysFromStart}
+                      count={friend.diaryCount}
+                      writer={friend.writer}
                       date="오늘"
                       onDelete={handleDeleteFriend}
                     />
