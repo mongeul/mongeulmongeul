@@ -4,6 +4,7 @@ services:
   mongeulmongeul-spring:
     container_name: mongeulmongeul-spring
     image: mongeulmongeul-spring
+    build: .
     environment:
       - TZ=Asia/Seoul
     privileged: true
