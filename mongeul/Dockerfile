@@ -1,4 +1,4 @@
-FROM openjdk:17-alpine
+FROM openjdk:17-jdk
 RUN apk add --no-cache tzdata
 ARG JAR_FILE=/build/libs/*-0.0.1-SNAPSHOT.jar
 COPY ${JAR_FILE} app.jar
