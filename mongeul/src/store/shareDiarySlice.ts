@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Friend } from "@/lib/api/sharediary";
+import { Friend } from "@/lib/api/shared-diary";
 
 interface ShareDiaryState {
   friends: Friend[];

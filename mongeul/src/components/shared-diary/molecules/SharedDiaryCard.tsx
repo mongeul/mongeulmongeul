@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { deleteFriend } from "@/lib/api/sharediary";
+import { deleteFriend } from "@/lib/api/shared-diary";
 import Card from "@/components/common/atoms/Card";
 import NicknameBadge from "../atoms/NicknameBadge";
 import DiaryStats from "../atoms/DiaryStats";
@@ -14,7 +14,7 @@ interface SharedDiaryCardProps {
   nickname: string;
   day: number;
   count: number;
-  writer: string;
+  writer: boolean;
   date: string;
   onDelete: (friendId: number) => void;
 }
@@ -44,9 +44,15 @@ export default function SharedDiaryCard({
     }
   };
 
+  const isMyTurn = writer === false;
+
   return (
-    <Card width="w-full max-w-lg mx-auto" roundSize="rounded-3xl">
-      <div className="flex justify-between items-center w-full p-3 bg-white relative gap-6">
+    <Card
+      width="w-full max-w-lg mx-auto"
+      roundSize="rounded-3xl"
+      bgColor={isMyTurn ? "bg-theme-200" : "bg-white"}
+    >
+      <div className="flex justify-between p-3 items-center w-full relative gap-6">
         <div>
           <MenuIcon
             className="w-5 h-5 text-zinc-400 absolute top-2 right-3 cursor-pointer"
@@ -72,7 +78,11 @@ export default function SharedDiaryCard({
         </div>
 
         <div className="pr-6">
-          <RecentAuthor author={writer} date={date} />
+          <RecentAuthor
+            author={writer ? "나" : nickname}
+            date={date}
+            isMyTurn={isMyTurn}
+          />
         </div>
       </div>
     </Card>
