@@ -7,6 +7,7 @@ import { RootState } from "@/store/store";
 import { useSelector } from "react-redux";
 import FeedItem from "../atoms/FeedListItem";
 import { FeedListResponse, FeedListItem } from "@/types/feedTypes";
+import Spinner from "@/components/common/atoms/Spinner";
 
 export default function FeedList() {
   const myFeed = useSelector((state: RootState) => state.feed.myFeed);
@@ -83,7 +84,12 @@ export default function FeedList() {
     return () => observer.disconnect();
   }, [hasNextPage, fetchNextPage]);
 
-  if (isLoading) return <div className="text-center">로딩 중...</div>;
+  if (isLoading)
+    return (
+      <div className="text-center">
+        <Spinner />
+      </div>
+    );
 
   if (isError)
     return (
@@ -105,7 +111,9 @@ export default function FeedList() {
           </div>
         ))}
       {isFetchingNextPage && (
-        <div className="text-center col-span-4">더 불러오는 중...</div>
+        <div className="text-center col-span-4">
+          <Spinner />
+        </div>
       )}
       <div ref={observerRef} className="w-full h-10" />
     </div>

@@ -8,12 +8,5 @@ export default function Layout({
   children: ReactNode;
   detail: ReactNode;
 }) {
-  return (
-    // eslint-disable-next-line react/no-children-prop
-    <ParellelLayout children={children} detail={detail} />
-    // <div className="flex gap-4 h-screen">
-    //   <div className="w-full md:w-1/2">{children}</div>
-    //   <div className="w-full md:w-1/2">{detail}</div>
-    // </div>
-  );
+  return <ParellelLayout detail={detail}>{children}</ParellelLayout>;
 }

@@ -1,6 +1,5 @@
 "use client";
 
-import { Theme, Font } from "@/types/settingTypes";
 import {
   createContext,
   ReactNode,
@@ -8,6 +7,7 @@ import {
   useEffect,
   useState,
 } from "react";
+import { Theme, Font } from "@/types/settingTypes";
 
 interface ThemeContextProps {
   theme: Theme;
@@ -33,11 +33,31 @@ export function ThemeProvider({
   initialFont,
   initialFontSize,
 }: ThemeProviderProps) {
-  const [theme, setTheme] = useState<Theme>(initialTheme);
-  const [font, setFont] = useState<Font>(initialFont);
-  const [fontSize, setFontSize] = useState<number>(initialFontSize);
+  //초기값을 localStorage에서 가져와서 설정 (서버 사이드 문제 방지)
+  const [theme, setTheme] = useState<Theme>(() => {
+    if (typeof window !== "undefined") {
+      return (localStorage.getItem("theme") as Theme) || initialTheme;
+    }
+    return initialTheme;
+  });
+
+  const [font, setFont] = useState<Font>(() => {
+    if (typeof window !== "undefined") {
+      return (localStorage.getItem("font") as Font) || initialFont;
+    }
+    return initialFont;
+  });
+
+  const [fontSize, setFontSize] = useState<number>(() => {
+    if (typeof window !== "undefined") {
+      return Number(localStorage.getItem("fontSize")) || initialFontSize;
+    }
+    return initialFontSize;
+  });
+
   const [isInitialized, setIsInitialized] = useState(false);
 
+  // useEffect에서 localStorage값 한 번 더 설정 (CSR 환경 반영)
   useEffect(() => {
     if (typeof window !== "undefined") {
       const savedTheme =
@@ -77,6 +97,7 @@ export function ThemeProvider({
     }
   }, [fontSize]);
 
+  // 초기화가 완료될 때까지 숨김 처리하여 깜빡임 방지
   if (!isInitialized) {
     return <div style={{ visibility: "hidden" }}>{children}</div>;
   }
@@ -90,10 +111,41 @@ export function ThemeProvider({
   );
 }
 
+// useTheme() 훅 ThemeProvider 내부에서만 사용되도록 보장
 export function useTheme() {
   const context = useContext(ThemeContext);
   if (!context) {
-    throw new Error("useTheme 훅은 ThemeProvider 내부에서만 사용해야 합니다.");
+    if (typeof window !== "undefined") {
+      console.warn("ThemeProvider가 없어서 기본값을 반환합니다.");
+      return {
+        theme: "sky",
+        setTheme: () => {},
+        font: "suit",
+        setFont: () => {},
+        fontSize: 16,
+        setFontSize: () => {},
+      };
+    }
+    return {
+      theme: "sky",
+      setTheme: () => {
+        throw new Error(
+          "useTheme 훅은 ThemeProvider 내부에서만 사용해야 합니다."
+        );
+      },
+      font: "suit",
+      setFont: () => {
+        throw new Error(
+          "useTheme 훅은 ThemeProvider 내부에서만 사용해야 합니다."
+        );
+      },
+      fontSize: 16,
+      setFontSize: () => {
+        throw new Error(
+          "useTheme 훅은 ThemeProvider 내부에서만 사용해야 합니다."
+        );
+      },
+    };
   }
   return context;
 }

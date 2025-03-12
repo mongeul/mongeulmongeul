@@ -83,8 +83,29 @@
   }
 
   @font-face {
+    font-family: "NanumSquareRoundR";
+    src: url("/fonts/NanumSquareRoundR.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+  }
+
+  @font-face {
     font-family: "GowunDodum-Regular";
     src: url("/fonts/GowunDodum-Regular.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+  }
+
+  @font-face {
+    font-family: "SejongGeulggot 2";
+    src: url("/fonts/SejongGeulggot 2.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+  }
+
+  @font-face {
+    font-family: "RixXladywatermelonR";
+    src: url("/fonts/RixXladywatermelonR.ttf") format("woff2");
     font-weight: normal;
     font-style: normal;
   }
@@ -93,8 +114,20 @@
     font-family: "SUIT", sans-serif;
   }
 
+  [data-font="nanum-square-round"] {
+    font-family: "NanumSquareRoundR", sans-serif;
+  }
+
   [data-font="gowun-dodum"] {
     font-family: "GowunDodum-Regular", sans-serif;
+  }
+
+  [data-font="sejong-geulggot"] {
+    font-family: "SejongGeulggot 2", sans-serif;
+  }
+
+  [data-font="lady-watermelon"] {
+    font-family: "RixXladywatermelonR", sans-serif;
   }
 }
 

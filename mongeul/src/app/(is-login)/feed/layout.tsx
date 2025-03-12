@@ -8,6 +8,5 @@ export default function Layout({
   children: ReactNode;
   detail: ReactNode;
 }) {
-  // eslint-disable-next-line react/no-children-prop
-  return <ParellelLayout children={children} detail={detail} />;
+  return <ParellelLayout detail={detail}>{children}</ParellelLayout>;
 }

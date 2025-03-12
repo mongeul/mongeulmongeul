@@ -15,7 +15,7 @@ const AuthSetting = [
 
 export default function SettingTemplates() {
   return (
-    <div className="flex flex-col w-full h-full gap-6">
+    <div className="flex flex-col w-full h-auto gap-6">
       <CategoryCard categories={PersonalSetting} title={"개인 설정"} />
       <CategoryCard categories={DisplaySetting} title={"화면 설정"} />
       <CategoryCard categories={AuthSetting} title={"계정"} />

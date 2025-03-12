@@ -18,15 +18,15 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body className="bg-theme-50 flex flex-col items-center">
-        <QueryProvider>
-          <ThemeProvider
-            initialTheme="sky"
-            initialFont="suit"
-            initialFontSize={16}
-          >
+        <ThemeProvider
+          initialTheme="sky"
+          initialFont="suit"
+          initialFontSize={16}
+        >
+          <QueryProvider>
             <ClientLayout>{children}</ClientLayout>
-          </ThemeProvider>
-        </QueryProvider>
+          </QueryProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

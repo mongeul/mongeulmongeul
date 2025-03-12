@@ -3,6 +3,7 @@
 import { ReactNode, useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import DefaultLayout from "./DefaultLayout";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface ParellelLayoutProps {
   children: ReactNode;
@@ -23,6 +24,9 @@ export default function ParellelLayout({
     "/shared-diary",
   ];
   const shouldShowChildrenFirst = showChildrenFirstRoutes.includes(pathname);
+  const isBaseRoute = showChildrenFirstRoutes.some(
+    (route) => pathname === route
+  );
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -38,18 +42,31 @@ export default function ParellelLayout({
   }, []);
 
   return (
-    <div className="flex w-full justify-center gap-10">
-      {!isMobile ? (
-        <>
-          <div className="w-full lg:w-1/2">
+    <div className="flex w-full justify-center overflow-hidden">
+      {isBaseRoute ? (
+        <div className="flex justify-center w-full lg:w-1/2">
+          <DefaultLayout>{children}</DefaultLayout>
+        </div>
+      ) : !isMobile ? (
+        <AnimatePresence mode="sync">
+          {/* 새로운 화면 */}
+          <div className="flex justify-center w-full lg:w-1/2">
             <DefaultLayout>{children}</DefaultLayout>
           </div>
-          <div className="w-full lg:w-1/2">
+
+          {/* 새로운 화면 */}
+          <motion.div
+            key={`${pathname}-detail`}
+            initial={{ x: -50, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ duration: 0.5, ease: "easeInOut" }}
+            className="flex justify-center w-full lg:w-1/2"
+          >
             <DefaultLayout>{detail}</DefaultLayout>
-          </div>
-        </>
+          </motion.div>
+        </AnimatePresence>
       ) : (
-        <div className="w-full">
+        <div className="flex justify-center w-full">
           <DefaultLayout>
             {shouldShowChildrenFirst ? children : detail}
           </DefaultLayout>

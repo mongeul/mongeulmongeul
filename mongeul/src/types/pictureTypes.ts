@@ -1,4 +1,4 @@
-export type Brush = "pen" | "pencil" | "eraser";
+export type Brush = "pen" | "highlighter" | "eraser";
 
 export interface PictureLine {
   points: [number, number][];

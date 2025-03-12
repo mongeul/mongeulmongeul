@@ -1,7 +1,6 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
   images: {
     domains: ["drive.google.com"],
   },
@@ -13,8 +12,11 @@ const nextConfig: NextConfig = {
     });
 
     if (isServer) {
-      config.externals = [...(config.externals || []), "konva"];
+      config.externals = [...(config.externals || [])];
+      config.resolve.alias["canvas"] = false;
+      config.resolve.alias["konva"] = false;
     }
+
     return config;
   },
 };

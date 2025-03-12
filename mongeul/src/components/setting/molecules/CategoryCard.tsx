@@ -17,7 +17,7 @@ export default function CategoryCard({ categories, title }: CategoryCardProps) {
   return (
     <div>
       <Title text={title} />
-      <Card padding="py-1" width="w-full" height="h-full">
+      <Card padding="py-1" width="w-full" height="h-auto">
         <div className="w-full">
           {categories.map((category, idx) => (
             <div key={category.link}>
