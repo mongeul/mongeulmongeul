@@ -13,7 +13,7 @@ const nextConfig: NextConfig = {
     });
 
     if (isServer) {
-      config.externals = [...(config.externals || []), "konva"];
+      config.externals = [...(config.externals || []), "konva", "canvas"];
     }
     return config;
   },

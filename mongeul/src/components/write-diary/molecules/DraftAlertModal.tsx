@@ -146,7 +146,7 @@ export default function DraftAlertModal() {
     return () => {
       window.removeEventListener("popstate", handlePopState);
     };
-  }, [isDirty]);
+  }, [isDirty, router]);
 
   // 페이지 이동 감지 (router.push / router.replace 오버라이드)
   useEffect(() => {

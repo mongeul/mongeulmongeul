@@ -10,7 +10,6 @@ import PenIcon from "@/assets/icons/pen.svg";
 import EraserIcon from "@/assets/icons/eraser.svg";
 
 const brushes: Brush[] = ["pen", "highlighter", "eraser"];
-// const brushes: Brush[] = ["pen", "eraser"];
 
 export default function BrushSelectPalette() {
   const dispatch = useDispatch();

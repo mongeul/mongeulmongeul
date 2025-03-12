@@ -112,7 +112,6 @@ export default function FeedList() {
         ))}
       {isFetchingNextPage && (
         <div className="text-center col-span-4">
-          {" "}
           <Spinner />
         </div>
       )}

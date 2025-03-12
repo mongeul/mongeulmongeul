@@ -1,4 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
+import dynamic from "next/dynamic";
+import { useEffect, useRef, useState } from "react";
 import { Stage, Layer, Line } from "react-konva";
 import { RootState } from "@/store/store";
 import { useDispatch, useSelector } from "react-redux";
@@ -6,7 +7,7 @@ import { addLine, updateLines } from "@/store/pictureSlice";
 import Card from "@/components/common/atoms/Card";
 import { setStageRef } from "@/utils/stateRef";
 
-export default function KonvaCanvas() {
+const KonvaCanvas = () => {
   const dispatch = useDispatch();
   const { lines, selectedBrush } = useSelector(
     (state: RootState) => state.picture
@@ -14,12 +15,21 @@ export default function KonvaCanvas() {
 
   const stageRef = useRef<any>(null);
   const [isPicture, setIsPicture] = useState<boolean>(false);
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setIsClient(true);
+    }
+  }, []);
 
   useEffect(() => {
     if (stageRef.current) {
       setStageRef(stageRef.current);
     }
   }, []);
+
+  if (!isClient) return null; // 서버에서 실행되지 않도록 방어
 
   const changeOpacity = (color: string, opacity: number) => {
     if (color.startsWith("rgba")) return color;
@@ -136,4 +146,7 @@ export default function KonvaCanvas() {
       </div>
     </Card>
   );
-}
+};
+
+// 서버 사이드 렌더링 방지
+export default dynamic(() => Promise.resolve(KonvaCanvas), { ssr: false });

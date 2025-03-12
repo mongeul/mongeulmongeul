@@ -4,7 +4,7 @@ import PrivateStatusIcon from "@/components/common/atoms/PrivateStatusIcon";
 
 const DiaryPrivateStatus: React.FC = () => {
   const { selectedDiary } = useSelector((state: RootState) => state.calendar);
-  if (!selectedDiary) return null;
+  if (!selectedDiary || selectedDiary === "LOCK") return null;
 
   const { icon } = PrivateStatusIcon({
     privateStatus: selectedDiary.privateStatus,
