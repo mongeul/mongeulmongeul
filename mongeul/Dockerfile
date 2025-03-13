@@ -5,8 +5,13 @@ RUN npm ci
 COPY . .
 RUN npm run build
 
-FROM nginx:alpine
-COPY --from=build /app/.next /usr/share/nginx/html
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+FROM node:20.15.0-alpine
+WORKDIR /app
+COPY --from=build /app/package*.json ./
+COPY --from=build /app/next.config.mjs ./
+COPY --from=build /app/.next ./.next
+COPY --from=build /app/public ./public
+RUN npm ci --only=production
+
+EXPOSE 3000
+CMD ["npm", "start"]
