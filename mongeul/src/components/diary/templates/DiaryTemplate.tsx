@@ -1,0 +1,91 @@
+"use client";
+import Calendar from "@/components/calendar/organisms/Calendar";
+import Diary from "@/components/diary/organisms/Diary";
+import LockDiary from "@/components/diary/organisms/LockDiary";
+import { fetchDiaries, fetchMyDiary } from "@/lib/api/diary";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/store/store";
+import {
+  setSelectedDate,
+  setSelectedDiary,
+  setCurrentMonth,
+  setDiaryEntries,
+} from "@/store/calendarSlice";
+import { useRouter } from "next/navigation";
+import { setDate } from "@/store/diarySlice";
+
+export default function DiaryTemplate() {
+  const router = useRouter();
+  const dispatch = useDispatch();
+  const { selectedDate, currentMonth, selectedDiary } = useSelector(
+    (state: RootState) => state.calendar
+  );
+  const { diaryEntries = [] } = useSelector(
+    (state: RootState) => state.calendar
+  );
+  const [currentDiaryId, setCurrentDiaryId] = useState<number | null>(null);
+
+  useEffect(() => {
+    console.log("현재 선택된 월:", currentMonth);
+
+    const fetchDiaryData = async () => {
+      const diaries = await fetchDiaries(currentMonth.year, currentMonth.month);
+      // console.log("일기데이터", diaries);
+      dispatch(
+        setDiaryEntries(
+          diaries.map((diary) => ({
+            date: diary.date,
+            diaryId: diary.diaryId,
+            privateStatus: diary.privateStatus,
+          }))
+        )
+      );
+    };
+
+    fetchDiaryData();
+  }, [currentMonth, dispatch]);
+
+  const handleDateSelect = async (date: string) => {
+    const selectedDateStr = date;
+    const todayStr = new Date().toISOString().split("T")[0];
+
+    if (selectedDateStr > todayStr) {
+      return;
+    }
+
+    console.log(`${date} 날짜 클릭됨 / API 요청 실행`);
+    dispatch(setSelectedDate(date));
+
+    const entry = diaryEntries.find((entry) => entry.date === date);
+    if (!entry) {
+      dispatch(setSelectedDiary(null));
+      dispatch(setDate(date));
+      router.push("/write-diary");
+      return;
+    }
+
+    // ✅ 상태 초기화 후 이동
+    dispatch(setSelectedDiary(null)); // 🔥 이동 전에 초기화
+
+    if (entry.privateStatus === "LOCK") {
+      setCurrentDiaryId(entry.diaryId);
+      router.push(`/diary/${entry.diaryId}`);
+    } else {
+      router.push(`/diary/${entry.diaryId}`);
+    }
+  };
+
+  const handlePasswordSubmit = async (password: string) => {
+    if (!currentDiaryId) return;
+
+    const diary = await fetchMyDiary(currentDiaryId, password);
+    dispatch(setSelectedDiary(diary));
+  };
+
+  return (
+    <div className="w-full flex flex-col justify-center items-center gap-6">
+      <Calendar onSelectDate={handleDateSelect} />
+    </div>
+  );
+}
