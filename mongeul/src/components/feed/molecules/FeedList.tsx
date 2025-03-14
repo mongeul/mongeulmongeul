@@ -99,7 +99,7 @@ export default function FeedList() {
     );
 
   return (
-    <div className="relative w-full h-auto min-h-screen grid grid-cols-4 gap-4 p-4">
+    <div className="relative w-full h-auto grid grid-cols-4 gap-4 p-4 grid-auto-rows-min place-items-start">
       {data?.pages
         ?.flatMap((page) => {
           console.log("페이지 데이터 :", page);
