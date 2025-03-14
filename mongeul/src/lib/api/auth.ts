@@ -30,8 +30,8 @@ export const handleKakaoLogin = async (
       console.log("🔍 로그인 후 받은 유저 정보:", user);
 
       dispatch(setUser({ ...user }));
-      document.cookie = `accessToken=${accessToken}; path=/; max-age=604800; secure; samesite=strict`; // 30분 (1800초)
-      document.cookie = `refreshToken=${refreshToken}; path=/; max-age=604800; secure; samesite=strict`; // 7일 (604800초)
+      document.cookie = `accessToken=${accessToken}; path=/; secure; samesite=strict`; // max-age=604800; 30분 (1800초)
+      document.cookie = `refreshToken=${refreshToken}; path=/; secure; samesite=strict`; // max-age=604800; 7일 (604800초)
 
       return user;
     }
