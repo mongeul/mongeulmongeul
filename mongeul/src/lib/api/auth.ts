@@ -30,8 +30,8 @@ export const handleKakaoLogin = async (
       console.log("🔍 로그인 후 받은 유저 정보:", user);
 
       dispatch(setUser({ ...user }));
-      document.cookie = `accessToken=${accessToken}; path=/; max-age=604800; secure; samesite=strict`; // 30분 (1800초)
-      document.cookie = `refreshToken=${refreshToken}; path=/; max-age=604800; secure; samesite=strict`; // 7일 (604800초)
+      document.cookie = `accessToken=${accessToken}; path=/; secure; samesite=strict`; // max-age=604800; 30분 (1800초)
+      document.cookie = `refreshToken=${refreshToken}; path=/; secure; samesite=strict`; // max-age=604800; 7일 (604800초)
 
       return user;
     }
@@ -120,5 +120,32 @@ export const handleLogout = async (dispatch: AppDispatch) => {
     }
   } catch (error) {
     console.error("❌ 로그아웃 요청 중 오류 발생:", error);
+  }
+};
+
+// 회원탈퇴 API (POST)
+export const handleWithdraw = async (dispatch: AppDispatch) => {
+  try {
+    const data = await apiClient("/api/user/withdraw", {
+      method: "POST",
+    });
+
+    if (data.success) {
+      console.log("🟢 회원 탈퇴 성공!");
+
+      dispatch(clearUser());
+
+      // 쿠키 삭제
+      document.cookie =
+        "accessToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+      document.cookie =
+        "refreshToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+
+      window.location.href = "/auth/login";
+    } else {
+      console.error("❌ 회원 탈퇴 실패:", data.message);
+    }
+  } catch (error) {
+    console.error("❌ 회원 탈퇴 요청 중 오류 발생:", error);
   }
 };

@@ -1,5 +1,4 @@
 const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "";
-const TOKEN = process.env.NEXT_PUBLIC_TEST_TOKEN || "";
 
 export const getCookie = (name: string): string | null => {
   const match = document.cookie.match(new RegExp(`(^| )${name}=([^;]+)`));
@@ -32,10 +31,26 @@ export const apiClient = async (
     credentials: "include",
     headers,
   });
+  if (res.status === 204) {
+    return null;
+  }
 
   const data = await res.json();
 
   if (!res.ok) {
+    if (res.status === 401) {
+      console.log("토큰 만료 감지됨! 쿠키 삭제 및 로그인 페이지로 이동");
+
+      // 만료된 토큰 삭제
+      document.cookie =
+        "accessToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+      document.cookie =
+        "refreshToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+
+      // 로그인 페이지로 이동
+      window.location.href = "/auth/login";
+    }
+
     throw new Error(data.message || "API 요청 실패");
   }
 

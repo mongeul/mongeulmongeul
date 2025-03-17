@@ -8,13 +8,14 @@ import {
   IsDiaryResponse,
 } from "@/types/diaryTypes";
 import { PictureLineResponse } from "@/types/pictureTypes";
-import { revalidatePath } from "next/cache";
 
 // 일기 생성
 export async function createDiaryEntry(
   data: DiaryRequest
 ): Promise<DiaryResponse> {
   const formData = new FormData();
+
+  console.log("일기작성 데이터", data);
 
   formData.append("title", data.title);
   formData.append("content", data.content);
@@ -28,10 +29,12 @@ export async function createDiaryEntry(
     formData.append("picture", blob, "picture.png");
   }
 
+  // pictureLines 추가
   if (data.pictureLines) {
     formData.append("pictureLines", JSON.stringify(data.pictureLines));
   }
 
+  // API 요청
   const response = await apiClient("/api/v1/diaries", {
     method: "POST",
     body: formData,
@@ -55,7 +58,8 @@ export async function updateDiaryEntry(
   formData.append("privateStatus", data.privateStatus);
 
   if (data.picture) {
-    formData.append("picture", data.picture);
+    const blob = await (await fetch(data.picture)).blob();
+    formData.append("picture", blob, "picture.png");
   }
 
   if (data.pictureLines) {
