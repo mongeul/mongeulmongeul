@@ -4,9 +4,9 @@ import { Diary, Draft } from "@/types/diaryTypes";
 import { formatDate } from "@/utils/formatDate";
 import CloseIcon from "@/assets/icons/close.svg";
 import {
-  deleteDraft,
-  fetchIsWrite,
+  deleteDiaryEntry,
   fetchPictureLines,
+  verifyDiaryEntry,
 } from "@/lib/api/write-diary";
 import {
   setContent,
@@ -46,7 +46,7 @@ export default function DraftItem({
   // 임시저장 일기 삭제
   const handleDelete = async (diaryId: number) => {
     try {
-      await deleteDraft(diaryId);
+      await deleteDiaryEntry(diaryId);
       onDelete(diaryId);
     } catch (error) {
       console.error("일기 삭제 실패:", error);
@@ -61,16 +61,16 @@ export default function DraftItem({
       console.log(pictureLinesResponse);
 
       if (
-        pictureLinesResponse.pictureLines &&
-        pictureLinesResponse.pictureLines.length > 0
+        pictureLinesResponse.data.pictureLines &&
+        pictureLinesResponse.data.pictureLines.length > 0
       ) {
         // Redux 상태 업데이트
-        dispatch(setPictureLines(pictureLinesResponse.pictureLines));
-        dispatch(updateLines(pictureLinesResponse.pictureLines));
+        dispatch(setPictureLines(pictureLinesResponse.data.pictureLines));
+        dispatch(updateLines(pictureLinesResponse.data.pictureLines));
 
         // 캔버스를 만들고 이미지 변환 후 Redux 저장
         const imageDataUrl = await convertLinesToImage(
-          pictureLinesResponse.pictureLines
+          pictureLinesResponse.data.pictureLines
         );
         dispatch(setPicture(imageDataUrl));
       }
@@ -81,7 +81,7 @@ export default function DraftItem({
 
   // 임시저장 일기 선택
   const onSelectDraft = async (draft: Diary) => {
-    const isDiary = await fetchIsWrite(draft.date);
+    const isDiary = await verifyDiaryEntry(draft.date);
 
     if (isDiary?.data) {
       // 이미 작성된 날짜의 임시저장 일기라면 모달 표시

@@ -8,16 +8,36 @@ import {
   IsDiaryResponse,
 } from "@/types/diaryTypes";
 import { PictureLineResponse } from "@/types/pictureTypes";
+import { revalidatePath } from "next/cache";
 
 // 일기 생성
 export async function createDiaryEntry(
   data: DiaryRequest
 ): Promise<DiaryResponse> {
-  return apiClient("/api/v1/diaries", {
+  const formData = new FormData();
+
+  formData.append("title", data.title);
+  formData.append("content", data.content);
+  formData.append("date", data.date);
+  formData.append("weather", data.weather ?? "");
+  formData.append("feeling", data.feeling ?? "");
+  formData.append("privateStatus", data.privateStatus);
+
+  if (data.picture) {
+    const blob = await (await fetch(data.picture)).blob();
+    formData.append("picture", blob, "picture.png");
+  }
+
+  if (data.pictureLines) {
+    formData.append("pictureLines", JSON.stringify(data.pictureLines));
+  }
+
+  const response = await apiClient("/api/v1/diaries", {
     method: "POST",
-    body: JSON.stringify(data),
-    headers: { "Content-Type": "application/json" },
+    body: formData,
   });
+
+  return response;
 }
 
 // 일기 수정
@@ -25,10 +45,26 @@ export async function updateDiaryEntry(
   data: DiaryRequest,
   diaryId: number
 ): Promise<DiaryResponse> {
+  const formData = new FormData();
+
+  formData.append("title", data.title);
+  formData.append("content", data.content);
+  formData.append("date", data.date);
+  formData.append("weather", data.weather ?? "");
+  formData.append("feeling", data.feeling ?? "");
+  formData.append("privateStatus", data.privateStatus);
+
+  if (data.picture) {
+    formData.append("picture", data.picture);
+  }
+
+  if (data.pictureLines) {
+    formData.append("pictureLines", JSON.stringify(data.pictureLines));
+  }
+
   return apiClient(`/api/v1/diaries/${diaryId}`, {
     method: "PUT",
-    body: JSON.stringify(data),
-    headers: { "Content-Type": "application/json" },
+    body: formData,
   });
 }
 
@@ -68,7 +104,7 @@ export async function fetchDiaryDraft(): Promise<DraftResponse> {
 }
 
 // 임시 저장된 일기 생성
-export async function saveDiaryDraft(
+export async function createDiaryDraft(
   data: DraftRequest
 ): Promise<DraftResponse> {
   return apiClient("/api/v1/diaries/drafts", {
