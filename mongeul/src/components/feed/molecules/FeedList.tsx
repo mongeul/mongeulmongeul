@@ -2,7 +2,7 @@
 
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useEffect, useRef } from "react";
-import { fetchFeedList } from "@/lib/api/feed";
+import { getFeeds } from "@/lib/api/feed";
 import { RootState } from "@/store/store";
 import { useSelector } from "react-redux";
 import FeedItem from "../atoms/FeedListItem";
@@ -28,7 +28,7 @@ export default function FeedList() {
     queryKey: ["feeds", myFeed], // 쿼리 키: 동일한 요청을 캐싱하여 관리
     queryFn: async ({ pageParam = null }) => {
       console.log("pageParam:", pageParam, "myFeed:", myFeed);
-      const result = await fetchFeedList(
+      const result = await getFeeds(
         pageSize,
         typeof pageParam === "number" ? pageParam : null,
         myFeed

@@ -3,10 +3,10 @@ import FeedEmojiButton from "../atoms/FeedEmojiButton";
 import { Feeling } from "@/types/diaryTypes";
 import { RootState } from "@/store/store";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteFeedEmoji, postFeedEmoji } from "@/actions/feed";
 import { toggleEmoji } from "@/store/feedSlice";
 import { getEmojiId } from "@/utils/getEmojiId";
 import { useParams } from "next/navigation";
+import { removeEmojiFromFeed, addEmojiToFeed } from "@/lib/api/feed";
 
 export default function FeedEmojiBubble() {
   const { id } = useParams();
@@ -25,9 +25,9 @@ export default function FeedEmojiBubble() {
 
     try {
       if (isSelected) {
-        await deleteFeedEmoji(Number(id), getEmojiId(emoji));
+        await removeEmojiFromFeed(Number(id), getEmojiId(emoji));
       } else {
-        await postFeedEmoji(Number(id), getEmojiId(emoji));
+        await addEmojiToFeed(Number(id), getEmojiId(emoji));
       }
     } catch (error) {
       console.error("이모지 업데이트 실패:", error);

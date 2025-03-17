@@ -10,7 +10,7 @@ export default function WriteDiaryNavBar() {
     <Suspense>
       <SearchParamsProvider>
         {(diaryId) => (
-          <div className="w-full px-6 flex flex-row gap-6">
+          <div className="w-full px-0 flex flex-row gap-2">
             <CreateDiaryButton diaryId={diaryId} />
             {diaryId === null && <DraftButtons />}
           </div>

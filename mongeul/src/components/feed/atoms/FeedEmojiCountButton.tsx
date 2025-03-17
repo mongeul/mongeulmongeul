@@ -1,11 +1,11 @@
 import Button from "@/components/common/atoms/Button";
 import { Feeling } from "@/types/diaryTypes";
 import FeedEmojiButton from "./FeedEmojiButton";
-import { deleteFeedEmoji, postFeedEmoji } from "@/actions/feed";
 import { toggleEmoji } from "@/store/feedSlice";
 import { getEmojiId } from "@/utils/getEmojiId";
 import { useParams } from "next/navigation";
 import { useDispatch } from "react-redux";
+import { removeEmojiFromFeed, addEmojiToFeed } from "@/lib/api/feed";
 
 interface FeedEmojiCountButtonProps {
   emoji: Feeling;
@@ -28,9 +28,9 @@ export default function FeedEmojiCountButton({
 
     try {
       if (isSelected) {
-        await deleteFeedEmoji(Number(id), getEmojiId(emoji));
+        await removeEmojiFromFeed(Number(id), getEmojiId(emoji));
       } else {
-        await postFeedEmoji(Number(id), getEmojiId(emoji));
+        await addEmojiToFeed(Number(id), getEmojiId(emoji));
       }
     } catch (error) {
       console.error("이모지 업데이트 실패:", error);
@@ -44,7 +44,7 @@ export default function FeedEmojiCountButton({
     <Button
       text={feelingCount}
       borderColor="border border-theme-400"
-      backgroundColor="bg-theme-50"
+      backgroundColor={isSelected ? "bg-theme-300" : "bg-theme-50"}
       padding="px-2 py-1"
       icon={icon}
       onClick={toggleButton}

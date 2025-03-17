@@ -1,6 +1,6 @@
 "use client";
 
-import { fetchFeedDetail } from "@/lib/api/feed";
+import { getFeedById } from "@/lib/api/feed";
 import { FeedDetail } from "@/types/feedTypes";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -25,7 +25,7 @@ export default function FeedDetailTemplates() {
       setLoading(true);
 
       try {
-        const data = await fetchFeedDetail(Number(id));
+        const data = await getFeedById(Number(id));
         if (data?.success && data.data) {
           setFeed(data.data);
           dispatch(setFeedDetailEmojis(data.data.emojis));
