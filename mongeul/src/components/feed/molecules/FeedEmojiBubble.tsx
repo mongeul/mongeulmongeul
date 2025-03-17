@@ -3,13 +3,14 @@ import FeedEmojiButton from "../atoms/FeedEmojiButton";
 import { Feeling } from "@/types/diaryTypes";
 import { RootState } from "@/store/store";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteFeedEmoji, postFeedEmoji } from "@/actions/feed";
 import { toggleEmoji } from "@/store/feedSlice";
 import { getEmojiId } from "@/utils/getEmojiId";
 import { useParams } from "next/navigation";
+import { addEmoji, removeEmoji } from "@/lib/api/feed";
 
 export default function FeedEmojiBubble() {
   const { id } = useParams();
+  const diaryId = Number(id);
   const dispatch = useDispatch();
 
   const feedEmojis = useSelector(
@@ -19,15 +20,15 @@ export default function FeedEmojiBubble() {
   const emojis: Feeling[] = ["HAPPY", "SAD", "ANGRY", "WOW", "SOSO"];
 
   const toggleButton = async (isSelected: boolean, emoji: Feeling) => {
-    if (!id) return;
-
+    if (!diaryId) return;
+    const emojiId = getEmojiId(emoji);
     dispatch(toggleEmoji(emoji));
 
     try {
       if (isSelected) {
-        await deleteFeedEmoji(Number(id), getEmojiId(emoji));
+        await removeEmoji(diaryId, emojiId);
       } else {
-        await postFeedEmoji(Number(id), getEmojiId(emoji));
+        await addEmoji(diaryId, emojiId);
       }
     } catch (error) {
       console.error("이모지 업데이트 실패:", error);

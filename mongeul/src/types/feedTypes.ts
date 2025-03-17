@@ -34,5 +34,5 @@ export interface FeedDetailResponse {
 export interface FeedEmojiresponse {
   success: boolean;
   message: string;
-  data: null;
+  data: Record<string, unknown>;
 }

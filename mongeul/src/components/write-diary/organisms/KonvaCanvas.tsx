@@ -14,7 +14,7 @@ const KonvaCanvas = () => {
   );
 
   const stageRef = useRef<any>(null);
-  const [isPicture, setIsPicture] = useState<boolean>(false);
+  const [isDrawing, setIsDrawing] = useState<boolean>(false);
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
@@ -26,8 +26,11 @@ const KonvaCanvas = () => {
   useEffect(() => {
     if (stageRef.current) {
       setStageRef(stageRef.current);
+      console.log("✅ stageRef 설정됨:", stageRef.current);
+    } else {
+      console.warn("⚠️ stageRef가 아직 설정되지 않았습니다.");
     }
-  }, []);
+  }, [stageRef.current]); // `stageRef.current` 변경될 때 실행
 
   if (!isClient) return null; // 서버에서 실행되지 않도록 방어
 
@@ -45,12 +48,12 @@ const KonvaCanvas = () => {
   // 그림 그리기 시작
   const handleMouseDown = (e: any) => {
     if (selectedBrush === "eraser") {
-      setIsPicture(true);
+      setIsDrawing(true);
       handleErase(e); // 마우스를 누르자마자 바로 지우기 실행
       return;
     }
 
-    setIsPicture(true);
+    setIsDrawing(true);
     const pos = e.target.getStage().getPointerPosition();
     if (!pos) return;
 
@@ -63,7 +66,7 @@ const KonvaCanvas = () => {
 
   // 그리는 중 or 지우는 중
   const handleMouseMove = (e: any) => {
-    if (!isPicture) return;
+    if (!isDrawing) return;
     if (selectedBrush === "eraser") {
       handleErase(e);
       return;
@@ -114,7 +117,7 @@ const KonvaCanvas = () => {
 
   // 그리기 또는 지우기 종료
   const handleMouseUp = () => {
-    setIsPicture(false);
+    setIsDrawing(false);
   };
 
   return (

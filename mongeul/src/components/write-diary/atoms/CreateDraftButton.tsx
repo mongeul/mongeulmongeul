@@ -1,6 +1,10 @@
 "use client";
 
-import { submitDiaryDraft, submitUpdateDiary } from "@/lib/api/write-diary";
+import {
+  createDiaryDraft,
+  createDiaryEntry,
+  updateDiaryEntry,
+} from "@/lib/api/write-diary";
 import { resetDiary } from "@/store/diarySlice";
 import { resetPicture } from "@/store/pictureSlice";
 import { RootState } from "@/store/store";
@@ -34,7 +38,7 @@ export default function CreateDraftButton() {
     // 임시저장 수정
     if (isDraft && draftId) {
       try {
-        await submitUpdateDiary(
+        await updateDiaryEntry(
           {
             title,
             content,
@@ -57,12 +61,12 @@ export default function CreateDraftButton() {
 
         router.push("/diary");
       } catch (error) {
-        console.error("일기 임시저장 실패:", error);
+        console.error("일기 임시저장 수정 실패:", error);
       }
     } else {
-      // 발행된 일기 수정
+      // 임시저장 생성
       try {
-        await submitDiaryDraft({
+        await createDiaryDraft({
           title,
           content,
           pictureLines:

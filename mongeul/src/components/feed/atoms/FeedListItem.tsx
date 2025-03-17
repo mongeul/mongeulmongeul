@@ -71,7 +71,7 @@ export default function FeedItem({ feed }: FeedListItemProps) {
   return (
     <Link href={`/feed/${feed.feedId}`}>
       <div
-        className="absolute cursor-pointer flex items-center justify-center w-10 h-10"
+        className="absolute cursor-pointer flex items-center justify-center w-full aspect-[1/1]"
         style={{
           // 랜덤 위치 배치
           top: position.top,

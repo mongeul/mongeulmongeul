@@ -2,9 +2,9 @@
 
 import Button from "@/components/common/atoms/Button";
 import {
-  deleteDraft,
-  submitDiary,
-  submitUpdateDiary,
+  createDiaryEntry,
+  deleteDiaryEntry,
+  updateDiaryEntry,
 } from "@/lib/api/write-diary";
 import { resetDiary } from "@/store/diarySlice";
 import { resetPicture } from "@/store/pictureSlice";
@@ -48,7 +48,7 @@ export default function CreateDiaryButton({ diaryId }: CreateDiaryButtonProps) {
 
     try {
       if (diaryId) {
-        await submitUpdateDiary(
+        await updateDiaryEntry(
           {
             title,
             content,
@@ -65,7 +65,7 @@ export default function CreateDiaryButton({ diaryId }: CreateDiaryButtonProps) {
           diaryId
         );
       } else {
-        await submitDiary({
+        await createDiaryEntry({
           title,
           content,
           picture: picture || "",
@@ -80,7 +80,7 @@ export default function CreateDiaryButton({ diaryId }: CreateDiaryButtonProps) {
         });
 
         if (isDraft && typeof draftId === "number") {
-          await deleteDraft(draftId);
+          await deleteDiaryEntry(draftId);
         }
       }
 
