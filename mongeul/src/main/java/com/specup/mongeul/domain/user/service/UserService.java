@@ -6,7 +6,6 @@ import com.specup.mongeul.domain.user.entity.LockPassword;
 import com.specup.mongeul.domain.user.entity.User;
 import com.specup.mongeul.domain.user.repository.LockPasswordRepository;
 import com.specup.mongeul.domain.user.repository.UserRepository;
-import com.specup.mongeul.global.auth.TokenBlacklistService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserService {
     private final UserRepository userRepository;
     private final LockPasswordRepository lockPasswordRepository;
-    private final TokenBlacklistService tokenBlacklistService;
 
     @Transactional
     public NicknameResponse setNickname(NicknameRequest request, User user) {
@@ -27,12 +25,6 @@ public class UserService {
         return NicknameResponse.builder()
                 .nickname(request.getNickname())
                 .build();
-    }
-
-    @Transactional
-    public void logout(String accessToken, String refreshToken) {
-        tokenBlacklistService.addToBlacklist(accessToken);
-        tokenBlacklistService.addToBlacklist(refreshToken);
     }
 
     public UserResponse getMyInfo(User user) {

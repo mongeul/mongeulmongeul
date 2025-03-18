@@ -4,6 +4,7 @@ import com.specup.mongeul.domain.user.dto.oauth.KakaoUserInfo;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
@@ -11,6 +12,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class KakaoClient {
@@ -26,7 +28,8 @@ public class KakaoClient {
         return "https://kauth.kakao.com/oauth/authorize" +
                 "?client_id=" + clientId +
                 "&redirect_uri=" + redirectUri +
-                "&response_type=code";
+                "&response_type=code" +
+                "&prompt=login";
     }
 
     public String getAccessToken(String authorizationCode) {
@@ -76,6 +79,25 @@ public class KakaoClient {
                     .build();
         } catch (Exception e) {
             throw new RuntimeException("카카오 사용자 정보 조회 실패", e);
+        }
+    }
+
+    public void logoutUser(String accessToken) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(accessToken);
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+
+        HttpEntity<?> request = new HttpEntity<>(headers);
+
+        try {
+            restTemplate.exchange(
+                    "https://kapi.kakao.com/v1/user/logout",
+                    HttpMethod.POST,
+                    request,
+                    String.class
+            );
+        } catch (Exception e) {
+            throw new RuntimeException("카카오 로그아웃 실패", e);
         }
     }
 
