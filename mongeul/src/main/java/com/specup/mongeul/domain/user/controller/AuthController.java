@@ -34,4 +34,21 @@ public class AuthController {
             @RequestBody @Valid KakaoLoginRequest request) {
         return ResponseEntity.ok(ApiResponse.success(authService.kakaoLogin(request), "로그인 성공"));
     }
+
+    @Operation(summary = "토큰 재발급", description = "리프레시 토큰으로 액세스 토큰과 리프레시 토큰을 재발급합니다.")
+    @PostMapping("/refresh")
+    public ResponseEntity<ApiResponse<TokenRefreshResponse>> refreshToken(
+            @RequestBody @Valid TokenRefreshRequest request,
+            @AuthenticationPrincipal User user) {
+        return ResponseEntity.ok(ApiResponse.success(authService.refreshToken(request), "토큰 재발급 성공"));
+    }
+
+    @Operation(summary = "로그아웃", description = "사용자의 로그아웃을 처리합니다.")
+    @PostMapping("/logout")
+    public ResponseEntity<ApiResponse<Void>> logout(
+            @RequestBody @Valid LogoutRequest request,
+            @AuthenticationPrincipal User user) {
+        authService.logout(request, user.getId());
+        return ResponseEntity.ok(ApiResponse.success(null, "로그아웃 성공"));
+    }
 }

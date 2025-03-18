@@ -114,7 +114,12 @@ public enum ErrorCode {
     FRIEND_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 친구 관계를 찾을 수 없습니다."),
 
     // 알림 관련 에러
-    NOTIFICATION_NOT_FOUND(HttpStatus.NOT_FOUND, "알림쇼을 찾을 수 없습니다"),;
+    NOTIFICATION_NOT_FOUND(HttpStatus.NOT_FOUND, "알림쇼을 찾을 수 없습니다"),
+
+    // ErrorCode 열거형에 추가할 상수들
+    REFRESH_TOKEN_NOT_FOUND(HttpStatus.NOT_FOUND, "리프레시 토큰을 찾을 수 없습니다."),
+    REFRESH_TOKEN_MISMATCH(HttpStatus.BAD_REQUEST, "리프레시 토큰이 일치하지 않습니다."),
+    NOT_KAKAO_USER(HttpStatus.BAD_REQUEST, "카카오 로그인 사용자가 아닙니다."),;
 
     private final HttpStatus status;
     private final String message;

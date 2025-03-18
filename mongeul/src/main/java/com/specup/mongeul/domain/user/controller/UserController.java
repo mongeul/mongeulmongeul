@@ -30,14 +30,6 @@ public class UserController {
         return ResponseEntity.ok(ApiResponse.success(userService.setNickname(request, user), "닉네임 설정 성공"));
     }
 
-    @Operation(summary = "로그아웃", description = "사용자 로그아웃을 처리합니다.")
-    @PostMapping("/logout")
-    public ResponseEntity<ApiResponse<Void>> logout(
-            @RequestBody @Valid LogoutRequest request) {
-        userService.logout(request.getAccessToken(), request.getRefreshToken());
-        return ResponseEntity.ok(ApiResponse.success(null, "로그아웃 성공"));
-    }
-
     @Operation(summary = "회원정보 조회", description = "현재 로그인한 사용자의 회원정보를 조회합니다.")
     @GetMapping("/me")
     public ResponseEntity<ApiResponse<UserResponse>> getMyInfo(
