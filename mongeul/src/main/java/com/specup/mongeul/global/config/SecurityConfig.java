@@ -41,7 +41,6 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .requestMatchers(
-                                "/**",
                                 "/api/auth/kakao",     // 카카오 로그인 URL 조회
                                 "/api/auth/kakao/**",  // 카카오 로그인 콜백
                                 "/api/drive/**"
@@ -90,19 +89,9 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowCredentials(true);
         configuration.setAllowedOrigins(List.of(
-                "http://localhost",
                 "http://localhost:3000",
-                "http://localhost:5173",
-                "http://localhost:5174",
-                "http://127.0.0.1:5500",
-                "https://localhost",
                 "https://localhost:3000",
-                "https://localhost:5173",
-                "https://localhost:5174",
-                "https://dev.test.com",
-                "https://dev.test.com:3000",
-                "https://dev.test.com:5173",
-                "https://dev.test.com:5174"));
+                "https://mongeul.co.kr"));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
