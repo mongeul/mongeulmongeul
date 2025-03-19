@@ -91,7 +91,11 @@ public class SecurityConfig {
         configuration.setAllowedOrigins(List.of(
                 "http://localhost:3000",
                 "https://localhost:3000",
-                "https://mongeul.co.kr"));
+                "https://mongeul.co.kr",
+                "http://mongeul.co.kr",
+                "http://api.mongeul.co.kr",
+                "https://api.mongeul.co.kr"
+            ));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
