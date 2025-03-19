@@ -3,10 +3,13 @@ package com.specup.mongeul.global.config;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.models.servers.Server;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import java.util.List;
 
 @Configuration
 public class SwaggerConfig {
@@ -28,8 +31,14 @@ public class SwaggerConfig {
                 .bearerFormat("JWT")
         );
 
+        // ✅ 서버 URL 설정 추가 (HTTP 대신 HTTPS 사용)
+        Server server = new Server()
+                .url("https://api.mongeul.co.kr")
+                .description("Production Server");
+
         return new OpenAPI()
                 .info(info)
+                .servers(List.of(server))
                 .addSecurityItem(securityRequirement)
                 .components(components);
     }

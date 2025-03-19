@@ -41,7 +41,6 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .requestMatchers(
-                                "/**",
                                 "/api/auth/kakao",     // 카카오 로그인 URL 조회
                                 "/api/auth/kakao/**",  // 카카오 로그인 콜백
                                 "/api/drive/**"
