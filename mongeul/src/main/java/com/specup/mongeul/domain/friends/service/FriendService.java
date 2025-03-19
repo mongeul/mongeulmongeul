@@ -5,6 +5,7 @@ import com.specup.mongeul.domain.diary.repository.ShareDiaryRepository;
 import com.specup.mongeul.domain.friends.dto.response.FriendCodeResponse;
 import com.specup.mongeul.domain.friends.dto.response.FriendNicknameResponse;
 import com.specup.mongeul.domain.friends.dto.response.FriendResponse;
+import com.specup.mongeul.domain.friends.dto.response.WritableShareFriendResponse;
 import com.specup.mongeul.domain.friends.entity.Friend;
 import com.specup.mongeul.domain.friends.entity.FriendCode;
 import com.specup.mongeul.domain.friends.repository.FriendRepository;
@@ -80,6 +81,47 @@ public class FriendService {
                             ChronoUnit.DAYS.between(friend.getCreatedAt().toLocalDate(), LocalDateTime.now()),
                             isWriter,
                             recentWriteDate
+                    );
+                })
+                .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<WritableShareFriendResponse> getWritableShareFriends(User user) {
+        Long userId = user.getId();
+
+        return friendRepository.findByUserIdOrFriendId(userId).stream()
+                .filter(friend -> {
+                    // status에 따라 친구 목록에 표시 여부 결정 (getFriends와 동일한 필터링)
+                    if (friend.getStatus() == 0) {
+                        return true;
+                    } else if (friend.getStatus() == 1 && friend.getFriend().getId().equals(userId)) {
+                        return true;
+                    } else if (friend.getStatus() == 2 && friend.getUser().getId().equals(userId)) {
+                        return true;
+                    }
+                    return false;
+                })
+                .filter(friend -> {
+                    // 최근 공유일기 조회
+                    ShareDiary latestDiary = shareDiaryRepository.findLatestByGroup(friend);
+
+                    if (latestDiary == null) {
+                        // 공유일기가 없으면 작성 가능 (포함)
+                        return true;
+                    }
+
+                    // 최근 작성자가 현재 사용자인 경우 제외 (상대방 차례)
+                    return !latestDiary.getWriter().getId().equals(userId);
+                })
+                .map(friend -> {
+                    User friendUser = friend.getUser().getId().equals(userId)
+                            ? friend.getFriend()
+                            : friend.getUser();
+
+                    return WritableShareFriendResponse.of(
+                            friendUser.getId(),
+                            friendUser.getNickname()
                     );
                 })
                 .toList();

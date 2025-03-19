@@ -3,6 +3,7 @@ package com.specup.mongeul.domain.friends.controller;
 import com.specup.mongeul.domain.friends.dto.response.FriendCodeResponse;
 import com.specup.mongeul.domain.friends.dto.response.FriendNicknameResponse;
 import com.specup.mongeul.domain.friends.dto.response.FriendResponse;
+import com.specup.mongeul.domain.friends.dto.response.WritableShareFriendResponse;
 import com.specup.mongeul.domain.friends.service.FriendService;
 import com.specup.mongeul.domain.user.entity.User;
 import com.specup.mongeul.global.common.ApiResponse;
@@ -26,6 +27,12 @@ public class FriendsController {
     @GetMapping("")
     public ResponseEntity<ApiResponse<List<FriendResponse>>> getFriends(@AuthenticationPrincipal User user) {
         return ResponseEntity.ok(ApiResponse.success(friendService.getFriends(user), "친구 목록 조회 성공"));
+    }
+
+    @Operation(summary = "공유일기 작성 가능한 친구 목록 조회", description = "현재 공유일기를 작성할 수 있는 친구 목록을 조회합니다.")
+    @GetMapping("/writable")
+    public ResponseEntity<ApiResponse<List<WritableShareFriendResponse>>> getWritableShareFriends(@AuthenticationPrincipal User user) {
+        return ResponseEntity.ok(ApiResponse.success(friendService.getWritableShareFriends(user), "공유일기 작성 가능한 친구 목록 조회 성공"));
     }
 
     @Operation(summary = "친구 코드 발급", description = "친구 추가용 코드를 발급합니다.")
