@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { fetchDiaryDraft } from "@/lib/api/write-diary";
 import { Draft } from "@/types/diaryTypes";
 import DraftItem from "../atoms/DraftItem";
+import { DraftItemSkeleton } from "@/components/skeletons";
 
 interface DraftListProps {
   onClose: () => void;
@@ -39,7 +40,8 @@ export default function DraftList({ onClose }: DraftListProps) {
     );
   };
 
-  if (loading) return <div>로딩 중...</div>;
+  if (loading)
+    return [...Array(2)].map((_, index) => <DraftItemSkeleton key={index} />);
   if (error) return <div>{error}</div>;
 
   return (
@@ -54,7 +56,7 @@ export default function DraftList({ onClose }: DraftListProps) {
           />
         ))
       ) : (
-        <div className="text-xs text-gray-400 p-4 w-full h-40 flex justify-center items-center">
+        <div className="text-xs text-gray-400 p-4 w-full h-20 flex justify-center items-center">
           임시저장된 일기가 없습니다.
         </div>
       )}
