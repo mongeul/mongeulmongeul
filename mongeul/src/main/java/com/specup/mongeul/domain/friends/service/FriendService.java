@@ -1,5 +1,7 @@
 package com.specup.mongeul.domain.friends.service;
 
+import com.specup.mongeul.domain.diary.entity.ShareDiary;
+import com.specup.mongeul.domain.diary.repository.ShareDiaryRepository;
 import com.specup.mongeul.domain.friends.dto.response.FriendCodeResponse;
 import com.specup.mongeul.domain.friends.dto.response.FriendNicknameResponse;
 import com.specup.mongeul.domain.friends.dto.response.FriendResponse;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.SecureRandom;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
@@ -28,6 +31,7 @@ public class FriendService {
     private final FriendCodeStore friendCodeStore;
     private static final int CODE_LENGTH = 4;
     private final JpaFriendCodeStore jpaFriendCodeStore;
+    private final ShareDiaryRepository shareDiaryRepository;
 
     @Transactional(readOnly = true)
     public List<FriendResponse> getFriends(User user) {
@@ -56,13 +60,26 @@ public class FriendService {
                             ? friend.getFriend()
                             : friend.getUser();
 
+                    // 최근 공유 일기 조회
+                    ShareDiary latestDiary = shareDiaryRepository.findLatestByGroup(friend);
+
+                    // 기본값 설정
+                    boolean isWriter = false;
+                    LocalDate recentWriteDate = null; // 기본 날짜
+
+                    if (latestDiary != null) {
+                        // 최근 작성자가 상대방(친구)인지 확인
+                        isWriter = latestDiary.getWriter().getId().equals(friendUser.getId());
+                        recentWriteDate = latestDiary.getDate();
+                    }
+
                     return FriendResponse.of(
                             friendUser.getId(),
                             friendUser.getNickname(),
                             friend.getCount(),
                             ChronoUnit.DAYS.between(friend.getCreatedAt().toLocalDate(), LocalDateTime.now()),
-                            // TODO 일기 쓸 순서 구하는 로직 구현 예정
-                            false
+                            isWriter,
+                            recentWriteDate
                     );
                 })
                 .toList();
