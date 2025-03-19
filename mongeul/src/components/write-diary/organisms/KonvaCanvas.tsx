@@ -26,9 +26,9 @@ const KonvaCanvas = () => {
   useEffect(() => {
     if (stageRef.current) {
       setStageRef(stageRef.current);
-      console.log("✅ stageRef 설정됨:", stageRef.current);
+      console.log("stageRef 설정됨:", stageRef.current);
     } else {
-      console.warn("⚠️ stageRef가 아직 설정되지 않았습니다.");
+      console.warn("stageRef가 아직 설정되지 않았습니다.");
     }
   }, [stageRef.current]); // `stageRef.current` 변경될 때 실행
 

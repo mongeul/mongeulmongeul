@@ -11,9 +11,6 @@ export const fetchDiaries = async (
 
     const response = await apiClient(`/api/v1/diaries${query}`, {
       method: "GET",
-      headers: {
-        Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_TOKEN}`,
-      },
     });
 
     console.log("일기 데이터:", response);
@@ -33,9 +30,6 @@ export const fetchMyDiary = async (
     const query = lockPassword ? `?lockPassword=${lockPassword}` : "";
     const response = await apiClient(`/api/v1/diaries/${diaryId}${query}`, {
       method: "GET",
-      headers: {
-        Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_TOKEN}`,
-      },
     });
 
     console.log(`일기 (${diaryId}) 데이터:`, response);
