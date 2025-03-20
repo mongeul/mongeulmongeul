@@ -39,7 +39,7 @@ export default function CreateDraftButton({ groupId }: CreateDraftButtonProps) {
     redirectPath: string
   ) {
     try {
-      const response = await apiCall(); // API 응답 받기
+      const response = await apiCall();
       console.log("API 응답:", response);
 
       dispatch(resetDiary());

@@ -3,15 +3,19 @@ import DraftList from "../molecules/DraftList";
 
 interface DraftListModalProps {
   onClose: () => void;
+  groupId: number | null;
 }
 
-export default function DraftListModal({ onClose }: DraftListModalProps) {
+export default function DraftListModal({
+  onClose,
+  groupId,
+}: DraftListModalProps) {
   return (
     <WebModal padding="" onClose={onClose}>
       <div className="text-sm pb-2 flex justify-center">임시 저장 목록</div>
       <div className="w-80 max-h-96 flex flex-col items-center gap-4 overflow-y-auto scrollbar-hide">
         <div className="w-full flex-grow">
-          <DraftList onClose={onClose} />
+          <DraftList onClose={onClose} groupId={groupId} />
         </div>
       </div>
     </WebModal>

@@ -11,8 +11,8 @@ export default function WriteDiaryNavBar() {
       <SearchParamsProvider>
         {(diaryId, groupId) => (
           <div className="w-full px-0 flex flex-row gap-2">
-            <CreateDiaryButton diaryId={diaryId} groupId={null} />
-            {diaryId === null && <DraftButtons />}
+            <CreateDiaryButton diaryId={diaryId} groupId={groupId} />
+            {diaryId === null && <DraftButtons groupId={groupId} />}
           </div>
         )}
       </SearchParamsProvider>
