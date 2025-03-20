@@ -42,110 +42,81 @@ export default function CreateDiaryButton({
     privateStatus,
   } = useSelector((state: RootState) => state.diary);
 
+  // API 요청 실행 후 상태 업데이트 및 페이지 이동
+  async function handleSaveDiary(
+    apiCall: () => Promise<any>,
+    redirectPath: string
+  ) {
+    if (isSubmittingRef.current) return;
+    isSubmittingRef.current = true;
+    setIsSubmitting(true);
+
+    try {
+      await apiCall();
+      dispatch(resetDiary());
+      dispatch(resetPicture());
+
+      setTimeout(() => router.push(redirectPath), 50);
+    } catch (error) {
+      console.error("일기 저장 실패:", error);
+    } finally {
+      isSubmittingRef.current = false;
+      setIsSubmitting(false);
+    }
+  }
+
+  // 일기 데이터
+  const diaryData = {
+    title,
+    content,
+    picture: picture || "",
+    pictureLines:
+      typeof pictureLines === "string"
+        ? JSON.parse(pictureLines)
+        : pictureLines,
+    date,
+    weather,
+    feeling,
+    privateStatus,
+  };
+
+  // 제출 핸들러
   async function handleSubmit() {
     if (!title || !content || !date || !weather || !feeling || !privateStatus) {
       alert("필수 입력 항목을 모두 입력해주세요!");
       return;
     }
 
-    if (isSubmittingRef.current) return;
-    isSubmittingRef.current = true;
-    setIsSubmitting(true);
+    if (diaryId && !groupId) {
+      // 개인 일기 수정
+      return handleSaveDiary(
+        () => updateDiaryEntry(diaryData, diaryId),
+        "/diary"
+      );
+    }
 
-    try {
-      if (diaryId && groupId === null) {
-        // 개인 일기 수정
-        await updateDiaryEntry(
-          {
-            title,
-            content,
-            picture: picture || "",
-            pictureLines:
-              typeof pictureLines === "string"
-                ? JSON.parse(pictureLines)
-                : pictureLines,
-            date,
-            weather,
-            feeling,
-            privateStatus,
-          },
-          diaryId
-        );
-      } else if (diaryId === null && groupId === null) {
-        // 개인 일기 작성
-        await createDiaryEntry({
-          title,
-          content,
-          picture: picture || "",
-          pictureLines:
-            typeof pictureLines === "string"
-              ? JSON.parse(pictureLines)
-              : pictureLines,
-          date,
-          weather,
-          feeling,
-          privateStatus,
-        });
+    if (!diaryId && !groupId) {
+      // 개인 일기 작성
+      return handleSaveDiary(async () => {
+        await createDiaryEntry(diaryData);
+        if (isDraft && draftId) await deleteDiaryEntry(draftId);
+      }, "/diary");
+    }
 
-        if (isDraft && typeof draftId === "number") {
-          await deleteDiaryEntry(draftId);
-        }
-      } else if (diaryId === null && groupId) {
-        // 공유 일기 작성
-        await createSharedDiaryEntry(
-          {
-            title,
-            content,
-            picture: picture || "",
-            pictureLines:
-              typeof pictureLines === "string"
-                ? JSON.parse(pictureLines)
-                : pictureLines,
-            date,
-            weather,
-            feeling,
-            privateStatus,
-          },
-          groupId
-        );
+    if (!diaryId && groupId) {
+      // 공유 일기 작성
+      return handleSaveDiary(async () => {
+        await createSharedDiaryEntry(diaryData, groupId);
+        if (isDraft && draftId) await deleteDiaryEntry(draftId);
+      }, "/shared-diary");
+    }
 
-        if (isDraft && typeof draftId === "number") {
-          await deleteDiaryEntry(draftId);
-        }
-      } else if (diaryId !== null && groupId) {
-        // 공유 일기 수정
-        await updateSharedDiaryEntry(
-          {
-            title,
-            content,
-            picture: picture || "",
-            pictureLines:
-              typeof pictureLines === "string"
-                ? JSON.parse(pictureLines)
-                : pictureLines,
-            date,
-            weather,
-            feeling,
-            privateStatus,
-          },
-          diaryId,
-          groupId
-        );
-      }
-
-      // 상태 초기화 및 페이지 이동
-      dispatch(resetDiary());
-      dispatch(resetPicture());
-      if (groupId !== null) {
-        router.push("/diary");
-      } else {
-        router.push("/shared-diary");
-      }
-    } catch (error) {
-      console.error("일기 작성 실패:", error);
-    } finally {
-      isSubmittingRef.current = false;
-      setIsSubmitting(false);
+    if (diaryId && groupId) {
+      // 공유 일기 수정
+      return handleSaveDiary(
+        () => updateSharedDiaryEntry(diaryData, groupId, diaryId),
+        "/shared-diary"
+      );
     }
   }
 
