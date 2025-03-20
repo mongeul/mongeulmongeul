@@ -7,7 +7,9 @@ import {
   deleteDiaryEntry,
   deleteSharedDiaryEntry,
   fetchPictureLines,
+  fetchSharedPictureLines,
   verifyDiaryEntry,
+  verifySharedDiaryEntry,
 } from "@/lib/api/write-diary";
 import {
   setContent,
@@ -61,7 +63,10 @@ export default function DraftItem({
   // 임시저장 일기 라인 조회 후 이미지 변환
   const handlePictureLines = async (diaryId: number) => {
     try {
-      const response = await fetchPictureLines(diaryId);
+      const response = await (groupId
+        ? fetchSharedPictureLines(diaryId)
+        : fetchPictureLines(diaryId));
+
       const pictureLines = response.data.pictureLines;
 
       if (pictureLines?.length > 0) {
@@ -80,7 +85,9 @@ export default function DraftItem({
   // 임시저장 일기 선택
   const onSelectDraft = async (draft: Diary) => {
     try {
-      const isDiary = await verifyDiaryEntry(draft.date);
+      const isDiary = await (groupId
+        ? verifySharedDiaryEntry(draft.date, groupId)
+        : verifyDiaryEntry(draft.date));
 
       if (isDiary?.data) {
         // 이미 작성된 날짜의 임시저장 일기라면 모달 표시

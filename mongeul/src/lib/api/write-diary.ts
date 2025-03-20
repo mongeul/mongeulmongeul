@@ -188,6 +188,16 @@ export async function verifyDiaryEntry(
   });
 }
 
+// 특정 날짜 공유 일기 존재 여부 확인
+export async function verifySharedDiaryEntry(
+  today: string,
+  groupId: number
+): Promise<IsDiaryResponse> {
+  return apiClient(`/api/v1/groups/${groupId}/find?today=${today}`, {
+    method: "GET",
+  });
+}
+
 // 임시 저장된 일기 조회
 export async function fetchDiaryDraft(): Promise<DraftResponse> {
   return apiClient("/api/v1/diaries/drafts", {
