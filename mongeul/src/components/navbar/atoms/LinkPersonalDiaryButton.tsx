@@ -20,7 +20,7 @@ export default function LinkPersonalDiaryButton({
     const today = new Date().toISOString().split("T")[0];
     const isDiary = await verifyDiaryEntry(today);
 
-    if (isDiary) {
+    if (isDiary.data) {
       // 오늘 일기로 렌더링 또는 수정 페이지로 이동
       router.push(`/write-diary?id=${isDiary.data}`);
     } else {

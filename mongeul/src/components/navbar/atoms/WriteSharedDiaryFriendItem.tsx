@@ -1,17 +1,22 @@
 import Button from "@/components/common/atoms/Button";
+import { useRouter } from "next/navigation";
 
 interface WriteSharedDiaryFriendItemProps {
   nickname: string;
-  friendId: number;
+  groupId: number;
 }
 
 export default function WriteSharedDiaryFriendItem({
   nickname,
-  friendId,
+  groupId,
 }: WriteSharedDiaryFriendItemProps) {
+  const router = useRouter();
+
   const handleClick = () => {
-    console.log(`친구 클릭 ${nickname} ${friendId}`);
+    console.log(`친구 클릭 ${nickname} ${groupId}`);
+    router.push(`/write-diary?groupid=${groupId}`);
   };
+
   return (
     <Button
       width="w-full"

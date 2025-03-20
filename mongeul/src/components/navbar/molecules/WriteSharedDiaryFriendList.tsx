@@ -4,15 +4,15 @@ import { WriteSharedDiaryItemSkeleton } from "@/components/skeletons";
 
 export default function WriteSharedDiaryFriendList() {
   const [loading, setIsLoading] = useState(true);
-  const [friends, setFriends] = useState([
-    { nickname: "나", friendId: 1 },
-    { nickname: "너", friendId: 2 },
-    { nickname: "쟤", friendId: 3 },
+  const [groups, setGroups] = useState([
+    { nickname: "나", groupId: 1 },
+    { nickname: "너", groupId: 2 },
+    { nickname: "쟤", groupId: 3 },
   ]);
 
-  // useEffect(() => {
-
-  // }, [])
+  useEffect(() => {
+    setIsLoading(false);
+  }, []);
 
   if (loading)
     return (
@@ -25,11 +25,11 @@ export default function WriteSharedDiaryFriendList() {
 
   return (
     <div className="w-full flex flex-col gap-4 py-4">
-      {friends.map((friend) => (
+      {groups.map((group) => (
         <WriteSharedDiaryFriendItem
-          key={friend.friendId}
-          friendId={friend.friendId}
-          nickname={friend.nickname}
+          key={group.groupId}
+          groupId={group.groupId}
+          nickname={group.nickname}
         />
       ))}
     </div>
