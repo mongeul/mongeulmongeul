@@ -195,11 +195,32 @@ export async function fetchDiaryDraft(): Promise<DraftResponse> {
   });
 }
 
-// 임시 저장된 일기 생성
+// 임시 저장된 공유일기 조회
+export async function fetchSharedDiaryDraft(
+  groupId: number
+): Promise<DraftResponse> {
+  return apiClient(`/api/v1/groups/${groupId}/share-diaries/drafts`, {
+    method: "GET",
+  });
+}
+
+// 임시 저장 일기 생성
 export async function createDiaryDraft(
   data: DraftRequest
 ): Promise<DraftResponse> {
   return apiClient("/api/v1/diaries/drafts", {
+    method: "POST",
+    body: JSON.stringify(data),
+    headers: { "Content-Type": "application/json" },
+  });
+}
+
+// 임시 저장 공유일기 생성
+export async function createSharedDiaryDraft(
+  data: DraftRequest,
+  groupId: number
+): Promise<DraftResponse> {
+  return apiClient(`/api/v1/groups/${groupId}/share-diaries/drafts`, {
     method: "POST",
     body: JSON.stringify(data),
     headers: { "Content-Type": "application/json" },
