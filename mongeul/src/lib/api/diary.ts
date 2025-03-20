@@ -11,12 +11,9 @@ export const fetchDiaries = async (
 
     const response = await apiClient(`/api/v1/diaries${query}`, {
       method: "GET",
-      headers: {
-        Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_TOKEN}`,
-      },
     });
 
-    console.log("일기 데이터:", response);
+    // console.log("일기 데이터:", response);
     return response.success ? response.data : [];
   } catch (error) {
     console.error("일기 조회 오류:", error);
@@ -33,15 +30,17 @@ export const fetchMyDiary = async (
     const query = lockPassword ? `?lockPassword=${lockPassword}` : "";
     const response = await apiClient(`/api/v1/diaries/${diaryId}${query}`, {
       method: "GET",
-      headers: {
-        Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_TOKEN}`,
-      },
     });
 
     console.log(`일기 (${diaryId}) 데이터:`, response);
-    return response.success ? response.data : null;
+
+    if (!response.success) {
+      throw new Error("비밀번호가 틀렸습니다."); // ✅ 명확한 오류 던지기
+    }
+
+    return response.data;
   } catch (error) {
     console.error(`일기 (${diaryId}) 조회 오류:`, error);
-    return null;
+    throw error; // ✅ 여기서 throw해야 `catch` 블록에서 감지 가능
   }
 };
