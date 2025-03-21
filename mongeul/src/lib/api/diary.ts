@@ -13,7 +13,7 @@ export const fetchDiaries = async (
       method: "GET",
     });
 
-    console.log("일기 데이터:", response);
+    // console.log("일기 데이터:", response);
     return response.success ? response.data : [];
   } catch (error) {
     console.error("일기 조회 오류:", error);
@@ -33,9 +33,14 @@ export const fetchMyDiary = async (
     });
 
     console.log(`일기 (${diaryId}) 데이터:`, response);
-    return response.success ? response.data : null;
+
+    if (!response.success) {
+      throw new Error("비밀번호가 틀렸습니다."); // ✅ 명확한 오류 던지기
+    }
+
+    return response.data;
   } catch (error) {
     console.error(`일기 (${diaryId}) 조회 오류:`, error);
-    return null;
+    throw error; // ✅ 여기서 throw해야 `catch` 블록에서 감지 가능
   }
 };

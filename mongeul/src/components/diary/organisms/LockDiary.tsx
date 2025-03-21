@@ -1,4 +1,3 @@
-"use client";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
@@ -12,6 +11,21 @@ interface LockDiaryProps {
 const LockDiary: React.FC<LockDiaryProps> = ({ onPasswordSubmit }) => {
   const { selectedDiary } = useSelector((state: RootState) => state.calendar);
   const [password, setPassword] = useState("");
+  const [error, setError] = useState<string | null>(null);
+
+  const handleSubmit = async () => {
+    if (password.length !== 4) {
+      setError("비밀번호는 4자리여야 합니다.");
+      return;
+    }
+    setError(null);
+
+    try {
+      await onPasswordSubmit(password);
+    } catch (err) {
+      setError("비밀번호가 틀렸습니다.");
+    }
+  };
 
   if (selectedDiary === "LOCK") {
     return (
@@ -23,11 +37,13 @@ const LockDiary: React.FC<LockDiaryProps> = ({ onPasswordSubmit }) => {
           {/* ✅ 비밀번호 입력 UI */}
           <DiaryLockInput onPasswordChange={setPassword} />
 
-          {/* ✅ 비밀번호 4자리 입력되면 "확인" 버튼 활성화 */}
+          {/* ❗️ 비밀번호 오류 메시지 표시 */}
+          {error && <p className="text-red-500">{error}</p>}
+
           <button
-            onClick={() => onPasswordSubmit(password)}
+            onClick={handleSubmit}
             className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg"
-            disabled={password.length !== 4} // 4자리 입력해야 버튼 활성화
+            disabled={password.length !== 4}
           >
             확인
           </button>
@@ -35,6 +51,8 @@ const LockDiary: React.FC<LockDiaryProps> = ({ onPasswordSubmit }) => {
       </Card>
     );
   }
+
+  return null;
 };
 
 export default LockDiary;
