@@ -61,6 +61,21 @@ const pictureSlice = createSlice({
     updateLines: (state, action: PayloadAction<PictureLine[]>) => {
       state.lines = action.payload;
     },
+    updateLinesWithHistory: (
+      state,
+      action: PayloadAction<{
+        newLines: PictureLine[];
+        beforeLines?: PictureLine[];
+      }>
+    ) => {
+      const { newLines, beforeLines } = action.payload;
+      const backup = beforeLines ?? [...state.lines]; // 지우기 전 상태가 있으면 사용, 없으면 현재 상태
+
+      pushWithLimit(state.history, backup, MAX_HISTORY_LENGTH);
+      state.lines = newLines;
+      state.redoStack = [];
+    },
+
     undo: (state) => {
       if (state.history.length > 0) {
         const lastState = state.history.pop();
@@ -90,6 +105,7 @@ export const {
   addLine,
   removeLine,
   updateLines,
+  updateLinesWithHistory,
   undo,
   redo,
   resetPicture,

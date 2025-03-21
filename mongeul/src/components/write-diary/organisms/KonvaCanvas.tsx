@@ -2,10 +2,15 @@ import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { RootState } from "@/store/store";
 import { useDispatch, useSelector } from "react-redux";
-import { addLine, updateLines } from "@/store/pictureSlice";
+import {
+  addLine,
+  updateLines,
+  updateLinesWithHistory,
+} from "@/store/pictureSlice";
 import Card from "@/components/common/atoms/Card";
 import { setStageRef } from "@/utils/stateRef";
 import { Stage, Layer, Line } from "react-konva";
+import { PictureLine } from "@/types/pictureTypes";
 
 const KonvaCanvas = () => {
   const dispatch = useDispatch();
@@ -16,6 +21,7 @@ const KonvaCanvas = () => {
   const stageRef = useRef<any>(null);
   const [isDrawing, setIsDrawing] = useState<boolean>(false);
   const [isClient, setIsClient] = useState(false);
+  const prevLinesBeforeErase = useRef<PictureLine[] | null>(null);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -27,12 +33,10 @@ const KonvaCanvas = () => {
     if (stageRef.current) {
       setStageRef(stageRef.current);
       console.log("stageRef 설정됨:", stageRef.current);
-    } else {
-      console.warn("stageRef가 아직 설정되지 않았습니다.");
     }
-  }, [stageRef.current]); // `stageRef.current` 변경될 때 실행
+  }, [stageRef.current]);
 
-  if (!isClient) return null; // 서버에서 실행되지 않도록 방어
+  if (!isClient) return null;
 
   const changeOpacity = (color: string, opacity: number) => {
     if (color.startsWith("rgba")) return color;
@@ -47,13 +51,14 @@ const KonvaCanvas = () => {
 
   // 그림 그리기 시작
   const handleMouseDown = (e: any) => {
+    setIsDrawing(true);
+
     if (selectedBrush === "eraser") {
-      setIsDrawing(true);
-      handleErase(e); // 마우스를 누르자마자 바로 지우기 실행
+      prevLinesBeforeErase.current = [...lines];
+      handleErase(e, false);
       return;
     }
 
-    setIsDrawing(true);
     const pos = e.target.getStage().getPointerPosition();
     if (!pos) return;
 
@@ -64,11 +69,12 @@ const KonvaCanvas = () => {
     );
   };
 
-  // 그리는 중 or 지우는 중
+  // 그리는 중
   const handleMouseMove = (e: any) => {
     if (!isDrawing) return;
+
     if (selectedBrush === "eraser") {
-      handleErase(e);
+      handleErase(e, false);
       return;
     }
 
@@ -93,16 +99,14 @@ const KonvaCanvas = () => {
     dispatch(updateLines(newLines));
   };
 
-  // 지우개
-  const handleErase = (e: any) => {
+  // 지우기
+  const handleErase = (e: any, shouldSaveHistory: boolean) => {
     const stage = stageRef.current;
     if (!stage) return;
 
-    // 현재 마우스 위치
     const erasedPosition = stage.getPointerPosition();
     if (!erasedPosition) return;
 
-    // 마우스가 지나간 위치 근처의 선을 찾아서 삭제
     const newLines = lines.filter(
       (line) =>
         !line.points.some(
@@ -112,11 +116,24 @@ const KonvaCanvas = () => {
         )
     );
 
-    dispatch(updateLines(newLines));
+    if (shouldSaveHistory) {
+      dispatch(
+        updateLinesWithHistory({
+          newLines,
+          beforeLines: prevLinesBeforeErase.current || [],
+        })
+      );
+      prevLinesBeforeErase.current = null;
+    } else {
+      dispatch(updateLines(newLines));
+    }
   };
 
   // 그리기 또는 지우기 종료
-  const handleMouseUp = () => {
+  const handleMouseUp = (e: any) => {
+    if (isDrawing && selectedBrush === "eraser") {
+      handleErase(e, true);
+    }
     setIsDrawing(false);
   };
 
