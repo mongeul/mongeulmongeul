@@ -4,7 +4,7 @@ const KonvaCanvas = dynamic(() => import("./KonvaCanvas"), { ssr: false });
 
 export default function Canvas() {
   return (
-    <div>
+    <div className="w-full">
       <KonvaCanvas />
     </div>
   );

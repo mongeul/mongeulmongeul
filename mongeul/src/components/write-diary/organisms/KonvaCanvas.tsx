@@ -139,30 +139,32 @@ const KonvaCanvas = () => {
 
   return (
     <Card padding="">
-      <div>
-        <Stage
-          width={500}
-          height={500}
-          ref={stageRef}
-          onMouseDown={handleMouseDown}
-          onMouseMove={handleMouseMove}
-          onMouseUp={handleMouseUp}
-          onMouseLeave={handleMouseUp}
-        >
-          <Layer>
-            {lines.map((line, i) => (
-              <Line
-                key={i}
-                points={line.points.flat()}
-                stroke={line.stroke}
-                strokeWidth={line.strokeWidth}
-                tension={0.5}
-                lineCap="round"
-                lineJoin="round"
-              />
-            ))}
-          </Layer>
-        </Stage>
+      <div className="w-full overflow-x-auto">
+        <div className="w-[768px] flex-shrink-0">
+          <Stage
+            width={768}
+            height={500}
+            ref={stageRef}
+            onMouseDown={handleMouseDown}
+            onMouseMove={handleMouseMove}
+            onMouseUp={handleMouseUp}
+            onMouseLeave={handleMouseUp}
+          >
+            <Layer>
+              {lines.map((line, i) => (
+                <Line
+                  key={i}
+                  points={line.points.flat()}
+                  stroke={line.stroke}
+                  strokeWidth={line.strokeWidth}
+                  tension={0.5}
+                  lineCap="round"
+                  lineJoin="round"
+                />
+              ))}
+            </Layer>
+          </Stage>
+        </div>
       </div>
     </Card>
   );
