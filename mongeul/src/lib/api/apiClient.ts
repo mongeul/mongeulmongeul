@@ -1,5 +1,4 @@
 const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "";
-const TOKEN = process.env.NEXT_PUBLIC_API_TOKEN || "";
 
 export const getCookie = (name: string): string | null => {
   const match = document.cookie.match(new RegExp(`(^| )${name}=([^;]+)`));
