@@ -5,8 +5,11 @@ import { formatDate } from "@/utils/formatDate";
 import CloseIcon from "@/assets/icons/close.svg";
 import {
   deleteDiaryEntry,
+  deleteSharedDiaryEntry,
   fetchPictureLines,
+  fetchSharedPictureLines,
   verifyDiaryEntry,
+  verifySharedDiaryEntry,
 } from "@/lib/api/write-diary";
 import {
   setContent,
@@ -29,12 +32,14 @@ import UpdateAlertModal from "../molecules/UpdateAlertModal";
 
 interface DraftItemProps {
   draft: Draft;
+  groupId: number | null;
   onDelete: (diaryId: number) => void;
   onClose: () => void;
 }
 
 export default function DraftItem({
   draft,
+  groupId,
   onDelete,
   onClose,
 }: DraftItemProps) {
@@ -46,7 +51,9 @@ export default function DraftItem({
   // 임시저장 일기 삭제
   const handleDelete = async (diaryId: number) => {
     try {
-      await deleteDiaryEntry(diaryId);
+      await (groupId
+        ? deleteSharedDiaryEntry(diaryId)
+        : deleteDiaryEntry(diaryId));
       onDelete(diaryId);
     } catch (error) {
       console.error("일기 삭제 실패:", error);
@@ -55,23 +62,19 @@ export default function DraftItem({
 
   // 임시저장 일기 라인 조회 후 이미지 변환
   const handlePictureLines = async (diaryId: number) => {
-    console.log("임시저장 일기 불러오기");
     try {
-      const pictureLinesResponse = await fetchPictureLines(diaryId);
-      console.log(pictureLinesResponse);
+      const response = await (groupId
+        ? fetchSharedPictureLines(diaryId)
+        : fetchPictureLines(diaryId));
 
-      if (
-        pictureLinesResponse.data.pictureLines &&
-        pictureLinesResponse.data.pictureLines.length > 0
-      ) {
-        // Redux 상태 업데이트
-        dispatch(setPictureLines(pictureLinesResponse.data.pictureLines));
-        dispatch(updateLines(pictureLinesResponse.data.pictureLines));
+      const pictureLines = response.data.pictureLines;
+
+      if (pictureLines?.length > 0) {
+        dispatch(setPictureLines(pictureLines));
+        dispatch(updateLines(pictureLines));
 
         // 캔버스를 만들고 이미지 변환 후 Redux 저장
-        const imageDataUrl = await convertLinesToImage(
-          pictureLinesResponse.data.pictureLines
-        );
+        const imageDataUrl = await convertLinesToImage(pictureLines);
         dispatch(setPicture(imageDataUrl));
       }
     } catch (error) {
@@ -81,21 +84,26 @@ export default function DraftItem({
 
   // 임시저장 일기 선택
   const onSelectDraft = async (draft: Diary) => {
-    const isDiary = await verifyDiaryEntry(draft.date);
+    try {
+      const isDiary = await (groupId
+        ? verifySharedDiaryEntry(draft.date, groupId)
+        : verifyDiaryEntry(draft.date));
 
-    if (isDiary?.data) {
-      // 이미 작성된 날짜의 임시저장 일기라면 모달 표시
-      setPendingDiaryId(isDiary.data);
-      setIsModalOpen(true);
-    } else {
-      // 새롭게 작성하는 경우
-      proceedToEdit(draft);
+      if (isDiary?.data) {
+        // 이미 작성된 날짜의 임시저장 일기라면 모달 표시
+        setPendingDiaryId(isDiary.data);
+        setIsModalOpen(true);
+      } else {
+        proceedToEdit(draft);
+      }
+    } catch (error) {
+      console.error("일기 존재 여부 확인 실패", error);
     }
   };
 
   // 확인 버튼을 눌렀을 때만 페이지 이동
-  const proceedToEdit = (draft: Diary) => {
-    handlePictureLines(draft.diaryId);
+  const proceedToEdit = async (draft: Diary) => {
+    await handlePictureLines(draft.diaryId);
     dispatch(setTitle(draft.title));
     dispatch(setContent(draft.content));
     dispatch(setDate(draft.date));
@@ -106,16 +114,15 @@ export default function DraftItem({
     dispatch(setDraftId(draft.diaryId));
 
     onClose();
-
     if (pendingDiaryId) {
-      router.push(`/write-diary?id=${pendingDiaryId}`);
+      router.push(`/write-diary?id=${pendingDiaryId ?? draft.diaryId}`);
       setPendingDiaryId(null);
     }
   };
 
   return (
     <div className="w-full flex flex-row gap-2 p-4 border-b border-gray-100 last:border-b-0 relative">
-      {/* 제목, 날짜, 내용 클릭 가능 영역 */}
+      {/* 클릭 가능 영역 */}
       <div
         className="w-full flex flex-col gap-2 cursor-pointer"
         onClick={() => onSelectDraft(draft)}

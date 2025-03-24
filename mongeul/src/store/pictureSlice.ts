@@ -10,13 +10,21 @@ interface PictureState {
   redoStack: Array<PictureLine[]>;
 }
 
+const MAX_HISTORY_LENGTH = 30;
+
 const initialState: PictureState = {
   selectedColor: "#000000",
   selectedBrushSize: 5,
   selectedBrush: "pen",
-  lines: [] as PictureLine[],
-  history: [] as Array<PictureLine[]>,
-  redoStack: [] as Array<PictureLine[]>,
+  lines: [],
+  history: [],
+  redoStack: [],
+};
+
+// 히스토리/리도스택 최대 길이 제한
+const pushWithLimit = <T>(arr: T[], item: T, limit: number) => {
+  if (arr.length >= limit) arr.shift();
+  arr.push(item);
 };
 
 const pictureSlice = createSlice({
@@ -41,22 +49,38 @@ const pictureSlice = createSlice({
         stroke: state.selectedColor,
         strokeWidth: state.selectedBrushSize,
       };
-      state.history.push([...state.lines]);
+
+      pushWithLimit(state.history, [...state.lines], MAX_HISTORY_LENGTH);
       state.lines.push(newLine);
       state.redoStack = [];
     },
     removeLine: (state, action: PayloadAction<number>) => {
-      state.history.push([...state.lines]);
+      pushWithLimit(state.history, [...state.lines], MAX_HISTORY_LENGTH);
       state.lines = state.lines.filter((_, index) => index !== action.payload);
     },
     updateLines: (state, action: PayloadAction<PictureLine[]>) => {
       state.lines = action.payload;
     },
+    updateLinesWithHistory: (
+      state,
+      action: PayloadAction<{
+        newLines: PictureLine[];
+        beforeLines?: PictureLine[];
+      }>
+    ) => {
+      const { newLines, beforeLines } = action.payload;
+      const backup = beforeLines ?? [...state.lines]; // 지우기 전 상태가 있으면 사용, 없으면 현재 상태
+
+      pushWithLimit(state.history, backup, MAX_HISTORY_LENGTH);
+      state.lines = newLines;
+      state.redoStack = [];
+    },
+
     undo: (state) => {
       if (state.history.length > 0) {
         const lastState = state.history.pop();
         if (lastState) {
-          state.redoStack.push([...state.lines]);
+          pushWithLimit(state.redoStack, [...state.lines], MAX_HISTORY_LENGTH);
           state.lines = lastState;
         }
       }
@@ -65,7 +89,7 @@ const pictureSlice = createSlice({
       if (state.redoStack.length > 0) {
         const redoState = state.redoStack.pop();
         if (redoState) {
-          state.history.push([...state.lines]);
+          pushWithLimit(state.history, [...state.lines], MAX_HISTORY_LENGTH);
           state.lines = redoState;
         }
       }
@@ -81,8 +105,10 @@ export const {
   addLine,
   removeLine,
   updateLines,
+  updateLinesWithHistory,
   undo,
   redo,
   resetPicture,
 } = pictureSlice.actions;
+
 export default pictureSlice.reducer;
