@@ -7,7 +7,7 @@ export async function convertLinesToImage(
   return new Promise((resolve) => {
     // 가상 Konva Stage 생성 (DOM 없이 JS에서만 존재)
     const stage = new Konva.Stage({
-      width: 500,
+      width: 768,
       height: 500,
       container: document.createElement("div"), // DOM에 추가하지 않고 메모리상에서만 사용
     });

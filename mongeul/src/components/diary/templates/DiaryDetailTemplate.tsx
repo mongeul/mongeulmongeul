@@ -1,35 +1,52 @@
 "use client";
 import { useParams } from "next/navigation";
-import Diary from "@/components/diary/organisms/Diary";
-import LockDiary from "@/components/diary/organisms/LockDiary";
-import { fetchMyDiary } from "@/lib/api/diary";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { setSelectedDiary } from "@/store/calendarSlice";
+import { fetchMyDiary } from "@/lib/api/diary";
+import Diary from "@/components/diary/organisms/Diary";
+import DiaryDetail from "../organisms/DiaryDetail";
+import LockDiary from "../organisms/LockDiary";
 
 export default function DiaryDetailTemplate() {
-  const { id } = useParams(); // ✅ 현재 페이지의 ID 가져오기
+  const { id } = useParams();
   const dispatch = useDispatch();
   const selectedDiary = useSelector(
     (state: RootState) => state.calendar.selectedDiary
   );
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isMobile, setIsMobile] = useState<boolean>(false);
   const [password, setPassword] = useState<string>("");
+  const [pwError, setPwError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!id) return; // ✅ ID가 없으면 실행하지 않음
+    const checkScreenSize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    checkScreenSize();
+    window.addEventListener("resize", checkScreenSize);
+    return () => window.removeEventListener("resize", checkScreenSize);
+  }, []);
+
+  useEffect(() => {
+    if (!id) return;
 
     const fetchDiary = async () => {
       setLoading(true);
       try {
-        console.log("📌 Fetching Diary ID:", id); // ✅ 로그 추가
-        const diary = await fetchMyDiary(Number(id)); // ✅ API 호출
-        dispatch(setSelectedDiary(diary));
+        const diary = await fetchMyDiary(Number(id));
+        if (!diary) {
+          dispatch(setSelectedDiary("LOCK"));
+        } else {
+          dispatch(setSelectedDiary(diary));
+        }
       } catch (err) {
-        console.error("🚨 Diary Fetch Error:", err);
-        setError("일기를 불러오는 중 오류가 발생했습니다.");
+        console.error("Diary Fetch Error:", err);
+        dispatch(setSelectedDiary("LOCK"));
       } finally {
         setLoading(false);
       }
@@ -38,32 +55,43 @@ export default function DiaryDetailTemplate() {
     fetchDiary();
   }, [id, dispatch]);
 
-  // ✅ 비밀번호 입력 후 API 호출
-  const handlePasswordSubmit = async (password: string) => {
-    setLoading(true);
+  const handlePasswordSubmit = async () => {
+    if (password.length !== 4) {
+      setPwError("비밀번호는 4자리여야 합니다.");
+      return;
+    }
+
     try {
+      setPwError(null);
       const diary = await fetchMyDiary(Number(id), password);
       dispatch(setSelectedDiary(diary));
-    } catch (err) {
-      console.error("🚨 비밀번호 입력 오류:", err);
-      setError("비밀번호가 틀렸습니다.");
-    } finally {
-      setLoading(false);
+    } catch {
+      setPwError("비밀번호가 틀렸습니다.");
+      setPassword("");
     }
   };
 
-  if (loading) return <p>📌 로딩 중...</p>;
-  if (error) return <p className="text-red-500">{error}</p>;
-  if (!selectedDiary) return <p>❌ 일기를 찾을 수 없습니다.</p>;
+  // 🔐 LOCK 상태일 때는 바로 LockDiary 렌더링
+  if (selectedDiary === "LOCK") {
+    return (
+      <LockDiary
+        password={password}
+        onPasswordChange={setPassword}
+        onPasswordSubmit={handlePasswordSubmit}
+        error={pwError}
+      />
+    );
+  }
 
-  return (
+  // ✅ 아닌 경우, 모바일이면 DiaryDetail / 웹이면 Diary
+  return isMobile ? (
+    <div className="w-full flex flex-col items-center">
+      <DiaryDetail />
+    </div>
+  ) : (
     <div className="w-full flex flex-col justify-center items-center gap-6">
       <div className="flex-1">
-        {selectedDiary.privateStatus === "LOCK" ? (
-          <LockDiary onPasswordSubmit={handlePasswordSubmit} />
-        ) : (
-          <Diary />
-        )}
+        <Diary />
       </div>
     </div>
   );

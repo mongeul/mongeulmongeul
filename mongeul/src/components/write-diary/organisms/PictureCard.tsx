@@ -29,9 +29,9 @@ export default function PictureCard({ diaryId }: { diaryId: number | null }) {
       const pictureLinesResponse = await fetchPictureLines(diaryId);
       console.log(pictureLinesResponse);
 
-      if (pictureLinesResponse.pictureLines) {
-        dispatch(setPictureLines(pictureLinesResponse.pictureLines));
-        dispatch(updateLines(pictureLinesResponse.pictureLines));
+      if (pictureLinesResponse.data.pictureLines) {
+        dispatch(setPictureLines(pictureLinesResponse.data.pictureLines));
+        dispatch(updateLines(pictureLinesResponse.data.pictureLines));
       }
     } catch (error) {
       console.error("일기 라인 불러오기 실패:", error);

@@ -31,7 +31,7 @@ export default function DiaryTemplate() {
 
     const fetchDiaryData = async () => {
       const diaries = await fetchDiaries(currentMonth.year, currentMonth.month);
-      // console.log("일기데이터", diaries);
+      console.log("일기데이터", diaries);
       dispatch(
         setDiaryEntries(
           diaries.map((diary) => ({
@@ -65,10 +65,10 @@ export default function DiaryTemplate() {
       return;
     }
 
-    // ✅ 상태 초기화 후 이동
-    dispatch(setSelectedDiary(null)); // 🔥 이동 전에 초기화
+    dispatch(setSelectedDiary(null));
 
     if (entry.privateStatus === "LOCK") {
+      dispatch(setSelectedDiary("LOCK"));
       setCurrentDiaryId(entry.diaryId);
       router.push(`/diary/${entry.diaryId}`);
     } else {
@@ -76,15 +76,15 @@ export default function DiaryTemplate() {
     }
   };
 
-  const handlePasswordSubmit = async (password: string) => {
-    if (!currentDiaryId) return;
+  // const handlePasswordSubmit = async (password: string) => {
+  //   if (!currentDiaryId) return;
 
-    const diary = await fetchMyDiary(currentDiaryId, password);
-    dispatch(setSelectedDiary(diary));
-  };
+  //   const diary = await fetchMyDiary(currentDiaryId, password);
+  //   dispatch(setSelectedDiary(diary));
+  // };
 
   return (
-    <div className="w-full flex flex-col justify-center items-center gap-6">
+    <div className="w-full flex flex-col justify-start items-center gap-6">
       <Calendar onSelectDate={handleDateSelect} />
     </div>
   );

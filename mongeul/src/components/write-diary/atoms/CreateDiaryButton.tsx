@@ -2,9 +2,11 @@
 
 import Button from "@/components/common/atoms/Button";
 import {
-  deleteDraft,
-  submitDiary,
-  submitUpdateDiary,
+  createDiaryEntry,
+  createSharedDiaryEntry,
+  deleteDiaryEntry,
+  updateDiaryEntry,
+  updateSharedDiaryEntry,
 } from "@/lib/api/write-diary";
 import { resetDiary } from "@/store/diarySlice";
 import { resetPicture } from "@/store/pictureSlice";
@@ -16,9 +18,13 @@ import { useRouter } from "next/navigation";
 
 interface CreateDiaryButtonProps {
   diaryId: number | null;
+  groupId: number | null;
 }
 
-export default function CreateDiaryButton({ diaryId }: CreateDiaryButtonProps) {
+export default function CreateDiaryButton({
+  diaryId,
+  groupId,
+}: CreateDiaryButtonProps) {
   const router = useRouter();
   const isSubmittingRef = useRef<boolean>(false);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
@@ -36,69 +42,86 @@ export default function CreateDiaryButton({ diaryId }: CreateDiaryButtonProps) {
     privateStatus,
   } = useSelector((state: RootState) => state.diary);
 
+  // API 요청 실행 후 상태 업데이트 및 페이지 이동
+  async function handleSaveDiary(
+    apiCall: () => Promise<any>,
+    redirectPath: string
+  ) {
+    if (isSubmittingRef.current) return;
+    isSubmittingRef.current = true;
+    setIsSubmitting(true);
+
+    try {
+      await apiCall();
+      dispatch(resetDiary());
+      dispatch(resetPicture());
+
+      setTimeout(() => router.push(redirectPath), 50);
+    } catch (error) {
+      console.error("일기 저장 실패:", error);
+    } finally {
+      isSubmittingRef.current = false;
+      setIsSubmitting(false);
+    }
+  }
+
+  // 일기 데이터
+  const diaryData = {
+    title,
+    content,
+    picture: picture || "",
+    pictureLines:
+      typeof pictureLines === "string"
+        ? JSON.parse(pictureLines)
+        : pictureLines,
+    date,
+    weather,
+    feeling,
+    privateStatus,
+  };
+
+  // 제출 핸들러
   async function handleSubmit() {
     if (!title || !content || !date || !weather || !feeling || !privateStatus) {
       alert("필수 입력 항목을 모두 입력해주세요!");
       return;
     }
 
-    if (isSubmittingRef.current) return;
-    isSubmittingRef.current = true;
-    setIsSubmitting(true);
+    if (diaryId && !groupId) {
+      // 개인 일기 수정
+      return handleSaveDiary(
+        () => updateDiaryEntry(diaryData, diaryId),
+        "/diary"
+      );
+    }
 
-    try {
-      if (diaryId) {
-        await submitUpdateDiary(
-          {
-            title,
-            content,
-            picture: picture || "",
-            pictureLines:
-              typeof pictureLines === "string"
-                ? JSON.parse(pictureLines)
-                : pictureLines,
-            date,
-            weather,
-            feeling,
-            privateStatus,
-          },
-          diaryId
-        );
-      } else {
-        await submitDiary({
-          title,
-          content,
-          picture: picture || "",
-          pictureLines:
-            typeof pictureLines === "string"
-              ? JSON.parse(pictureLines)
-              : pictureLines,
-          date,
-          weather,
-          feeling,
-          privateStatus,
-        });
+    if (!diaryId && !groupId) {
+      // 개인 일기 작성
+      return handleSaveDiary(async () => {
+        await createDiaryEntry(diaryData);
+        if (isDraft && draftId) await deleteDiaryEntry(draftId);
+      }, "/diary");
+    }
 
-        if (isDraft && typeof draftId === "number") {
-          await deleteDraft(draftId);
-        }
-      }
+    if (!diaryId && groupId) {
+      // 공유 일기 작성
+      return handleSaveDiary(async () => {
+        await createSharedDiaryEntry(diaryData, groupId);
+        if (isDraft && draftId) await deleteDiaryEntry(draftId);
+      }, "/shared-diary");
+    }
 
-      await Promise.all([dispatch(resetDiary()), dispatch(resetPicture())]);
-      router.push("/diary");
-    } catch (error) {
-      console.error("일기 작성 실패:", error);
-    } finally {
-      setTimeout(() => {
-        isSubmittingRef.current = false;
-        setIsSubmitting(false);
-      }, 500);
+    if (diaryId && groupId) {
+      // 공유 일기 수정
+      return handleSaveDiary(
+        () => updateSharedDiaryEntry(diaryData, groupId, diaryId),
+        "/shared-diary"
+      );
     }
   }
 
   return (
     <>
-      {/* 일기 작성중 */}
       {isSubmitting && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 z-50">
           <DiarySubmitSpinner />

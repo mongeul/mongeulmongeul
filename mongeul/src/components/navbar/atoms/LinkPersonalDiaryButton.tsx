@@ -1,7 +1,7 @@
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { ReactElement } from "react";
-import { fetchIsWrite } from "@/lib/api/write-diary";
+import { verifyDiaryEntry } from "@/lib/api/write-diary";
 
 interface LinkPersonalDiaryButtonProps {
   text: string;
@@ -18,9 +18,9 @@ export default function LinkPersonalDiaryButton({
 
   const handleClick = async () => {
     const today = new Date().toISOString().split("T")[0];
-    const isDiary = await fetchIsWrite(today);
+    const isDiary = await verifyDiaryEntry(today);
 
-    if (isDiary) {
+    if (isDiary.data) {
       // 오늘 일기로 렌더링 또는 수정 페이지로 이동
       router.push(`/write-diary?id=${isDiary.data}`);
     } else {
