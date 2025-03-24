@@ -14,7 +14,7 @@ const DiaryDetail: React.FC = () => {
   const { selectedDiary } = useSelector((state: RootState) => state.calendar);
   const diaryData = selectedDiary === "LOCK" ? null : (selectedDiary as Diary);
   return (
-    <div>
+    <div className="w-full">
       {diaryData ? <DiaryDetailContainer diary={diaryData} /> : <div></div>}
     </div>
   );
