@@ -1,12 +1,20 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Friend } from "@/lib/api/shared-diary";
 
+interface SharedDiaryEntry {
+  date: string;
+  diaryId: number;
+  privateStatus: string;
+}
+
 interface ShareDiaryState {
   friends: Friend[];
+  sharedDiaryEntries: SharedDiaryEntry[];
 }
 
 const initialState: ShareDiaryState = {
   friends: [],
+  sharedDiaryEntries: [],
 };
 
 export const shareDiarySlice = createSlice({
@@ -19,8 +27,15 @@ export const shareDiarySlice = createSlice({
     updateFriendOrder: (state, action: PayloadAction<Friend[]>) => {
       state.friends = action.payload;
     },
+    setSharedDiaryEntries: (
+      state,
+      action: PayloadAction<SharedDiaryEntry[]>
+    ) => {
+      state.sharedDiaryEntries = action.payload;
+    },
   },
 });
 
-export const { setFriends, updateFriendOrder } = shareDiarySlice.actions;
+export const { setFriends, updateFriendOrder, setSharedDiaryEntries } =
+  shareDiarySlice.actions;
 export default shareDiarySlice.reducer;

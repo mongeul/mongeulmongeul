@@ -2,6 +2,7 @@
 
 import { useParams } from "next/navigation";
 import Calendar from "@/components/calendar/organisms/Calendar";
+import ShareDiaryTemplate from "@/components/shared-diary/templates/SharedDiaryTemplate";
 
 export default function SharedDiaryDetailPage() {
   const params = useParams();
@@ -14,7 +15,7 @@ export default function SharedDiaryDetailPage() {
 
   return (
     <div>
-      <Calendar onSelectDate={handleSelectDate} />
+      <ShareDiaryTemplate />
     </div>
   );
 }

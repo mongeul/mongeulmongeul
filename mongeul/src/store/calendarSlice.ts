@@ -12,6 +12,7 @@ interface CalendarState {
   selectedDiary: Diary | "LOCK" | null;
   currentMonth: { year: number; month: number };
   diaryEntries: DiaryEntry[];
+  sharedDiaryEntries: DiaryEntry[];
 }
 
 const today = new Date();
@@ -23,6 +24,7 @@ const initialState: CalendarState = {
     month: today.getMonth() + 1,
   },
   diaryEntries: [],
+  sharedDiaryEntries: [],
 };
 
 const calendarSlice = createSlice({
@@ -44,6 +46,9 @@ const calendarSlice = createSlice({
     setDiaryEntries: (state, action: PayloadAction<DiaryEntry[]>) => {
       state.diaryEntries = action.payload;
     },
+    setSharedDiaryEntries: (state, action: PayloadAction<DiaryEntry[]>) => {
+      state.sharedDiaryEntries = action.payload;
+    },
   },
 });
 
@@ -52,5 +57,6 @@ export const {
   setSelectedDiary,
   setCurrentMonth,
   setDiaryEntries,
+  setSharedDiaryEntries,
 } = calendarSlice.actions;
 export default calendarSlice.reducer;
