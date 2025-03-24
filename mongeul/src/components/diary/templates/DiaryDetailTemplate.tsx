@@ -1,13 +1,13 @@
 "use client";
 import { useParams } from "next/navigation";
-import Diary from "@/components/diary/organisms/Diary";
-import DiaryDetail from "../organisms/DiaryDetail";
-import LockDiary from "@/components/diary/organisms/LockDiary";
-import { fetchMyDiary } from "@/lib/api/diary";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { setSelectedDiary } from "@/store/calendarSlice";
+import { fetchMyDiary } from "@/lib/api/diary";
+import Diary from "@/components/diary/organisms/Diary";
+import DiaryDetail from "../organisms/DiaryDetail";
+import LockDiary from "../organisms/LockDiary";
 
 export default function DiaryDetailTemplate() {
   const { id } = useParams();
@@ -15,47 +15,37 @@ export default function DiaryDetailTemplate() {
   const selectedDiary = useSelector(
     (state: RootState) => state.calendar.selectedDiary
   );
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [password, setPassword] = useState<string>("");
-
-  // ✅ 모바일 감지 상태
   const [isMobile, setIsMobile] = useState<boolean>(false);
+  const [password, setPassword] = useState<string>("");
+  const [pwError, setPwError] = useState<string | null>(null);
 
   useEffect(() => {
-    // ✅ 초기 화면 크기 설정
     const checkScreenSize = () => {
-      setIsMobile(window.innerWidth <= 768); // 768px 이하이면 모바일
+      setIsMobile(window.innerWidth <= 768);
     };
 
-    checkScreenSize(); // 초기 실행
-
-    // ✅ 창 크기 변경 이벤트 리스너 추가
+    checkScreenSize();
     window.addEventListener("resize", checkScreenSize);
-
-    return () => {
-      // ✅ 컴포넌트 언마운트 시 이벤트 리스너 제거
-      window.removeEventListener("resize", checkScreenSize);
-    };
+    return () => window.removeEventListener("resize", checkScreenSize);
   }, []);
+
   useEffect(() => {
     if (!id) return;
 
     const fetchDiary = async () => {
       setLoading(true);
       try {
-        console.log("📌 Fetching Diary ID:", id);
         const diary = await fetchMyDiary(Number(id));
-
         if (!diary) {
-          console.log("🚨 일기 조회 실패 (잠김 가능성 있음)");
           dispatch(setSelectedDiary("LOCK"));
         } else {
           dispatch(setSelectedDiary(diary));
         }
       } catch (err) {
-        console.error("🚨 Diary Fetch Error:", err);
-        setError("일기를 불러오는 중 오류가 발생했습니다.");
+        console.error("Diary Fetch Error:", err);
         dispatch(setSelectedDiary("LOCK"));
       } finally {
         setLoading(false);
@@ -65,31 +55,43 @@ export default function DiaryDetailTemplate() {
     fetchDiary();
   }, [id, dispatch]);
 
-  const handlePasswordSubmit = async (password: string) => {
-    setLoading(true);
+  const handlePasswordSubmit = async () => {
+    if (password.length !== 4) {
+      setPwError("비밀번호는 4자리여야 합니다.");
+      return;
+    }
+
     try {
+      setPwError(null);
       const diary = await fetchMyDiary(Number(id), password);
       dispatch(setSelectedDiary(diary));
-    } catch (err) {
-      console.error("🚨 비밀번호 입력 오류:", err); // ✅ 콘솔 로그 추가
-      setError("비밀번호가 틀렸습니다.");
-      window.alert("비밀번호가 틀렸습니다."); // ✅ alert 확인
-      setPassword(""); // ✅ 비밀번호 초기화
-    } finally {
-      setLoading(false);
+    } catch {
+      setPwError("비밀번호가 틀렸습니다.");
+      setPassword("");
     }
   };
 
+  // 🔐 LOCK 상태일 때는 바로 LockDiary 렌더링
+  if (selectedDiary === "LOCK") {
+    return (
+      <LockDiary
+        password={password}
+        onPasswordChange={setPassword}
+        onPasswordSubmit={handlePasswordSubmit}
+        error={pwError}
+      />
+    );
+  }
+
+  // ✅ 아닌 경우, 모바일이면 DiaryDetail / 웹이면 Diary
   return isMobile ? (
-    <DiaryDetail />
+    <div className="w-full flex flex-col items-center">
+      <DiaryDetail />
+    </div>
   ) : (
     <div className="w-full flex flex-col justify-center items-center gap-6">
       <div className="flex-1">
-        {selectedDiary === "LOCK" ? (
-          <LockDiary onPasswordSubmit={handlePasswordSubmit} />
-        ) : (
-          <Diary />
-        )}
+        <Diary />
       </div>
     </div>
   );

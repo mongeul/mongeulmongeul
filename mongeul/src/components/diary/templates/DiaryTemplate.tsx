@@ -76,12 +76,12 @@ export default function DiaryTemplate() {
     }
   };
 
-  const handlePasswordSubmit = async (password: string) => {
-    if (!currentDiaryId) return;
+  // const handlePasswordSubmit = async (password: string) => {
+  //   if (!currentDiaryId) return;
 
-    const diary = await fetchMyDiary(currentDiaryId, password);
-    dispatch(setSelectedDiary(diary));
-  };
+  //   const diary = await fetchMyDiary(currentDiaryId, password);
+  //   dispatch(setSelectedDiary(diary));
+  // };
 
   return (
     <div className="w-full flex flex-col justify-start items-center gap-6">
