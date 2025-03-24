@@ -34,6 +34,11 @@ export interface Draft extends Omit<BaseDiary, "picture" | "pictureLines"> {
   published: boolean;
 }
 
+export interface WritableFriend {
+  friendId: number;
+  nickname: string;
+}
+
 export interface DiaryResponse {
   success: boolean;
   message: string;
@@ -59,5 +64,11 @@ export interface DiaryDatesResponse {
 export interface IsDiaryResponse {
   success: boolean;
   data: number | null;
+  message: string;
+}
+
+export interface WritableFriendsResponse {
+  success: boolean;
+  data: WritableFriend[];
   message: string;
 }

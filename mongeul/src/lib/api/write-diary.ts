@@ -6,6 +6,7 @@ import {
   DraftRequest,
   DraftResponse,
   IsDiaryResponse,
+  WritableFriendsResponse,
 } from "@/types/diaryTypes";
 import { PictureLineResponse } from "@/types/pictureTypes";
 
@@ -251,6 +252,13 @@ export async function fetchSharedPictureLines(
   shareDiaryId: number
 ): Promise<PictureLineResponse> {
   return apiClient(`/api/v1/share-diaries/${shareDiaryId}/picture-lines`, {
+    method: "GET",
+  });
+}
+
+// 공유일기 작성 가능한 친구목록 조회
+export async function fetchWritableFriends(): Promise<WritableFriendsResponse> {
+  return apiClient("/api/v1/friend/writable", {
     method: "GET",
   });
 }
