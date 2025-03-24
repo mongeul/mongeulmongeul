@@ -16,6 +16,8 @@ import com.google.api.services.drive.DriveScopes;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
 import com.google.api.services.drive.model.Permission;
+import com.google.auth.http.HttpCredentialsAdapter;
+import com.google.auth.oauth2.GoogleCredentials;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -51,6 +53,9 @@ public class GoogleDriveService {
     @Value("${google.drive.upload-folder-ids.share-diary}")
     private String shareDiaryUploadFolderId;
 
+    @Value("${google.drive.env}")
+    private String googleDriveEnv;
+
     @Autowired
     private ResourceLoader resourceLoader;
 
@@ -78,10 +83,38 @@ public class GoogleDriveService {
 
     public Drive getDriveService() throws IOException, GeneralSecurityException {
         HttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
-        Credential credential = getCredentials(HTTP_TRANSPORT);
-        return new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential)
-                .setApplicationName(applicationName)
-                .build();
+
+        InputStream credentialStream = resourceLoader.getResource(clientSecretPath).getInputStream();
+
+        if ("prod".equalsIgnoreCase(googleDriveEnv)) {
+            // ✅ 운영 환경: 서비스 계정 방식
+            GoogleCredentials credentials = GoogleCredentials.fromStream(credentialStream)
+                    .createScoped(Collections.singleton(DriveScopes.DRIVE));
+
+            return new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, new HttpCredentialsAdapter(credentials))
+                    .setApplicationName(applicationName)
+                    .build();
+
+        } else {
+            // ✅ 로컬 환경: OAuth 사용자 인증 방식
+            GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(credentialStream));
+
+            GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(
+                    HTTP_TRANSPORT, JSON_FACTORY, clientSecrets, SCOPES)
+                    .setDataStoreFactory(new FileDataStoreFactory(new java.io.File(credentialsFolderPath)))
+                    .setAccessType("offline")
+                    .build();
+
+            LocalServerReceiver receiver = new LocalServerReceiver.Builder()
+                    .setPort(authServerPort)
+                    .build();
+
+            Credential credential = new AuthorizationCodeInstalledApp(flow, receiver).authorize("user");
+
+            return new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential)
+                    .setApplicationName(applicationName)
+                    .build();
+        }
     }
 
     /**
