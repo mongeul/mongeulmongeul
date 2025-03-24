@@ -16,7 +16,10 @@ import com.google.api.services.drive.DriveScopes;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
 import com.google.api.services.drive.model.Permission;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -48,11 +51,16 @@ public class GoogleDriveService {
     @Value("${google.drive.upload-folder-ids.share-diary}")
     private String shareDiaryUploadFolderId;
 
+    @Autowired
+    private ResourceLoader resourceLoader;
+
     private Credential getCredentials(final HttpTransport HTTP_TRANSPORT) throws IOException {
         // 경로 객체 생성
         java.io.File credentialsFolder = new java.io.File(credentialsFolderPath);
 
-        InputStream in = new FileInputStream(clientSecretPath);
+        Resource resource = resourceLoader.getResource(clientSecretPath);
+        InputStream in = resource.getInputStream();
+
         GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
         GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(
                 HTTP_TRANSPORT, JSON_FACTORY, clientSecrets, SCOPES)
