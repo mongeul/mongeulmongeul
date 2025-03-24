@@ -1,17 +1,31 @@
 import { useEffect, useState } from "react";
 import WriteSharedDiaryFriendItem from "../atoms/WriteSharedDiaryFriendItem";
 import { WriteSharedDiaryItemSkeleton } from "@/components/skeletons";
+import { fetchWritableFriends } from "@/lib/api/write-diary";
+import { WritableFriend } from "@/types/diaryTypes";
 
 export default function WriteSharedDiaryFriendList() {
-  const [loading, setIsLoading] = useState(true);
-  const [groups, setGroups] = useState([
-    { nickname: "나", groupId: 1 },
-    { nickname: "너", groupId: 2 },
-    { nickname: "쟤", groupId: 3 },
-  ]);
+  const [loading, setLoading] = useState(true);
+  const [groups, setGroups] = useState<WritableFriend[]>([]);
 
   useEffect(() => {
-    setIsLoading(false);
+    async function loadWritableFriends() {
+      setLoading(true);
+
+      try {
+        const data = await fetchWritableFriends();
+        if (data?.success && data.data) {
+          setGroups(data.data);
+        } else {
+        }
+      } catch (err) {
+        console.error("공유일기 작성 가능 친구 목록 조회 실패:", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadWritableFriends();
   }, []);
 
   if (loading)
@@ -25,13 +39,19 @@ export default function WriteSharedDiaryFriendList() {
 
   return (
     <div className="w-full flex flex-col gap-4 py-4">
-      {groups.map((group) => (
-        <WriteSharedDiaryFriendItem
-          key={group.groupId}
-          groupId={group.groupId}
-          nickname={group.nickname}
-        />
-      ))}
+      {groups.length === 0 ? (
+        <p className="text-center text-gray-400 text-sm">
+          지금 공유일기 작성 가능한 친구가 없어요
+        </p>
+      ) : (
+        groups.map((group) => (
+          <WriteSharedDiaryFriendItem
+            key={group.friendId}
+            groupId={group.friendId}
+            nickname={group.nickname}
+          />
+        ))
+      )}
     </div>
   );
 }

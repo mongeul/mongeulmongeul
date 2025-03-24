@@ -1,0 +1,21 @@
+{
+  "name": "몽글몽글",
+  "short_name": "몽글몽글",
+  "description": "그림일기 서비스 입니다.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#BAE6FD",
+  "theme_color": "#7DD3FC",
+  "icons": [
+    {
+      "src": "/icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
