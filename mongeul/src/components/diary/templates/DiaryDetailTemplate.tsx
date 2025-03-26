@@ -8,6 +8,7 @@ import { fetchMyDiary } from "@/lib/api/diary";
 import Diary from "@/components/diary/organisms/Diary";
 import DiaryDetail from "../organisms/DiaryDetail";
 import LockDiary from "../organisms/LockDiary";
+import useIsMobile from "@/utils/useIsMobile";
 
 export default function DiaryDetailTemplate() {
   const { id } = useParams();
@@ -17,20 +18,10 @@ export default function DiaryDetailTemplate() {
   );
 
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [isMobile, setIsMobile] = useState<boolean>(false);
   const [password, setPassword] = useState<string>("");
-  const [pwError, setPwError] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const checkScreenSize = () => {
-      setIsMobile(window.innerWidth <= 768);
-    };
-
-    checkScreenSize();
-    window.addEventListener("resize", checkScreenSize);
-    return () => window.removeEventListener("resize", checkScreenSize);
-  }, []);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     if (!id) return;
@@ -57,33 +48,32 @@ export default function DiaryDetailTemplate() {
 
   const handlePasswordSubmit = async () => {
     if (password.length !== 4) {
-      setPwError("비밀번호는 4자리여야 합니다.");
+      setError("비밀번호는 4자리여야 합니다.");
       return;
     }
 
     try {
-      setPwError(null);
+      setError(null);
       const diary = await fetchMyDiary(Number(id), password);
       dispatch(setSelectedDiary(diary));
     } catch {
-      setPwError("비밀번호가 틀렸습니다.");
+      setError("비밀번호가 틀렸습니다.");
       setPassword("");
     }
   };
 
-  // 🔐 LOCK 상태일 때는 바로 LockDiary 렌더링
+  // LOCK 일때
   if (selectedDiary === "LOCK") {
     return (
       <LockDiary
-        password={password}
         onPasswordChange={setPassword}
         onPasswordSubmit={handlePasswordSubmit}
-        error={pwError}
+        error={error}
       />
     );
   }
 
-  // ✅ 아닌 경우, 모바일이면 DiaryDetail / 웹이면 Diary
+  // 모바일이면 DiaryDetail / 웹이면 Diary
   return isMobile ? (
     <div className="w-full flex flex-col items-center">
       <DiaryDetail />
