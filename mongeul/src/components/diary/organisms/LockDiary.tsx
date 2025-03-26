@@ -4,14 +4,13 @@ import DiaryLockInput from "@/components/common/molecules/DiaryLockInput";
 import Button from "@/components/common/atoms/Button";
 
 interface LockDiaryProps {
-  password: string;
+  // password: string;
   onPasswordChange: (password: string) => void;
   onPasswordSubmit: () => void;
   error?: string | null;
 }
 
 const LockDiary: React.FC<LockDiaryProps> = ({
-  password,
   onPasswordChange,
   onPasswordSubmit,
   error,
