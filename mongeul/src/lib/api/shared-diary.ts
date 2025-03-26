@@ -6,6 +6,7 @@ export interface Friend {
   daysFromStart: number;
   diaryCount: number;
   writer: boolean;
+  recentWriteDate: string;
 }
 
 // 친구 목록 조회 API
@@ -15,17 +16,19 @@ export const getFriends = async (): Promise<Friend[]> => {
 
     console.log("📢 API 요청 응답:", response);
 
-    if (response.success && Array.isArray(response.data)) {
-      console.log("✅ 친구 목록 조회 성공:", response.data);
-      return response.data;
-    }
+    const rawData =
+      response.success && Array.isArray(response.data)
+        ? response.data
+        : response.success && response.data?.data
+        ? response.data.data
+        : [];
 
-    if (response.success && response.data.data) {
-      console.log("✅ 친구 목록 조회 성공 (data.data):", response.data.data);
-      return response.data.data;
-    }
+    const safeData = rawData.map((friend: any) => ({
+      ...friend,
+      recentWriteDate: friend.recentWriteDate || "",
+    }));
 
-    return [];
+    return safeData;
   } catch (error) {
     console.error("❌ 친구 목록 불러오기 실패:", error);
     return [];
@@ -79,5 +82,34 @@ export const deleteFriend = async (friendId: number) => {
   } catch (error) {
     console.error("친구 삭제 실패:", error);
     throw error;
+  }
+};
+
+// 공유일기 작성 날짜 조회 API (GET)
+export const getSharedDiaryDates = async (
+  friendId: number,
+  year: number,
+  month: number
+): Promise<string[]> => {
+  try {
+    const query = `?year=${year}&month=${month}`;
+    const response = await apiClient(
+      `/api/v1/groups/${friendId}/share-diaries/date${query}`,
+      {
+        method: "GET",
+      }
+    );
+
+    console.log("📆 공유일기 날짜 응답:", response);
+
+    if (response.success && Array.isArray(response.data)) {
+      console.log("✅ 공유일기 날짜 목록 조회 성공:", response.data);
+      return response.data;
+    }
+
+    return [];
+  } catch (error) {
+    console.error("❌ 공유일기 날짜 조회 실패:", error);
+    return [];
   }
 };

@@ -30,7 +30,9 @@ export default function DefaultNavBar() {
       <Link href="/shared-diary">
         <SharedDiaryIcon
           className={`w-7 h-7 ${
-            pathname === "/shared-diary" ? "text-theme-300" : "text-gray-300"
+            pathname.startsWith("/shared-diary")
+              ? "text-theme-300"
+              : "text-gray-300"
           }`}
         />
       </Link>

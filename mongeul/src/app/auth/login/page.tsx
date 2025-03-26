@@ -107,7 +107,7 @@ function Login() {
           onClose={() => {
             console.log("🔴 닉네임 모달 닫기 실행됨!");
             setIsModalOpen(false);
-            router.push("/feed");
+            router.push("/diary");
           }}
         />
       )}

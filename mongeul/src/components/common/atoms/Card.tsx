@@ -10,6 +10,7 @@ interface CardProps {
   roundSize?: string;
   className?: string;
   bgColor?: string;
+  onClick?: () => void;
 }
 
 export default function Card({
@@ -21,6 +22,7 @@ export default function Card({
   roundSize = "rounded-3xl",
   className,
   bgColor = "flex bg-white",
+  onClick,
 }: CardProps) {
   return (
     <div
@@ -31,8 +33,10 @@ export default function Card({
         `border ${borderColor}`,
         `${roundSize}`,
         bgColor,
-        `${className}`
+        `${className}`,
+        { "cursor-pointer": !!onClick }
       )}
+      onClick={onClick}
     >
       {children}
     </div>

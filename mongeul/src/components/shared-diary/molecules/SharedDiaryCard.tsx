@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { deleteFriend } from "@/lib/api/shared-diary";
+import { useRouter } from "next/navigation";
 import Card from "@/components/common/atoms/Card";
 import NicknameBadge from "../atoms/NicknameBadge";
 import DiaryStats from "../atoms/DiaryStats";
@@ -30,6 +31,8 @@ export default function SharedDiaryCard({
 }: SharedDiaryCardProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false); // 메뉴 버튼 토글 상태
   const [isDeleting, setIsDeleting] = useState(false); // 삭제 로딩 상태
+  const router = useRouter();
+
   const handleDelete = async () => {
     if (isDeleting) return;
     setIsDeleting(true);
@@ -46,11 +49,16 @@ export default function SharedDiaryCard({
 
   const isMyTurn = writer === false;
 
+  const handleCardClick = () => {
+    router.push(`/shared-diary/${friendId}`);
+  };
+
   return (
     <Card
       width="w-full max-w-lg mx-auto"
       roundSize="rounded-3xl"
       bgColor={isMyTurn ? "bg-theme-200" : "bg-white"}
+      onClick={handleCardClick}
     >
       <div className="flex justify-between p-3 items-center w-full relative gap-6">
         <div>
