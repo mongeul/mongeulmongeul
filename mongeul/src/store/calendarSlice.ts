@@ -6,13 +6,18 @@ interface DiaryEntry {
   diaryId: number;
   privateStatus: string;
 }
+interface ShareDiaryEntry {
+  date: string;
+  diaryId: number;
+}
 
 interface CalendarState {
   selectedDate: string;
   selectedDiary: Diary | "LOCK" | null;
   currentMonth: { year: number; month: number };
   diaryEntries: DiaryEntry[];
-  sharedDiaryEntries: DiaryEntry[];
+  sharedDiaryEntries: ShareDiaryEntry[];
+  lockedDiaryId: number | null;
 }
 
 const today = new Date();
@@ -25,6 +30,7 @@ const initialState: CalendarState = {
   },
   diaryEntries: [],
   sharedDiaryEntries: [],
+  lockedDiaryId: null,
 };
 
 const calendarSlice = createSlice({
@@ -46,8 +52,14 @@ const calendarSlice = createSlice({
     setDiaryEntries: (state, action: PayloadAction<DiaryEntry[]>) => {
       state.diaryEntries = action.payload;
     },
-    setSharedDiaryEntries: (state, action: PayloadAction<DiaryEntry[]>) => {
+    setSharedDiaryEntries: (
+      state,
+      action: PayloadAction<ShareDiaryEntry[]>
+    ) => {
       state.sharedDiaryEntries = action.payload;
+    },
+    setLockedDiaryId: (state, action: PayloadAction<number | null>) => {
+      state.lockedDiaryId = action.payload;
     },
   },
 });
@@ -58,5 +70,6 @@ export const {
   setCurrentMonth,
   setDiaryEntries,
   setSharedDiaryEntries,
+  setLockedDiaryId,
 } = calendarSlice.actions;
 export default calendarSlice.reducer;

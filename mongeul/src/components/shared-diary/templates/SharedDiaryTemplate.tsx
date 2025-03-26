@@ -5,9 +5,12 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { useRouter, useParams } from "next/navigation";
-import { setSelectedDate, setSelectedDiary } from "@/store/calendarSlice";
+import {
+  setSelectedDate,
+  setSelectedDiary,
+  setSharedDiaryEntries,
+} from "@/store/calendarSlice";
 import { setDate } from "@/store/diarySlice";
-import { setSharedDiaryEntries } from "@/store/shareDiarySlice";
 import { getSharedDiaryDates } from "@/lib/api/shared-diary";
 
 export default function SharedDiaryTemplate() {
@@ -15,9 +18,10 @@ export default function SharedDiaryTemplate() {
   const dispatch = useDispatch();
   const { id } = useParams();
 
-  const selectedDate = useSelector(
-    (state: RootState) => state.calendar.selectedDate
+  const { selectedDate, currentMonth, selectedDiary } = useSelector(
+    (state: RootState) => state.calendar
   );
+
   const sharedDiaryEntries = useSelector(
     (state: RootState) => state.shareDiary.sharedDiaryEntries
   );
@@ -25,31 +29,28 @@ export default function SharedDiaryTemplate() {
   const [currentDiaryId, setCurrentDiaryId] = useState<number | null>(null);
 
   useEffect(() => {
-    const fetchDiaryData = async () => {
-      if (!id) return;
-      try {
-        const diaryDates = await getSharedDiaryDates(
-          Number(id),
-          new Date().getFullYear(),
-          new Date().getMonth() + 1
-        );
+    console.log("현재 선택된 월:", currentMonth);
 
-        dispatch(
-          setSharedDiaryEntries(
-            diaryDates.map((date) => ({
-              date: date,
-              diaryId: 0,
-              privateStatus: "PUBLIC", // 여기 뭔가 이상하니까 수정하기 ;;
-            }))
-          )
-        );
-      } catch (error) {
-        console.error("❌ 공유일기 날짜 조회 실패:", error);
-      }
+    const fetchDiaryData = async () => {
+      const diaries = await getSharedDiaryDates(
+        Number(id),
+        currentMonth.year,
+        currentMonth.month
+      );
+      console.log("일기데이터", diaries);
+      // dispatch(
+      //   setSharedDiaryEntries(
+      //     diaries.map((diary) => ({
+      //       date: diary.date,
+      //       diaryId: diary.diaryId,
+      //       privateStatus: diary.privateStatus,
+      //     }))
+      //   )
+      // );
     };
 
     fetchDiaryData();
-  }, [id, dispatch]);
+  }, [currentMonth, dispatch]);
 
   const handleDateSelect = (date: string) => {
     dispatch(setSelectedDate(date));

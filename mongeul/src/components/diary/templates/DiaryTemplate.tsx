@@ -1,7 +1,5 @@
 "use client";
 import Calendar from "@/components/calendar/organisms/Calendar";
-import Diary from "@/components/diary/organisms/Diary";
-import LockDiary from "@/components/diary/organisms/LockDiary";
 import { fetchDiaries, fetchMyDiary } from "@/lib/api/diary";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,22 +7,24 @@ import { RootState } from "@/store/store";
 import {
   setSelectedDate,
   setSelectedDiary,
-  setCurrentMonth,
   setDiaryEntries,
+  setLockedDiaryId,
 } from "@/store/calendarSlice";
 import { useRouter } from "next/navigation";
 import { setDate } from "@/store/diarySlice";
+import useIsMobile from "@/utils/useIsMobile";
+import DiaryPriview from "../organisms/DiaryPreview";
 
 export default function DiaryTemplate() {
   const router = useRouter();
   const dispatch = useDispatch();
-  const { selectedDate, currentMonth, selectedDiary } = useSelector(
-    (state: RootState) => state.calendar
-  );
+  const { currentMonth } = useSelector((state: RootState) => state.calendar);
   const { diaryEntries = [] } = useSelector(
     (state: RootState) => state.calendar
   );
   const [currentDiaryId, setCurrentDiaryId] = useState<number | null>(null);
+
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     console.log("현재 선택된 월:", currentMonth);
@@ -69,23 +69,24 @@ export default function DiaryTemplate() {
 
     if (entry.privateStatus === "LOCK") {
       dispatch(setSelectedDiary("LOCK"));
-      setCurrentDiaryId(entry.diaryId);
-      router.push(`/diary/${entry.diaryId}`);
+      dispatch(setLockedDiaryId(entry.diaryId));
+      if (!isMobile) {
+        router.push(`/diary/${entry.diaryId}`);
+      }
     } else {
-      router.push(`/diary/${entry.diaryId}`);
+      if (!isMobile) {
+        router.push(`/diary/${entry.diaryId}`);
+      } else {
+        const diary = await fetchMyDiary(entry.diaryId);
+        dispatch(setSelectedDiary(diary));
+      }
     }
   };
-
-  // const handlePasswordSubmit = async (password: string) => {
-  //   if (!currentDiaryId) return;
-
-  //   const diary = await fetchMyDiary(currentDiaryId, password);
-  //   dispatch(setSelectedDiary(diary));
-  // };
 
   return (
     <div className="w-full flex flex-col justify-start items-center gap-6">
       <Calendar onSelectDate={handleDateSelect} />
+      {isMobile && <DiaryPriview />}
     </div>
   );
 }
