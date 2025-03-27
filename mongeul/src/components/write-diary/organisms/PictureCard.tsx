@@ -23,7 +23,8 @@ export default function PictureCard({ diaryId }: { diaryId: number | null }) {
   };
 
   const handlePictureLines = async (diaryId: number | null) => {
-    if (!diaryId) return;
+    console.log("일기 라인 불러오기");
+    if (!diaryId || !picture) return;
 
     try {
       const pictureLinesResponse = await fetchPictureLines(diaryId);

@@ -10,7 +10,7 @@ import {
 } from "@/store/diarySlice";
 import { RootState } from "@/store/store";
 import { Diary } from "@/types/diaryTypes";
-import { useParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 
 export default function DiaryUpdateButton() {
@@ -19,8 +19,6 @@ export default function DiaryUpdateButton() {
   const selectedDiary = useSelector(
     (state: RootState) => state.calendar.selectedDiary
   ) as Diary;
-
-  const diaryId = useParams();
 
   const handleDiaryUpdate = () => {
     dispatch(setTitle(selectedDiary.title));
@@ -31,7 +29,7 @@ export default function DiaryUpdateButton() {
     dispatch(setPicture(selectedDiary.picture ? selectedDiary.picture : null));
     dispatch(setWeather(selectedDiary.weather));
 
-    router.push(`/write-diary?id=${diaryId}`);
+    router.push(`/write-diary?id=${selectedDiary.diaryId}`);
   };
 
   return (
