@@ -1,7 +1,9 @@
 "use client";
 
 import Button from "@/components/common/atoms/Button";
-import { addFriend } from "@/lib/api/shared-diary";
+import { addFriend, getFriends } from "@/lib/api/shared-diary";
+import { useDispatch } from "react-redux";
+import { setFriends } from "@/store/shareDiarySlice";
 
 export default function FriendConfirmModal({
   nickname,
@@ -12,11 +14,15 @@ export default function FriendConfirmModal({
   code: string;
   onClose: () => void;
 }) {
+  const dispatch = useDispatch();
+
   const handleFriendAdd = async () => {
     try {
       const response = await addFriend(code);
       if (response.success) {
         console.log("친구 추가 성공:", response.data.nickname);
+        const updatedFriends = await getFriends();
+        dispatch(setFriends(updatedFriends));
         onClose(); // 모달 닫기
       } else {
         console.error("친구 추가 실패");

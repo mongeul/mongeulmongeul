@@ -5,11 +5,8 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { useRouter, useParams } from "next/navigation";
-import {
-  setSelectedDate,
-  setSelectedDiary,
-  setSharedDiaryEntries,
-} from "@/store/calendarSlice";
+import { setSelectedDate, setSelectedDiary } from "@/store/calendarSlice";
+import { setSharedDiaryEntries } from "@/store/shareDiarySlice";
 import { setDate } from "@/store/diarySlice";
 import { getSharedDiaryDates } from "@/lib/api/shared-diary";
 
@@ -38,15 +35,14 @@ export default function SharedDiaryTemplate() {
         currentMonth.month
       );
       console.log("일기데이터", diaries);
-      // dispatch(
-      //   setSharedDiaryEntries(
-      //     diaries.map((diary) => ({
-      //       date: diary.date,
-      //       diaryId: diary.diaryId,
-      //       privateStatus: diary.privateStatus,
-      //     }))
-      //   )
-      // );
+      dispatch(
+        setSharedDiaryEntries(
+          diaries.map((diary) => ({
+            date: diary.date,
+            diaryId: diary.shareDiaryId,
+          }))
+        )
+      );
     };
 
     fetchDiaryData();
@@ -59,13 +55,9 @@ export default function SharedDiaryTemplate() {
     if (!entry) {
       dispatch(setSelectedDiary(null));
       dispatch(setDate(date));
-      router.push(`/shared-diary/${id}/write`);
+      router.push(`/write-diary?groupid=${id}`);
       return;
     }
-
-    dispatch(setSelectedDiary(null));
-    setCurrentDiaryId(entry.diaryId);
-    router.push(`/shared-diary/${id}/diary/${entry.diaryId}`);
   };
 
   return (
