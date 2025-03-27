@@ -27,7 +27,7 @@ export default function SocialLoginButtons() {
         alt="카카오 로그인"
         onClick={handleKakaoLogin}
       />
-      <SocialLoginButton
+      {/* <SocialLoginButton
         icon={NaverIcon}
         alt="네이버 로그인"
         onClick={() => console.log("Naver 로그인 클릭")}
@@ -36,7 +36,7 @@ export default function SocialLoginButtons() {
         icon={GoogleIcon}
         alt="구글 로그인"
         onClick={() => console.log("Google 로그인 클릭")}
-      />
+      /> */}
     </div>
   );
 }
