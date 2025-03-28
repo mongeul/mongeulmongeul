@@ -9,6 +9,7 @@ import { setSelectedDate, setSelectedDiary } from "@/store/calendarSlice";
 import { setSharedDiaryEntries } from "@/store/shareDiarySlice";
 import { setDate } from "@/store/diarySlice";
 import { getSharedDiaryDates } from "@/lib/api/shared-diary";
+import ShareCalendar from "@/components/calendar/organisms/ShareCalendar";
 
 export default function SharedDiaryTemplate() {
   const router = useRouter();
@@ -62,7 +63,7 @@ export default function SharedDiaryTemplate() {
 
   return (
     <div className="w-full flex flex-col justify-center items-center gap-6">
-      <Calendar onSelectDate={handleDateSelect} />
+      <ShareCalendar onSelectDate={handleDateSelect} />
     </div>
   );
 }
