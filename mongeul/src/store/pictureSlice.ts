@@ -2,6 +2,7 @@ import { Brush, PictureLine } from "@/types/pictureTypes";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface PictureState {
+  stageRef: any | null;
   selectedColor: string;
   selectedBrushSize: number;
   selectedBrush: Brush;
@@ -13,6 +14,7 @@ interface PictureState {
 const MAX_HISTORY_LENGTH = 30;
 
 const initialState: PictureState = {
+  stageRef: null,
   selectedColor: "#000000",
   selectedBrushSize: 5,
   selectedBrush: "pen",
@@ -31,6 +33,9 @@ const pictureSlice = createSlice({
   name: "picture",
   initialState,
   reducers: {
+    setStageRef: (state, action: PayloadAction<any>) => {
+      state.stageRef = action.payload;
+    },
     setColor: (state, action: PayloadAction<string>) => {
       state.selectedColor = action.payload;
       if (state.selectedBrush === "eraser") {
@@ -99,6 +104,7 @@ const pictureSlice = createSlice({
 });
 
 export const {
+  setStageRef,
   setColor,
   setBrushSize,
   setBrushType,

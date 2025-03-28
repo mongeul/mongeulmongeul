@@ -4,7 +4,6 @@ import { Friend } from "@/lib/api/shared-diary";
 interface SharedDiaryEntry {
   date: string;
   diaryId: number;
-  privateStatus: string;
 }
 
 interface ShareDiaryState {

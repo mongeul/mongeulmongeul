@@ -15,6 +15,13 @@ export const store = configureStore({
     shareDiary: shareDiaryReducer,
     feed: feedReducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: ["picture/setStageRef"],
+        ignoredPaths: ["picture.stageRef"],
+      },
+    }),
 });
 
 export type RootState = ReturnType<typeof store.getState>;
