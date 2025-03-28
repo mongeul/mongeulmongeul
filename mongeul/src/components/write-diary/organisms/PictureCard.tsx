@@ -15,6 +15,7 @@ export default function PictureCard({ diaryId }: { diaryId: number | null }) {
   const dispatch = useDispatch();
 
   const picture = useSelector((state: RootState) => state.diary.picture);
+  const lines = useSelector((state: RootState) => state.picture.lines);
 
   const deletePicture = () => {
     dispatch(resetPicture());
@@ -23,7 +24,8 @@ export default function PictureCard({ diaryId }: { diaryId: number | null }) {
   };
 
   const handlePictureLines = async (diaryId: number | null) => {
-    if (!diaryId) return;
+    console.log("일기 라인 불러오기");
+    if (!diaryId || !picture || lines.length > 0) return;
 
     try {
       const pictureLinesResponse = await fetchPictureLines(diaryId);
