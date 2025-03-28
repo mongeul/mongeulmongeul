@@ -22,7 +22,7 @@ export default function LinkPersonalDiaryButton({
 
     if (isDiary.data) {
       // 오늘 일기로 렌더링 또는 수정 페이지로 이동
-      router.push(`/write-diary?id=${isDiary.data}`);
+      router.push(`/diary/${isDiary.data}`);
     } else {
       router.push("/write-diary"); // 작성 페이지로 이동
     }
