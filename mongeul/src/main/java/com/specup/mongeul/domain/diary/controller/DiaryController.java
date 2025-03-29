@@ -109,8 +109,8 @@ public class DiaryController {
     @GetMapping("/diaries/find")
     public ResponseEntity<ApiResponse<Long>> getDiaryId(
             @AuthenticationPrincipal User user,
-            @RequestParam LocalDate today) {
-        Long diaryId = diaryService.getDiaryId(user.getId(), today);
+            @RequestParam LocalDate date) {
+        Long diaryId = diaryService.getDiaryId(user.getId(), date);
         return ResponseEntity.ok(ApiResponse.success(diaryId, diaryId != null ? "일기 ID 조회 성공" : "해당 날짜에 작성된 일기 없음"));
     }
 }

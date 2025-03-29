@@ -52,7 +52,7 @@ public interface ShareDiaryRepository extends JpaRepository<ShareDiary, Long> {
 
     // 해당 날짜 작성한 공유일기 찾기
     @Query("""
-        SELECT sd FROM ShareDiary sd
+        SELECT sd.id FROM ShareDiary sd
         WHERE sd.group = :group
           AND sd.date = :date
     """)

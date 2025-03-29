@@ -19,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Tag(name = "ShareDiary", description = "공유일기 API")
@@ -28,7 +29,6 @@ import java.util.List;
 public class ShareDiaryController {
     private final ShareDiaryService shareDiaryService;
 
-    // 공유일기 작성
     @Operation(summary = "공유일기 작성", description = "공유일기를 작성합니다.")
     @PostMapping(value = "/groups/{groupId}/share-diaries", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ApiResponse<ShareDiaryResponse>> create(
@@ -38,7 +38,6 @@ public class ShareDiaryController {
         return ResponseEntity.ok(ApiResponse.success(shareDiaryService.create(user.getId(), groupId, request), "공유일기 작성 성공"));
     }
 
-    // 공유일기 임시저장
     @Operation(summary = "공유일기 임시저장", description = "공유일기를 임시저장 합니다.")
     @PostMapping("/groups/{groupId}/share-diaries/drafts")
     public ResponseEntity<ApiResponse<ShareDiaryDraftResponse>> draft(
@@ -48,7 +47,6 @@ public class ShareDiaryController {
         return ResponseEntity.ok(ApiResponse.success(shareDiaryService.saveDraft(user.getId(), groupId, request), "공유일기 임시저장 성공"));
     }
 
-    // 공유일기 수정
     @Operation(summary = "공유일기 수정", description = "공유일기를 수정합니다.")
     @PutMapping(value = "/groups/{groupId}/share-diaries/{shareDiaryId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ApiResponse<ShareDiaryResponse>> update(
@@ -59,7 +57,6 @@ public class ShareDiaryController {
         return ResponseEntity.ok(ApiResponse.success(shareDiaryService.update(user.getId(), groupId, shareDiaryId, request), "공유일기 수정 성공"));
     }
 
-    // 공유일기 목록 조회
     @Operation(summary = "공유일기 목록 조회(캘린더)", description = "공유일기 목록을 조회합니다.")
     @GetMapping("/groups/{groupId}/share-diaries")
     public ResponseEntity<ApiResponse<List<ShareDiaryResponse>>> getCalendarShareDiaries(
@@ -70,7 +67,6 @@ public class ShareDiaryController {
         return ResponseEntity.ok(ApiResponse.success(shareDiaryService.getCalendarShareDiaries(groupId, year, month), "공유일기 목록 조회 성공"));
     }
 
-    // 공유일기 임시저장 목록 조회
     @Operation(summary = "공유일기 임시저장 목록 조회", description = "임시저장 된 공유일기 목록을 조회합니다.")
     @GetMapping("/groups/{groupId}/share-diaries/drafts")
     public ResponseEntity<ApiResponse<List<ShareDiaryDraftResponse>>> getDraftShareDiaries(
@@ -79,7 +75,6 @@ public class ShareDiaryController {
         return ResponseEntity.ok(ApiResponse.success(shareDiaryService.getDraftShareDiaries(user.getId(), groupId), "임시저장 목록 조회 성공"));
     }
 
-    // 특정 공유일기 조회
     @Operation(summary = "특정 공유일기 조회", description = "특정 공유일기를 조회합니다.")
     @GetMapping("/share-diaries/{shareDiaryId}")
     public ResponseEntity<ApiResponse<ShareDiaryResponse>> read(
@@ -88,7 +83,6 @@ public class ShareDiaryController {
         return ResponseEntity.ok(ApiResponse.success(shareDiaryService.read(shareDiaryId), "공유일기 조회 성공"));
     }
 
-    // 공유일기 삭제
     @Operation(summary = "공유일기 삭제", description = "공유일기를 삭제합니다.")
     @DeleteMapping("/share-diaries/{shareDiaryId}")
     public ResponseEntity<ApiResponse<Void>> delete(
@@ -98,7 +92,6 @@ public class ShareDiaryController {
         return ResponseEntity.noContent().build();
     }
 
-    // 공유일기 그림 조회
     @Operation(summary = "공유일기 그림 조회", description = "그림(pictureLines)을 조회 합니다.")
     @GetMapping("/share-diaries/{shareDiaryId}/picture-lines")
     public ResponseEntity<ApiResponse<ShareDiaryPictureLineResponse>> getPictureLines(
@@ -107,7 +100,6 @@ public class ShareDiaryController {
         return ResponseEntity.ok(ApiResponse.success(shareDiaryService.readPicture(shareDiaryId), "그림 조회 성공"));
     }
 
-    // 공유일기 작성날짜 목록 조회
     @Operation(summary = "공유일기 작성날짜 목록 조회", description = "그룹의 공유일기가 작성된 날짜 목록을 조회합니다.")
     @GetMapping("/groups/{groupId}/share-diaries/date")
     public ResponseEntity<ApiResponse<List<ShareDiaryDateResponse>>> getShareDiaryDates(
@@ -116,5 +108,14 @@ public class ShareDiaryController {
             @RequestParam int year,
             @RequestParam int month) {
         return ResponseEntity.ok(ApiResponse.success(shareDiaryService.getDates(groupId, year, month), "공유일기 날짜 목록 조회 성공"));
+    }
+
+    @Operation(summary = "날짜로 작성한 공유일기 ID 조회", description = "해당 날짜의 작성한 공유일기 ID를 확인합니다.")
+    @GetMapping("/share-diaries/find")
+    public ResponseEntity<ApiResponse<Long>> getShareDiaryId(
+            @RequestParam Long groupId,
+            @RequestParam LocalDate date) {
+        Long shareDiaryId = shareDiaryService.getShareDiaryId(groupId, date);
+        return ResponseEntity.ok(ApiResponse.success(shareDiaryId, shareDiaryId != null ? "공유일기 ID 조회 성공" : "해당 날짜에 작성된 공유일기 없음"));
     }
 }
