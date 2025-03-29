@@ -49,27 +49,4 @@ public class DiaryEmojiService {
                         .orElseThrow(() -> new CustomException(ErrorCode.EMOJI_NOT_FOUND));
         diaryEmojiRepository.delete(diaryEmoji);
     }
-
-    /**
-     * 토글 형식의 이모지 등록/삭제 ver -> 이후 성능 테스트 비교
-     */
-//    @Transactional
-//    public boolean emojiToggle(Long userId, Long diaryId, DiaryEmojiRequest request) {
-//        User user = userRepository.findById(userId)
-//                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
-//        Diary diary = diaryRepository.findById(diaryId)
-//                .orElseThrow(() -> new CustomException(ErrorCode.DIARY_NOT_FOUND));
-//        Emoji emoji = emojiRepository.findById(request.getEmojiId())
-//                .orElseThrow(() -> new CustomException(ErrorCode.EMOJI_NOT_FOUND));
-//
-//        Optional<DiaryEmoji> existEmoji = diaryEmojiRepository.findByDiaryIdAndEmojiIdAndUserId(diaryId, request.getEmojiId(), userId);
-//
-//        if (existEmoji.isPresent()) {
-//            diaryEmojiRepository.delete(existEmoji.get());
-//            return false;
-//        } else {
-//            diaryEmojiRepository.save(DiaryEmoji.create(diary, emoji, user));
-//            return true;
-//        }
-//    }
 }

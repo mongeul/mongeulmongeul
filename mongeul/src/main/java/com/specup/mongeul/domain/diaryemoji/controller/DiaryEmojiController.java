@@ -36,18 +36,4 @@ public class DiaryEmojiController {
         diaryEmojiService.deleteEmoji(feedId, emojiId, user.getId());
         return ResponseEntity.noContent().build();
     }
-
-    /**
-     * 토글 형식의 이모지 등록/삭제 ver -> 이후 성능 테스트 비교
-     */
-//    @Operation(summary = "이모지 등록/삭제", description = "토글 형식의 이모지 등록 및 삭제")
-//    @PostMapping("/diaries/{diaryId}/emojis")
-//    public ResponseEntity<ApiResponse<Void>>add(@AuthenticationPrincipal User user, @PathVariable Long diaryId, @Valid @RequestBody DiaryEmojiRequest request) {
-//        boolean isAdded = diaryEmojiService.emojiToggle(user.getId(), diaryId, request);
-//        if (isAdded) {
-//            return ResponseEntity.ok(ApiResponse.success(null, "이모지 추가 성공"));
-//        } else {
-//            return ResponseEntity.ok(ApiResponse.success(null, "이모지 삭제 성공"));
-//        }
-//    }
 }

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ShareDiaryRepository extends JpaRepository<ShareDiary, Long> {
@@ -48,4 +49,13 @@ public interface ShareDiaryRepository extends JpaRepository<ShareDiary, Long> {
     List<ShareDiary> findByGroupAndDateBetween(@Param("group") Friend group,
                                                @Param("startOfMonth") LocalDate startOfMonth,
                                                @Param("startOfNextMonth") LocalDate startOfNextMonth);
+
+    // 해당 날짜 작성한 공유일기 찾기
+    @Query("""
+        SELECT sd.id FROM ShareDiary sd
+        WHERE sd.group = :group
+          AND sd.date = :date
+    """)
+    Optional<Long> findShareDiaryIdByGroupIdAndDate(@Param("group") Friend group,
+                                                    @Param("date") LocalDate date);
 }

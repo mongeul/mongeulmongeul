@@ -256,4 +256,13 @@ public class ShareDiaryService {
                 .map(ShareDiaryDateResponse::from)
                 .toList();
     }
+
+    // 해당 날짜 공유일기 id 조회
+    @Transactional(readOnly = true)
+    public Long getShareDiaryId(Long groupId, LocalDate date) {
+        Friend group = friendRepository.findById(groupId)
+                .orElseThrow(() -> new CustomException(ErrorCode.GROUP_NOT_FOUND));
+        return shareDiaryRepository.findShareDiaryIdByGroupIdAndDate(group, date)
+                .orElse(null);
+    }
 }
