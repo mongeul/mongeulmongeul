@@ -10,8 +10,6 @@ import com.specup.mongeul.domain.diary.dto.response.Diary.DiaryPictureLineRespon
 import com.specup.mongeul.domain.diary.service.DiaryService;
 import com.specup.mongeul.domain.user.entity.User;
 import com.specup.mongeul.global.common.ApiResponse;
-import com.specup.mongeul.global.error.CustomException;
-import com.specup.mongeul.global.error.ErrorCode;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -20,7 +18,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -72,14 +69,6 @@ public class DiaryController {
             @Valid @RequestBody DiaryDraftRequest request) {
         return ResponseEntity.ok(ApiResponse.success(diaryService.saveDraft(user.getId(), request), "일기 임시저장 성공"));
     }
-
-//    @Operation(summary = "일기 임시저장 -> 일기작성", description = "임시저장 된 일기로 일기를 작성합니다.")
-//    @PostMapping("/diaries/{diaryId}/publish")
-//    public ResponseEntity<ApiResponse<DiaryResponse>> publish(
-//            @AuthenticationPrincipal User user,
-//            @PathVariable Long diaryId) {
-//        return ResponseEntity.ok(ApiResponse.success(diaryService.publish(user.getId(), diaryId), "임시저장 된 일기로 일기 생성 성공"));
-//    }
 
     @Operation(summary = "일기 수정", description = "일기를 수정합니다.")
     @PutMapping(value = "/diaries/{diaryId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

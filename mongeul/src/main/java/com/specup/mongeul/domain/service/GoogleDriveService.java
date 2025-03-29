@@ -23,7 +23,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.security.GeneralSecurityException;
@@ -180,41 +179,6 @@ public class GoogleDriveService {
                 return "application/octet-stream"; // 기본 바이너리 타입
         }
     }
-
-    /**
-     * 파일 업로드 로직
-     */
-//    public Map<String, String> processAndUploadFile(MultipartFile file, String fileName) throws Exception {
-//        // 파일명이 제공되지 않은 경우 원본 파일명 사용
-//        if (fileName == null || fileName.trim().isEmpty()) {
-//            fileName = file.getOriginalFilename();
-//        }
-//
-//        // ContentType 확인 (MIME 타입 자동 감지)
-//        String mimeType = file.getContentType();
-//        if (mimeType == null || mimeType.trim().isEmpty()) {
-//            // ContentType이 없는 경우 파일 확장자로 유추
-//            String extension = getFileExtension(fileName);
-//            mimeType = getMimeTypeFromExtension(extension);
-//        }
-//
-//        // MultipartFile을 임시 파일로 변환
-//        java.io.File tempFile = java.io.File.createTempFile("temp-", null);
-//        file.transferTo(tempFile);
-//
-//        // 구글 드라이브에 업로드
-//        String fileUrl = uploadFile(tempFile, mimeType, fileName);
-//
-//        // 임시 파일 삭제
-//        tempFile.delete();
-//
-//        Map<String, String> response = new HashMap<>();
-//        response.put("fileUrl", fileUrl);
-//        response.put("fileName", fileName);
-//        response.put("mimeType", mimeType);
-//
-//        return response;
-//    }
 
     // 일기 그림 업로드
     public String uploadFile(java.io.File filePath, String mimeType, Long userId, LocalDate date, boolean isDiary) throws Exception {

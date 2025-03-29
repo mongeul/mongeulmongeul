@@ -27,7 +27,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -102,23 +101,6 @@ public class DiaryService {
         );
         return DiaryDraftResponse.from(diary);
     }
-
-    // 임시저장 -> 최종저장
-//    @Transactional
-//    public DiaryResponse publish(Long userId, Long diaryId) {
-//        Diary diary = diaryRepository.findById(diaryId)
-//                .orElseThrow(() -> new CustomException(ErrorCode.DIARY_NOT_FOUND));
-//        if (!diary.getUser().getId().equals(userId)) {
-//            throw new CustomException(ErrorCode.INVALID_DIARY_USER);
-//        }
-//        if (diaryRepository.existsByUserIdAndDateAndPublished(userId, diary.getDate(), true)) {
-//            throw new CustomException(ErrorCode.DIARY_ALREADY_EXISTS);
-//        }
-//        diary.update(diary.getTitle(), diary.getContent(), diary.getPicture(),
-//                diary.getDate(), diary.getPictureLines(), diary.getWeather(),
-//                diary.getFeeling(), diary.getPrivateStatus(), true);
-//        return DiaryResponse.from(diary);
-//    }
 
     // 일기 수정
     @Transactional

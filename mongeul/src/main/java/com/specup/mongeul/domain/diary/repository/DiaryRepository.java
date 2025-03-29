@@ -54,12 +54,6 @@ public interface DiaryRepository extends JpaRepository<Diary, Long> {
                                                           @Param("date") LocalDate date);
 
     /**
-     * 하루 1개 일기 제한 검증 (데이터를 조회해서 반환으로 체크)
-     */
-//    @Query("SELECT COUNT(d) > 0 FROM Diary d WHERE d.user.id = :userId AND d.createdAt BETWEEN :start AND :end")
-//    Optional<Diary> findByUserIdAndCreatedAtBetween(Long userId, LocalDateTime start, LocalDateTime end);
-
-    /**
      * 피드 무한 스크롤
      */
     @Query(value = """
