@@ -15,6 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.support.TransactionTemplate;
 
+import java.time.LocalDate;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -52,16 +53,22 @@ public class DataInitializer {
 
     void insert() {
         transactionTemplate.executeWithoutResult(status -> {
-            User user = userRepository.findById(1L)
-                    .orElseThrow(() -> new RuntimeException("User not found"));
             for (int i = 0; i < BULK_INSERT_SIZE; i++) {
+                long randomUserId = (long) (Math.random() * 100) + 1;
+                User user = userRepository.findById(randomUserId)
+                        .orElseThrow(() -> new RuntimeException("User not found"));
+                LocalDate randomDate = LocalDate.of(2025, 1, 1).plusDays((int) (Math.random() * 365));
+                boolean randomPublished = Math.random() < 0.5;
                 Diary diary = Diary.create(
                         "title" + i,
                         "content" + i,
                         null,
+                        randomDate,
+                        null,
                         DiaryWeather.SUNNY,
                         DiaryFeeling.HAPPY,
                         DiaryPrivate.PUBLIC,
+                        randomPublished,
                         user
                 );
                 entityManager.persist(diary);

@@ -12,6 +12,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
@@ -66,6 +67,7 @@ public class Diary extends BaseSoftDeleteEntity {
     private User user;
 
     @OneToMany(mappedBy = "diary", cascade = CascadeType.ALL)
+    @BatchSize(size = 50)
     private List<Comment> comments = new ArrayList<>();
 
     @OneToMany(mappedBy = "diary", cascade = CascadeType.ALL, orphanRemoval = true)
