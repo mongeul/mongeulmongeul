@@ -14,6 +14,7 @@ import com.specup.mongeul.domain.diary.entity.ShareDiary;
 import com.specup.mongeul.domain.diary.repository.ShareDiaryRepository;
 import com.specup.mongeul.domain.friends.entity.Friend;
 import com.specup.mongeul.domain.friends.repository.FriendRepository;
+import com.specup.mongeul.domain.service.CloudinaryService;
 import com.specup.mongeul.domain.service.GoogleDriveService;
 import com.specup.mongeul.domain.user.entity.User;
 import com.specup.mongeul.domain.user.repository.UserRepository;
@@ -35,6 +36,7 @@ public class ShareDiaryService {
     private final FriendRepository friendRepository;
     private final ObjectMapper objectMapper;
     private final GoogleDriveService googleDriveService;
+    private final CloudinaryService cloudinaryService;
 
     // 공유일기 생성
     @Transactional
@@ -58,6 +60,7 @@ public class ShareDiaryService {
         MultipartFile picture = request.getPicture();
         // 그림 URL 생성
         String pictureUrl = null;
+        String fileUrl = null;
         if (picture != null && !picture.isEmpty()) {
             try {
                 // 임시 파일 생성 및 업로드
@@ -65,6 +68,7 @@ public class ShareDiaryService {
                 picture.transferTo(tempFile);
 
                 pictureUrl = googleDriveService.uploadFile(tempFile, picture.getContentType(), groupId, request.getDate(), false);
+                fileUrl = cloudinaryService.uploadFile(tempFile, groupId, request.getDate(), false);
 
                 // 파일 자동 삭제 (try-with-resources 활용)
                 if (!tempFile.delete()) {
@@ -143,6 +147,7 @@ public class ShareDiaryService {
 
         MultipartFile newPicture = request.getPicture();
         String pictureUrl = shareDiary.getPicture();
+        String pictureUrl2 = shareDiary.getPicture();
 
         if (newPicture != null && !newPicture.isEmpty()) {
             try {
@@ -150,6 +155,7 @@ public class ShareDiaryService {
                 java.io.File tempFile = java.io.File.createTempFile("temp-", null);
                 newPicture.transferTo(tempFile);
                 pictureUrl = googleDriveService.uploadFile(tempFile, newPicture.getContentType(), groupId, request.getDate(), false);
+                pictureUrl2 = cloudinaryService.uploadFile(tempFile, groupId, request.getDate(), false);
 
                 tempFile.delete();
             } catch (Exception e) {
