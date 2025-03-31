@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Diary } from "@/types/diaryTypes";
+import { SharedDiary } from "@/lib/api/shared-diary";
 
 interface DiaryEntry {
   date: string;
@@ -14,6 +15,7 @@ interface ShareDiaryEntry {
 interface CalendarState {
   selectedDate: string;
   selectedDiary: Diary | "LOCK" | null;
+  selectedSharedDiary: SharedDiary | null;
   currentMonth: { year: number; month: number };
   diaryEntries: DiaryEntry[];
   sharedDiaryEntries: ShareDiaryEntry[];
@@ -24,6 +26,7 @@ const today = new Date();
 const initialState: CalendarState = {
   selectedDate: "",
   selectedDiary: null,
+  selectedSharedDiary: null,
   currentMonth: {
     year: today.getFullYear(),
     month: today.getMonth() + 1,
@@ -42,6 +45,12 @@ const calendarSlice = createSlice({
     },
     setSelectedDiary: (state, action: PayloadAction<Diary | "LOCK" | null>) => {
       state.selectedDiary = action.payload;
+    },
+    setSelectedSharedDiary: (
+      state,
+      action: PayloadAction<SharedDiary | null>
+    ) => {
+      state.selectedSharedDiary = action.payload;
     },
     setCurrentMonth: (
       state,
@@ -67,6 +76,7 @@ const calendarSlice = createSlice({
 export const {
   setSelectedDate,
   setSelectedDiary,
+  setSelectedSharedDiary,
   setCurrentMonth,
   setDiaryEntries,
   setSharedDiaryEntries,

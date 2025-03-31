@@ -21,7 +21,7 @@ export interface SharedDiary {
   published: boolean;
 }
 
-// 친구 목록 조회 API
+// 친구 목록 조회 API (GET)
 export const getFriends = async (): Promise<Friend[]> => {
   try {
     const response = await apiClient("/api/v1/friend");
@@ -97,7 +97,7 @@ export const deleteFriend = async (friendId: number) => {
   }
 };
 
-// 공유일기 작성 날짜 조회 API (GET)
+// 공유일기 작성 캘린더 조회 API (GET)
 export const getSharedDiaryDates = async (
   friendId: number,
   year: number,
@@ -106,7 +106,7 @@ export const getSharedDiaryDates = async (
   try {
     const query = `?year=${year}&month=${month}`;
     const response = await apiClient(
-      `/api/v1/groups/${friendId}/share-diaries/date${query}`,
+      `/api/v1/groups/${friendId}/share-diaries${query}`,
       {
         method: "GET",
       }
@@ -126,29 +126,24 @@ export const getSharedDiaryDates = async (
   }
 };
 
-// 일기 상세 조회 API
-export const getSharedDiaries = async (
-  friendId: number,
-  year: number,
-  month: number
-): Promise<SharedDiary[]> => {
+// 공유일기 상세 조회 API (GET)
+export const getSharedDiaryDetail = async (
+  shareDiaryId: number
+): Promise<SharedDiary | null> => {
   try {
-    const query = `?year=${year}&month=${month}`;
-    const response = await apiClient(
-      `/api/v1/groups/${friendId}/share-diaries${query}`,
-      {
-        method: "GET",
-      }
-    );
+    const response = await apiClient(`/api/v1/share-diaries/${shareDiaryId}`, {
+      method: "GET",
+    });
 
-    if (response.success && Array.isArray(response.data)) {
-      console.log("✅ 공유일기 상세 조회 성공:", response.data);
+    console.log("📖 공유일기 상세 응답:", response);
+
+    if (response.success && response.data) {
       return response.data;
     }
 
-    return [];
+    return null;
   } catch (error) {
-    console.error("❌ 공유일기 전체 조회 실패:", error);
-    return [];
+    console.error("❌ 공유일기 상세 조회 실패:", error);
+    return null;
   }
 };
