@@ -2,7 +2,7 @@
 
 import Button from "@/components/common/atoms/Button";
 import WebModal from "@/components/common/atoms/WebModal";
-import { createDiaryEntry } from "@/lib/api/write-diary";
+import { createDiaryDraft, createDiaryEntry } from "@/lib/api/write-diary";
 import { resetDiary } from "@/store/diarySlice";
 import { resetPicture } from "@/store/pictureSlice";
 import { RootState } from "@/store/store";
@@ -52,7 +52,7 @@ export default function DraftAlertModal() {
 
     try {
       console.log("submitDiary API 요청 시작");
-      await createDiaryEntry({
+      await createDiaryDraft({
         title,
         content,
         pictureLines:

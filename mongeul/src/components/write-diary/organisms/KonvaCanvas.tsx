@@ -4,11 +4,11 @@ import { RootState } from "@/store/store";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addLine,
+  setStageRef,
   updateLines,
   updateLinesWithHistory,
 } from "@/store/pictureSlice";
 import Card from "@/components/common/atoms/Card";
-import { setStageRef } from "@/utils/stateRef";
 import { Stage, Layer, Line } from "react-konva";
 import { PictureLine } from "@/types/pictureTypes";
 
@@ -30,11 +30,17 @@ const KonvaCanvas = () => {
   }, []);
 
   useEffect(() => {
-    if (stageRef.current) {
-      setStageRef(stageRef.current);
-      console.log("stageRef 설정됨:", stageRef.current);
-    }
-  }, [stageRef.current]);
+    const waitForStage = () => {
+      if (stageRef.current) {
+        dispatch(setStageRef(stageRef.current));
+        console.log("stageRef Redux 저장 완료", stageRef.current);
+      } else {
+        requestAnimationFrame(waitForStage);
+      }
+    };
+
+    waitForStage();
+  }, [dispatch]);
 
   if (!isClient) return null;
 
