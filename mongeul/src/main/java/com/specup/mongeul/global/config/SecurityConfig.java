@@ -89,8 +89,11 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowCredentials(true);
         configuration.setAllowedOrigins(List.of(
+//                TODO https://www.mongeul.co.kr 제외 삭제 예정
                 "http://localhost:3000",
                 "https://localhost:3000",
+                "https://www.mongeul.co.kr",
+                "http://www.mongeul.co.kr",
                 "https://mongeul.co.kr",
                 "http://mongeul.co.kr",
                 "http://api.mongeul.co.kr",
