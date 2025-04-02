@@ -129,29 +129,60 @@ public class CloudinaryService {
      * @param fileUrl Cloudinary 파일 URL
      * @return Public ID
      */
+//    private String extractPublicIdFromUrl(String fileUrl) {
+//
+//        // URL 형식: https://res.cloudinary.com/cloud-name/image/upload/v1234567890/folder/file_name
+//        String[] parts = fileUrl.split("/");
+//        StringBuilder publicId = new StringBuilder();
+//
+//        boolean startCollecting = false;
+//        for (String part : parts) {
+//            if (startCollecting) {
+//                publicId.append(part).append("/");
+//            }
+//            if (part.startsWith("v") && part.substring(1).matches("\\d+")) {
+//                startCollecting = true;
+//            }
+//        }
+//
+//        // 마지막 슬래시 제거
+//        if (publicId.length() > 0) {
+//            publicId.setLength(publicId.length() - 1);
+//        }
+//
+//        String result = publicId.toString();
+//        return result;
+//    }
     private String extractPublicIdFromUrl(String fileUrl) {
+        // 예: https://res.cloudinary.com/daw5iggrn/image/upload/v1234567890/folder/filename.png
 
-        // URL 형식: https://res.cloudinary.com/cloud-name/image/upload/v1234567890/folder/file_name
-        String[] parts = fileUrl.split("/");
-        StringBuilder publicId = new StringBuilder();
-
-        boolean startCollecting = false;
-        for (String part : parts) {
-            if (startCollecting) {
-                publicId.append(part).append("/");
+        try {
+            int uploadIndex = fileUrl.indexOf("/upload/");
+            if (uploadIndex == -1) {
+                throw new IllegalArgumentException("Cloudinary URL 형식이 올바르지 않습니다.");
             }
-            if (part.startsWith("v") && part.substring(1).matches("\\d+")) {
-                startCollecting = true;
+
+            // upload/ 이후 전체 경로
+            String afterUpload = fileUrl.substring(uploadIndex + "/upload/".length());
+
+            // 첫 번째 '/' 기준으로 잘라서 버전(v...) 제거
+            String[] parts = afterUpload.split("/", 2);
+            if (parts.length < 2) {
+                throw new IllegalArgumentException("Cloudinary URL에서 public_id를 추출할 수 없습니다.");
             }
-        }
 
-        // 마지막 슬래시 제거
-        if (publicId.length() > 0) {
-            publicId.setLength(publicId.length() - 1);
-        }
+            String publicIdWithExt = parts[1];
 
-        String result = publicId.toString();
-        return result;
+            // 확장자 제거
+            if (publicIdWithExt.contains(".")) {
+                publicIdWithExt = publicIdWithExt.substring(0, publicIdWithExt.lastIndexOf('.'));
+            }
+
+            return publicIdWithExt;
+
+        } catch (Exception e) {
+            throw new RuntimeException("Cloudinary URL에서 public_id 추출 실패: " + e.getMessage(), e);
+        }
     }
 
     /**
