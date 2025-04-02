@@ -15,7 +15,6 @@ import com.specup.mongeul.domain.diary.repository.ShareDiaryRepository;
 import com.specup.mongeul.domain.friends.entity.Friend;
 import com.specup.mongeul.domain.friends.repository.FriendRepository;
 import com.specup.mongeul.domain.service.CloudinaryService;
-import com.specup.mongeul.domain.service.GoogleDriveService;
 import com.specup.mongeul.domain.user.entity.User;
 import com.specup.mongeul.domain.user.repository.UserRepository;
 import com.specup.mongeul.global.error.CustomException;
@@ -35,7 +34,6 @@ public class ShareDiaryService {
     private final UserRepository userRepository;
     private final FriendRepository friendRepository;
     private final ObjectMapper objectMapper;
-    private final GoogleDriveService googleDriveService;
     private final CloudinaryService cloudinaryService;
 
     // 공유일기 생성
@@ -60,15 +58,13 @@ public class ShareDiaryService {
         MultipartFile picture = request.getPicture();
         // 그림 URL 생성
         String pictureUrl = null;
-        String fileUrl = null;
         if (picture != null && !picture.isEmpty()) {
             try {
                 // 임시 파일 생성 및 업로드
                 java.io.File tempFile = java.io.File.createTempFile("temp-", null);
                 picture.transferTo(tempFile);
 
-                pictureUrl = googleDriveService.uploadFile(tempFile, picture.getContentType(), groupId, request.getDate(), false);
-                fileUrl = cloudinaryService.uploadFile(tempFile, groupId, request.getDate(), false);
+                pictureUrl = cloudinaryService.uploadFile(tempFile, groupId, request.getDate(), false);
 
                 // 파일 자동 삭제 (try-with-resources 활용)
                 if (!tempFile.delete()) {
@@ -147,15 +143,13 @@ public class ShareDiaryService {
 
         MultipartFile newPicture = request.getPicture();
         String pictureUrl = shareDiary.getPicture();
-        String pictureUrl2 = shareDiary.getPicture();
 
         if (newPicture != null && !newPicture.isEmpty()) {
             try {
                 // 새 이미지 업로드 (자동 덮어쓰기 로직 포함)
                 java.io.File tempFile = java.io.File.createTempFile("temp-", null);
                 newPicture.transferTo(tempFile);
-                pictureUrl = googleDriveService.uploadFile(tempFile, newPicture.getContentType(), groupId, request.getDate(), false);
-                pictureUrl2 = cloudinaryService.uploadFile(tempFile, groupId, request.getDate(), false);
+                pictureUrl = cloudinaryService.uploadFile(tempFile, groupId, request.getDate(), false);
 
                 tempFile.delete();
             } catch (Exception e) {
@@ -218,10 +212,10 @@ public class ShareDiaryService {
             throw new CustomException(ErrorCode.INVALID_SHARE_DIARY_USER);
         }
 
-        // Google Drive 이미지 삭제 (파일 URL이 있을 경우)
-        if (shareDiary.getPicture() != null && shareDiary.getPicture().contains("id=")) {
+        // cloudinary 이미지 삭제
+        if (shareDiary.getPicture() != null) {
             try {
-                googleDriveService.deleteFile(shareDiary.getPicture());
+                cloudinaryService.deleteFile(shareDiary.getPicture());
             } catch (Exception e) {
                 throw new RuntimeException("파일 삭제 실패", e);
             }
