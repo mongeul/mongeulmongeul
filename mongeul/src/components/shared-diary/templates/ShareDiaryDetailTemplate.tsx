@@ -14,7 +14,7 @@ import ShareDiary from "../organisms/ShareDiary";
 import ShareDiaryDetail from "../organisms/ShareDiaryDetail";
 
 export default function ShareDiaryDetailTemplate() {
-  const { shareDiaryId } = useParams();
+  const { diaryId } = useParams();
   const dispatch = useDispatch();
   const isMobile = useIsMobile();
 
@@ -27,7 +27,7 @@ export default function ShareDiaryDetailTemplate() {
   useEffect(() => {
     const fetchSharedDiary = async () => {
       try {
-        const diary = await getSharedDiaryDetail(Number(shareDiaryId));
+        const diary = await getSharedDiaryDetail(Number(diaryId));
         dispatch(setSelectedSharedDiary(diary));
       } catch (error) {
         console.error("공유일기 상세 조회 실패:", error);
@@ -37,8 +37,8 @@ export default function ShareDiaryDetailTemplate() {
       }
     };
 
-    if (shareDiaryId) fetchSharedDiary();
-  }, [shareDiaryId, dispatch]);
+    if (diaryId) fetchSharedDiary();
+  }, [diaryId, dispatch]);
 
   if (loading) return <div className="text-center mt-10">로딩 중...</div>;
   if (!selectedDiary)
