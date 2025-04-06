@@ -45,7 +45,7 @@ export default function FeedLikeButton() {
         {isOpen && (
           <div
             ref={bubbleRef}
-            className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2"
+            className="absolute bottom-full left-1/2 -translate-x-1/2 -translate-x-[26px] mb-2"
           >
             <FeedEmojiBubble />
           </div>

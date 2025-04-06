@@ -8,7 +8,5 @@ interface DiaryPrivateStatusIconProps {
 export default function DiaryPrivateStatusIcon({
   privateStatus,
 }: DiaryPrivateStatusIconProps) {
-  const { icon } = PrivateStatusIcon({ privateStatus, size: "h-10 w-10" });
-
-  return icon;
+  return <PrivateStatusIcon privateStatus={privateStatus} size="h-10 w-10" />;
 }

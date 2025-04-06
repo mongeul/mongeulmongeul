@@ -6,51 +6,30 @@ import Angry from "@/assets/images/angry.png";
 import Wow from "@/assets/images/wow.png";
 import Basic from "@/assets/images/basic.png";
 import { Feeling } from "@/types/diaryTypes";
-import { useMemo } from "react";
 
 interface FeelingsIconProps {
   feeling: Feeling;
   size?: string;
 }
 
+const feelingMap: Record<Feeling | string, { src: any; alt: string }> = {
+  HAPPY: { src: Happy, alt: "행복해요" },
+  SAD: { src: Sad, alt: "슬퍼요" },
+  ANGRY: { src: Angry, alt: "화나요" },
+  WOW: { src: Wow, alt: "놀라워요" },
+  SOSO: { src: Soso, alt: "그저그래요" },
+  DEFAULT: { src: Basic, alt: "기분 없음" },
+};
+
 export default function FeelingsIcon({
   feeling,
   size = "w-24 h-24",
 }: FeelingsIconProps) {
-  const status = useMemo(() => {
-    switch (feeling) {
-      case "HAPPY":
-        return {
-          icon: <Image src={Happy} alt="행복해요" className={size} />,
-          label: "행복해요",
-        };
-      case "SAD":
-        return {
-          icon: <Image src={Sad} alt="슬퍼요" className={size} />,
-          label: "슬퍼요",
-        };
-      case "ANGRY":
-        return {
-          icon: <Image src={Angry} alt="화나요" className={size} />,
-          label: "화나요",
-        };
-      case "WOW":
-        return {
-          icon: <Image src={Wow} alt="놀라워요" className={size} />,
-          label: "놀라워요",
-        };
-      case "SOSO":
-        return {
-          icon: <Image src={Soso} alt="그저그래요" className={size} />,
-          label: "그저그래요",
-        };
-      default:
-        return {
-          icon: <Image src={Basic} alt="기분 없음" className={size} />,
-          label: "기분 없음",
-        };
-    }
-  }, [feeling, size]);
+  const { src, alt } = feelingMap[feeling] || feelingMap["DEFAULT"];
 
-  return status;
+  return (
+    <div className={`relative ${size}`}>
+      <Image src={src} alt={alt} fill className="object-contain" />
+    </div>
+  );
 }

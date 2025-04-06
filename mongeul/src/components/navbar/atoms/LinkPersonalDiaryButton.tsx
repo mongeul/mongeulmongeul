@@ -17,8 +17,8 @@ export default function LinkPersonalDiaryButton({
   const router = useRouter();
 
   const handleClick = async () => {
-    const today = new Date().toISOString().split("T")[0];
-    const isDiary = await verifyDiaryEntry(today);
+    const date = new Date().toISOString().split("T")[0];
+    const isDiary = await verifyDiaryEntry(date);
 
     if (isDiary.data) {
       router.push(`/diary/${isDiary.data}`);

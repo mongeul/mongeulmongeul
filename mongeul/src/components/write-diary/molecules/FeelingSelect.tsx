@@ -6,9 +6,17 @@ import { setFeeling } from "@/store/diarySlice";
 import { RootState } from "@/store/store";
 import { Feeling } from "@/types/diaryTypes";
 import WebModal from "../../common/atoms/WebModal";
-import FeelingIcon from "@/components/common/atoms/FeelingsIcon";
+import FeelingsIcon from "@/components/common/atoms/FeelingsIcon";
 
 const feelingOptions: Feeling[] = ["HAPPY", "SOSO", "SAD", "ANGRY", "WOW"];
+
+const feelingLabelMap: Record<Feeling, string> = {
+  HAPPY: "행복해요",
+  SOSO: "그저그래요",
+  SAD: "슬퍼요",
+  ANGRY: "화나요",
+  WOW: "놀라워요",
+};
 
 function ModalContent({ closeModal }: { closeModal: () => void }) {
   const dispatch = useDispatch();
@@ -23,21 +31,18 @@ function ModalContent({ closeModal }: { closeModal: () => void }) {
       <p className="text-gray-600">오늘 하루 기분이 어떠셨나요?</p>
       <div className="flex justify-center pt-6 pb-4">
         <div className="grid grid-cols-3 gap-8">
-          {feelingOptions.map((feeling, index) => {
-            const { icon, label } = FeelingIcon({
-              feeling: feeling,
-            });
-            return (
-              <div
-                key={index}
-                className="flex flex-col items-center justify-center gap-2 cursor-pointer"
-                onClick={() => handleChange(feeling)}
-              >
-                {icon}
-                <p className="text-sm text-gray-500">{label}</p>
-              </div>
-            );
-          })}
+          {feelingOptions.map((feeling) => (
+            <div
+              key={feeling}
+              className="flex flex-col items-center justify-center gap-2 cursor-pointer"
+              onClick={() => handleChange(feeling)}
+            >
+              <FeelingsIcon feeling={feeling} size="w-16 h-16" />
+              <p className="text-sm text-gray-500">
+                {feelingLabelMap[feeling]}
+              </p>
+            </div>
+          ))}
         </div>
       </div>
     </div>
@@ -52,15 +57,13 @@ export default function FeelingSelect() {
 
   const toggleModal = () => setIsModalOpen((prev) => !prev);
 
-  const { icon } = FeelingIcon({ feeling: selectedFeeling });
-
   return (
     <>
       <div
         onClick={toggleModal}
         className="flex flex-col items-center justify-center gap-2 cursor-pointer"
       >
-        {icon}
+        <FeelingsIcon feeling={selectedFeeling} size="w-20 h-20" />
         <p className="text-xs text-zinc-400">오늘의 기분</p>
       </div>
 

@@ -6,7 +6,5 @@ interface DiaryFeelingIconProps {
 }
 
 export default function DiaryFeelingIcon({ feeling }: DiaryFeelingIconProps) {
-  const { icon } = FeelingsIcon({ feeling, size: "h-20 w-20" });
-
-  return icon;
+  return <FeelingsIcon feeling={feeling} size="h-20 w-20" />;
 }

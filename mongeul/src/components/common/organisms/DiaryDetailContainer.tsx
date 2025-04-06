@@ -3,7 +3,7 @@
 import { FeedDetail } from "@/types/feedTypes";
 import DiaryHeader from "../molecules/DiaryHeader";
 import DiaryContentCard from "../atoms/DiaryContentCard";
-import ImageCard from "../atoms/ImageCard";
+import DiaryImageCard from "../atoms/DiaryImageCard";
 import { Diary } from "@/types/diaryTypes";
 
 interface DiaryDetailContainerProps {
@@ -22,7 +22,7 @@ export default function DiaryDetailContainer({
         title={diary.title}
         date={diary.date}
       />
-      {diary.picture && <ImageCard picture={diary.picture} />}
+      {diary.picture && <DiaryImageCard picture={diary.picture} />}
       <DiaryContentCard content={diary.content} />
     </div>
   );

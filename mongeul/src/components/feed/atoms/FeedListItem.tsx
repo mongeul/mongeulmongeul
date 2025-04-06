@@ -1,5 +1,6 @@
 "use client";
 
+import FeelingsIcon from "@/components/common/atoms/FeelingsIcon";
 import FeelingIcon from "@/components/common/atoms/FeelingsIcon";
 import { FeedListItem } from "@/types/feedTypes";
 import Link from "next/link";
@@ -10,8 +11,6 @@ interface FeedListItemProps {
 }
 
 export default function FeedItem({ feed }: FeedListItemProps) {
-  const { icon } = FeelingIcon({ feeling: feed.feeling });
-
   // 아이콘의 초기 위치를 중앙(50%, 50%)으로 설정
   const [position, setPosition] = useState<{ top: string; left: string }>({
     top: "50%",
@@ -81,7 +80,7 @@ export default function FeedItem({ feed }: FeedListItemProps) {
           animation: `shake-${feed.feedId} ${animationDuration} ease-in-out infinite alternate`,
         }}
       >
-        {icon}
+        <FeelingsIcon feeling={feed.feeling} size="w-24 h-24" />
       </div>
     </Link>
   );
