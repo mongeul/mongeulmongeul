@@ -70,7 +70,7 @@ export default function SharedDiaryTemplate() {
       return;
     }
     if (!isMobile) {
-      router.push(`/shared-diary/${id}/@detail/${entry.diaryId}`);
+      router.push(`/shared-diary/${id}/${entry.diaryId}`);
     } else {
       const diary = await getSharedDiaryDetail(entry.diaryId);
       dispatch(setSelectedSharedDiary(diary));
