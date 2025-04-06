@@ -30,14 +30,7 @@ export default function DraftAlertModal() {
     privateStatus,
   } = useSelector((state: RootState) => state.diary);
 
-  const isDirty = !!(
-    title ||
-    content ||
-    picture ||
-    pictureLines ||
-    weather ||
-    feeling
-  );
+  const isDirty = !!(title || content || picture || pictureLines);
 
   console.log("isDirty 상태:", isDirty);
 
