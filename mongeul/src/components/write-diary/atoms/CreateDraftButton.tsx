@@ -10,6 +10,7 @@ import { resetDiary } from "@/store/diarySlice";
 import { resetPicture } from "@/store/pictureSlice";
 import { RootState } from "@/store/store";
 import { useRouter } from "next/navigation";
+import { flushSync } from "react-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 interface CreateDraftButtonProps {
@@ -31,7 +32,7 @@ export default function CreateDraftButton({ groupId }: CreateDraftButtonProps) {
     privateStatus,
   } = useSelector((state: RootState) => state.diary);
 
-  const isDirty = !!(title || content || pictureLines || weather || feeling);
+  const isDirty = !!(title || content || pictureLines);
 
   // API 요청 실행 후 상태 업데이트 및 페이지 이동
   async function handleSaveDiary(
@@ -42,10 +43,14 @@ export default function CreateDraftButton({ groupId }: CreateDraftButtonProps) {
       const response = await apiCall();
       console.log("API 응답:", response);
 
-      dispatch(resetDiary());
-      dispatch(resetPicture());
+      // Redux 상태 즉시 반영
+      flushSync(() => {
+        dispatch(resetDiary());
+        dispatch(resetPicture());
+      });
 
-      setTimeout(() => router.push(redirectPath), 50);
+      // 상태 반영 후 라우팅
+      router.push(redirectPath);
     } catch (error) {
       console.error("일기 임시저장 실패:", error);
     }

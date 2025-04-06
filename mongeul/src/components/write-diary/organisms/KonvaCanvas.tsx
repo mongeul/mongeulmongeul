@@ -145,15 +145,21 @@ const KonvaCanvas = () => {
 
   return (
     <Card padding="">
-      <div className="w-full overflow-x-auto">
+      <div
+        className="w-full overflow-x-auto"
+        style={{ touchAction: isDrawing ? "none" : "auto" }}
+      >
         <div className="w-[768px] flex-shrink-0">
           <Stage
             width={768}
             height={500}
             ref={stageRef}
             onMouseDown={handleMouseDown}
+            onTouchStart={handleMouseDown}
             onMouseMove={handleMouseMove}
+            onTouchMove={handleMouseMove}
             onMouseUp={handleMouseUp}
+            onTouchEnd={handleMouseUp}
             onMouseLeave={handleMouseUp}
           >
             <Layer>

@@ -181,22 +181,23 @@ export async function fetchSharedDiaryDates(
 }
 
 // 특정 날짜 일기 존재 여부 확인
-export async function verifyDiaryEntry(
-  today: string
-): Promise<IsDiaryResponse> {
-  return apiClient(`/api/v1/diaries/find?today=${today}`, {
+export async function verifyDiaryEntry(date: string): Promise<IsDiaryResponse> {
+  return apiClient(`/api/v1/diaries/find?date=${date}`, {
     method: "GET",
   });
 }
 
 // 특정 날짜 공유 일기 존재 여부 확인
 export async function verifySharedDiaryEntry(
-  today: string,
+  date: string,
   groupId: number
 ): Promise<IsDiaryResponse> {
-  return apiClient(`/api/v1/groups/${groupId}/find?today=${today}`, {
-    method: "GET",
-  });
+  return apiClient(
+    `/api/v1/share-diaries/find?groupId=${groupId}&date=${date}`,
+    {
+      method: "GET",
+    }
+  );
 }
 
 // 임시 저장된 일기 조회

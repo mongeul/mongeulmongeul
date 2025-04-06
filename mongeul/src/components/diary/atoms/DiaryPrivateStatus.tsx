@@ -6,14 +6,12 @@ const DiaryPrivateStatus: React.FC = () => {
   const { selectedDiary } = useSelector((state: RootState) => state.calendar);
   if (!selectedDiary || selectedDiary === "LOCK") return null;
 
-  const { icon } = PrivateStatusIcon({
-    privateStatus: selectedDiary.privateStatus,
-  });
-
   return (
     <div className="flex items-center space-x-2">
-      {icon}
-      {/* <span className="text-sm text-gray-600">{label}</span> */}
+      <PrivateStatusIcon
+        privateStatus={selectedDiary.privateStatus}
+        size="w-5 h-5"
+      />
     </div>
   );
 };

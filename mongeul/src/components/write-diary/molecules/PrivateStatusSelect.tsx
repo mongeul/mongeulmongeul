@@ -10,6 +10,12 @@ import PrivateStatusIcon from "@/components/common/atoms/PrivateStatusIcon";
 
 const privateStatuses: PrivateStatus[] = ["PUBLIC", "PRIVATE", "LOCK"];
 
+const privateStatusLabelMap: Record<PrivateStatus, string> = {
+  PUBLIC: "전체 공개",
+  PRIVATE: "나만 보기",
+  LOCK: "잠금 일기",
+};
+
 function ModalContent({ closeModal }: { closeModal: () => void }) {
   const dispatch = useDispatch();
 
@@ -24,21 +30,21 @@ function ModalContent({ closeModal }: { closeModal: () => void }) {
       <div className="flex justify-center pt-6 pb-4">
         <div className="flex flex-col justify-center gap-6">
           <div className="flex flex-row gap-8">
-            {privateStatuses.map((privateStatus, index) => {
-              const { icon, label } = PrivateStatusIcon({
-                privateStatus: privateStatus,
-              });
-              return (
-                <div
-                  key={index}
-                  className="flex flex-col items-center justify-center gap-4"
-                  onClick={() => handleChange(privateStatus)}
-                >
-                  <div>{icon}</div>
-                  <div className="text-sm">{label}</div>
+            {privateStatuses.map((privateStatus) => (
+              <div
+                key={privateStatus}
+                className="flex flex-col items-center justify-center gap-4 cursor-pointer"
+                onClick={() => handleChange(privateStatus)}
+              >
+                <PrivateStatusIcon
+                  privateStatus={privateStatus}
+                  size="w-16 h-16"
+                />
+                <div className="text-sm">
+                  {privateStatusLabelMap[privateStatus]}
                 </div>
-              );
-            })}
+              </div>
+            ))}
           </div>
           <p className="text-zinc-400 text-xs text-center">
             * 잠긴 일기는 비밀번호를 입력해야만 볼 수 있어요
@@ -57,15 +63,16 @@ export default function PrivateStatusSelect() {
 
   const toggleModal = (): void => setIsModalOpen((prev) => !prev);
 
-  const { icon } = PrivateStatusIcon({ privateStatus: selectedPrivateStatus });
-
   return (
     <>
       <div
         onClick={toggleModal}
-        className="flex flex-col items-center justify-center gap-2"
+        className="flex flex-col items-center justify-center gap-2 cursor-pointer"
       >
-        {icon}
+        <PrivateStatusIcon
+          privateStatus={selectedPrivateStatus}
+          size="w-20 h-20"
+        />
         <p className="text-xs text-zinc-400">공개 범위</p>
       </div>
 

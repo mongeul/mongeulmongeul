@@ -15,6 +15,7 @@ import { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import DiarySubmitSpinner from "../molecules/DiarySubmitSpinner";
 import { useRouter } from "next/navigation";
+import { flushSync } from "react-dom";
 
 interface CreateDiaryButtonProps {
   diaryId: number | null;
@@ -53,10 +54,15 @@ export default function CreateDiaryButton({
 
     try {
       await apiCall();
-      dispatch(resetDiary());
-      dispatch(resetPicture());
 
-      setTimeout(() => router.push(redirectPath), 50);
+      // Redux 상태 즉시 반영
+      flushSync(() => {
+        dispatch(resetDiary());
+        dispatch(resetPicture());
+      });
+
+      // 상태 반영 후 페이지 이동
+      router.push(redirectPath);
     } catch (error) {
       console.error("일기 저장 실패:", error);
     } finally {
