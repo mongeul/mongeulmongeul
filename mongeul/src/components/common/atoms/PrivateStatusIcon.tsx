@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Public from "@/assets/images/public.png";
-import Private from "@/assets/images/lock.png";
+import Private from "@/assets/images/private.png";
 import Lock from "@/assets/images/lock.png";
 import { PrivateStatus } from "@/types/diaryTypes";
 import { useMemo } from "react";

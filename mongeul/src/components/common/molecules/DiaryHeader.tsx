@@ -24,16 +24,16 @@ export default function DiaryHeader({
   return (
     <Card width="w-full">
       <div className="w-full flex flex-col justify-center gap-2">
-        <div className="flex flex-row gap-4">
+        <div className="flex flex-row gap-2">
           <div className="w-auto h-auto flex items-center justify-center">
             <DiaryFeelingIcon feeling={feeling} />
           </div>
-          <div className="flex flex-col gap-2">
-            <div className="flex flex-row gap-2 h-auto">
+          <div className="flex flex-col">
+            <div className="flex flex-row h-auto">
               <DiaryWeatherIcon weather={weather} />
               <DiaryPrivateStatusIcon privateStatus={privateStatus} />
             </div>
-            <div className="">
+            <div>
               <DiaryDate date={date} />
             </div>
           </div>

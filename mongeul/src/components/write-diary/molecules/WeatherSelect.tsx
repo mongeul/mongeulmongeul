@@ -22,7 +22,7 @@ function ModalContent({ closeModal }: { closeModal: () => void }) {
     <div className="flex flex-col items-center justify-center">
       <p className="text-gray-600">오늘의 날씨는 어떤가요?</p>
       <div className="flex justify-center pt-6 pb-4">
-        <div className="grid grid-cols-4 gap-8">
+        <div className="grid grid-cols-4 gap-2">
           {weathers.map((weather, index) => {
             const { icon, label } = WeatherIcon({
               weather: weather,
@@ -48,7 +48,7 @@ export default function WeatherSelect() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const selectedWeather: Weather = useSelector(
     (state: RootState) => state.diary.weather
-  ) as Weather;
+  );
 
   const toggleModal = () => setIsModalOpen((prev) => !prev);
 

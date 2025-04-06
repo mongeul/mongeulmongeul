@@ -10,8 +10,8 @@ interface DiaryState {
   content: string;
   picture: string | null;
   pictureLines: PictureLine[] | null;
-  feeling: Feeling | null;
-  weather: Weather | null;
+  feeling: Feeling;
+  weather: Weather;
   privateStatus: PrivateStatus;
 }
 
@@ -23,8 +23,8 @@ const initialState: DiaryState = {
   content: "",
   picture: null,
   pictureLines: null,
-  feeling: null,
-  weather: null,
+  feeling: "SOSO",
+  weather: "SUNNY",
   privateStatus: "PRIVATE" as PrivateStatus,
 };
 
@@ -53,10 +53,10 @@ const diarySlice = createSlice({
     setPictureLines: (state, action: PayloadAction<PictureLine[] | null>) => {
       state.pictureLines = action.payload ?? [];
     },
-    setFeeling: (state, action: PayloadAction<Feeling | null>) => {
+    setFeeling: (state, action: PayloadAction<Feeling>) => {
       state.feeling = action.payload;
     },
-    setWeather: (state, action: PayloadAction<Weather | null>) => {
+    setWeather: (state, action: PayloadAction<Weather>) => {
       state.weather = action.payload;
     },
     setPrivateStatus: (state, action: PayloadAction<PrivateStatus>) => {

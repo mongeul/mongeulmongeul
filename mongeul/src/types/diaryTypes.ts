@@ -11,8 +11,8 @@ export interface BaseDiary {
   content: string;
   picture?: string;
   date: string;
-  weather: Weather | null;
-  feeling: Feeling | null;
+  weather: Weather;
+  feeling: Feeling;
   privateStatus: PrivateStatus;
 }
 
