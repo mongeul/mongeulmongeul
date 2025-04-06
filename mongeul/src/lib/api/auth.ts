@@ -179,3 +179,25 @@ export const getNewTokens = async (): Promise<{
     return null;
   }
 };
+
+// 내 정보 확인 (GET)
+export const getUserInfo = async (dispatch: AppDispatch) => {
+  try {
+    const data = await apiClient("/api/user/me", {
+      method: "GET",
+    });
+
+    if (data.success) {
+      dispatch(setUser(data.data));
+      return data.data;
+    } else {
+      console.warn("❗ 사용자 정보 조회 실패:", data.message);
+      dispatch(clearUser());
+      return null;
+    }
+  } catch (error) {
+    console.error("❌ 사용자 정보 조회 중 에러:", error);
+    dispatch(clearUser());
+    return null;
+  }
+};

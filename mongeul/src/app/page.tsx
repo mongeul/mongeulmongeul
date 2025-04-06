@@ -1,10 +1,3 @@
-// import { redirect } from "next/navigation";
-
-// export default function Home() {
-//   redirect("/diary");
-//   return null;
-// }
-
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 
