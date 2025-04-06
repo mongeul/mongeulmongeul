@@ -6,7 +6,7 @@ interface DiaryWeatherIconProps {
 }
 
 export default function DiaryWeatherIcon({ weather }: DiaryWeatherIconProps) {
-  const { icon } = WeatherIcon({ weather, size: "h-4 w-4" });
+  const { icon } = WeatherIcon({ weather, size: "h-10 w-10" });
 
   return icon;
 }

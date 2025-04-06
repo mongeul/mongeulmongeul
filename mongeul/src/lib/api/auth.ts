@@ -149,3 +149,33 @@ export const handleWithdraw = async (dispatch: AppDispatch) => {
     console.error("❌ 회원 탈퇴 요청 중 오류 발생:", error);
   }
 };
+
+// 토큰 재발급 (POST)
+export const getNewTokens = async (): Promise<{
+  accessToken: string;
+  refreshToken: string;
+} | null> => {
+  const refreshToken = getCookie("refreshToken");
+  if (!refreshToken) return null;
+
+  try {
+    const data = await apiClient("/api/auth/refresh", {
+      method: "POST",
+    });
+
+    if (data.success) {
+      const { accessToken, refreshToken: newRefreshToken } = data.data;
+
+      // 새 토큰 쿠키에 저장
+      document.cookie = `accessToken=${accessToken}; path=/; secure; samesite=strict`;
+      document.cookie = `refreshToken=${newRefreshToken}; path=/; secure; samesite=strict`;
+
+      return { accessToken, refreshToken: newRefreshToken };
+    }
+
+    return null;
+  } catch (error) {
+    console.error("❌ 토큰 재발급 실패:", error);
+    return null;
+  }
+};

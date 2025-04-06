@@ -1,10 +1,12 @@
-"use client";
-
-import { useMemo } from "react";
-import RoundIcon from "@/components/common/atoms/RoundIcon";
-import HappyIcon from "@/assets/icons/happy.svg";
-import FeelIcon from "@/assets/icons/feel.svg";
+import Image from "next/image";
+import Happy from "@/assets/images/happy.png";
+import Sad from "@/assets/images/sad.png";
+import Soso from "@/assets/images/soso.png";
+import Angry from "@/assets/images/angry.png";
+import Wow from "@/assets/images/wow.png";
+import Basic from "@/assets/images/basic.png";
 import { Feeling } from "@/types/diaryTypes";
+import { useMemo } from "react";
 
 interface FeelingsIconProps {
   feeling: Feeling;
@@ -13,62 +15,38 @@ interface FeelingsIconProps {
 
 export default function FeelingsIcon({
   feeling,
-  size = "w-9 h-9",
+  size = "w-24 h-24",
 }: FeelingsIconProps) {
   const status = useMemo(() => {
     switch (feeling) {
       case "HAPPY":
         return {
-          icon: (
-            <RoundIcon backgroundColor="bg-theme-400">
-              <HappyIcon className={`text-white ${size}`} />
-            </RoundIcon>
-          ),
+          icon: <Image src={Happy} alt="행복해요" className={size} />,
           label: "행복해요",
         };
       case "SAD":
         return {
-          icon: (
-            <RoundIcon backgroundColor="bg-theme-300">
-              <HappyIcon className={`text-white ${size}`} />
-            </RoundIcon>
-          ),
+          icon: <Image src={Sad} alt="슬퍼요" className={size} />,
           label: "슬퍼요",
         };
       case "ANGRY":
         return {
-          icon: (
-            <RoundIcon backgroundColor="bg-theme-200">
-              <HappyIcon className={`text-white ${size}`} />
-            </RoundIcon>
-          ),
+          icon: <Image src={Angry} alt="화나요" className={size} />,
           label: "화나요",
         };
       case "WOW":
         return {
-          icon: (
-            <RoundIcon backgroundColor="bg-theme-200">
-              <HappyIcon className={`text-white ${size}`} />
-            </RoundIcon>
-          ),
+          icon: <Image src={Wow} alt="놀라워요" className={size} />,
           label: "놀라워요",
         };
       case "SOSO":
         return {
-          icon: (
-            <RoundIcon backgroundColor="bg-theme-200">
-              <HappyIcon className={`text-white ${size}`} />
-            </RoundIcon>
-          ),
+          icon: <Image src={Soso} alt="그저그래요" className={size} />,
           label: "그저그래요",
         };
       default:
         return {
-          icon: (
-            <RoundIcon backgroundColor="bg-zinc-300">
-              <FeelIcon className={`text-white ${size}`} />
-            </RoundIcon>
-          ),
+          icon: <Image src={Basic} alt="기분 없음" className={size} />,
           label: "기분 없음",
         };
     }

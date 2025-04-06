@@ -1,9 +1,10 @@
-"use client";
-
-import { useMemo } from "react";
-import RoundIcon from "./RoundIcon";
-import WeatherSvgIcon from "@/assets/icons/weather.svg";
+import Image from "next/image";
+import Sunny from "@/assets/images/sunny.png";
+import Cloudy from "@/assets/images/cloudy.png";
+import Rainy from "@/assets/images/rainy.png";
+import Snowy from "@/assets/images/Snowy.png";
 import { Weather } from "@/types/diaryTypes";
+import { useMemo } from "react";
 
 interface WeatherIconProps {
   weather: Weather;
@@ -12,53 +13,33 @@ interface WeatherIconProps {
 
 export default function WeatherIcon({
   weather,
-  size = "w-9 h-9",
+  size = "w-24 h-24",
 }: WeatherIconProps) {
   const status = useMemo(() => {
     switch (weather) {
       case "SUNNY":
         return {
-          icon: (
-            <RoundIcon backgroundColor="bg-theme-200">
-              <WeatherSvgIcon className={`text-white ${size}`} />
-            </RoundIcon>
-          ),
+          icon: <Image src={Sunny} alt="맑음" className={size} />,
           label: "맑음",
         };
       case "CLOUDY":
         return {
-          icon: (
-            <RoundIcon backgroundColor="bg-theme-300">
-              <WeatherSvgIcon className={`text-white ${size}`} />
-            </RoundIcon>
-          ),
+          icon: <Image src={Cloudy} alt="흐림" className={size} />,
           label: "흐림",
         };
       case "RAINY":
         return {
-          icon: (
-            <RoundIcon backgroundColor="bg-theme-400">
-              <WeatherSvgIcon className={`text-white ${size}`} />
-            </RoundIcon>
-          ),
+          icon: <Image src={Rainy} alt="비" className={size} />,
           label: "비",
         };
       case "SNOWY":
         return {
-          icon: (
-            <RoundIcon backgroundColor="bg-theme-500">
-              <WeatherSvgIcon className={`text-white ${size}`} />
-            </RoundIcon>
-          ),
+          icon: <Image src={Snowy} alt="눈" className={size} />,
           label: "눈",
         };
       default:
         return {
-          icon: (
-            <RoundIcon backgroundColor="bg-zinc-300">
-              <WeatherSvgIcon className={`text-white ${size}`} />
-            </RoundIcon>
-          ),
+          icon: <Image src={Sunny} alt="맑음" className={size} />,
           label: "날씨 없음",
         };
     }

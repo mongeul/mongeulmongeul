@@ -1,0 +1,35 @@
+"use client";
+import React, { useState } from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
+
+import Card from "@/components/common/atoms/Card";
+import DiaryTitle from "@/components/diary/atoms/DiaryTitle";
+import DiaryImage from "@/components/diary/atoms/DiaryImage";
+import DiaryContent from "@/components/diary/atoms/DiaryContent";
+import ShareDiaryDetailHeader from "../molecules/ShareDiaryDetailHeader";
+
+const Diary: React.FC = () => {
+  const { selectedSharedDiary } = useSelector(
+    (state: RootState) => state.calendar
+  );
+
+  return (
+    <div>
+      {selectedSharedDiary ? (
+        <Card height="min-h-[200px] lg:min-h-[450px]">
+          <div className="flex flex-col items-start w-full p-4">
+            <ShareDiaryDetailHeader />
+            <DiaryTitle />
+            <DiaryImage />
+            <DiaryContent />
+          </div>
+        </Card>
+      ) : (
+        <div></div>
+      )}
+    </div>
+  );
+};
+
+export default Diary;
