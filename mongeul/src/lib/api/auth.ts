@@ -30,8 +30,8 @@ export const handleKakaoLogin = async (
       console.log("🔍 로그인 후 받은 유저 정보:", user);
 
       dispatch(setUser({ ...user }));
-      document.cookie = `accessToken=${accessToken}; path=/; secure; samesite=strict`; // max-age=604800; 30분 (1800초)
-      document.cookie = `refreshToken=${refreshToken}; path=/; secure; samesite=strict`; // max-age=604800; 7일 (604800초)
+      document.cookie = `accessToken=${accessToken}; path=/; secure; samesite=strict; max-age=1800`;
+      document.cookie = `refreshToken=${refreshToken}; path=/; secure; samesite=strict; max-age=604800`;
 
       return user;
     }
@@ -167,8 +167,8 @@ export const getNewTokens = async (): Promise<{
       const { accessToken, refreshToken: newRefreshToken } = data.data;
 
       // 새 토큰 쿠키에 저장
-      document.cookie = `accessToken=${accessToken}; path=/; secure; samesite=strict`;
-      document.cookie = `refreshToken=${newRefreshToken}; path=/; secure; samesite=strict`;
+      document.cookie = `accessToken=${accessToken}; path=/; secure; samesite=strict; max-age=1800`;
+      document.cookie = `refreshToken=${newRefreshToken}; path=/; secure; samesite=strict; max-age=604800`;
 
       return { accessToken, refreshToken: newRefreshToken };
     }
@@ -176,6 +176,28 @@ export const getNewTokens = async (): Promise<{
     return null;
   } catch (error) {
     console.error("❌ 토큰 재발급 실패:", error);
+    return null;
+  }
+};
+
+// 내 정보 확인 (GET)
+export const getUserInfo = async (dispatch: AppDispatch) => {
+  try {
+    const data = await apiClient("/api/user/me", {
+      method: "GET",
+    });
+
+    if (data.success) {
+      dispatch(setUser(data.data));
+      return data.data;
+    } else {
+      console.warn("❗ 사용자 정보 조회 실패:", data.message);
+      dispatch(clearUser());
+      return null;
+    }
+  } catch (error) {
+    console.error("❌ 사용자 정보 조회 중 에러:", error);
+    dispatch(clearUser());
     return null;
   }
 };
