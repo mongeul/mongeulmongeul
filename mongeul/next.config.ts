@@ -4,7 +4,15 @@ import withPWA from "next-pwa";
 const nextConfig: NextConfig = {
   images: {
     domains: ["drive.google.com", "res.cloudinary.com"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "res.cloudinary.com",
+        pathname: "/daw5iggrn/**",
+      },
+    ],
   },
+
   webpack: (config, { isServer }) => {
     config.module.rules.push({
       test: /\.svg$/i,
