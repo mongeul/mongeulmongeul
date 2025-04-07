@@ -2,7 +2,7 @@ import Image from "next/image";
 import Sunny from "@/assets/images/sunny.png";
 import Cloudy from "@/assets/images/cloudy.png";
 import Rainy from "@/assets/images/rainy.png";
-import Snowy from "@/assets/images/Snowy.png";
+import Snowy from "@/assets/images/snowy.png";
 import { Weather } from "@/types/diaryTypes";
 
 interface WeatherIconProps {
