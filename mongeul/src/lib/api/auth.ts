@@ -30,8 +30,8 @@ export const handleKakaoLogin = async (
       console.log("🔍 로그인 후 받은 유저 정보:", user);
 
       dispatch(setUser({ ...user }));
-      document.cookie = `accessToken=${accessToken}; path=/; secure; samesite=strict`; // max-age=604800; 30분 (1800초)
-      document.cookie = `refreshToken=${refreshToken}; path=/; secure; samesite=strict`; // max-age=604800; 7일 (604800초)
+      document.cookie = `accessToken=${accessToken}; path=/; secure; samesite=strict; max-age=1800`;
+      document.cookie = `refreshToken=${refreshToken}; path=/; secure; samesite=strict; max-age=604800`;
 
       return user;
     }
@@ -167,8 +167,8 @@ export const getNewTokens = async (): Promise<{
       const { accessToken, refreshToken: newRefreshToken } = data.data;
 
       // 새 토큰 쿠키에 저장
-      document.cookie = `accessToken=${accessToken}; path=/; secure; samesite=strict`;
-      document.cookie = `refreshToken=${newRefreshToken}; path=/; secure; samesite=strict`;
+      document.cookie = `accessToken=${accessToken}; path=/; secure; samesite=strict; max-age=1800`;
+      document.cookie = `refreshToken=${newRefreshToken}; path=/; secure; samesite=strict; max-age=604800`;
 
       return { accessToken, refreshToken: newRefreshToken };
     }
