@@ -22,7 +22,7 @@ export default function DiaryTemplate() {
   const { diaryEntries = [] } = useSelector(
     (state: RootState) => state.calendar
   );
-  const [currentDiaryId, setCurrentDiaryId] = useState<number | null>(null);
+  // const [currentDiaryId, setCurrentDiaryId] = useState<number | null>(null);
 
   const isMobile = useIsMobile();
 
