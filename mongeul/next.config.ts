@@ -3,7 +3,7 @@ import withPWA from "next-pwa";
 
 const nextConfig: NextConfig = {
   images: {
-    domains: ["drive.google.com"],
+    domains: ["drive.google.com", "res.cloudinary.com"],
   },
   webpack: (config, { isServer }) => {
     config.module.rules.push({
