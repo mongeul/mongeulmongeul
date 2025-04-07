@@ -11,6 +11,7 @@ const nextConfig: NextConfig = {
         pathname: "/daw5iggrn/**",
       },
     ],
+    unoptimized: true,
   },
 
   webpack: (config, { isServer }) => {
