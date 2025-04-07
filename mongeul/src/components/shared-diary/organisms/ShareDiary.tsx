@@ -13,6 +13,7 @@ const Diary: React.FC = () => {
   const { selectedSharedDiary } = useSelector(
     (state: RootState) => state.calendar
   );
+  console.log("현재 공유 일기 상태:", selectedSharedDiary);
 
   return (
     <div>

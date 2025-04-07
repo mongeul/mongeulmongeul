@@ -156,17 +156,22 @@ export const getNewTokens = async (): Promise<{
   refreshToken: string;
 } | null> => {
   const refreshToken = getCookie("refreshToken");
-  if (!refreshToken) return null;
+  const accessToken = getCookie("accessToken");
+  if (!refreshToken || !accessToken) return null;
 
   try {
     const data = await apiClient("/api/auth/refresh", {
       method: "POST",
+      body: JSON.stringify({
+        accessToken,
+        refreshToken,
+      }),
     });
 
     if (data.success) {
       const { accessToken, refreshToken: newRefreshToken } = data.data;
 
-      // 새 토큰 쿠키에 저장
+      // ✅ 쿠키에 저장
       document.cookie = `accessToken=${accessToken}; path=/; secure; samesite=strict; max-age=1800`;
       document.cookie = `refreshToken=${newRefreshToken}; path=/; secure; samesite=strict; max-age=604800`;
 
