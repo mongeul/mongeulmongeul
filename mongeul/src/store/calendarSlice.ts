@@ -20,6 +20,7 @@ interface CalendarState {
   diaryEntries: DiaryEntry[];
   sharedDiaryEntries: ShareDiaryEntry[];
   lockedDiaryId: number | null;
+  selectedFriendId: number | null;
 }
 
 const today = new Date();
@@ -34,6 +35,7 @@ const initialState: CalendarState = {
   diaryEntries: [],
   sharedDiaryEntries: [],
   lockedDiaryId: null,
+  selectedFriendId: null,
 };
 
 const calendarSlice = createSlice({
@@ -70,6 +72,9 @@ const calendarSlice = createSlice({
     setLockedDiaryId: (state, action: PayloadAction<number | null>) => {
       state.lockedDiaryId = action.payload;
     },
+    setSelectedFriendId: (state, action: PayloadAction<number | null>) => {
+      state.selectedFriendId = action.payload;
+    },
   },
 });
 
@@ -81,5 +86,6 @@ export const {
   setDiaryEntries,
   setSharedDiaryEntries,
   setLockedDiaryId,
+  setSelectedFriendId,
 } = calendarSlice.actions;
 export default calendarSlice.reducer;

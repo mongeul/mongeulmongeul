@@ -12,13 +12,15 @@ import ShareDiaryContent from "../atoms/ShareDiaryContent";
 
 const SharedDiaryPreview: React.FC = () => {
   const router = useRouter();
-  const { selectedSharedDiary } = useSelector(
+  const { selectedSharedDiary, selectedFriendId } = useSelector(
     (state: RootState) => state.calendar
   );
 
   const handleClick = () => {
     if (selectedSharedDiary?.shareDiaryId) {
-      router.push(`/shared-diary/${selectedSharedDiary.shareDiaryId}`);
+      router.push(
+        `/shared-diary/${selectedFriendId}/${selectedSharedDiary.shareDiaryId}`
+      );
     }
   };
 
