@@ -55,7 +55,7 @@ export default function SharedDiaryCard({
 
   return (
     <Card
-      width="w-full max-w-lg mx-auto"
+      width="w-full max-w-md sm:max-w-lg mx-auto"
       roundSize="rounded-3xl"
       bgColor={isMyTurn ? "bg-theme-200" : "bg-white"}
       onClick={handleCardClick}
@@ -83,17 +83,20 @@ export default function SharedDiaryCard({
             </div>
           )}
         </div>
-        <div className="flex flex-col gap-1 pl-6 flex-1">
-          <NicknameBadge nickname={nickname} />
-          <DiaryStats days={day} count={count} />
-        </div>
 
-        <div className="pr-6">
-          <RecentAuthor
-            author={writer ? "나" : nickname}
-            date={date}
-            isMyTurn={isMyTurn}
-          />
+        <div className="flex flex-row justify-between items-center w-full gap-4">
+          <div className="flex flex-col gap-1 flex-shrink">
+            <NicknameBadge nickname={nickname} />
+            <DiaryStats days={day} count={count} />
+          </div>
+
+          <div className="flex flex-row gap-3 pr-6">
+            <RecentAuthor
+              author={writer ? "나" : nickname}
+              date={date}
+              isMyTurn={isMyTurn}
+            />
+          </div>
         </div>
       </div>
     </Card>
