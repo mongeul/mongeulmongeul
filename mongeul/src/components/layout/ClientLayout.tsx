@@ -6,9 +6,11 @@ import { store } from "@/store/store";
 import { getNewTokens, getUserInfo } from "@/lib/api/auth";
 import { clearUser } from "@/store/userSlice";
 import { getCookie } from "@/lib/api/apiClient";
+import { useRouter } from "next/navigation";
 
 function AutoLoginHandler() {
   const dispatch = useDispatch();
+  const router = useRouter();
 
   useEffect(() => {
     const autoLogin = async () => {
@@ -25,6 +27,7 @@ function AutoLoginHandler() {
         } else {
           console.warn("❌ 자동 로그인 실패, 상태 초기화");
           dispatch(clearUser());
+          router.push("/auth/login");
         }
       }
     };

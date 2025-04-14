@@ -8,6 +8,7 @@ import {
   setSelectedDate,
   setSelectedDiary,
   setSelectedSharedDiary,
+  setSelectedFriendId,
 } from "@/store/calendarSlice";
 import { setSharedDiaryEntries } from "@/store/shareDiarySlice";
 import { setDate } from "@/store/diarySlice";
@@ -35,6 +36,12 @@ export default function SharedDiaryTemplate() {
   const isMobile = useIsMobile();
 
   const [currentDiaryId, setCurrentDiaryId] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (id) {
+      dispatch(setSelectedFriendId(Number(id)));
+    }
+  }, [id, dispatch]);
 
   useEffect(() => {
     console.log("현재 선택된 월:", currentMonth);

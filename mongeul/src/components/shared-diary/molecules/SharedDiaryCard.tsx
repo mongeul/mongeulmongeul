@@ -61,13 +61,16 @@ export default function SharedDiaryCard({
       onClick={handleCardClick}
     >
       <div className="flex justify-between p-3 items-center w-full relative gap-6">
-        <div>
+        <div onClick={(e) => e.stopPropagation()}>
           <MenuIcon
             className="w-5 h-5 text-zinc-400 absolute top-2 right-3 cursor-pointer"
             onClick={() => setIsMenuOpen((prev) => !prev)}
           />
           {isMenuOpen && (
-            <div className="absolute top-7 right-0 bg-white shadow-lg border rounded-md p-2">
+            <div
+              className="absolute top-7 right-0 bg-white shadow-lg border rounded-md p-2"
+              onClick={(e) => e.stopPropagation()}
+            >
               <Button
                 text={isDeleting ? "삭제 중..." : "삭제하기"}
                 width="w-24"

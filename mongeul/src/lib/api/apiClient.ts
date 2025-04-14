@@ -43,42 +43,47 @@ export const apiClient = async (
 
   const data = await res.json();
 
-  // apiClient.ts 내부 수정
   if (!res.ok) {
     if (res.status === 401) {
-      console.warn("🔐 accessToken 만료됨, 토큰 재발급 시도 중");
+      if (!isRefreshRequest) {
+        // ✅ 리프레시 요청은 제외!
+        console.warn("🔐 accessToken 만료됨, 토큰 재발급 시도 중");
 
-      const refreshed = await getNewTokens();
+        const refreshed = await getNewTokens();
 
-      if (refreshed) {
-        console.log("✅ 토큰 재발급 성공, 요청 재시도");
+        if (refreshed) {
+          console.log("✅ 토큰 재발급 성공, 요청 재시도");
 
-        // accessToken 갱신 후 원래 요청 다시 시도
-        const retryHeaders: Record<string, string> = {
-          ...(options.headers as Record<string, string>),
-          Authorization: `Bearer ${refreshed.accessToken}`,
-        };
+          // accessToken 갱신 후 원래 요청 다시 시도
+          const retryHeaders: Record<string, string> = {
+            ...(options.headers as Record<string, string>),
+            Authorization: `Bearer ${refreshed.accessToken}`,
+          };
 
-        if (!(options.body instanceof FormData)) {
-          retryHeaders["Content-Type"] = "application/json";
+          if (!(options.body instanceof FormData)) {
+            retryHeaders["Content-Type"] = "application/json";
+          }
+
+          const retryRes = await fetch(fullUrl, {
+            ...options,
+            headers: retryHeaders,
+            credentials: "include",
+          });
+
+          const retryData = await retryRes.json();
+          return retryData;
         }
 
-        const retryRes = await fetch(fullUrl, {
-          ...options,
-          headers: retryHeaders,
-          credentials: "include",
-        });
-
-        const retryData = await retryRes.json();
-        return retryData;
+        console.log("❌ 토큰 재발급 실패, 로그인 페이지로 이동");
+        document.cookie =
+          "accessToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+        document.cookie =
+          "refreshToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+        window.location.href = "/auth/login";
       }
 
-      console.log("❌ 토큰 재발급 실패, 로그인 페이지로 이동");
-      document.cookie =
-        "accessToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
-      document.cookie =
-        "refreshToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
-      window.location.href = "/auth/login";
+      // ✅ 이거 꼭 추가해야 돼! (리프레시 요청 401일 때 빠져나가게)
+      throw new Error("토큰이 만료되었고 재발급도 실패했습니다.");
     }
 
     throw new Error(data.message || "API 요청 실패");

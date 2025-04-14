@@ -41,10 +41,6 @@ export default function ShareDiaryDetailTemplate() {
   }, [diaryId, dispatch]);
 
   if (loading) return <div className="text-center mt-10">로딩 중...</div>;
-  if (!selectedDiary)
-    return (
-      <div className="text-center mt-10">공유일기를 불러올 수 없습니다.</div>
-    );
 
   return isMobile ? (
     <div className="w-full flex flex-col items-center">
