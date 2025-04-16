@@ -10,8 +10,8 @@ const DiaryWeather: React.FC = () => {
   if (selectedDiary === "LOCK" || !selectedDiary?.weather) return null;
 
   return (
-    <div className="w-6 h-6">
-      <WeatherIcon weather={selectedDiary.weather} size="w-6 h-6" />
+    <div>
+      <WeatherIcon weather={selectedDiary.weather} size="w-10 h-10" />
     </div>
   );
 };
