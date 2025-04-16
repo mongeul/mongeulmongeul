@@ -9,6 +9,8 @@ import DiaryStats from "../atoms/DiaryStats";
 import RecentAuthor from "../atoms/RecentAuthor";
 import MenuIcon from "@/assets/icons/menudot.svg";
 import Button from "@/components/common/atoms/Button";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
 
 interface SharedDiaryCardProps {
   friendId: number;
@@ -33,6 +35,8 @@ export default function SharedDiaryCard({
   const [isDeleting, setIsDeleting] = useState(false); // 삭제 로딩 상태
   const router = useRouter();
 
+  const myNickname = useSelector((state: RootState) => state.user.nickname);
+
   const handleDelete = async () => {
     if (isDeleting) return;
     setIsDeleting(true);
@@ -55,7 +59,7 @@ export default function SharedDiaryCard({
 
   return (
     <Card
-      width="w-full max-w-lg mx-auto"
+      width="w-full max-w-md sm:max-w-lg mx-auto"
       roundSize="rounded-3xl"
       bgColor={isMyTurn ? "bg-theme-200" : "bg-white"}
       onClick={handleCardClick}
@@ -83,17 +87,20 @@ export default function SharedDiaryCard({
             </div>
           )}
         </div>
-        <div className="flex flex-col gap-1 pl-6 flex-1">
-          <NicknameBadge nickname={nickname} />
-          <DiaryStats days={day} count={count} />
-        </div>
 
-        <div className="pr-6">
-          <RecentAuthor
-            author={writer ? "나" : nickname}
-            date={date}
-            isMyTurn={isMyTurn}
-          />
+        <div className="flex flex-row justify-between items-center w-full gap-4">
+          <div className="flex flex-col gap-1 flex-shrink">
+            <NicknameBadge nickname={nickname} />
+            <DiaryStats days={day} count={count} />
+          </div>
+
+          <div className="flex flex-row gap-3 pr-6">
+            <RecentAuthor
+              author={writer ? myNickname ?? "나" : nickname}
+              date={date}
+              isMyTurn={isMyTurn}
+            />
+          </div>
         </div>
       </div>
     </Card>
