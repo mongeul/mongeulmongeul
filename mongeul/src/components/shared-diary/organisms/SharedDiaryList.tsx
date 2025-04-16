@@ -7,7 +7,7 @@ import { getFriends } from "@/lib/api/shared-diary";
 import { RootState, AppDispatch } from "@/store/store";
 import SharedDiaryCard from "@/components/shared-diary/molecules/SharedDiaryCard";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
-import { formatRelativeDate } from "@/utils/formatDate";
+import { formatMonthDate } from "@/utils/formatDate";
 
 export default function SharedDiaryList() {
   const dispatch = useDispatch<AppDispatch>();
@@ -100,7 +100,7 @@ export default function SharedDiaryList() {
                       day={friend.daysFromStart}
                       count={friend.diaryCount}
                       writer={friend.writer}
-                      date={formatRelativeDate(friend.recentWriteDate)}
+                      date={formatMonthDate(friend.recentWriteDate)}
                       onDelete={handleDeleteFriend}
                     />
                   </div>

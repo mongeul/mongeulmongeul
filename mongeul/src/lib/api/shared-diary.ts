@@ -34,12 +34,17 @@ export const getFriends = async (): Promise<Friend[]> => {
         : response.success && response.data?.data
         ? response.data.data
         : [];
+    console.log("📦 받은 rawData:", rawData);
 
     const safeData = rawData.map((friend: any) => ({
-      ...friend,
+      friendId: friend.friendId,
+      nickname: friend.nickname,
+      diaryCount: friend.diaryCount ?? 0,
+      daysFromStart: friend.daysFromStart ?? 0,
       recentWriteDate: friend.recentWriteDate || "",
+      writer: friend.writer,
     }));
-
+    console.log("✅ 매핑된 safeData:", safeData);
     return safeData;
   } catch (error) {
     console.error("❌ 친구 목록 불러오기 실패:", error);

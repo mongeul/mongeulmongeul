@@ -9,6 +9,8 @@ import DiaryStats from "../atoms/DiaryStats";
 import RecentAuthor from "../atoms/RecentAuthor";
 import MenuIcon from "@/assets/icons/menudot.svg";
 import Button from "@/components/common/atoms/Button";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
 
 interface SharedDiaryCardProps {
   friendId: number;
@@ -32,6 +34,8 @@ export default function SharedDiaryCard({
   const [isMenuOpen, setIsMenuOpen] = useState(false); // 메뉴 버튼 토글 상태
   const [isDeleting, setIsDeleting] = useState(false); // 삭제 로딩 상태
   const router = useRouter();
+
+  const myNickname = useSelector((state: RootState) => state.user.nickname);
 
   const handleDelete = async () => {
     if (isDeleting) return;
@@ -92,7 +96,7 @@ export default function SharedDiaryCard({
 
           <div className="flex flex-row gap-3 pr-6">
             <RecentAuthor
-              author={writer ? "나" : nickname}
+              author={writer ? myNickname ?? "나" : nickname}
               date={date}
               isMyTurn={isMyTurn}
             />
