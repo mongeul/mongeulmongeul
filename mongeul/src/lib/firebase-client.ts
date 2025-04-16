@@ -1,4 +1,3 @@
-// src/lib/firebase-client.ts
 import { initializeApp, getApps } from "firebase/app";
 import { getMessaging, isSupported } from "firebase/messaging";
 
@@ -11,4 +10,8 @@ const firebaseConfig = {
 };
 
 const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
-export const messaging = (await isSupported()) ? getMessaging(app) : null;
+
+export const getMessagingInstance = async () => {
+  const supported = await isSupported();
+  return supported ? getMessaging(app) : null;
+};
