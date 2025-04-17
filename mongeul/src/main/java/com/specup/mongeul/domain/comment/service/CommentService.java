@@ -7,6 +7,7 @@ import com.specup.mongeul.domain.comment.entity.Comment;
 import com.specup.mongeul.domain.comment.repository.CommentRepository;
 import com.specup.mongeul.domain.diary.entity.Diary;
 import com.specup.mongeul.domain.diary.repository.DiaryRepository;
+import com.specup.mongeul.domain.notification.service.NotificationService;
 import com.specup.mongeul.domain.user.entity.User;
 import com.specup.mongeul.domain.user.repository.UserRepository;
 import com.specup.mongeul.global.error.CustomException;
@@ -25,6 +26,7 @@ public class CommentService {
     private final UserRepository userRepository;
     private final DiaryRepository diaryRepository;
     private final CommentRepository commentRepository;
+    private final NotificationService notificationService;
 
     @Transactional
     public CommentResponse create(Long userId, Long diaryId, CommentCreateRequest request) {
@@ -41,6 +43,18 @@ public class CommentService {
                         diary
                 )
         );
+        
+        // 댓글 알림 생성 - 본인 일기에 댓글을 단 경우는 제외
+        User diaryOwner = diary.getUser();
+        if (!diaryOwner.getId().equals(userId)) {
+            notificationService.createCommentNotification(diaryOwner, user.getNickname(), diaryId);
+        }
+        
+        // 대댓글 알림 생성 - 본인 댓글에 대댓글을 단 경우는 제외
+        if (parentComment != null && !parentComment.getUser().getId().equals(userId)) {
+            notificationService.createCommentNotification(parentComment.getUser(), user.getNickname(), diaryId);
+        }
+        
         return CommentResponse.from(comment);
     }
 

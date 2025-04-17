@@ -6,6 +6,7 @@ import com.specup.mongeul.domain.diaryemoji.entity.DiaryEmoji;
 import com.specup.mongeul.domain.diaryemoji.repository.DiaryEmojiRepository;
 import com.specup.mongeul.domain.emoji.entity.Emoji;
 import com.specup.mongeul.domain.emoji.repository.EmojiRepository;
+import com.specup.mongeul.domain.notification.service.NotificationService;
 import com.specup.mongeul.domain.user.entity.User;
 import com.specup.mongeul.domain.user.repository.UserRepository;
 import com.specup.mongeul.global.error.CustomException;
@@ -22,6 +23,7 @@ public class DiaryEmojiService {
     private final DiaryRepository diaryRepository;
     private final EmojiRepository emojiRepository;
     private final DiaryEmojiRepository diaryEmojiRepository;
+    private final NotificationService notificationService;
 
     @Transactional
     public void addEmoji(Long diaryId, Long emojiId, Long userId) {
@@ -38,6 +40,12 @@ public class DiaryEmojiService {
 
         try {
             diaryEmojiRepository.save(DiaryEmoji.create(diary, emoji, user));
+            
+            // 자신의 일기에 이모지를 추가한 경우는 알림을 보내지 않음
+            User diaryOwner = diary.getUser();
+            if (!diaryOwner.getId().equals(userId)) {
+                notificationService.createReactionNotification(diaryOwner, user.getNickname(), diaryId);
+            }
         } catch (DataIntegrityViolationException e) {
             throw new CustomException(ErrorCode.EMOJI_ALREADY_ADDED);
         }
