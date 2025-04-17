@@ -14,6 +14,7 @@ import com.specup.mongeul.domain.diary.entity.ShareDiary;
 import com.specup.mongeul.domain.diary.repository.ShareDiaryRepository;
 import com.specup.mongeul.domain.friends.entity.Friend;
 import com.specup.mongeul.domain.friends.repository.FriendRepository;
+import com.specup.mongeul.domain.notification.service.NotificationService;
 import com.specup.mongeul.domain.service.CloudinaryService;
 import com.specup.mongeul.domain.user.entity.User;
 import com.specup.mongeul.domain.user.repository.UserRepository;
@@ -35,6 +36,7 @@ public class ShareDiaryService {
     private final FriendRepository friendRepository;
     private final ObjectMapper objectMapper;
     private final CloudinaryService cloudinaryService;
+    private final NotificationService notificationService;
 
     // 공유일기 생성
     @Transactional
@@ -82,6 +84,13 @@ public class ShareDiaryService {
                         request.getFeeling(), true, group, user
                 )
         );
+        
+        // 친구에게 공유 일기 알림 전송
+        User friend = group.getFriend();
+        if (friend != null) {
+            notificationService.createSharedDiaryNotification(friend, user.getNickname(), shareDiary.getId());
+        }
+        
         return ShareDiaryResponse.from(shareDiary);
     }
 
@@ -159,10 +168,21 @@ public class ShareDiaryService {
             pictureUrl = null;
         }
 
+        boolean wasPublished = shareDiary.getPublished();
+        boolean isNowPublished = wasPublished;
+        
         shareDiary.update(
                 request.getTitle(), request.getContent(), pictureUrl,
                 request.getDate(), request.getPictureLines(), request.getWeather(),
-                request.getFeeling(), shareDiary.getPublished());
+                request.getFeeling(), isNowPublished);
+        
+        // 임시저장에서 발행으로 변경된 경우 알림 전송
+        if (!wasPublished && isNowPublished) {
+            User friend = group.getFriend();
+            if (friend != null) {
+                notificationService.createSharedDiaryNotification(friend, user.getNickname(), shareDiary.getId());
+            }
+        }
 
         return ShareDiaryResponse.from(shareDiary);
     }

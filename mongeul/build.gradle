@@ -64,6 +64,9 @@ dependencies {
 
 	// cloudinary
 	implementation 'com.cloudinary:cloudinary-http44:1.34.0'
+
+	// Firebase
+	implementation 'com.google.firebase:firebase-admin:9.2.0'
 }
 
 tasks.named('test') {
