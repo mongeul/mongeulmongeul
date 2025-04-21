@@ -11,12 +11,17 @@ import FeedEmojiGroup from "../molecules/FeedEmojiGroup";
 import FeedLikeButton from "../atoms/FeedLikeButton";
 import { DiaryDetailSkeleton } from "@/components/skeletons";
 import { fetchFeedById } from "@/lib/api/feed";
+import CommentModal from "../organisms/CommentModal";
 
 export default function FeedDetailTemplates() {
   const dispatch = useDispatch();
   const { id } = useParams();
   const [feed, setFeed] = useState<FeedDetail | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [isCommentModalOpen, setIsCommentModalOpen] = useState(false);
+
+  const openCommentModal = () => setIsCommentModalOpen(true);
+  const closeCommentModal = () => setIsCommentModalOpen(false);
 
   useEffect(() => {
     if (!id) return;
@@ -49,11 +54,12 @@ export default function FeedDetailTemplates() {
       <div className="w-full">
         <DiaryDetailContainer diary={feed} />
         <div className="flex flex-row items-center gap-2 h-auto py-4 px-2">
-          <FeedCommentButton />
+          <FeedCommentButton onClick={openCommentModal} />
           <FeedLikeButton />
           <FeedEmojiGroup />
         </div>
       </div>
+      <CommentModal isOpen={isCommentModalOpen} onClose={closeCommentModal} />
     </div>
   );
 }
