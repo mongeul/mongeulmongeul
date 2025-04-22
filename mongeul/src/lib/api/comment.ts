@@ -43,7 +43,7 @@ export async function createComment(
   parentCommentId: number | null = null
 ): Promise<SingleFeedCommentResponse> {
   try {
-    return await apiClient(`/api/v1/feeds/${feedId}/comments`, {
+    const response = await apiClient(`/api/v1/feeds/${feedId}/comments`, {
       method: "POST",
       body: JSON.stringify({
         content,
@@ -53,8 +53,11 @@ export async function createComment(
         "Content-Type": "application/json",
       },
     });
+
+    console.log("✅ 댓글 작성 성공:", response);
+    return response;
   } catch (error) {
-    console.error(`댓글 작성 실패! feedId: ${feedId}`, error);
+    console.error(`❌ 댓글 작성 실패! feedId: ${feedId}`, error);
     throw error;
   }
 }
@@ -88,6 +91,27 @@ export async function deleteComment(
     });
   } catch (error) {
     console.error(`댓글 삭제 실패! commentId: ${commentId}`, error);
+    throw error;
+  }
+}
+
+// 댓글 신고 (POST)
+export async function reportComment(
+  commentId: number
+): Promise<{ success: boolean; message: string }> {
+  try {
+    const response = await apiClient(`/api/v1/comments/report`, {
+      method: "POST",
+      body: JSON.stringify({ commentId }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    console.log("🚨 댓글 신고 성공:", response);
+    return response;
+  } catch (error) {
+    console.error("❌ 댓글 신고 실패:", error);
     throw error;
   }
 }
