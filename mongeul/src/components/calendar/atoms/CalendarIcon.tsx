@@ -1,23 +1,21 @@
 "use client";
 import FeedIcon from "@/assets/icons/feed.svg";
-import Image from "next/image";
+import FeelingsIcon from "@/components/common/atoms/FeelingsIcon";
+import { Feeling } from "@/types/diaryTypes";
 
 interface CalendarIconProps {
   hasDiary?: boolean;
-  diaryImage?: string;
+  feeling?: Feeling;
 }
 
 const CalendarIcon: React.FC<CalendarIconProps> = ({
   hasDiary = false,
-  diaryImage,
+  feeling,
 }) => {
-  if (hasDiary) {
-    return (
-      // <Image src={diaryImage} alt="Diary" className="w-6 h-6 rounded-md" />
-      <FeedIcon className="w-6 h-6 text-blue-300" />
-    );
+  if (hasDiary && feeling) {
+    return <FeelingsIcon feeling={feeling} size="w-10 h-10" />;
   }
-  return <FeedIcon className="w-6 h-6 text-gray-300" />;
+  return <FeedIcon className="w-6 h-6 text-gray-300 my-2" />;
 };
 
 export default CalendarIcon;
