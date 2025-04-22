@@ -10,7 +10,7 @@ const DiaryPrivateStatus: React.FC = () => {
     <div className="flex items-center space-x-2">
       <PrivateStatusIcon
         privateStatus={selectedDiary.privateStatus}
-        size="w-5 h-5"
+        size="w-10 h-10"
       />
     </div>
   );

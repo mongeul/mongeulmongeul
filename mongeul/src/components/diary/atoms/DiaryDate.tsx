@@ -24,7 +24,7 @@ const DiaryDate: React.FC = () => {
   return (
     <p>
       {date}
-      <span className="m-2">|</span>
+      <span className="m-2 w-10">|</span>
       {day}
     </p>
   );

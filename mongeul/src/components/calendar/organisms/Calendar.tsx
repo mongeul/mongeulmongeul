@@ -30,7 +30,7 @@ const Calendar: React.FC<CalendarProps> = ({ onSelectDate }) => {
 
   return (
     <div className="">
-      <Card height="min-h-[450px]">
+      <Card height="min-h-[470px]">
         <div className="flex justify-center items-center w-full">
           <div className="">
             <CalendarHeader

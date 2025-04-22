@@ -38,6 +38,8 @@ export default function DiaryTemplate() {
             date: diary.date,
             diaryId: diary.diaryId,
             privateStatus: diary.privateStatus,
+            feeling: diary.feeling,
+            picture: diary.picture,
           }))
         )
       );
