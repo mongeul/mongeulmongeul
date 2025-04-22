@@ -1,6 +1,10 @@
 package com.specup.mongeul.domain.user.service;
 
+import com.specup.mongeul.domain.user.client.GoogleClient;
 import com.specup.mongeul.domain.user.client.KakaoClient;
+import com.specup.mongeul.domain.user.client.NaverClient;
+import com.specup.mongeul.domain.user.dto.oauth.GoogleUserInfo;
+import com.specup.mongeul.domain.user.dto.oauth.NaverUserInfo;
 import com.specup.mongeul.domain.user.dto.oauth.KakaoUserInfo;
 import com.specup.mongeul.domain.user.repository.UserRepository;
 import com.specup.mongeul.global.auth.JwtTokenProvider;
@@ -23,6 +27,8 @@ import com.specup.mongeul.domain.user.dto.response.*;
 public class AuthService {
     private final UserRepository userRepository;
     private final KakaoClient kakaoClient;
+    private final GoogleClient googleClient;
+    private final NaverClient naverClient;
     private final JwtTokenProvider jwtTokenProvider;
     private final TokenBlacklistService tokenBlacklistService;
 
@@ -71,9 +77,18 @@ public class AuthService {
     }
 
     private User createKakaoUser(KakaoUserInfo kakaoUserInfo) {
+        // 카카오는 닉네임을 제공하지 않을 수 있어 이메일 앞부분을 기본으로 사용
+        String nickname = null;
+        String email = kakaoUserInfo.getEmail();
+        if (email != null && !email.isEmpty()) {
+            nickname = email.split("@")[0];
+        }
+        
+        log.info("Creating Kakao user with nickname: {}, email: {}", nickname, email);
+        
         User user = User.builder()
-                .nickname(null)
-                .email(kakaoUserInfo.getEmail())
+                .nickname(nickname)
+                .email(email)
                 .oauthProvider(OAuthProvider.KAKAO)
                 .oauthId(kakaoUserInfo.getId())
                 .build();
@@ -123,5 +138,132 @@ public class AuthService {
         if (request.getRefreshToken() != null) {
             tokenBlacklistService.addToBlacklist(request.getRefreshToken());
         }
+    }
+
+    // 구글 로그인 URL 생성
+    public GoogleLoginUrlResponse getGoogleLoginUrl() {
+        String url = googleClient.getLoginUrl();
+        return GoogleLoginUrlResponse.builder()
+                .loginUrl(url)
+                .build();
+    }
+
+    // 구글 로그인 처리
+    @Transactional
+    public LoginResponse googleLogin(GoogleLoginRequest request) {
+        // 인증 코드로 액세스 토큰 발급
+        String accessToken = googleClient.getAccessToken(request.getCode());
+
+        // 액세스 토큰으로 사용자 정보 조회
+        GoogleUserInfo googleUserInfo = googleClient.getUserInfo(accessToken);
+
+        // 내부 사용자 조회 또는 생성
+        User user = userRepository.findByOauthIdAndOauthProvider(
+                googleUserInfo.getId(),
+                OAuthProvider.GOOGLE
+        ).orElseGet(() -> createGoogleUser(googleUserInfo));
+
+        // 내부 JWT 토큰 발급
+        String jwtAccessToken = jwtTokenProvider.createAccessToken(user.getId());
+        String jwtRefreshToken = jwtTokenProvider.createRefreshToken(user.getId());
+
+        // 응답 반환
+        return LoginResponse.builder()
+                .accessToken(jwtAccessToken)
+                .refreshToken(jwtRefreshToken)
+                .user(LoginResponse.UserInfo.builder()
+                        .id(user.getId())
+                        .nickname(user.getNickname())
+                        .email(user.getEmail())
+                        .build())
+                .build();
+    }
+
+    // 구글 사용자 생성
+    private User createGoogleUser(GoogleUserInfo googleUserInfo) {
+        // 구글은 name을 제공하지만 추가 처리
+        String nickname = googleUserInfo.getName();
+        if (nickname == null || nickname.isEmpty()) {
+            String email = googleUserInfo.getEmail();
+            if (email != null && !email.isEmpty()) {
+                nickname = email.split("@")[0];
+            }
+        }
+        
+        log.info("Creating Google user with nickname: {}, email: {}", nickname, googleUserInfo.getEmail());
+        
+        User user = User.builder()
+                .nickname(nickname)
+                .email(googleUserInfo.getEmail())
+                .oauthProvider(OAuthProvider.GOOGLE)
+                .oauthId(googleUserInfo.getId())
+                .build();
+
+        return userRepository.save(user);
+    }
+
+    // 네이버 로그인 URL 생성
+    public NaverLoginUrlResponse getNaverLoginUrl() {
+        // 보안을 위한 state 값 생성 (예: 랜덤 문자열)
+        String state = generateRandomState();
+        String url = naverClient.getLoginUrl(state);
+        return NaverLoginUrlResponse.builder()
+                .loginUrl(url)
+                .state(state)
+                .build();
+    }
+
+    // 랜덤 상태값 생성 (CSRF 방지)
+    private String generateRandomState() {
+        return java.util.UUID.randomUUID().toString();
+    }
+
+    // 네이버 로그인 처리
+    @Transactional
+    public LoginResponse naverLogin(NaverLoginRequest request) {
+        // 인증 코드로 액세스 토큰 발급
+        String accessToken = naverClient.getAccessToken(request.getCode(), request.getState());
+
+        // 액세스 토큰으로 사용자 정보 조회
+        NaverUserInfo naverUserInfo = naverClient.getUserInfo(accessToken);
+
+        // 내부 사용자 조회 또는 생성
+        User user = userRepository.findByOauthIdAndOauthProvider(
+                naverUserInfo.getId(),
+                OAuthProvider.NAVER
+        ).orElseGet(() -> createNaverUser(naverUserInfo));
+
+        // 내부 JWT 토큰 발급
+        String jwtAccessToken = jwtTokenProvider.createAccessToken(user.getId());
+        String jwtRefreshToken = jwtTokenProvider.createRefreshToken(user.getId());
+
+        // 응답 반환
+        return LoginResponse.builder()
+                .accessToken(jwtAccessToken)
+                .refreshToken(jwtRefreshToken)
+                .user(LoginResponse.UserInfo.builder()
+                        .id(user.getId())
+                        .nickname(user.getNickname())
+                        .email(user.getEmail())
+                        .build())
+                .build();
+    }
+
+    // 네이버 사용자 생성
+    private User createNaverUser(NaverUserInfo naverUserInfo) {
+        String nickname = "temp";
+        String email = naverUserInfo.getEmail();
+        if (email != null && !email.isEmpty()) {
+            nickname = email.split("@")[0];
+        }
+        
+        User user = User.builder()
+                .nickname(nickname)
+                .email(naverUserInfo.getEmail())
+                .oauthProvider(OAuthProvider.NAVER)
+                .oauthId(naverUserInfo.getId())
+                .build();
+
+        return userRepository.save(user);
     }
 }

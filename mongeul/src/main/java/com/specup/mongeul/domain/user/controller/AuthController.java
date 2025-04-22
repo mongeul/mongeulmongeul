@@ -51,4 +51,30 @@ public class AuthController {
         authService.logout(request, user.getId());
         return ResponseEntity.ok(ApiResponse.success(null, "로그아웃 성공"));
     }
+
+    @Operation(summary = "구글 로그인 URL", description = "구글 로그인 URL을 반환합니다.")
+    @GetMapping("/google")
+    public ResponseEntity<ApiResponse<GoogleLoginUrlResponse>> getGoogleLoginUrl() {
+        return ResponseEntity.ok(ApiResponse.success(authService.getGoogleLoginUrl(), "구글 로그인 URL 생성 성공"));
+    }
+
+    @Operation(summary = "구글 로그인", description = "구글 인증 코드로 로그인합니다.")
+    @PostMapping("/google")
+    public ResponseEntity<ApiResponse<LoginResponse>> googleLogin(
+            @RequestBody @Valid GoogleLoginRequest request) {
+        return ResponseEntity.ok(ApiResponse.success(authService.googleLogin(request), "구글 로그인 성공"));
+    }
+
+    @Operation(summary = "네이버 로그인 URL", description = "네이버 로그인 URL을 반환합니다.")
+    @GetMapping("/naver")
+    public ResponseEntity<ApiResponse<NaverLoginUrlResponse>> getNaverLoginUrl() {
+        return ResponseEntity.ok(ApiResponse.success(authService.getNaverLoginUrl(), "네이버 로그인 URL 생성 성공"));
+    }
+
+    @Operation(summary = "네이버 로그인", description = "네이버 인증 코드로 로그인합니다.")
+    @PostMapping("/naver")
+    public ResponseEntity<ApiResponse<LoginResponse>> naverLogin(
+            @RequestBody @Valid NaverLoginRequest request) {
+        return ResponseEntity.ok(ApiResponse.success(authService.naverLogin(request), "네이버 로그인 성공"));
+    }
 }
