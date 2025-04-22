@@ -39,6 +39,7 @@ export default function DiaryTemplate() {
             diaryId: diary.diaryId,
             privateStatus: diary.privateStatus,
             feeling: diary.feeling,
+            picture: diary.picture,
           }))
         )
       );

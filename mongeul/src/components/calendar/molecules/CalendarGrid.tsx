@@ -1,6 +1,7 @@
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import CalendarDate from "../atoms/CalendarDate";
+import { Feeling } from "@/types/diaryTypes";
 
 interface CalendarGridProps {
   year: number;
@@ -38,9 +39,12 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
           "0"
         )}-${String(index + 1).padStart(2, "0")}`;
 
-        const hasDiary = diaryEntries.some(
+        const diaryEntry = diaryEntries.find(
           (entry) => entry.date === formattedDate
         );
+
+        const hasDiary = Boolean(diaryEntry);
+        const feeling = diaryEntry?.feeling as Feeling;
 
         return (
           <CalendarDate
@@ -48,6 +52,7 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
             date={index + 1}
             isSelected={index + 1 === selectedDate}
             hasDiary={hasDiary}
+            feeling={feeling}
             onClick={() => onSelectDate(index + 1)}
           />
         );

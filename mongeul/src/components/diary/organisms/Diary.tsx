@@ -14,7 +14,7 @@ const Diary: React.FC = () => {
   return (
     <div>
       {selectedDiary ? (
-        <Card height="min-h-[200px] lg:min-h-[450px]">
+        <Card height="min-h-[200px] lg:min-h-[470px]">
           <div className="flex flex-col items-start w-full p-4">
             <DiaryHeader />
             <DiaryTitle />

@@ -1,27 +1,27 @@
 "use client";
 import CalendarIcon from "./CalendarIcon";
+import { Feeling } from "@/types/diaryTypes";
 
 interface CalendarDateProps {
   date: number;
   isSelected?: boolean;
   hasDiary?: boolean;
-  diaryImage?: string;
+  feeling?: Feeling;
   onClick?: () => void;
 }
 
 const CalendarDate: React.FC<CalendarDateProps> = ({
   date,
   hasDiary = false,
-  diaryImage,
+  feeling,
   onClick,
 }) => {
   return (
     <button
       onClick={onClick}
-      className="flex flex-col items-center justify-center w-12 h-12
-      transition duration-200"
+      className="flex flex-col items-center justify-center w-13 h-13"
     >
-      <CalendarIcon hasDiary={hasDiary} diaryImage={diaryImage} />
+      <CalendarIcon hasDiary={hasDiary} feeling={feeling} />
       <span>{date}</span>
     </button>
   );

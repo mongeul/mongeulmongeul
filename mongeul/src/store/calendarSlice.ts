@@ -7,6 +7,7 @@ interface DiaryEntry {
   diaryId: number;
   privateStatus: string;
   feeling: string;
+  picture?: string;
 }
 interface ShareDiaryEntry {
   date: string;
