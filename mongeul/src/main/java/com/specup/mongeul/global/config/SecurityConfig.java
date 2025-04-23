@@ -43,6 +43,10 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/api/auth/kakao",     // 카카오 로그인 URL 조회
                                 "/api/auth/kakao/**",  // 카카오 로그인 콜백
+                                "/api/auth/google",    // 구글 로그인 URL 조회
+                                "/api/auth/google/**", // 구글 로그인 콜백
+                                "/api/auth/naver",     // 네이버 로그인 URL 조회
+                                "/api/auth/naver/**",  // 네이버 로그인 콜백
                                 "/api/drive/**"
                         ).permitAll()
                         .anyRequest().authenticated())
