@@ -1,3 +1,5 @@
+import { throttle } from "lodash";
+import { useCallback, useMemo } from "react";
 import Button from "@/components/common/atoms/Button";
 import { Feeling } from "@/types/diaryTypes";
 import FeedEmojiButton from "./FeedEmojiButton";
@@ -23,10 +25,11 @@ export default function FeedEmojiCountButton({
   const dispatch = useDispatch();
   const emojiId = getEmojiId(emoji);
 
-  const toggleButton = async () => {
+  // toggle 핸들러 (throttle 내부용)
+  const handleToggle = useCallback(async () => {
     if (!diaryId) return;
 
-    // UI 상태 먼저 변경
+    // UI 먼저 업데이트
     dispatch(toggleEmoji(emoji));
 
     try {
@@ -37,11 +40,16 @@ export default function FeedEmojiCountButton({
       }
     } catch (error) {
       console.error("이모지 업데이트 실패:", error);
-
-      // 요청 실패 시 상태 롤백
-      dispatch(toggleEmoji(emoji));
+      dispatch(toggleEmoji(emoji)); // 실패시 롤백
     }
-  };
+  }, [diaryId, dispatch, emoji, emojiId, isSelected]);
+
+  // handleToggle을 throttle로 감싸서 과도한 요청 방지
+  // useMemo로 감싸서 리렌더링 때마다 새로 생성되지 않게 함
+  const throttledToggle = useMemo(
+    () => throttle(handleToggle, 1000), // 1초에 1번 제한
+    [handleToggle]
+  );
 
   const icon = <FeedEmojiButton emoji={emoji} />;
   const feelingCount = count >= 1000 ? "+999" : String(count);
@@ -53,7 +61,7 @@ export default function FeedEmojiCountButton({
       backgroundColor={isSelected ? "bg-theme-300" : "bg-theme-50"}
       padding="px-2 py-1"
       icon={icon}
-      onClick={toggleButton}
+      onClick={throttledToggle}
     />
   );
 }
