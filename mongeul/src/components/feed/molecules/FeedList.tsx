@@ -73,8 +73,12 @@ export default function FeedList() {
     });
 
     observer.observe(observerRef.current); // ref에 등록된 요소 관찰 시작
-    return () => observer.disconnect();
-  }, [handleObserver]);
+
+    return () => {
+      observer.disconnect();
+      throttledFetchNextPage.cancel();
+    };
+  }, [handleObserver, throttledFetchNextPage]);
 
   if (isLoading)
     return (
