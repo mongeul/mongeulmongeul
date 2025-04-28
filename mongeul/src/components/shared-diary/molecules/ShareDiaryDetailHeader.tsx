@@ -4,6 +4,7 @@ import { RootState } from "@/store/store";
 import ShareDiaryDate from "../atoms/ShareDiaryDate";
 import ShareDiaryWeather from "../atoms/ShareDiaryWeather";
 import ShareDiaryImage from "../atoms/ShareDiaryImage";
+import ShareDiaryFeeling from "../atoms/ShareDiaryFeeling";
 
 const DiaryHeader: React.FC = () => {
   const { selectedSharedDiary } = useSelector(
@@ -16,6 +17,7 @@ const DiaryHeader: React.FC = () => {
     <div className="flex items-center justify-between w-full p-2">
       <ShareDiaryDate />
       <div className="flex space-x-10">
+        <ShareDiaryFeeling />
         <ShareDiaryImage />
         <ShareDiaryWeather />
       </div>

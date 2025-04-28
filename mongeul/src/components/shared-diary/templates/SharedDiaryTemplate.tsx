@@ -58,6 +58,7 @@ export default function SharedDiaryTemplate() {
           diaries.map((diary) => ({
             date: diary.date,
             diaryId: diary.shareDiaryId,
+            feeling: diary.feeling,
           }))
         )
       );

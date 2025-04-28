@@ -12,6 +12,7 @@ interface DiaryEntry {
 interface ShareDiaryEntry {
   date: string;
   diaryId: number;
+  feeling: string;
 }
 
 interface CalendarState {
