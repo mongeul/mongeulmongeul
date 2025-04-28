@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from "react";
 import { formatDateTime } from "@/utils/formatDate";
 import { deleteComment, reportComment, updateComment } from "@/lib/api/comment";
@@ -8,14 +10,18 @@ interface CommentItemProps {
   commentId: number;
   content: string;
   createdAt: string;
+  parentCommentId?: number | null;
   onDelete: () => void;
+  onReply: (parentId: number) => void;
 }
 
 export default function CommentItem({
   commentId,
   content,
   createdAt,
+  parentCommentId = null,
   onDelete,
+  onReply,
 }: CommentItemProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
@@ -49,7 +55,7 @@ export default function CommentItem({
     try {
       await updateComment(commentId, editedContent.trim());
       setIsEditMode(false);
-      onDelete(); // 💡 목록 리프레시 (수정 후 다시 불러오기)
+      onDelete();
     } catch (error) {
       console.error("❌ 댓글 수정 실패:", error);
       alert("댓글 수정에 실패했습니다.");
@@ -57,7 +63,11 @@ export default function CommentItem({
   };
 
   return (
-    <div className="relative text-sm border-b border-gray-100 pb-4 pt-2 pr-8">
+    <div
+      className={`relative text-sm border-b border-gray-100 pb-4 pt-2 pr-8 ${
+        parentCommentId ? "ml-6" : ""
+      }`}
+    >
       {/* 메뉴 아이콘 */}
       <MenuIcon
         className="w-5 h-5 text-zinc-400 absolute top-2 right-2 cursor-pointer"
@@ -143,7 +153,17 @@ export default function CommentItem({
           </div>
         </div>
       ) : (
-        <p className="text-zinc-700 whitespace-pre-line mt-1">{content}</p>
+        <>
+          <p className="text-zinc-700 whitespace-pre-line mt-1">{content}</p>
+          {!parentCommentId && (
+            <button
+              onClick={() => onReply(commentId)}
+              className="text-theme-400 text-xs mt-2 hover:underline"
+            >
+              답글 달기
+            </button>
+          )}
+        </>
       )}
     </div>
   );

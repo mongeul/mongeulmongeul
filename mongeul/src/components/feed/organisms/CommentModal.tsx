@@ -7,16 +7,17 @@ import { fetchComments, FeedComment } from "@/lib/api/comment";
 import CommentList from "./CommentList";
 import CommentInput from "../molecules/CommentInput";
 
-interface CommentModalProps {
+export default function CommentModal({
+  isOpen,
+  onClose,
+}: {
   isOpen: boolean;
   onClose: () => void;
-}
-
-export default function CommentModal({ isOpen, onClose }: CommentModalProps) {
+}) {
   const { id } = useParams();
   const [comments, setComments] = useState<FeedComment[]>([]);
+  const [parentCommentId, setParentCommentId] = useState<number | null>(null); // ✅ 답글용 parent ID 관리
 
-  // 댓글 목록 조회
   const loadComments = async () => {
     try {
       const res = await fetchComments(Number(id));
@@ -27,7 +28,7 @@ export default function CommentModal({ isOpen, onClose }: CommentModalProps) {
   };
 
   useEffect(() => {
-    if (isOpen) loadComments(); // 모달 열릴 때만 fetch
+    if (isOpen) loadComments();
   }, [isOpen]);
 
   if (!isOpen) return null;
@@ -35,8 +36,16 @@ export default function CommentModal({ isOpen, onClose }: CommentModalProps) {
   return (
     <WebModal onClose={onClose} padding="px-4 py-2">
       <div className="flex flex-col w-[380px] h-[700px]">
-        <CommentList comments={comments} onChange={loadComments} />
-        <CommentInput onSubmit={loadComments} />
+        <CommentList
+          comments={comments}
+          onChange={loadComments}
+          onReply={(commentId) => setParentCommentId(commentId)}
+        />
+        <CommentInput
+          onSubmit={loadComments}
+          parentCommentId={parentCommentId}
+          resetParent={() => setParentCommentId(null)}
+        />
       </div>
     </WebModal>
   );
