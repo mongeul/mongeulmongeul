@@ -1,7 +1,6 @@
 "use client";
 
 import FeelingsIcon from "@/components/common/atoms/FeelingsIcon";
-import FeelingIcon from "@/components/common/atoms/FeelingsIcon";
 import { FeedListItem } from "@/types/feedTypes";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -29,10 +28,10 @@ export default function FeedItem({ feed }: FeedListItemProps) {
   useEffect(() => {
     // 아이콘의 랜덤한 위치 설정 (5% ~ 95%)
     const top = `${Math.random() * 80 + 5}%`;
-    const left = `${Math.random() * 80 + 5}%`;
+    const left = `${Math.random() * 10 + 5}%`;
 
     // 아이콘의 랜덤한 이동 범위 설정 (-7.5px ~ 7.5px)
-    const x = Math.random() * 15 - 7.5;
+    const x = Math.random() * 7 - 3.5;
     const y = Math.random() * 15 - 7.5;
 
     // 아이콘의 랜덤한 애니메이션 지속 시간 설정 (2초 ~ 5초)
@@ -68,20 +67,20 @@ export default function FeedItem({ feed }: FeedListItemProps) {
   }, [feed.feedId]);
 
   return (
-    <Link href={`/feed/${feed.feedId}`}>
-      <div
-        className="absolute cursor-pointer flex items-center justify-center w-full aspect-[1/1]"
-        style={{
-          // 랜덤 위치 배치
-          top: position.top,
-          left: position.left,
-          // 랜덤 흔들림 효과 적용
-          transform: `translate(${offset.x}px, ${offset.y}px)`,
-          animation: `shake-${feed.feedId} ${animationDuration} ease-in-out infinite alternate`,
-        }}
-      >
+    <div
+      className="absolute flex items-center justify-center w-full aspect-[1/1]"
+      style={{
+        // 랜덤 위치 배치
+        top: position.top,
+        left: position.left,
+        // 랜덤 흔들림 효과 적용
+        transform: `translate(${offset.x}px, ${offset.y}px)`,
+        animation: `shake-${feed.feedId} ${animationDuration} ease-in-out infinite alternate`,
+      }}
+    >
+      <Link href={`/feed/${feed.feedId}`} className="cursor-pointer">
         <FeelingsIcon feeling={feed.feeling} size="w-24 h-24" />
-      </div>
-    </Link>
+      </Link>
+    </div>
   );
 }

@@ -45,9 +45,16 @@ const feedSlice = createSlice({
         });
       }
     },
+    clearFeedDetailEmojis: (state) => {
+      state.feedDetailEmojis = [];
+    },
   },
 });
 
-export const { setMyFeed, setFeedDetailEmojis, toggleEmoji } =
-  feedSlice.actions;
+export const {
+  setMyFeed,
+  setFeedDetailEmojis,
+  toggleEmoji,
+  clearFeedDetailEmojis,
+} = feedSlice.actions;
 export default feedSlice.reducer;

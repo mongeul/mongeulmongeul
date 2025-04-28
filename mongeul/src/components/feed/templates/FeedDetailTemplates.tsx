@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import DiaryDetailContainer from "../../common/organisms/DiaryDetailContainer";
 import FeedCommentButton from "../atoms/FeedCommentButton";
 import { useDispatch } from "react-redux";
-import { setFeedDetailEmojis } from "@/store/feedSlice";
+import { setFeedDetailEmojis, clearFeedDetailEmojis } from "@/store/feedSlice";
 import FeedEmojiGroup from "../molecules/FeedEmojiGroup";
 import FeedLikeButton from "../atoms/FeedLikeButton";
 import { DiaryDetailSkeleton } from "@/components/skeletons";
@@ -44,6 +44,10 @@ export default function FeedDetailTemplates() {
     }
 
     loadFeed();
+
+    return () => {
+      dispatch(clearFeedDetailEmojis());
+    };
   }, [dispatch, id]);
 
   if (loading) return <DiaryDetailSkeleton />;
