@@ -13,10 +13,10 @@ const ShareDiaryWeather: React.FC = () => {
   if (!selectedSharedDiary?.weather) return null;
 
   return (
-    <div className="w-6 h-6">
+    <div>
       <WeatherIcon
         weather={selectedSharedDiary.weather as Weather}
-        size="w-6 h-6"
+        size="w-10 h-10"
       />
     </div>
   );

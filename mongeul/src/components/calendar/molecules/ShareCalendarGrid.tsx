@@ -1,6 +1,9 @@
+"use client";
+
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import CalendarDate from "../atoms/CalendarDate";
+import { Feeling } from "@/types/diaryTypes"; // ✅ 추가
 
 interface ShareCalendarGridProps {
   year: number;
@@ -40,9 +43,12 @@ const ShareCalendarGrid: React.FC<ShareCalendarGridProps> = ({
           "0"
         )}-${String(index + 1).padStart(2, "0")}`;
 
-        const hasDiary = sharedDiaryEntries.some(
+        const diaryEntry = sharedDiaryEntries.find(
           (entry) => entry.date === formattedDate
         );
+
+        const hasDiary = Boolean(diaryEntry);
+        const feeling = diaryEntry?.feeling as Feeling;
 
         return (
           <CalendarDate
@@ -50,6 +56,7 @@ const ShareCalendarGrid: React.FC<ShareCalendarGridProps> = ({
             date={index + 1}
             isSelected={index + 1 === selectedDate}
             hasDiary={hasDiary}
+            feeling={feeling}
             onClick={() => onSelectDate(index + 1)}
           />
         );

@@ -61,7 +61,7 @@ export default function CommentInput({
           }
           value={comment}
           onChange={(e) => setComment(e.target.value)}
-          className="flex-1 border border-gray-300 rounded-full px-6 py-4 text-sm focus:outline-none"
+          className="flex-1 border border-gray-300 rounded-full px-6 py-4 text-[16px] focus:outline-none"
         />
         <button
           type="button"

@@ -31,8 +31,8 @@ export default function SocialLoginButtons() {
         icon={NaverIcon}
         alt="네이버 로그인"
         onClick={() => console.log("Naver 로그인 클릭")}
-      />
-      <SocialLoginButton
+      /> */}
+      {/* <SocialLoginButton
         icon={GoogleIcon}
         alt="구글 로그인"
         onClick={() => console.log("Google 로그인 클릭")}
