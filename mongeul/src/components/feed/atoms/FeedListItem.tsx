@@ -28,10 +28,10 @@ export default function FeedItem({ feed }: FeedListItemProps) {
   useEffect(() => {
     // 아이콘의 랜덤한 위치 설정 (5% ~ 95%)
     const top = `${Math.random() * 80 + 5}%`;
-    const left = `${Math.random() * 80 + 5}%`;
+    const left = `${Math.random() * 10 + 5}%`;
 
     // 아이콘의 랜덤한 이동 범위 설정 (-7.5px ~ 7.5px)
-    const x = Math.random() * 15 - 7.5;
+    const x = Math.random() * 7 - 3.5;
     const y = Math.random() * 15 - 7.5;
 
     // 아이콘의 랜덤한 애니메이션 지속 시간 설정 (2초 ~ 5초)

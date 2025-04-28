@@ -95,7 +95,7 @@ export default function FeedList() {
     );
 
   return (
-    <div className="relative w-full h-auto grid grid-cols-4 gap-4 p-4 grid-auto-rows-min place-items-start">
+    <div className="relative w-full h-auto grid grid-cols-4 gap-0 p-0 grid-auto-rows-min place-items-start">
       {data?.pages
         .flatMap((page) => page.data)
         .map((feed: FeedListItem) => (
