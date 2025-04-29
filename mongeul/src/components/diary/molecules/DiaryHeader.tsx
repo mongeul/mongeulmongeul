@@ -12,14 +12,11 @@ const DiaryHeader: React.FC = () => {
   if (!selectedDiary) return null;
 
   return (
-    <div className="flex items-center justify-between w-full p-2">
+    <div className="flex items-center space-x-4 w-full p-2">
       <DiaryDate />
-      <div className="flex space-x-10">
-        <DiaryFeeling />
-        <DiaryImage />
-        <DiaryWeather />
-        <DiaryPrivateStatusIcon />
-      </div>
+      <DiaryFeeling />
+      <DiaryWeather />
+      <DiaryPrivateStatusIcon />
     </div>
   );
 };

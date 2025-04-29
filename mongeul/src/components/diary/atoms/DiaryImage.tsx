@@ -11,7 +11,6 @@ const DiaryImage: React.FC = () => {
   const { selectedDiary } = useSelector((state: RootState) => state.calendar);
   const [isLoading, setIsLoading] = useState(true);
 
-  // ✅ 타입 가드로 "LOCK" 처리
   if (!selectedDiary || selectedDiary === "LOCK" || !selectedDiary.picture) {
     return null;
   }
