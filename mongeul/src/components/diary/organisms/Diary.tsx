@@ -7,6 +7,7 @@ import DiaryTitle from "../atoms/DiaryTitle";
 import DiaryImage from "../atoms/DiaryImage";
 import DiaryContent from "../atoms/DiaryContent";
 import Card from "@/components/common/atoms/Card";
+import DiaryControlButtons from "../molecules/DiaryControlButtons";
 
 const Diary: React.FC = () => {
   const { selectedDiary } = useSelector((state: RootState) => state.calendar);
@@ -14,14 +15,17 @@ const Diary: React.FC = () => {
   return (
     <div>
       {selectedDiary ? (
-        <Card height="min-h-[200px] lg:min-h-[470px]">
-          <div className="flex flex-col items-start w-full p-4">
-            <DiaryHeader />
-            <DiaryTitle />
-            <DiaryImage />
-            <DiaryContent />
-          </div>
-        </Card>
+        <div>
+          <Card height="min-h-[200px] lg:min-h-[470px]">
+            <div className="flex flex-col items-start w-full p-4">
+              <DiaryHeader />
+              <DiaryTitle />
+              <DiaryImage />
+              <DiaryContent />
+            </div>
+          </Card>
+          <DiaryControlButtons />
+        </div>
       ) : (
         <div></div>
       )}
