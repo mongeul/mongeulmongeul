@@ -87,8 +87,14 @@ export default function DiaryTemplate() {
 
   return (
     <div className="w-full flex flex-col justify-start items-center gap-6">
-      <Calendar onSelectDate={handleDateSelect} />
-      {isMobile && <DiaryPriview />}
+      <div className="w-full max-w-[400px]">
+        <Calendar onSelectDate={handleDateSelect} />
+      </div>
+      {isMobile && (
+        <div className="w-full max-w-[400px]">
+          <DiaryPriview />
+        </div>
+      )}
     </div>
   );
 }

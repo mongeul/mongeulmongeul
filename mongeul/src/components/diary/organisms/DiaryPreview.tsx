@@ -28,12 +28,10 @@ const DiaryPriview: React.FC = () => {
   // 🔒 LOCK
   if (selectedDiary === "LOCK") {
     return (
-      <div className="">
+      <div>
         <Card height="min-h-[200px]">
-          <div className="flex flex-col items-start w-full p-4">
-            <p className="text-gray-600 mb-4 text-base">
-              🔒 일기가 잠겨있습니다.
-            </p>
+          <div className="flex flex-col justify-center items-center w-full p-4">
+            <p className="text-gray-600 mb-4 text-base">일기가 잠겨있습니다.</p>
             <Button text="일기 보기" onClick={handleClick} />
           </div>
         </Card>
@@ -45,14 +43,16 @@ const DiaryPriview: React.FC = () => {
   if (!selectedDiary) return null;
 
   return (
-    <div className="">
-      <Card height="min-h-[200px]">
-        <div className="flex flex-row">
-          <div className="flex flex-col items-start justify-center w-full p-4">
+    <div>
+      <Card className="p-4 min-h-[200px]">
+        <div className="flex flex-col w-full gap-2 px-4">
+          <div>
             <DiaryHeader />
             <DiaryTitle />
-            <DiaryImage />
             <DiaryContent />
+          </div>
+
+          <div className="flex justify-center w-full">
             <Button text="자세히 보기" onClick={handleClick} />
           </div>
         </div>
