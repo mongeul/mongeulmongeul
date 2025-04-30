@@ -27,14 +27,16 @@ const SharedDiaryPreview: React.FC = () => {
   if (!selectedSharedDiary) return null;
 
   return (
-    <div className="">
-      <Card height="min-h-[200px]">
-        <div className="flex flex-row">
-          <div className="flex flex-col items-start justify-center w-full p-4">
+    <div>
+      <Card className="p-4 min-h-[200px]">
+        <div className="flex flex-col w-full gap-2 px-4">
+          <div>
             <ShareDiaryDetailHeader />
             <ShareDiaryTitle />
-            <ShareDiaryImage />
             <ShareDiaryContent />
+          </div>
+
+          <div className="flex justify-center w-full">
             <Button text="자세히 보기" onClick={handleClick} />
           </div>
         </div>

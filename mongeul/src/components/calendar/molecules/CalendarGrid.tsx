@@ -28,7 +28,7 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
   const rows = Math.ceil(totalCells / 7) * 7;
 
   return (
-    <div className="grid grid-cols-7 gap-2">
+    <div className="grid grid-cols-7 gap-2 w-full">
       {[...Array(firstDay)].map((_, index) => (
         <div key={`empty-${index}`} className="w-10 h-10"></div>
       ))}
