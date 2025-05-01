@@ -27,7 +27,7 @@ function AutoLoginHandler() {
         } else {
           console.warn("❌ 자동 로그인 실패, 상태 초기화");
           dispatch(clearUser());
-          router.push("/auth/login");
+          router.push("/login");
         }
       }
     };
