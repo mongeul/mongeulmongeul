@@ -15,7 +15,7 @@ const CalendarIcon: React.FC<CalendarIconProps> = ({
   if (hasDiary && feeling) {
     return <FeelingsIcon feeling={feeling} size="w-10 h-10" />;
   }
-  return <FeedIcon className="w-6 h-6 text-gray-300 my-2" />;
+  return <FeedIcon className="w-6 h-6 text-gray-200 my-2" />;
 };
 
 export default CalendarIcon;
