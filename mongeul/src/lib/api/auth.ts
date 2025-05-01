@@ -94,7 +94,7 @@ export const handleLogout = async (dispatch: AppDispatch) => {
 
     const accessToken = getCookie("accessToken");
     const refreshToken = getCookie("refreshToken");
-
+    console.log("🔍 현재 쿠키 상태 (로그아웃 직전):", document.cookie);
     if (!accessToken || !refreshToken) {
       console.error("❌ 저장된 토큰이 없습니다.");
       return;
@@ -115,6 +115,7 @@ export const handleLogout = async (dispatch: AppDispatch) => {
         "accessToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
       document.cookie =
         "refreshToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+      console.log("🔍 쿠키 삭제 후 상태:", document.cookie);
     } else {
       console.error("❌ 로그아웃 실패:", data.message);
     }
@@ -141,7 +142,7 @@ export const handleWithdraw = async (dispatch: AppDispatch) => {
       document.cookie =
         "refreshToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
 
-      window.location.href = "/auth/login";
+      window.location.href = "/login";
     } else {
       console.error("❌ 회원 탈퇴 실패:", data.message);
     }
@@ -203,6 +204,98 @@ export const getUserInfo = async (dispatch: AppDispatch) => {
   } catch (error) {
     console.error("❌ 사용자 정보 조회 중 에러:", error);
     dispatch(clearUser());
+    return null;
+  }
+};
+
+// 네이버 로그인 URL 가져오기 (GET)
+export const getNaverLoginUrl = async (): Promise<{
+  loginUrl: string;
+  state: string;
+}> => {
+  const data = await apiClient("/api/auth/naver", { method: "GET" });
+  return data.data; // { loginUrl, state }
+};
+
+// 네이버 로그인 페이지 리다이렉트
+export const redirectToNaverLogin = async () => {
+  const { loginUrl } = await getNaverLoginUrl();
+  window.location.href = loginUrl;
+};
+
+// 네이버 로그인 처리 (POST)
+export const handleNaverLogin = async (
+  code: string,
+  state: string,
+  dispatch: AppDispatch
+) => {
+  try {
+    console.log("📡 네이버 로그인 요청 시작:", { code, state });
+
+    const data = await apiClient("/api/auth/naver", {
+      method: "POST",
+      body: JSON.stringify({ code, state }),
+    });
+
+    console.log("🟢 네이버 로그인 응답:", data);
+
+    if (data.success) {
+      const { accessToken, refreshToken, user } = data.data;
+
+      dispatch(setUser(user));
+
+      document.cookie = `accessToken=${accessToken}; path=/; secure; samesite=strict; max-age=1800`;
+      document.cookie = `refreshToken=${refreshToken}; path=/; secure; samesite=strict; max-age=604800`;
+
+      return user;
+    }
+
+    return null;
+  } catch (error) {
+    console.error("❌ 네이버 로그인 실패:", error);
+    return null;
+  }
+};
+
+// 구글 로그인 URL 가져오기 (GET)
+export const getGoogleLoginUrl = async (): Promise<string> => {
+  const data = await apiClient("/api/auth/google", { method: "GET" });
+  return data.data.loginUrl;
+};
+// 구글 로그인 페이지 리다이렉트
+export const redirectToGoogleLogin = async () => {
+  const loginUrl = await getGoogleLoginUrl();
+  window.location.href = loginUrl;
+};
+
+// 네이버 로그인 처리 (POST)
+export const handleGoogleLogin = async (
+  code: string,
+  dispatch: AppDispatch
+) => {
+  try {
+    console.log("📡 구글 로그인 요청 시작:", code);
+
+    const data = await apiClient("/api/auth/google", {
+      method: "POST",
+      body: JSON.stringify({ code }),
+    });
+
+    console.log("🟢 구글 로그인 응답:", data);
+
+    if (data.success) {
+      const { accessToken, refreshToken, user } = data.data;
+      dispatch(setUser(user));
+
+      document.cookie = `accessToken=${accessToken}; path=/; secure; samesite=strict; max-age=1800`;
+      document.cookie = `refreshToken=${refreshToken}; path=/; secure; samesite=strict; max-age=604800`;
+
+      return user;
+    }
+
+    return null;
+  } catch (error) {
+    console.error("❌ 구글 로그인 실패:", error);
     return null;
   }
 };

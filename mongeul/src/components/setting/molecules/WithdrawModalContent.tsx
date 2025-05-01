@@ -22,7 +22,7 @@ export default function WithdrawModalContent({
 
     try {
       await handleWithdraw(dispatch);
-      router.push("/auth/login");
+      router.push("/login");
     } catch (error) {
       console.error("회원 탈퇴 실패:", error);
     }

@@ -2,7 +2,11 @@
 
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { getKakaoLoginUrl } from "@/lib/api/auth";
+import {
+  getKakaoLoginUrl,
+  getNaverLoginUrl,
+  getGoogleLoginUrl,
+} from "@/lib/api/auth";
 import SocialLoginButton from "@/components/auth/atoms/SocialLoginButton";
 import KakaoIcon from "@/assets/icons/kakao.png";
 import NaverIcon from "@/assets/icons/naver.png";
@@ -14,9 +18,27 @@ export default function SocialLoginButtons() {
   const handleKakaoLogin = async () => {
     try {
       const loginUrl = await getKakaoLoginUrl();
-      window.location.href = loginUrl; // 카카오 로그인 페이지로 이동
+      window.location.href = loginUrl;
     } catch (error) {
       console.error("카카오 로그인 URL 요청 실패:", error);
+    }
+  };
+
+  const handleNaverLogin = async () => {
+    try {
+      const { loginUrl } = await getNaverLoginUrl();
+      window.location.href = loginUrl;
+    } catch (error) {
+      console.error("네이버 로그인 URL 요청 실패:", error);
+    }
+  };
+
+  const handleGoogleLogin = async () => {
+    try {
+      const loginUrl = await getGoogleLoginUrl();
+      window.location.href = loginUrl;
+    } catch (error) {
+      console.error("구글 로그인 URL 요청 실패:", error);
     }
   };
 
@@ -27,16 +49,16 @@ export default function SocialLoginButtons() {
         alt="카카오 로그인"
         onClick={handleKakaoLogin}
       />
-      {/* <SocialLoginButton
+      <SocialLoginButton
         icon={NaverIcon}
         alt="네이버 로그인"
-        onClick={() => console.log("Naver 로그인 클릭")}
-      /> */}
-      {/* <SocialLoginButton
+        onClick={handleNaverLogin}
+      />
+      <SocialLoginButton
         icon={GoogleIcon}
         alt="구글 로그인"
-        onClick={() => console.log("Google 로그인 클릭")}
-      /> */}
+        onClick={handleGoogleLogin}
+      />
     </div>
   );
 }

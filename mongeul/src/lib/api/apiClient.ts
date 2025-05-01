@@ -79,10 +79,8 @@ export const apiClient = async (
           "accessToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
         document.cookie =
           "refreshToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
-        window.location.href = "/auth/login";
+        window.location.href = "/login";
       }
-
-      // ✅ 이거 꼭 추가해야 돼! (리프레시 요청 401일 때 빠져나가게)
       throw new Error("토큰이 만료되었고 재발급도 실패했습니다.");
     }
 

@@ -29,7 +29,7 @@ export default function RedirectHandler() {
 
         console.warn("자동 로그인 실패 → 로그인 페이지로 이동");
         dispatch(clearUser());
-        router.replace("/auth/login");
+        router.replace("/login");
         return;
       }
 
@@ -38,7 +38,7 @@ export default function RedirectHandler() {
         router.replace("/diary");
       } else {
         console.log("🚪 토큰 없음 → 로그인 페이지로 이동");
-        router.replace("/auth/login");
+        router.replace("/login");
       }
     };
 
