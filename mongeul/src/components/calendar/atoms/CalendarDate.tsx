@@ -19,7 +19,7 @@ const CalendarDate: React.FC<CalendarDateProps> = ({
   return (
     <button
       onClick={onClick}
-      className="flex flex-col items-center justify-center w-13 h-13"
+      className="flex flex-col items-center justify-center w-auto h-auto"
     >
       <CalendarIcon hasDiary={hasDiary} feeling={feeling} />
       <span>{date}</span>

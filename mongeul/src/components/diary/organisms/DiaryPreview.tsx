@@ -25,7 +25,7 @@ const DiaryPriview: React.FC = () => {
     }
   };
 
-  // 🔒 LOCK
+  // 잠긴 일기
   if (selectedDiary === "LOCK") {
     return (
       <div>
@@ -39,7 +39,7 @@ const DiaryPriview: React.FC = () => {
     );
   }
 
-  // 📖 일반 공개 일기
+  // 일반 일기
   if (!selectedDiary) return null;
 
   return (
