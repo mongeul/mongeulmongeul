@@ -25,7 +25,8 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
   const firstDay = getFirstDayOfMonth(year, month);
   const daysInMonth = new Date(year, month, 0).getDate();
   const totalCells = firstDay + daysInMonth;
-  const rows = Math.ceil(totalCells / 7) * 7;
+  const rows = 6 * 7;
+  const emptyCells = Math.max(rows - totalCells, 0);
 
   return (
     <div className="grid grid-cols-7 gap-2 w-full">
@@ -38,11 +39,9 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
           2,
           "0"
         )}-${String(index + 1).padStart(2, "0")}`;
-
         const diaryEntry = diaryEntries.find(
           (entry) => entry.date === formattedDate
         );
-
         const hasDiary = Boolean(diaryEntry);
         const feeling = diaryEntry?.feeling as Feeling;
 
@@ -57,6 +56,10 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
           />
         );
       })}
+
+      {[...Array(emptyCells)].map((_, index) => (
+        <div key={`post-empty-${index}`} className="w-10 h-10"></div>
+      ))}
     </div>
   );
 };
