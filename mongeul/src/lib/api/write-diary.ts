@@ -121,7 +121,6 @@ export async function updateSharedDiaryEntry(
   formData.append("date", data.date);
   formData.append("weather", data.weather ?? "");
   formData.append("feeling", data.feeling ?? "");
-  formData.append("privateStatus", data.privateStatus);
 
   if (data.picture) {
     const blob = await (await fetch(data.picture)).blob();

@@ -5,6 +5,7 @@ import { RootState } from "@/store/store";
 import DiaryDetailContainer from "@/components/common/organisms/DiaryDetailContainer";
 import { SharedDiary } from "@/lib/api/shared-diary";
 import { Diary } from "@/types/diaryTypes";
+import ShareDiaryControlButtons from "../molecules/ShareDiaryControlButtons";
 
 const ShareDiaryDetail: React.FC = () => {
   const selectedSharedDiary = useSelector(
@@ -22,6 +23,7 @@ const ShareDiaryDetail: React.FC = () => {
   return (
     <div className="w-full">
       <DiaryDetailContainer diary={diary as Diary} />
+      <ShareDiaryControlButtons />
     </div>
   );
 };

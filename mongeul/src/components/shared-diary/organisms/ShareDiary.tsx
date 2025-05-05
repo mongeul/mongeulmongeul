@@ -8,6 +8,7 @@ import ShareDiaryDetailHeader from "../molecules/ShareDiaryDetailHeader";
 import ShareDiaryTitle from "../atoms/ShareDiaryTitle";
 import ShareDiaryContent from "../atoms/ShareDiaryContent";
 import ShareDiaryImage from "../atoms/ShareDiaryImage";
+import ShareDiaryControlButtons from "../molecules/ShareDiaryControlButtons";
 
 const Diary: React.FC = () => {
   const { selectedSharedDiary } = useSelector(
@@ -18,14 +19,17 @@ const Diary: React.FC = () => {
   return (
     <div>
       {selectedSharedDiary ? (
-        <Card height="min-h-[200px] lg:min-h-[450px]">
-          <div className="flex flex-col items-start w-full p-4">
-            <ShareDiaryDetailHeader />
-            <ShareDiaryTitle />
-            <ShareDiaryImage />
-            <ShareDiaryContent />
-          </div>
-        </Card>
+        <div>
+          <Card height="min-h-[200px] lg:min-h-[450px]">
+            <div className="flex flex-col items-start w-full p-4">
+              <ShareDiaryDetailHeader />
+              <ShareDiaryTitle />
+              <ShareDiaryImage />
+              <ShareDiaryContent />
+            </div>
+          </Card>
+          <ShareDiaryControlButtons />
+        </div>
       ) : (
         <div></div>
       )}

@@ -1,10 +1,12 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Friend } from "@/lib/api/shared-diary";
+import { Feeling, Weather } from "@/types/diaryTypes";
 
 interface SharedDiaryEntry {
   date: string;
   diaryId: number;
-  feeling: string;
+  feeling: Feeling;
+  weather: Weather;
 }
 
 interface ShareDiaryState {
