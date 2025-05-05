@@ -19,6 +19,7 @@ import {
 import useIsMobile from "@/utils/useIsMobile";
 import ShareCalendar from "@/components/calendar/organisms/ShareCalendar";
 import SharedDiaryPreview from "../organisms/SharedDiaryPreview";
+import { Feeling, Weather } from "@/types/diaryTypes";
 
 export default function SharedDiaryTemplate() {
   const router = useRouter();
@@ -58,7 +59,8 @@ export default function SharedDiaryTemplate() {
           diaries.map((diary) => ({
             date: diary.date,
             diaryId: diary.shareDiaryId,
-            feeling: diary.feeling,
+            feeling: diary.feeling as Feeling,
+            weather: diary.weather as Weather,
           }))
         )
       );
