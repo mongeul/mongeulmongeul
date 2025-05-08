@@ -13,9 +13,13 @@ export default function ShareDiaryDeleteButton() {
     (state: RootState) => state.calendar.selectedSharedDiary
   ) as SharedDiary;
 
+  const groupId = useSelector(
+    (state: RootState) => state.calendar.selectedFriendId
+  );
+
   const handleDelete = async () => {
     await deleteSharedDiaryEntry(selectedSharedDiary.shareDiaryId);
-    router.push("/shared-diary");
+    router.push(`/shared-diary/${groupId}`);
     router.refresh();
   };
 

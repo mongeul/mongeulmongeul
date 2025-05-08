@@ -11,8 +11,8 @@ export default function SearchParamsProvider({
   const diaryId = searchParams.get("id")
     ? Number(searchParams.get("id"))
     : null;
-  const groupId = searchParams.get("groupid")
-    ? Number(searchParams.get("groupid"))
+  const groupId = searchParams.get("groupId")
+    ? Number(searchParams.get("groupId"))
     : null;
 
   return <>{children(diaryId, groupId)}</>;
