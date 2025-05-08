@@ -34,7 +34,9 @@ export default function ShareDiaryUpdateButton() {
     dispatch(setPicture(selectedSharedDiary.picture || null));
     dispatch(setWeather(selectedSharedDiary.weather as Weather));
 
-    router.push(`/write-diary?groupId=${groupId}`);
+    router.push(
+      `/write-diary?id=${selectedSharedDiary.shareDiaryId}&groupId=${groupId}`
+    );
   };
 
   return (

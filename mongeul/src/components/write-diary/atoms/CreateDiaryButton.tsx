@@ -121,7 +121,7 @@ export default function CreateDiaryButton({
       // 공유 일기 수정
       return handleSaveDiary(
         () => updateSharedDiaryEntry(diaryData, groupId, diaryId),
-        "/shared-diary"
+        `/shared-diary/${groupId}`
       );
     }
   }
