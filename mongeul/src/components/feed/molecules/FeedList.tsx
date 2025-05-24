@@ -1,7 +1,7 @@
 "use client";
 
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { useEffect, useRef, useCallback, useMemo } from "react";
+import { useEffect, useRef, useCallback } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import FeedItem from "../atoms/FeedListItem";
@@ -36,49 +36,44 @@ export default function FeedList() {
     },
   });
 
-  // fetchNextPage()를 1초 동안 한 번만 호출하도록 쓰로틀링
-  // 빠르게 여러 번 IntersectionObserver가 트리거되어도 1초에 최대 1번만 API 호출
-  const throttledFetchNextPage = useMemo(
-    () =>
-      throttle(() => {
-        if (hasNextPage) {
-          fetchNextPage();
-        }
-      }, 1000), // 1000ms 동안 1번만 호출
-    [hasNextPage, fetchNextPage]
+  // throttle을 useRef로 고정 생성 -> 재생성 방지
+  const throttledFetchNextPageRef = useRef(
+    throttle(() => {
+      fetchNextPage();
+    }, 1000)
   );
 
   // IntersectionObserver 콜백
-  // 관찰 대상이 뷰포트에 들어오면 throttledFetchNextPage() 호출
   const handleObserver = useCallback(
     (entries: IntersectionObserverEntry[]) => {
       const target = entries[0];
-      if (target.isIntersecting) {
-        throttledFetchNextPage();
+      if (target.isIntersecting && hasNextPage) {
+        throttledFetchNextPageRef.current();
       }
     },
-    [throttledFetchNextPage]
+    [hasNextPage]
   );
 
-  // IntersectionObserver 등록
-  // 컴포넌트 마운트 시 observer 등록
-  // 언마운트 시 observer 해제
+  // observer 등록 및 정리
   useEffect(() => {
-    if (!observerRef.current) return;
+    const observerTarget = observerRef.current;
+    const throttled = throttledFetchNextPageRef.current;
+
+    if (!observerTarget) return;
 
     const observer = new IntersectionObserver(handleObserver, {
-      root: null, // 뷰포트 기준
-      rootMargin: "100px", // 100px 전에 미리 로딩 트리거
-      threshold: 0.1, // 10% 이상 요소가 보여야 트리거
+      root: null,
+      rootMargin: "100px",
+      threshold: 0.1,
     });
 
-    observer.observe(observerRef.current); // ref에 등록된 요소 관찰 시작
+    observer.observe(observerTarget);
 
     return () => {
       observer.disconnect();
-      throttledFetchNextPage.cancel();
+      throttled.cancel();
     };
-  }, [handleObserver, throttledFetchNextPage]);
+  }, [handleObserver]);
 
   if (isLoading)
     return (
@@ -108,7 +103,7 @@ export default function FeedList() {
           <Spinner />
         </div>
       )}
-      {/* 마지막 요소 감지 */}
+      {/* 마지막 요소 감지용 엘리먼트 */}
       <div ref={observerRef} className="w-full h-10" />
     </div>
   );

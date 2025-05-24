@@ -9,12 +9,7 @@ export default function FeedEmojiGroup() {
     <div className="w-full overflow-x-auto scrollbar-hide">
       <div className="flex flex-row gap-2 min-w-max">
         {emojis.map((emoji) => (
-          <FeedEmojiCountButton
-            key={emoji.emojiType}
-            emoji={emoji.emojiType}
-            count={emoji.count}
-            isSelected={emoji.isSelected}
-          />
+          <FeedEmojiCountButton key={emoji.emojiType} emoji={emoji.emojiType} />
         ))}
       </div>
     </div>

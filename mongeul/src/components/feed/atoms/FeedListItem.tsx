@@ -79,7 +79,7 @@ export default function FeedItem({ feed }: FeedListItemProps) {
       }}
     >
       <Link href={`/feed/${feed.feedId}`} className="cursor-pointer">
-        <FeelingsIcon feeling={feed.feeling} size="w-24 h-24" />
+        <FeelingsIcon feeling={feed.feeling} size="w-20 h-20" />
       </Link>
     </div>
   );
