@@ -8,7 +8,7 @@ import { fetchMyDiary } from "@/lib/api/diary";
 import Diary from "@/components/diary/organisms/Diary";
 import DiaryDetail from "../organisms/DiaryDetail";
 import LockDiary from "../organisms/LockDiary";
-import useIsMobile from "@/utils/useIsMobile";
+import useIsMobile from "@/hooks/useIsMobile";
 
 export default function DiaryDetailTemplate() {
   const { id } = useParams();

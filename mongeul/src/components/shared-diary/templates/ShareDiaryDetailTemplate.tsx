@@ -9,7 +9,7 @@ import {
   setSelectedDiary,
   setSelectedSharedDiary,
 } from "@/store/calendarSlice";
-import useIsMobile from "@/utils/useIsMobile";
+import useIsMobile from "@/hooks/useIsMobile";
 import ShareDiary from "../organisms/ShareDiary";
 import ShareDiaryDetail from "../organisms/ShareDiaryDetail";
 
