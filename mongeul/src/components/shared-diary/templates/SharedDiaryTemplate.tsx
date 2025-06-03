@@ -16,7 +16,7 @@ import {
   getSharedDiaryDates,
   getSharedDiaryDetail,
 } from "@/lib/api/shared-diary";
-import useIsMobile from "@/utils/useIsMobile";
+import useIsMobile from "@/hooks/useIsMobile";
 import ShareCalendar from "@/components/calendar/organisms/ShareCalendar";
 import SharedDiaryPreview from "../organisms/SharedDiaryPreview";
 import { Feeling, Weather } from "@/types/diaryTypes";

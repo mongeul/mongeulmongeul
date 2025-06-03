@@ -12,7 +12,7 @@ import {
 } from "@/store/calendarSlice";
 import { useRouter } from "next/navigation";
 import { setDate } from "@/store/diarySlice";
-import useIsMobile from "@/utils/useIsMobile";
+import useIsMobile from "@/hooks/useIsMobile";
 import DiaryPriview from "../organisms/DiaryPreview";
 
 export default function DiaryTemplate() {
