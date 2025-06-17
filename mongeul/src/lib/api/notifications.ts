@@ -20,3 +20,19 @@ export async function sendToken(token: string): Promise<FcmToken> {
     throw error;
   }
 }
+
+export async function deleteToken(token: string): Promise<void> {
+  try {
+    await apiClient(`/api/v1/notification/token`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ token }),
+    });
+    console.log("FCM 토큰 삭제 성공");
+  } catch (error) {
+    console.error("FCM 토큰 삭제 오류:", error);
+    throw error;
+  }
+}

@@ -8,6 +8,7 @@ import { useState } from "react";
 const PersonalSetting = [
   { label: "닉네임 변경", link: "/setting/nickname" },
   { label: "일기 잠금 설정", link: "/setting/diary-lock" },
+  { label: "알림 설정", link: "/setting/notification" },
 ];
 const DisplaySetting = [
   { label: "테마 설정", link: "/setting/theme" },

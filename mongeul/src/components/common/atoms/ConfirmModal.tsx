@@ -24,20 +24,20 @@ export default function ConfirmModal({
         <p className="text-sm text-zinc-800 whitespace-pre-line">{message}</p>
         <div className="flex justify-center gap-4 pt-2">
           <Button
-            text="취소"
-            width="w-full"
-            height="h-12"
-            backgroundColor="bg-zinc-200"
-            textColor="text-black"
-            onClick={onCancel}
-          />
-          <Button
             text="확인"
             width="w-full"
             height="h-12"
             backgroundColor="bg-theme-400"
             textColor="text-white"
             onClick={onConfirm}
+          />
+          <Button
+            text="취소"
+            width="w-full"
+            height="h-12"
+            backgroundColor="bg-zinc-200"
+            textColor="text-black"
+            onClick={onCancel}
           />
         </div>
       </div>
