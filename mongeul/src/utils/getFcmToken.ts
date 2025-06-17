@@ -5,7 +5,7 @@ export const getFcmToken = async (): Promise<string | null> => {
   const messaging = await getMessagingInstance();
 
   if (!messaging) {
-    console.log("이 브라우저는 FCM을 지원하지 않아요 😢");
+    console.log("이 브라우저는 FCM을 지원하지 않음");
     return null;
   }
 
@@ -15,14 +15,14 @@ export const getFcmToken = async (): Promise<string | null> => {
     });
 
     if (token) {
-      console.log("✅ FCM 토큰:", token);
+      console.log("FCM 토큰 발급 성공");
       return token;
     } else {
-      console.log("❌ 토큰 없음 (권한 필요)");
+      console.log("토큰 없음 (권한 필요)");
       return null;
     }
   } catch (err) {
-    console.error("🚨 FCM 토큰 발급 오류:", err);
+    console.error("FCM 토큰 발급 오류:", err);
     return null;
   }
 };
